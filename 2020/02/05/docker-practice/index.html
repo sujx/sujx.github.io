@@ -1,0 +1,327 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Docker的快速练习 | 灰黑化挥花悔黑</title><meta name="keywords" content="centos,docker"><meta name="author" content="grepsu"><meta name="copyright" content="grepsu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="建立一个三节点的网络环境来进行docker的操作练习，其中master节点存储私有仓库镜像文件。 节点 IP 用途 master 192.168.174.181 管理节点和私有仓库 node1 192.168.174.180 节点一 node1 192.168.174.180 节点二  管理节点安装docker程序的安装[root@master ~]# yum install -y docker">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Docker的快速练习">
+<meta property="og:url" content="https://sujx.net/2020/02/05/docker-practice/index.html">
+<meta property="og:site_name" content="灰黑化挥花悔黑">
+<meta property="og:description" content="建立一个三节点的网络环境来进行docker的操作练习，其中master节点存储私有仓库镜像文件。 节点 IP 用途 master 192.168.174.181 管理节点和私有仓库 node1 192.168.174.180 节点一 node1 192.168.174.180 节点二  管理节点安装docker程序的安装[root@master ~]# yum install -y docker">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg">
+<meta property="article:published_time" content="2020-02-05T09:06:04.000Z">
+<meta property="article:modified_time" content="2021-07-01T12:07:28.490Z">
+<meta property="article:author" content="grepsu">
+<meta property="article:tag" content="centos">
+<meta property="article:tag" content="docker">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://sujx.net/2020/02/05/docker-practice/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"We didn't find any results for the search: ${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"prismjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Docker的快速练习',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-07-01 20:07:28'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    })(window)</script><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="灰黑化挥花悔黑" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">33</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">60</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">Categories</div><div class="length-num">9</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">灰黑化挥花悔黑</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">Docker的快速练习</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2020-02-05T09:06:04.000Z" title="Created 2020-02-05 17:06:04">2020-02-05</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2021-07-01T12:07:28.490Z" title="Updated 2021-07-01 20:07:28">2021-07-01</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Linux/">Linux</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Something/">Something</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Other/">Other</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/System/">System</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word count:</span><span class="word-count">1.4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading time:</span><span>7min</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Docker的快速练习"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div><article class="post-content" id="article-container"><p>建立一个三节点的网络环境来进行docker的操作练习，其中master节点存储私有仓库镜像文件。</p>
+<p>节点</p>
+<p>IP</p>
+<p>用途</p>
+<p>master</p>
+<p>192.168.174.181</p>
+<p>管理节点和私有仓库</p>
+<p>node1</p>
+<p>192.168.174.180</p>
+<p>节点一</p>
+<p>node1</p>
+<p>192.168.174.180</p>
+<p>节点二</p>
+<hr>
+<h3 id="管理节点安装"><a href="#管理节点安装" class="headerlink" title="管理节点安装"></a>管理节点安装</h3><h4 id="docker程序的安装"><a href="#docker程序的安装" class="headerlink" title="docker程序的安装"></a>docker程序的安装</h4><pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">[root@master ~]# yum install -y docker
+[root@master ~]# fdisk -l
+Disk &#x2F;dev&#x2F;sda: 10.7 GB, 10737418240 bytes, 20971520 sectors
+Disk &#x2F;dev&#x2F;sdb: 10.7 GB, 10737418240 bytes, 20971520 sectors
+
+# 这里我们将使用新增的&#x2F;dev&#x2F;sdb磁盘作为docker的存储
+
+[root@master ~]# vim &#x2F;etc&#x2F;sysconfig&#x2F;docker-storage-setup #使用:r 打开docker磁盘驱动模板文件&#x2F;usr&#x2F;share&#x2F;container-storage-setup&#x2F;container-storage-setup
+#STORAGE_DRIVER&#x3D;overlay2   #注释掉overlay2磁盘驱动
+STORAGE_DRIVER&#x3D;devicemapper #使用默认磁盘驱动
+EXTRA_STORAGE_OPTIONS&#x3D;&quot;--storage-opt dm.fs&#x3D;xfs&quot; #格式化为xfs
+DEVS&#x3D;&#x2F;dev&#x2F;sdb   #使用dev&#x2F;sdb磁盘
+CONTAINER_THINPOOL&#x3D;container-thinpool   #thinpool的容器存储方式，也是lv的名字
+VG&#x3D;docker_VG    #存储的vg名称
+
+[root@master ~]# container-storage-setup 
+INFO: Writing zeros to first 4MB of device &#x2F;dev&#x2F;sdb
+4+0 records in
+4+0 records out
+4194304 bytes (4.2 MB) copied, 0.00600853 s, 698 MB&#x2F;s
+INFO: Device node &#x2F;dev&#x2F;sdb1 exists.
+  Physical volume &quot;&#x2F;dev&#x2F;sdb1&quot; successfully created.
+  Volume group &quot;docker_VG&quot; successfully created
+  Rounding up size to full physical extent 12.00 MiB
+  Thin pool volume with chunk size 512.00 KiB can address at most 126.50 TiB of data.
+  Logical volume &quot;container-thinpool&quot; created.
+  Logical volume docker_VG&#x2F;container-thinpool changed.
+[root@master ~]# vgs
+  VG        #PV #LV #SN Attr   VSize   VFree
+  centos      1   2   0 wz--n-  &lt;9.00g    0 
+  docker_VG   1   1   0 wz--n- &lt;10.00g 6.00g
+[root@master ~]# lvs
+  LV                 VG        Attr       LSize  Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
+  root               centos    -wi-ao---- &lt;8.00g                                                    
+  swap               centos    -wi-ao----  1.00g                                                    
+  container-thinpool docker_VG twi-a-t---  3.97g             0.00   10.29   
+# 创建成功，启动docker服务
+[root@master ~]# systemctl enable docker --now<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="系统配置"><a href="#系统配置" class="headerlink" title="系统配置"></a>系统配置</h3><p>通过配置多个加速器实现不同网络环境下的快速部署。</p>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"># Docker加速器配置
+cat&gt;&#x2F;etc&#x2F;docker&#x2F;daemon.json&lt;&lt;EOF
+&#123;
+  &quot;registry-mirrors&quot;: [&quot;https:&#x2F;&#x2F;dockerhub.azk8s.cn&quot;,&quot;http:&#x2F;&#x2F;f1361db2.m.daocloud.io&quot;,&quot;https:&#x2F;&#x2F;d1a0f2854f4b44c2a3b3af4f5425db1a.mirror.swr.myhuaweicloud.com&quot;,&quot;https:&#x2F;&#x2F;hub-mirror.c.163.com&quot;,&quot;https:&#x2F;&#x2F;registry.docker-cn.com&quot;]，
+  &quot;insecure-registries&quot;: [&quot;registry:5000&quot;]
+&#125;
+EOF
+[root@master ~]# systemctl daemon-reload &amp;&amp; systemctl restart docker
+
+# 关闭防火墙
+[root@master ~]# systemctl disable firewalld.service --now
+
+# 关闭selinux
+setenforce 0<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="Docker环境准备"><a href="#Docker环境准备" class="headerlink" title="Docker环境准备"></a>Docker环境准备</h3><h4 id="镜像准备"><a href="#镜像准备" class="headerlink" title="镜像准备"></a>镜像准备</h4><pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"># 拉取实验镜像
+[root@master ~]# docker pull docker.io&#x2F;centos
+Using default tag: latest
+Trying to pull repository docker.io&#x2F;library&#x2F;centos ... 
+latest: Pulling from docker.io&#x2F;library&#x2F;centos
+8a29a15cefae: Pull complete 
+Digest: sha256:fe8d824220415eed5477b63addf40fb06c3b049404242b31982106ac204f6700
+Status: Downloaded newer image for docker.io&#x2F;centos:latest
+
+# 镜像列表
+[root@master ~]# docker images
+REPOSITORY           TAG                 IMAGE ID            CREATED             SIZE
+docker.io&#x2F;nginx      latest              2073e0bcb60e        2 days ago          127 MB
+docker.io&#x2F;httpd      latest              c562eeace183        3 days ago          165 MB
+docker.io&#x2F;php        latest              7dc31b4f3403        3 days ago          405 MB
+docker.io&#x2F;mysql      latest              791b6e40940c        3 days ago          465 MB
+docker.io&#x2F;debian     latest              a8797652cfd9        3 days ago          114 MB
+docker.io&#x2F;registry   latest              708bc6af7e5e        12 days ago         25.7 MB
+docker.io&#x2F;centos     latest              470671670cac        2 weeks ago         237 MB
+docker.io&#x2F;mysql      5.5                 d404d78aa797        9 months ago        205 MB
+docker.io&#x2F;centos     6.10                48650444e419        10 months ago       194 MB
+
+# 删除镜像
+[root@master ~]# docker rmi docker.io&#x2F;mysql
+Untagged: docker.io&#x2F;mysql:latest
+Untagged: docker.io&#x2F;mysql@sha256:6d0741319b6a2ae22c384a97f4bbee411b01e75f6284af0cce339fee83d7e314
+Deleted: sha256:791b6e40940cd550af522eb4ffe995226798204504fe495743445b900e417a51
+Deleted: sha256:a3c92ad464abbee6d08856efd404df8c43e9d991b9253bed8281e452d8021dfa
+Deleted: sha256:3eb0379ecdc39f86da90c491765187e40dda381e57f319dd21afd0b1e2c40158
+Deleted: sha256:fe814f19102e93fd9e2c12b4c864d110bbe4884ff4c5c34e2e1d96341ec17778
+Deleted: sha256:f973fa93f201d11a3a6ccf900614fa6e25f4cf899da69f163510560263642d0e
+Deleted: sha256:db53286cf6b77826bd35675098bfa76863ace9a04b4e28f4d8340d53c23821e8
+Deleted: sha256:477e19600de637164faac8d2e39d4552fac8fbf3c4a9f29efe34072c0fd156e9
+Deleted: sha256:2c109aa38ef35164d5adcabac202bde92420867a5839deb75f5ce034aacc00b4
+Deleted: sha256:0de337169373e6779cb3ca09485e95fedd4ac98abee19b839cd46e294a64f363
+Deleted: sha256:73f1cb0f35d3377b825488e38241d0e12c63e7d30946362402dd8ab2e9467d81
+Deleted: sha256:5807022bbb80a63e78831d4dff1ac497a450287ce43fbb0381623b19f5d45c8a
+Deleted: sha256:1aaef8d601e09d40fc66f3531268e837f4ae3eedf84f94359fa33177f0be4c6e
+Deleted: sha256:e0db3ba0aaea8a01d5cb000aeb449c153be0a47a369cafc4e912b85fb18192cf
+
+# 镜像导出
+[root@master ~]# docker save docker.io&#x2F;centos:6.10 &gt; &#x2F;tmp&#x2F;sujxcentos.tar
+
+# 镜像导入
+[root@node2 ~]# docker load &lt; &#x2F;root&#x2F;sujxcentos.tar
+[root@node2 ~]# docker images
+REPOSITORY                        TAG                 IMAGE ID            CREATED             SIZE
+docker.io&#x2F;centos                  6.10                48650444e419        10 months ago       194 MB
+
+# 检索镜像
+[root@master ~]# docker search oracle
+INDEX       NAME                                            DESCRIPTION                                     STARS     OFFICIAL   AUTOMATED
+docker.io   docker.io&#x2F;oraclelinux                           Official Docker builds of Oracle Linux.         629       [OK]       
+docker.io   docker.io&#x2F;jaspeen&#x2F;oracle-11g                    Docker image for Oracle 11g database            144                  [OK]
+docker.io   docker.io&#x2F;oracleinanutshell&#x2F;oracle-xe-11g                                                       82                   
+docker.io   docker.io&#x2F;oracle&#x2F;openjdk                        Docker images containing OpenJDK Oracle Linux   60                   [OK]
+docker.io   docker.io&#x2F;oracle&#x2F;graalvm-ce                     GraalVM Community Edition Official Image        56                   [OK]
+docker.io   docker.io&#x2F;absolutapps&#x2F;oracle-12c-ee             Oracle 12c EE image with web management co...   38                   
+docker.io   docker.io&#x2F;araczkowski&#x2F;oracle-apex-ords          Oracle Express Edition 11g Release 2 on Ub...   27                   [OK]
+docker.io   docker.io&#x2F;bofm&#x2F;oracle12c                        Docker image for Oracle Database                23                   [OK]
+docker.io   docker.io&#x2F;oracle&#x2F;nosql                          Oracle NoSQL on a Docker Image with Oracle...   22                   [OK]
+docker.io   docker.io&#x2F;datagrip&#x2F;oracle                       Oracle 11.2 &amp; 12.1.0.2-se2 &amp; 11.2.0.2-xe        14                   [OK]
+docker.io   docker.io&#x2F;oracle&#x2F;weblogic-kubernetes-operator   Docker images containing the Oracle WebLog...   10                   
+docker.io   docker.io&#x2F;openweb&#x2F;oracle-tomcat                 A fork off of Official tomcat image with O...   8                    [OK]
+docker.io   docker.io&#x2F;truevoly&#x2F;oracle-12c                   Copy of sath89&#x2F;oracle-12c image (https:&#x2F;&#x2F;g...   8                    
+docker.io   docker.io&#x2F;18fgsa&#x2F;oracle-client                  Hosted version of the Oracle Container Ima...   2                    <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="建立本地私有仓库"><a href="#建立本地私有仓库" class="headerlink" title="建立本地私有仓库"></a>建立本地私有仓库</h3><pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">[root@master ~]# docker run -d -p 5000:5000 --name&#x3D;registry --restart&#x3D;always docker.io&#x2F;registry
+345e05f68235687b47d2917fd0a86620ac2d6b40fbe7647063b817e0d690cf6b
+
+# 打标
+[root@master ~]# docker tag docker.io&#x2F;mysql:5.5 registry:5000&#x2F;sujx_images&#x2F;mysql:5.5
+
+#上传
+[root@master ~]# docker push registry:5000&#x2F;sujx_images&#x2F;mysql:5.5
+The push refers to a repository [registry:5000&#x2F;sujx_images&#x2F;mysql]
+c9f3545812c8: Pushed 
+f49eaacc87a0: Pushed 
+a9c5a24e943f: Pushed 
+90b4ae8695b5: Pushed 
+4054cc666efd: Pushed 
+f83622e85376: Pushed 
+af84b063c827: Pushed 
+ddc265b679cf: Pushed 
+647245c554e4: Pushed 
+432b5f62e513: Pushed 
+6270adb5794c: Pushed 
+5.5: digest: sha256:c9c671d0c959183154313d6830d46f9a00d5937f97415c15ebd3c6844f6f1467 size: 2619
+
+# 本地其他客户端拉取
+[root@node2 ~]# docker pull registry:5000&#x2F;sujx_images&#x2F;mysql:5.5
+Trying to pull repository registry:5000&#x2F;sujx_images&#x2F;mysql ... 
+5.5: Pulling from registry:5000&#x2F;sujx_images&#x2F;mysql
+743f2d6c1f65: Pull complete 
+3f0c413ee255: Pull complete 
+aef1ef8f1aac: Pull complete 
+f9ee573e34cb: Pull complete 
+3f237e01f153: Pull complete 
+03da1e065b16: Pull complete 
+04087a801070: Pull complete 
+7efd5395ab31: Pull complete 
+1b5cc03aaac8: Pull complete 
+2b7adaec9998: Pull complete 
+385b8f96a9ba: Pull complete 
+Digest: sha256:c9c671d0c959183154313d6830d46f9a00d5937f97415c15ebd3c6844f6f1467
+Status: Downloaded newer image for registry:5000&#x2F;sujx_images&#x2F;mysql:5.5
+
+# 本地其他节点上传镜像
+[root@node2 ~]# docker tag docker.io&#x2F;centos:6.10 registry:5000&#x2F;sujx_images&#x2F;centos:6.10
+[root@node2 ~]# docker push registry:5000&#x2F;sujx_images&#x2F;centos:6.10
+The push refers to a repository [registry:5000&#x2F;sujx_images&#x2F;centos]
+8088cb617267: Pushed 
+6.10: digest: sha256:7e53308393264c34359fbdf6d15d5c8c4985b8c2a58ee0ad4f7d5cc2e3c1577a size: 529
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">grepsu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://sujx.net/2020/02/05/docker-practice/">https://sujx.net/2020/02/05/docker-practice/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/centos/">centos</a><a class="post-meta__tags" href="/tags/docker/">docker</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2020/02/14/cdh6-3-deploy/"><img class="prev-cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">离线部署CDH6.3</div></div></a></div><div class="next-post pull-right"><a href="/2020/01/31/centos8-mirrors/"><img class="next-cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">CentOS8的软件库</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> Related Articles</span></div><div class="relatedPosts-list"><div><a href="/2019/09/09/deploy-local-repo-mirror/" title="建立本地RPM包仓库"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2019-09-09</div><div class="title">建立本地RPM包仓库</div></div></a></div><div><a href="/2020/02/14/cdh6-3-deploy/" title="离线部署CDH6.3"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-02-14</div><div class="title">离线部署CDH6.3</div></div></a></div><div><a href="/2019/06/14/intranet-kms/" title="内网搭建KMS服务器"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2019-06-14</div><div class="title">内网搭建KMS服务器</div></div></a></div><div><a href="/2019/11/20/quikly-deploy-itop-on-centos8/" title="基于CentOS8快速部署iTop"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2019-11-20</div><div class="title">基于CentOS8快速部署iTop</div></div></a></div><div><a href="/2019/07/20/ssh-nopasswd-centos/" title="CentOS的免密登录"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2019-07-20</div><div class="title">CentOS的免密登录</div></div></a></div><div><a href="/2019/08/09/update-openssh-2-81p1/" title="升级CentOS8的OpenSSH版本"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2019-08-09</div><div class="title">升级CentOS8的OpenSSH版本</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">grepsu</div><div class="author-info__description">逝者如斯夫,不舍昼夜</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">33</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">60</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">Categories</div><div class="length-num">9</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/sujx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://gitee.com/grepsu" target="_blank" title="Gitee"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:sujx@live.cn" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS链接"><i class="fa  fa-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AE%A1%E7%90%86%E8%8A%82%E7%82%B9%E5%AE%89%E8%A3%85"><span class="toc-number">1.</span> <span class="toc-text">管理节点安装</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#docker%E7%A8%8B%E5%BA%8F%E7%9A%84%E5%AE%89%E8%A3%85"><span class="toc-number">1.1.</span> <span class="toc-text">docker程序的安装</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E9%85%8D%E7%BD%AE"><span class="toc-number">2.</span> <span class="toc-text">系统配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Docker%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87"><span class="toc-number">3.</span> <span class="toc-text">Docker环境准备</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%95%9C%E5%83%8F%E5%87%86%E5%A4%87"><span class="toc-number">3.1.</span> <span class="toc-text">镜像准备</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BB%BA%E7%AB%8B%E6%9C%AC%E5%9C%B0%E7%A7%81%E6%9C%89%E4%BB%93%E5%BA%93"><span class="toc-number">4.</span> <span class="toc-text">建立本地私有仓库</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2021/06/29/deploy_hexo/" title="使用Hexo构建静态博客站点">使用Hexo构建静态博客站点</a><time datetime="2021-06-29T09:25:44.000Z" title="Created 2021-06-29 17:25:44">2021-06-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2021/06/29/Preper-WindowsPE/" title="简单制作WindowsPE镜像">简单制作WindowsPE镜像</a><time datetime="2021-06-29T06:14:44.000Z" title="Created 2021-06-29 14:14:44">2021-06-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2021/06/28/make-ubuntu-template-on-Hyper-V/" title="制作Hyper-V的Ubuntu虚机模板">制作Hyper-V的Ubuntu虚机模板</a><time datetime="2021-06-28T05:45:38.000Z" title="Created 2021-06-28 13:45:38">2021-06-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2020/10/19/set_idrac/" title="戴尔服务器iDRAC设置Tips">戴尔服务器iDRAC设置Tips</a><time datetime="2020-10-19T10:28:44.000Z" title="Created 2020-10-19 18:28:44">2020-10-19</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2020/09/30/modify_winserver_wsus_check_stat/" title="解决Windows Update一直为check状态">解决Windows Update一直为check状态</a><time datetime="2020-09-30T07:01:29.000Z" title="Created 2020-09-30 15:01:29">2020-09-30</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By grepsu</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">京ICP备17034757号-1</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">Local search</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

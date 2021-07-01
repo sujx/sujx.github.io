@@ -1,0 +1,614 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>灰黑化挥花悔黑</title>
+  <icon>https://sujx.net/icon.png</icon>
+  
+  <link href="https://sujx.net/atom.xml" rel="self"/>
+  
+  <link href="https://sujx.net/"/>
+  <updated>2021-07-01T12:07:28.488Z</updated>
+  <id>https://sujx.net/</id>
+  
+  <author>
+    <name>grepsu</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>使用Hexo构建静态博客站点</title>
+    <link href="https://sujx.net/2021/06/29/deploy_hexo/"/>
+    <id>https://sujx.net/2021/06/29/deploy_hexo/</id>
+    <published>2021-06-29T09:25:44.000Z</published>
+    <updated>2021-07-01T12:07:28.488Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;因为本站点是运行在阿里云最便宜的虚拟主机上面的，为提高运行效率、节约成本以及学习使用相关技术。现将原有wordpress站点迁移导出部署为hexo站点。&lt;br&gt;hexo的优势：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;原生使用markdown来进行文本编辑；&lt;/li&gt;
+&lt;li&gt;渲染生成静</summary>
+        
+      
+    
+    
+    
+    
+    <category term="blog" scheme="https://sujx.net/tags/blog/"/>
+    
+    <category term="hexo" scheme="https://sujx.net/tags/hexo/"/>
+    
+    <category term="wordpress" scheme="https://sujx.net/tags/wordpress/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>简单制作WindowsPE镜像</title>
+    <link href="https://sujx.net/2021/06/29/Preper-WindowsPE/"/>
+    <id>https://sujx.net/2021/06/29/Preper-WindowsPE/</id>
+    <published>2021-06-29T06:14:44.000Z</published>
+    <updated>2021-07-01T12:07:28.481Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h3 id=&quot;下载部署文件&quot;&gt;&lt;a href=&quot;#下载部署文件&quot; class=&quot;headerlink&quot; title=&quot;下载部署文件&quot;&gt;&lt;/a&gt;下载部署文件&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;下载适用于 Windows 10 版本 2004 的 Windows ADK&lt;br&gt;&lt;a</summary>
+        
+      
+    
+    
+    
+    
+    <category term="Windows WindowsPE" scheme="https://sujx.net/tags/Windows-WindowsPE/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>制作Hyper-V的Ubuntu虚机模板</title>
+    <link href="https://sujx.net/2021/06/28/make-ubuntu-template-on-Hyper-V/"/>
+    <id>https://sujx.net/2021/06/28/make-ubuntu-template-on-Hyper-V/</id>
+    <published>2021-06-28T05:45:38.000Z</published>
+    <updated>2021-07-01T12:07:28.499Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;安装和升级&quot;&gt;&lt;a href=&quot;#安装和升级&quot; class=&quot;headerlink&quot; title=&quot;安装和升级&quot;&gt;&lt;/a&gt;安装和升级&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;安装&lt;br&gt; 下载地址:https:#</summary>
+        
+      
+    
+    
+    
+    
+    <category term="Hyper-V Ubuntu VM Template" scheme="https://sujx.net/tags/Hyper-V-Ubuntu-VM-Template/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>戴尔服务器iDRAC设置Tips</title>
+    <link href="https://sujx.net/2020/10/19/set_idrac/"/>
+    <id>https://sujx.net/2020/10/19/set_idrac/</id>
+    <published>2020-10-19T10:28:44.000Z</published>
+    <updated>2021-07-01T12:07:28.505Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;ol&gt;
+&lt;li&gt; 戴尔服务器iDRAC可以使用 概览-iDRAC设置-设置-时区和NTP 来设置时区和校时；&lt;/li&gt;
+&lt;li&gt; 戴尔服务器iDRAC可从 概览-服务器-故障排除-SupportAssist-保存收集 来收集Lifecycle日志；&lt;/li&gt;
+&lt;li&gt;</summary>
+        
+      
+    
+    
+    
+    <category term="System" scheme="https://sujx.net/categories/System/"/>
+    
+    <category term="Tips" scheme="https://sujx.net/categories/Tips/"/>
+    
+    
+    <category term="dell" scheme="https://sujx.net/tags/dell/"/>
+    
+    <category term="idrac" scheme="https://sujx.net/tags/idrac/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>解决Windows Update一直为check状态</title>
+    <link href="https://sujx.net/2020/09/30/modify_winserver_wsus_check_stat/"/>
+    <id>https://sujx.net/2020/09/30/modify_winserver_wsus_check_stat/</id>
+    <published>2020-09-30T07:01:29.000Z</published>
+    <updated>2021-07-01T12:07:28.501Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;新部署的Windows Server 2012R2服务器在设置了WSUS服务之后，无法完成系统更新，始终处于check update的状态。检查Windows目录下的update log中，有”‘FATAL: GetClientUpdateUrl failed, err</summary>
+        
+      
+    
+    
+    
+    <category term="System" scheme="https://sujx.net/categories/System/"/>
+    
+    <category term="Windows" scheme="https://sujx.net/categories/Windows/"/>
+    
+    
+    <category term="Windows" scheme="https://sujx.net/tags/Windows/"/>
+    
+    <category term="WSUS" scheme="https://sujx.net/tags/WSUS/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Windows修改默认路由</title>
+    <link href="https://sujx.net/2020/09/23/modify_windows_defualt_route/"/>
+    <id>https://sujx.net/2020/09/23/modify_windows_defualt_route/</id>
+    <published>2020-09-23T10:12:04.000Z</published>
+    <updated>2021-07-01T12:07:28.500Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;在实际运维中，遇到了一件XX的事情，就是改网关。其实吧，网关嘛，改一下没啥啊，so easy。但，项目要求网关一定是“default”，而不是跳数1。 简单来说，就是如下： 1. default&lt;/p&gt;
+&lt;pre class=&quot;line-numbers</summary>
+        
+      
+    
+    
+    
+    <category term="Other" scheme="https://sujx.net/categories/Other/"/>
+    
+    
+    <category term="Windows" scheme="https://sujx.net/tags/Windows/"/>
+    
+    <category term="Router" scheme="https://sujx.net/tags/Router/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>OCSinventory-NG部署</title>
+    <link href="https://sujx.net/2020/09/14/deploy_ocsinventory/"/>
+    <id>https://sujx.net/2020/09/14/deploy_ocsinventory/</id>
+    <published>2020-09-14T12:10:35.000Z</published>
+    <updated>2021-07-01T12:07:28.489Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;&lt;a href=&quot;https://ocsinventory-ng.org/&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="Linux" scheme="https://sujx.net/categories/Linux/"/>
+    
+    <category term="System" scheme="https://sujx.net/categories/System/"/>
+    
+    
+    <category term="linux" scheme="https://sujx.net/tags/linux/"/>
+    
+    <category term="OCSinventory" scheme="https://sujx.net/tags/OCSinventory/"/>
+    
+    <category term="sysadmin" scheme="https://sujx.net/tags/sysadmin/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>CentOS7 安装 iTOP 2.7.1</title>
+    <link href="https://sujx.net/2020/08/25/install_itop_on_centos/"/>
+    <id>https://sujx.net/2020/08/25/install_itop_on_centos/</id>
+    <published>2020-08-25T06:39:45.000Z</published>
+    <updated>2021-07-01T12:07:28.496Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;因为CentOS7自带PHP和Maraidb版本过低，安装iTop会报错，因此需要安装额外包。&lt;/p&gt;
+&lt;h3 id=&quot;安装EPEL源和REMI源&quot;&gt;&lt;a href=&quot;#安装EPEL源和REMI源&quot; class=&quot;headerlink&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="Linux" scheme="https://sujx.net/categories/Linux/"/>
+    
+    <category term="System" scheme="https://sujx.net/categories/System/"/>
+    
+    
+    <category term="linux" scheme="https://sujx.net/tags/linux/"/>
+    
+    <category term="itop" scheme="https://sujx.net/tags/itop/"/>
+    
+    <category term="itsm" scheme="https://sujx.net/tags/itsm/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>JumpServer的两项修改</title>
+    <link href="https://sujx.net/2020/08/21/modify_jumperserver/"/>
+    <id>https://sujx.net/2020/08/21/modify_jumperserver/</id>
+    <published>2020-08-21T08:06:38.000Z</published>
+    <updated>2021-07-01T12:07:28.500Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;JumpServer-扩容&quot;&gt;&lt;a href=&quot;#JumpServer-扩容&quot; class=&quot;headerlink&quot; title=&quot;JumpServer 扩容&quot;&gt;&lt;/a&gt;JumpServer 扩容&lt;/h2&gt;&lt;h3 id=&quot;目标&quot;&gt;&lt;a href=&quot;#目标&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="Linux" scheme="https://sujx.net/categories/Linux/"/>
+    
+    
+    <category term="jumpserver" scheme="https://sujx.net/tags/jumpserver/"/>
+    
+    <category term="linux" scheme="https://sujx.net/tags/linux/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>用户初次使用jumpserver指南</title>
+    <link href="https://sujx.net/2020/08/18/first_use_jumpserver/"/>
+    <id>https://sujx.net/2020/08/18/first_use_jumpserver/</id>
+    <published>2020-08-18T08:20:28.000Z</published>
+    <updated>2021-07-01T12:07:28.491Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h3 id=&quot;概况&quot;&gt;&lt;a href=&quot;#概况&quot; class=&quot;headerlink&quot; title=&quot;概况&quot;&gt;&lt;/a&gt;概况&lt;/h3&gt;&lt;p&gt;为方便研发和运维同事进行线上操作，平台运营运维组为大家搭建了从线下办公环境到线上生产环境的网页版跳板机。 访问方式如下： -</summary>
+        
+      
+    
+    
+    
+    <category term="Linux" scheme="https://sujx.net/categories/Linux/"/>
+    
+    
+    <category term="jumpserver" scheme="https://sujx.net/tags/jumpserver/"/>
+    
+    <category term="linux" scheme="https://sujx.net/tags/linux/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>使用LVM进行磁盘管理</title>
+    <link href="https://sujx.net/2020/05/01/how_to_use_lvm/"/>
+    <id>https://sujx.net/2020/05/01/how_to_use_lvm/</id>
+    <published>2020-05-01T08:30:13.000Z</published>
+    <updated>2021-07-01T12:07:28.494Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h3 id=&quot;创建LVM&quot;&gt;&lt;a href=&quot;#创建LVM&quot; class=&quot;headerlink&quot; title=&quot;创建LVM&quot;&gt;&lt;/a&gt;创建LVM&lt;/h3&gt;&lt;pre class=&quot;line-numbers language-shell&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="Linux" scheme="https://sujx.net/categories/Linux/"/>
+    
+    
+    <category term="disk" scheme="https://sujx.net/tags/disk/"/>
+    
+    <category term="lvm" scheme="https://sujx.net/tags/lvm/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>PowerShell的小技巧</title>
+    <link href="https://sujx.net/2020/04/22/powershell-usetips/"/>
+    <id>https://sujx.net/2020/04/22/powershell-usetips/</id>
+    <published>2020-04-22T03:29:30.000Z</published>
+    <updated>2021-07-01T12:07:28.503Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h3 id=&quot;Powershell环境的设置&quot;&gt;&lt;a href=&quot;#Powershell环境的设置&quot; class=&quot;headerlink&quot; title=&quot;Powershell环境的设置&quot;&gt;&lt;/a&gt;Powershell环境的设置&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;</summary>
+        
+      
+    
+    
+    
+    <category term="Something" scheme="https://sujx.net/categories/Something/"/>
+    
+    <category term="Tips" scheme="https://sujx.net/categories/Tips/"/>
+    
+    
+    <category term="tips" scheme="https://sujx.net/tags/tips/"/>
+    
+    <category term="powershell" scheme="https://sujx.net/tags/powershell/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>离线加域</title>
+    <link href="https://sujx.net/2020/04/11/offline-join-ad/"/>
+    <id>https://sujx.net/2020/04/11/offline-join-ad/</id>
+    <published>2020-04-11T15:09:16.000Z</published>
+    <updated>2021-07-01T12:07:28.503Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;在MS</summary>
+        
+      
+    
+    
+    
+    <category term="Something" scheme="https://sujx.net/categories/Something/"/>
+    
+    <category term="Tips" scheme="https://sujx.net/categories/Tips/"/>
+    
+    
+    <category term="Windows" scheme="https://sujx.net/tags/Windows/"/>
+    
+    <category term="ActiveDirctory" scheme="https://sujx.net/tags/ActiveDirctory/"/>
+    
+    <category term="djoin" scheme="https://sujx.net/tags/djoin/"/>
+    
+    <category term="offline" scheme="https://sujx.net/tags/offline/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Hyper-V主机的开局</title>
+    <link href="https://sujx.net/2020/04/07/hyper-v-host-init/"/>
+    <id>https://sujx.net/2020/04/07/hyper-v-host-init/</id>
+    <published>2020-04-07T10:24:59.000Z</published>
+    <updated>2021-07-01T12:07:28.495Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;Hyper-V是微软推出的虚拟化平台，它具有免费、高效、功能完备和安全的特性，但他的管理是基于powershell和winrm来进行管理配置。习惯了windows的图形界面配置和Linux的Bash管理，初次上手还是有点难度。&lt;/p&gt;
+&lt;h3 id=&quot;安装&quot;&gt;&lt;a</summary>
+        
+      
+    
+    
+    
+    <category term="Tips" scheme="https://sujx.net/categories/Tips/"/>
+    
+    <category term="ServerCore" scheme="https://sujx.net/categories/ServerCore/"/>
+    
+    
+    <category term="hyper-v" scheme="https://sujx.net/tags/hyper-v/"/>
+    
+    <category term="servercore" scheme="https://sujx.net/tags/servercore/"/>
+    
+    <category term="virtualization" scheme="https://sujx.net/tags/virtualization/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>如何打开iDRAC虚拟控制台</title>
+    <link href="https://sujx.net/2020/04/01/how-to-use-idrac/"/>
+    <id>https://sujx.net/2020/04/01/how-to-use-idrac/</id>
+    <published>2020-04-01T09:26:46.000Z</published>
+    <updated>2021-07-01T12:07:28.492Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;在戴尔服务器的日常运维中，我们可以使用服务器自带的iDRAC带外管理器来进行远程的系统安装、配置以及开关机、重启的操作。在实际使用中，iDRAC的虚拟控制台会通过浏览器下载启动链接，再调用相关接口来在本地显示远程服务器图形界面。&lt;/p&gt;
+&lt;h2 id=&quot;&quot;&gt;&lt;a</summary>
+        
+      
+    
+    
+    
+    <category term="Something" scheme="https://sujx.net/categories/Something/"/>
+    
+    <category term="Tips" scheme="https://sujx.net/categories/Tips/"/>
+    
+    
+    <category term="dell" scheme="https://sujx.net/tags/dell/"/>
+    
+    <category term="idrac" scheme="https://sujx.net/tags/idrac/"/>
+    
+    <category term="java" scheme="https://sujx.net/tags/java/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>网卡配置项</title>
+    <link href="https://sujx.net/2020/03/30/set-netcard/"/>
+    <id>https://sujx.net/2020/03/30/set-netcard/</id>
+    <published>2020-03-30T09:38:11.000Z</published>
+    <updated>2021-07-01T12:07:28.505Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;修改电脑网卡高级设置可以提高网络速度。另外，建议关闭在Realtek网卡高级设置中的以下其他选项：流控制/FlowControl、巨型帧/Jumboframe、大量传送负载/OffloadLargesend、EEE(Energy Efficient</summary>
+        
+      
+    
+    
+    
+    <category term="Tips" scheme="https://sujx.net/categories/Tips/"/>
+    
+    
+    <category term="netcard" scheme="https://sujx.net/tags/netcard/"/>
+    
+    <category term="tips" scheme="https://sujx.net/tags/tips/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>修改Hosts文件加速访问GitHub</title>
+    <link href="https://sujx.net/2020/03/15/ip-for-github/"/>
+    <id>https://sujx.net/2020/03/15/ip-for-github/</id>
+    <published>2020-03-15T14:07:01.000Z</published>
+    <updated>2021-07-01T12:07:28.498Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;在公司使用中国电信的公司宽带访问Github速度虽然不是飞快，但还是能够下载的。不过回家是用的移动宽带，访问github时能打开首页就算时烧高香了。那么首先想到的就是修改Hosts直接访问Github的地址，避免国内的CDN污染和线路瞎JB跳。</summary>
+        
+      
+    
+    
+    
+    <category term="Something" scheme="https://sujx.net/categories/Something/"/>
+    
+    <category term="System" scheme="https://sujx.net/categories/System/"/>
+    
+    
+    <category term="github" scheme="https://sujx.net/tags/github/"/>
+    
+    <category term="hosts" scheme="https://sujx.net/tags/hosts/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>使用CDH示例程序进行字数统计</title>
+    <link href="https://sujx.net/2020/03/09/wordcount-by-cdh/"/>
+    <id>https://sujx.net/2020/03/09/wordcount-by-cdh/</id>
+    <published>2020-03-08T19:06:52.000Z</published>
+    <updated>2021-07-01T12:07:28.511Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;Wordcount程序是Hadoop上的经典“HelloWorld”程序。CDH系统自带了wordcount程序来检测部署的成功与否。&lt;/p&gt;
+&lt;pre class=&quot;line-numbers language-shell&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="Other" scheme="https://sujx.net/categories/Other/"/>
+    
+    <category term="Bigdata" scheme="https://sujx.net/categories/Bigdata/"/>
+    
+    
+    <category term="bigdata" scheme="https://sujx.net/tags/bigdata/"/>
+    
+    <category term="mapreduce" scheme="https://sujx.net/tags/mapreduce/"/>
+    
+    <category term="wordcount" scheme="https://sujx.net/tags/wordcount/"/>
+    
+    <category term="yarn" scheme="https://sujx.net/tags/yarn/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>HDFS初步使用</title>
+    <link href="https://sujx.net/2020/03/01/use-hdfs-newbie/"/>
+    <id>https://sujx.net/2020/03/01/use-hdfs-newbie/</id>
+    <published>2020-03-01T14:36:24.000Z</published>
+    <updated>2021-07-01T12:07:28.508Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;HDFS(Hadoop Distributed File System)是可扩展、容错、高性能的分布式文件系统，异步复制，一次写入多次读取，主要负责存储。其概念和内容可以参考&lt;a</summary>
+        
+      
+    
+    
+    
+    <category term="Something" scheme="https://sujx.net/categories/Something/"/>
+    
+    <category term="Bigdata" scheme="https://sujx.net/categories/Bigdata/"/>
+    
+    
+    <category term="linux" scheme="https://sujx.net/tags/linux/"/>
+    
+    <category term="bigdata" scheme="https://sujx.net/tags/bigdata/"/>
+    
+    <category term="hdfs" scheme="https://sujx.net/tags/hdfs/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>离线部署CDH5.16.2</title>
+    <link href="https://sujx.net/2020/02/29/offline-deploy-cdh5/"/>
+    <id>https://sujx.net/2020/02/29/offline-deploy-cdh5/</id>
+    <published>2020-02-29T14:36:44.000Z</published>
+    <updated>2021-07-01T12:07:28.502Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;在实践了CDH6的离线部署之后，发现Cloudera的官方教程是基于CDH5.10的。同时，CDH6的内存占用比较高，我的机器有点遭不住，所以又把CDH5的部署实施走了一遍。&lt;/p&gt;
+&lt;h3 id=&quot;模板部署&quot;&gt;&lt;a href=&quot;#模板部署&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="Something" scheme="https://sujx.net/categories/Something/"/>
+    
+    <category term="System" scheme="https://sujx.net/categories/System/"/>
+    
+    <category term="Bigdata" scheme="https://sujx.net/categories/Bigdata/"/>
+    
+    
+    <category term="cdh" scheme="https://sujx.net/tags/cdh/"/>
+    
+    <category term="offline" scheme="https://sujx.net/tags/offline/"/>
+    
+    <category term="bigdata" scheme="https://sujx.net/tags/bigdata/"/>
+    
+    <category term="cdh5" scheme="https://sujx.net/tags/cdh5/"/>
+    
+  </entry>
+  
+</feed>
