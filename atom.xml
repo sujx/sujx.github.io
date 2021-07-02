@@ -177,9 +177,9 @@
     <category term="Other" scheme="https://sujx.net/categories/Other/"/>
     
     
-    <category term="Windows" scheme="https://sujx.net/tags/Windows/"/>
-    
     <category term="Router" scheme="https://sujx.net/tags/Router/"/>
+    
+    <category term="Windows" scheme="https://sujx.net/tags/Windows/"/>
     
   </entry>
   
@@ -351,9 +351,9 @@
     <category term="Tips" scheme="https://sujx.net/categories/Tips/"/>
     
     
-    <category term="tips" scheme="https://sujx.net/tags/tips/"/>
-    
     <category term="powershell" scheme="https://sujx.net/tags/powershell/"/>
+    
+    <category term="tips" scheme="https://sujx.net/tags/tips/"/>
     
   </entry>
   
@@ -382,11 +382,11 @@
     
     <category term="Windows" scheme="https://sujx.net/tags/Windows/"/>
     
+    <category term="offline" scheme="https://sujx.net/tags/offline/"/>
+    
     <category term="ActiveDirctory" scheme="https://sujx.net/tags/ActiveDirctory/"/>
     
     <category term="djoin" scheme="https://sujx.net/tags/djoin/"/>
-    
-    <category term="offline" scheme="https://sujx.net/tags/offline/"/>
     
   </entry>
   
@@ -475,9 +475,9 @@
     <category term="Tips" scheme="https://sujx.net/categories/Tips/"/>
     
     
-    <category term="netcard" scheme="https://sujx.net/tags/netcard/"/>
-    
     <category term="tips" scheme="https://sujx.net/tags/tips/"/>
+    
+    <category term="netcard" scheme="https://sujx.net/tags/netcard/"/>
     
   </entry>
   
@@ -603,11 +603,11 @@
     
     <category term="cdh" scheme="https://sujx.net/tags/cdh/"/>
     
-    <category term="offline" scheme="https://sujx.net/tags/offline/"/>
-    
     <category term="bigdata" scheme="https://sujx.net/tags/bigdata/"/>
     
     <category term="cdh5" scheme="https://sujx.net/tags/cdh5/"/>
+    
+    <category term="offline" scheme="https://sujx.net/tags/offline/"/>
     
   </entry>
   
