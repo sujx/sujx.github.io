@@ -6,7 +6,7 @@
   <link href="https://sujx.net/atom.xml" rel="self"/>
   
   <link href="https://sujx.net/"/>
-  <updated>2021-07-05T03:23:22.204Z</updated>
+  <updated>2021-07-05T06:41:12.526Z</updated>
   <id>https://sujx.net/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://sujx.net/2021/06/29/deploy_hexo/"/>
     <id>https://sujx.net/2021/06/29/deploy_hexo/</id>
     <published>2021-06-29T09:25:44.000Z</published>
-    <updated>2021-07-05T03:23:22.204Z</updated>
+    <updated>2021-07-05T06:41:12.526Z</updated>
     
     
       
@@ -115,9 +115,9 @@
     
     
     
-    <category term="Tips" scheme="https://sujx.net/categories/Tips/"/>
-    
     <category term="System" scheme="https://sujx.net/categories/System/"/>
+    
+    <category term="Tips" scheme="https://sujx.net/categories/Tips/"/>
     
     
     <category term="dell" scheme="https://sujx.net/tags/dell/"/>
@@ -382,11 +382,11 @@
     
     <category term="Windows" scheme="https://sujx.net/tags/Windows/"/>
     
+    <category term="offline" scheme="https://sujx.net/tags/offline/"/>
+    
     <category term="ActiveDirctory" scheme="https://sujx.net/tags/ActiveDirctory/"/>
     
     <category term="djoin" scheme="https://sujx.net/tags/djoin/"/>
-    
-    <category term="offline" scheme="https://sujx.net/tags/offline/"/>
     
   </entry>
   
@@ -409,9 +409,9 @@
     
     
     
-    <category term="Tips" scheme="https://sujx.net/categories/Tips/"/>
-    
     <category term="ServerCore" scheme="https://sujx.net/categories/ServerCore/"/>
+    
+    <category term="Tips" scheme="https://sujx.net/categories/Tips/"/>
     
     
     <category term="hyper-v" scheme="https://sujx.net/tags/hyper-v/"/>
@@ -603,11 +603,11 @@
     
     <category term="cdh" scheme="https://sujx.net/tags/cdh/"/>
     
-    <category term="offline" scheme="https://sujx.net/tags/offline/"/>
-    
     <category term="bigdata" scheme="https://sujx.net/tags/bigdata/"/>
     
     <category term="cdh5" scheme="https://sujx.net/tags/cdh5/"/>
+    
+    <category term="offline" scheme="https://sujx.net/tags/offline/"/>
     
   </entry>
   
