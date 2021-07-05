@@ -409,9 +409,9 @@
     
     
     
-    <category term="ServerCore" scheme="https://sujx.net/categories/ServerCore/"/>
-    
     <category term="Tips" scheme="https://sujx.net/categories/Tips/"/>
+    
+    <category term="ServerCore" scheme="https://sujx.net/categories/ServerCore/"/>
     
     
     <category term="hyper-v" scheme="https://sujx.net/tags/hyper-v/"/>
