@@ -497,7 +497,10 @@ gpgkey&#x3D;file:&#x2F;&#x2F;&#x2F;etc&#x2F;pki&#x2F;rpm-gpg&#x2F;RPM-GPG-KEY-ce
 <li>原生使用markdown来进行文本编辑；</li>
 <li>渲染生成静态文件后部署，省去了PHP环境和数据库环境；</li>
 <li>基于HTML页面，无论是oss、virtualhost、virtualmachine都能快速灵活部署；</li>
-<li>以下部署方案在Windows 10的wsl子系统上测试正常。<h3 id="环境部署"><a href="#环境部署" class="headerlink" title="环境部署"></a>环境部署</h3></li>
+<li>以下部署方案在Windows 10的wsl子系统上测试正常。</li>
+</ol>
+<hr>
+<h3 id="环境部署"><a href="#环境部署" class="headerlink" title="环境部署"></a>环境部署</h3><ol>
 <li>部署NODE.JS<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"># 使用Ubuntu Desktop 20.04 LTS环境
 # 升级系统
 sudo apt update 
@@ -542,8 +545,10 @@ npm install hexo-deployer-ali-oss --save
 # 安装主题所需插件
 npm install hexo-renderer-pug hexo-renderer-stylus --save
 # 安装字数统计插件
-npm install hexo-wordcount --save<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h2 id="配置站点"><a href="#配置站点" class="headerlink" title="配置站点"></a>配置站点</h2></li>
+npm install hexo-wordcount --save<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+</ol>
+<hr>
+<h2 id="配置站点"><a href="#配置站点" class="headerlink" title="配置站点"></a>配置站点</h2><ol>
 <li>修改配置<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">vim ~&#x2F;blog&#x2F;_config.yml
    
    # 站点信息
@@ -626,9 +631,8 @@ deploy:
   verbose: true # 是否打印调试信息
   ignore_errors: false # 是否忽略错误<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
 <li><p>站点发布</p>
-</li>
+<pre class="line-numbers language-none"><code class="language-none">综上，使用阿里云的智能DNS，海外线路走github、电信线路走oss南方区域、万网虚拟主机走联通线路，实现一个廉价版的多区域部署。<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
 </ol>
-<p>综上，使用阿里云的智能DNS，海外线路走github、电信线路走oss南方区域、万网虚拟主机走联通线路，实现一个廉价版的多区域部署。</p>
 ]]></content>
       <tags>
         <tag>blog</tag>
