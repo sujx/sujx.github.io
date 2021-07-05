@@ -1,70 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>建立本地RPM包仓库</title>
-    <url>/2019/09/09/deploy-local-repo-mirror/</url>
-    <content><![CDATA[<p>随着国内使用Linux的氛围日渐浓郁，各个大厂的源也如雨后春笋一般纷纷出现，下载速度也是越来越快。不过，在我司内部因为安全制度的限制，生产环境是不能直接连接互联网的,因此需要建立本地的源服务器。</p>
-<h3 id="建立服务环境"><a href="#建立服务环境" class="headerlink" title="建立服务环境"></a>建立服务环境</h3><p>软件镜像需要通过HTTP/HTTPS环境来提供服务。</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"># 系统更新
-yum update -y
-# 安装RPM相关包
-yum install -y zlib-devel openssl-devel gcc perl-devel pam-devel make autoconf
-yum install -y rpm-build unzip rsync createrepo
-# 安装HTTP服务器
-yum install -y httpd mod_security
-# 修改配置文件
-touch &#x2F;etc&#x2F;httpd&#x2F;conf.d&#x2F;repos.conf
-cat&gt;&gt;&#x2F;etc&#x2F;httpd&#x2F;conf.d&#x2F;repos.conf&lt;&lt;EOF
-Alias &#x2F;repos &#x2F;var&#x2F;www&#x2F;repos
-&lt;directory &#x2F;var&#x2F;www&#x2F;repos&gt;
-    Options +Indexes
-    Require all granted
-&lt;&#x2F;directory&gt;
-EOF
-#开启端口
-firewall-cmd --permanent --add-service&#x3D;http
-firewall-cmd --reload
-systemctl enable httpd --now
-# 配置环境
-mkdir -p &#x2F;var&#x2F;www&#x2F;repos&#x2F;&#123;centos,epel,docker-ce,remi,mongodb,zabbix&#125;
-chown -R apache:apche &#x2F;var&#x2F;www&#x2F;repos<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+    <title>简单制作WindowsPE镜像</title>
+    <url>/2021/06/29/Preper-WindowsPE/</url>
+    <content><![CDATA[<h3 id="下载部署文件"><a href="#下载部署文件" class="headerlink" title="下载部署文件"></a>下载部署文件</h3><ol>
+<li><p>下载适用于 Windows 10 版本 2004 的 Windows ADK<br><a href="https://go.microsoft.com/fwlink/?linkid=2120254">https://go.microsoft.com/fwlink/?linkid=2120254</a></p>
+</li>
+<li><p>下载适用于 ADK 版本 2004 的 Windows PE 加载项<br><a href="https://go.microsoft.com/fwlink/?linkid=2120253">https://go.microsoft.com/fwlink/?linkid=2120253</a></p>
+</li>
+</ol>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>安装完成ADK和加载项之后，使用命令行进入 :</p>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>执行</p>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">copype amd64 c:\winpe_amd64_ps<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>该命令会自动创建目标文件夹</p>
+<h3 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h3><ol>
+<li><p>装载原始镜像</p>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">Dism &#x2F;Mount-Image &#x2F;ImageFile:&quot;C:\WinPE_amd64_PS\media\sources\boot.wim&quot; &#x2F;Index:1 &#x2F;MountDir:&quot;C:\WinPE_amd64_PS\mount&quot;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+<li><p>添加Powershell功能支持</p>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">Dism &#x2F;Add-Package &#x2F;Image:&quot;C:\WinPE_amd64_PS\mount&quot; &#x2F;PackagePath:&quot;C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment\amd64\WinPE_OCs\WinPE-WMI.cab&quot;
+Dism &#x2F;Add-Package &#x2F;Image:&quot;C:\WinPE_amd64_PS\mount&quot; &#x2F;PackagePath:&quot;C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment\amd64\WinPE_OCs\en-us\WinPE-WMI_en-us.cab&quot;
+Dism &#x2F;Add-Package &#x2F;Image:&quot;C:\WinPE_amd64_PS\mount&quot; &#x2F;PackagePath:&quot;C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment\amd64\WinPE_OCs\WinPE-NetFX.cab&quot;
+Dism &#x2F;Add-Package &#x2F;Image:&quot;C:\WinPE_amd64_PS\mount&quot; &#x2F;PackagePath:&quot;C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment\amd64\WinPE_OCs\en-us\WinPE-NetFX_en-us.cab&quot;
+Dism &#x2F;Add-Package &#x2F;Image:&quot;C:\WinPE_amd64_PS\mount&quot; &#x2F;PackagePath:&quot;C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment\amd64\WinPE_OCs\WinPE-Scripting.cab&quot;
+Dism &#x2F;Add-Package &#x2F;Image:&quot;C:\WinPE_amd64_PS\mount&quot; &#x2F;PackagePath:&quot;C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment\amd64\WinPE_OCs\en-us\WinPE-Scripting_en-us.cab&quot;
+Dism &#x2F;Add-Package &#x2F;Image:&quot;C:\WinPE_amd64_PS\mount&quot; &#x2F;PackagePath:&quot;C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment\amd64\WinPE_OCs\WinPE-PowerShell.cab&quot;
+Dism &#x2F;Add-Package &#x2F;Image:&quot;C:\WinPE_amd64_PS\mount&quot; &#x2F;PackagePath:&quot;C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment\amd64\WinPE_OCs\en-us\WinPE-PowerShell_en-us.cab&quot;
+Dism &#x2F;Add-Package &#x2F;Image:&quot;C:\WinPE_amd64_PS\mount&quot; &#x2F;PackagePath:&quot;C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment\amd64\WinPE_OCs\WinPE-StorageWMI.cab&quot;
+Dism &#x2F;Add-Package &#x2F;Image:&quot;C:\WinPE_amd64_PS\mount&quot; &#x2F;PackagePath:&quot;C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment\amd64\WinPE_OCs\en-us\WinPE-StorageWMI_en-us.cab&quot;
+Dism &#x2F;Add-Package &#x2F;Image:&quot;C:\WinPE_amd64_PS\mount&quot; &#x2F;PackagePath:&quot;C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment\amd64\WinPE_OCs\WinPE-DismCmdlets.cab&quot;
+Dism &#x2F;Add-Package &#x2F;Image:&quot;C:\WinPE_amd64_PS\mount&quot; &#x2F;PackagePath:&quot;C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment\amd64\WinPE_OCs\en-us\WinPE-DismCmdlets_en-us.cab&quot;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+<li><p>添加驱动</p>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">Dism &#x2F;image:&quot;C:\WinPE_amd64_PS\mount&quot; &#x2F;Add-Driver &#x2F;driver:&quot;d&quot;:\drivers\&quot; &#x2F;recurse<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+<li><p>添加工具</p>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">mkdir C:\WinPE_amd64_PS\mount\tools<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>复制可执行文件比如filezilla、putty等免安装文件到tools目录。</p>
+</li>
+<li><p>优化</p>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">Dism &#x2F;Set-ScratchSpace:512 &#x2F;Image:&quot;C:\WinPE_amd64_PS\mount&quot;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+<li><p>生成镜像</p>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">Dism &#x2F;Unmount-Image &#x2F;MountDir:C:\WinPE_amd64_PS\mount &#x2F;Commit
+MakeWinPEMedia &#x2F;ISO C:\WinPE_amd64_PS d:\winpe.iso<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
+<li><p>引导加载使用</p>
+</li>
+</ol>
+]]></content>
+      <tags>
+        <tag>Windows WindowsPE</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CentOS8的软件库</title>
+    <url>/2020/01/31/centos8-mirrors/</url>
+    <content><![CDATA[<p>相对于华为和阿里云的mirrors，中国科技大学的mirrors的完整性和速度要好一些，而且配置文件也方便一些。现在把相关文件记一下：</p>
+<h3 id="系统repo"><a href="#系统repo" class="headerlink" title="系统repo"></a>系统repo</h3><pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">[BaseOS]
+name&#x3D;CentOS-$releasever - Base
+#mirrorlist&#x3D;http:&#x2F;&#x2F;mirrorlist.centos.org&#x2F;?release&#x3D;$releasever&amp;arch&#x3D;$basearch&amp;repo&#x3D;BaseOS&amp;infra&#x3D;$infra
+baseurl&#x3D;https:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;centos&#x2F;$releasever&#x2F;BaseOS&#x2F;$basearch&#x2F;os&#x2F;
+gpgcheck&#x3D;1
+enabled&#x3D;1
+gpgkey&#x3D;file:&#x2F;&#x2F;&#x2F;etc&#x2F;pki&#x2F;rpm-gpg&#x2F;RPM-GPG-KEY-centosofficial
 
-<h3 id="同步官方安装源"><a href="#同步官方安装源" class="headerlink" title="同步官方安装源"></a>同步官方安装源</h3><p>下载脚本如下,其中使用到了清华大学的镜像源和中科大的镜像源，其中包含了CentOS、epel、Zabbix、MongoDB、PHP的镜像，整个占用存储空间不到800G。</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">#!&#x2F;bin&#x2F;bash
-# CentOS
-rsync -avrt --delete --exclude&#x3D;isos --exclude&#x3D;aarch64 --exclude&#x3D;ppc64 --exclude&#x3D;drpms&#x2F; --exclude&#x3D;debug&#x2F; rsync:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;centos&#x2F; &#x2F;var&#x2F;www&#x2F;repos&#x2F;centos&#x2F;
+#additional packages that may be useful
+[extras]
+name&#x3D;CentOS-$releasever - Extras
+#mirrorlist&#x3D;http:&#x2F;&#x2F;mirrorlist.centos.org&#x2F;?release&#x3D;$releasever&amp;arch&#x3D;$basearch&amp;repo&#x3D;extras&amp;infra&#x3D;$infra
+baseurl&#x3D;https:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;centos&#x2F;$releasever&#x2F;extras&#x2F;$basearch&#x2F;os&#x2F;
+gpgcheck&#x3D;1
+enabled&#x3D;1
+gpgkey&#x3D;file:&#x2F;&#x2F;&#x2F;etc&#x2F;pki&#x2F;rpm-gpg&#x2F;RPM-GPG-KEY-centosofficial
 
-#EPEL
-rsync -avrt --delete --exclude&#x3D;isos --exclude&#x3D;aarch64 --exclude&#x3D;ppc64 --exclude&#x3D;drpms&#x2F; --exclude&#x3D;debug&#x2F; rsync:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;epel&#x2F; &#x2F;var&#x2F;www&#x2F;repos&#x2F;epel&#x2F;
+#additional packages that extend functionality of existing packages
+[centosplus]
+name&#x3D;CentOS-$releasever - Plus
+#mirrorlist&#x3D;http:&#x2F;&#x2F;mirrorlist.centos.org&#x2F;?release&#x3D;$releasever&amp;arch&#x3D;$basearch&amp;repo&#x3D;centosplus&amp;infra&#x3D;$infra
+baseurl&#x3D;https:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;centos&#x2F;$releasever&#x2F;centosplus&#x2F;$basearch&#x2F;os&#x2F;
+gpgcheck&#x3D;1
+enabled&#x3D;0
+gpgkey&#x3D;file:&#x2F;&#x2F;&#x2F;etc&#x2F;pki&#x2F;rpm-gpg&#x2F;RPM-GPG-KEY-centosofficial
 
-#Docker_CE
-rsync -avrt --delete --exclude&#x3D;test --exclude&#x3D;nightly --exclude&#x3D;edge --exclude&#x3D;aarch64 --exclude&#x3D;drpms&#x2F; --exclude&#x3D;debug&#x2F; --exclude&#x3D;source&#x2F; --exclude&#x3D;debug-*&#x2F; rsync:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;repo&#x2F;docker-ce&#x2F;linux&#x2F;centos&#x2F; &#x2F;var&#x2F;www&#x2F;repos&#x2F;docker-ce&#x2F;linux&#x2F;centos&#x2F;
+[AppStream]
+name&#x3D;CentOS-$releasever - AppStream
+#mirrorlist&#x3D;http:&#x2F;&#x2F;mirrorlist.centos.org&#x2F;?release&#x3D;$releasever&amp;arch&#x3D;$basearch&amp;repo&#x3D;AppStream&amp;infra&#x3D;$infra
+baseurl&#x3D;https:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;centos&#x2F;$releasever&#x2F;AppStream&#x2F;$basearch&#x2F;os&#x2F;
+gpgcheck&#x3D;1
+enabled&#x3D;1
+gpgkey&#x3D;file:&#x2F;&#x2F;&#x2F;etc&#x2F;pki&#x2F;rpm-gpg&#x2F;RPM-GPG-KEY-centosofficial
 
-#Zabbix
-rsync -avrt --delete rsync:&#x2F;&#x2F;mirror.tuna.tsinghua.edu.cn&#x2F;zabbix&#x2F; &#x2F;var&#x2F;www&#x2F;repos&#x2F;zabbix&#x2F;
-
-#Mongodb
-rsync -avrt --delete  rsync:&#x2F;&#x2F;mirror.tuna.tsinghua.edu.cn&#x2F;mongodb&#x2F;yum&#x2F; &#x2F;var&#x2F;www&#x2F;repos&#x2F;mongodb&#x2F;yum&#x2F;
-
-#Remi
-rsync -avrt --delete  rsync:&#x2F;&#x2F;mirror.tuna.tsinghua.edu.cn&#x2F;remi&#x2F; &#x2F;var&#x2F;www&#x2F;repos&#x2F;remi&#x2F;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h3 id="设置本地打包软件源"><a href="#设置本地打包软件源" class="headerlink" title="设置本地打包软件源"></a>设置本地打包软件源</h3><p>由于官方软件的更新策略和时间限制，我们需要给部分软件进行自打包和更新升级，所以需要建立单独的本地仓库</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">cd &#x2F;var&#x2F;www&#x2F;repos
-mkdir -p &#x2F;var&#x2F;www&#x2F;repos&#x2F;local&#x2F;&#123;6,7,8&#125;&#x2F;x86_64
-creatrepo &#x2F;var&#x2F;www&#x2F;repos&#x2F;local&#x2F;6&#x2F;x86_64&#x2F;
-creatrepo &#x2F;var&#x2F;www&#x2F;repos&#x2F;local&#x2F;7&#x2F;x86_64&#x2F;
-creatrepo &#x2F;var&#x2F;www&#x2F;repos&#x2F;local&#x2F;8&#x2F;x86_64&#x2F;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>]]></content>
+[PowerTools]
+name&#x3D;CentOS-$releasever - PowerTools
+#mirrorlist&#x3D;http:&#x2F;&#x2F;mirrorlist.centos.org&#x2F;?release&#x3D;$releasever&amp;arch&#x3D;$basearch&amp;repo&#x3D;PowerTools&amp;infra&#x3D;$infra
+baseurl&#x3D;https:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;centos&#x2F;$releasever&#x2F;PowerTools&#x2F;$basearch&#x2F;os&#x2F;
+gpgcheck&#x3D;1
+enabled&#x3D;0
+gpgkey&#x3D;file:&#x2F;&#x2F;&#x2F;etc&#x2F;pki&#x2F;rpm-gpg&#x2F;RPM-GPG-KEY-centosofficial<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>]]></content>
       <categories>
         <category>Linux</category>
         <category>Something</category>
       </categories>
       <tags>
-        <tag>centos</tag>
-        <tag>dnf</tag>
+        <tag>centos8</tag>
+        <tag>mirrors</tag>
         <tag>repo</tag>
-        <tag>RPM</tag>
-        <tag>yum</tag>
+        <tag>tsinghua</tag>
       </tags>
   </entry>
   <entry>
@@ -266,115 +304,246 @@ cd<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><
         <category>System</category>
       </categories>
       <tags>
-        <tag>centos</tag>
         <tag>cdh</tag>
+        <tag>centos</tag>
         <tag>deploy</tag>
         <tag>hadoop</tag>
       </tags>
   </entry>
   <entry>
-    <title>简单制作WindowsPE镜像</title>
-    <url>/2021/06/29/Preper-WindowsPE/</url>
-    <content><![CDATA[<h3 id="下载部署文件"><a href="#下载部署文件" class="headerlink" title="下载部署文件"></a>下载部署文件</h3><ol>
-<li><p>下载适用于 Windows 10 版本 2004 的 Windows ADK<br><a href="https://go.microsoft.com/fwlink/?linkid=2120254">https://go.microsoft.com/fwlink/?linkid=2120254</a></p>
-</li>
-<li><p>下载适用于 ADK 版本 2004 的 Windows PE 加载项<br><a href="https://go.microsoft.com/fwlink/?linkid=2120253">https://go.microsoft.com/fwlink/?linkid=2120253</a></p>
-</li>
-</ol>
-<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>安装完成ADK和加载项之后，使用命令行进入 :</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>执行</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">copype amd64 c:\winpe_amd64_ps<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>该命令会自动创建目标文件夹</p>
-<h3 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h3><ol>
-<li><p>装载原始镜像</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">Dism &#x2F;Mount-Image &#x2F;ImageFile:&quot;C:\WinPE_amd64_PS\media\sources\boot.wim&quot; &#x2F;Index:1 &#x2F;MountDir:&quot;C:\WinPE_amd64_PS\mount&quot;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
-<li><p>添加Powershell功能支持</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">Dism &#x2F;Add-Package &#x2F;Image:&quot;C:\WinPE_amd64_PS\mount&quot; &#x2F;PackagePath:&quot;C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment\amd64\WinPE_OCs\WinPE-WMI.cab&quot;
-Dism &#x2F;Add-Package &#x2F;Image:&quot;C:\WinPE_amd64_PS\mount&quot; &#x2F;PackagePath:&quot;C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment\amd64\WinPE_OCs\en-us\WinPE-WMI_en-us.cab&quot;
-Dism &#x2F;Add-Package &#x2F;Image:&quot;C:\WinPE_amd64_PS\mount&quot; &#x2F;PackagePath:&quot;C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment\amd64\WinPE_OCs\WinPE-NetFX.cab&quot;
-Dism &#x2F;Add-Package &#x2F;Image:&quot;C:\WinPE_amd64_PS\mount&quot; &#x2F;PackagePath:&quot;C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment\amd64\WinPE_OCs\en-us\WinPE-NetFX_en-us.cab&quot;
-Dism &#x2F;Add-Package &#x2F;Image:&quot;C:\WinPE_amd64_PS\mount&quot; &#x2F;PackagePath:&quot;C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment\amd64\WinPE_OCs\WinPE-Scripting.cab&quot;
-Dism &#x2F;Add-Package &#x2F;Image:&quot;C:\WinPE_amd64_PS\mount&quot; &#x2F;PackagePath:&quot;C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment\amd64\WinPE_OCs\en-us\WinPE-Scripting_en-us.cab&quot;
-Dism &#x2F;Add-Package &#x2F;Image:&quot;C:\WinPE_amd64_PS\mount&quot; &#x2F;PackagePath:&quot;C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment\amd64\WinPE_OCs\WinPE-PowerShell.cab&quot;
-Dism &#x2F;Add-Package &#x2F;Image:&quot;C:\WinPE_amd64_PS\mount&quot; &#x2F;PackagePath:&quot;C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment\amd64\WinPE_OCs\en-us\WinPE-PowerShell_en-us.cab&quot;
-Dism &#x2F;Add-Package &#x2F;Image:&quot;C:\WinPE_amd64_PS\mount&quot; &#x2F;PackagePath:&quot;C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment\amd64\WinPE_OCs\WinPE-StorageWMI.cab&quot;
-Dism &#x2F;Add-Package &#x2F;Image:&quot;C:\WinPE_amd64_PS\mount&quot; &#x2F;PackagePath:&quot;C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment\amd64\WinPE_OCs\en-us\WinPE-StorageWMI_en-us.cab&quot;
-Dism &#x2F;Add-Package &#x2F;Image:&quot;C:\WinPE_amd64_PS\mount&quot; &#x2F;PackagePath:&quot;C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment\amd64\WinPE_OCs\WinPE-DismCmdlets.cab&quot;
-Dism &#x2F;Add-Package &#x2F;Image:&quot;C:\WinPE_amd64_PS\mount&quot; &#x2F;PackagePath:&quot;C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment\amd64\WinPE_OCs\en-us\WinPE-DismCmdlets_en-us.cab&quot;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
-<li><p>添加驱动</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">Dism &#x2F;image:&quot;C:\WinPE_amd64_PS\mount&quot; &#x2F;Add-Driver &#x2F;driver:&quot;d&quot;:\drivers\&quot; &#x2F;recurse<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
-<li><p>添加工具</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">mkdir C:\WinPE_amd64_PS\mount\tools<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>复制可执行文件比如filezilla、putty等免安装文件到tools目录。</p>
-</li>
-<li><p>优化</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">Dism &#x2F;Set-ScratchSpace:512 &#x2F;Image:&quot;C:\WinPE_amd64_PS\mount&quot;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
-<li><p>生成镜像</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">Dism &#x2F;Unmount-Image &#x2F;MountDir:C:\WinPE_amd64_PS\mount &#x2F;Commit
-MakeWinPEMedia &#x2F;ISO C:\WinPE_amd64_PS d:\winpe.iso<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
-<li><p>引导加载使用</p>
-</li>
-</ol>
-]]></content>
-      <tags>
-        <tag>Windows WindowsPE</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>CentOS8的软件库</title>
-    <url>/2020/01/31/centos8-mirrors/</url>
-    <content><![CDATA[<p>相对于华为和阿里云的mirrors，中国科技大学的mirrors的完整性和速度要好一些，而且配置文件也方便一些。现在把相关文件记一下：</p>
-<h3 id="系统repo"><a href="#系统repo" class="headerlink" title="系统repo"></a>系统repo</h3><pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">[BaseOS]
-name&#x3D;CentOS-$releasever - Base
-#mirrorlist&#x3D;http:&#x2F;&#x2F;mirrorlist.centos.org&#x2F;?release&#x3D;$releasever&amp;arch&#x3D;$basearch&amp;repo&#x3D;BaseOS&amp;infra&#x3D;$infra
-baseurl&#x3D;https:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;centos&#x2F;$releasever&#x2F;BaseOS&#x2F;$basearch&#x2F;os&#x2F;
-gpgcheck&#x3D;1
-enabled&#x3D;1
-gpgkey&#x3D;file:&#x2F;&#x2F;&#x2F;etc&#x2F;pki&#x2F;rpm-gpg&#x2F;RPM-GPG-KEY-centosofficial
+    <title>建立本地RPM包仓库</title>
+    <url>/2019/09/09/deploy-local-repo-mirror/</url>
+    <content><![CDATA[<p>随着国内使用Linux的氛围日渐浓郁，各个大厂的源也如雨后春笋一般纷纷出现，下载速度也是越来越快。不过，在我司内部因为安全制度的限制，生产环境是不能直接连接互联网的,因此需要建立本地的源服务器。</p>
+<h3 id="建立服务环境"><a href="#建立服务环境" class="headerlink" title="建立服务环境"></a>建立服务环境</h3><p>软件镜像需要通过HTTP/HTTPS环境来提供服务。</p>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"># 系统更新
+yum update -y
+# 安装RPM相关包
+yum install -y zlib-devel openssl-devel gcc perl-devel pam-devel make autoconf
+yum install -y rpm-build unzip rsync createrepo
+# 安装HTTP服务器
+yum install -y httpd mod_security
+# 修改配置文件
+touch &#x2F;etc&#x2F;httpd&#x2F;conf.d&#x2F;repos.conf
+cat&gt;&gt;&#x2F;etc&#x2F;httpd&#x2F;conf.d&#x2F;repos.conf&lt;&lt;EOF
+Alias &#x2F;repos &#x2F;var&#x2F;www&#x2F;repos
+&lt;directory &#x2F;var&#x2F;www&#x2F;repos&gt;
+    Options +Indexes
+    Require all granted
+&lt;&#x2F;directory&gt;
+EOF
+#开启端口
+firewall-cmd --permanent --add-service&#x3D;http
+firewall-cmd --reload
+systemctl enable httpd --now
+# 配置环境
+mkdir -p &#x2F;var&#x2F;www&#x2F;repos&#x2F;&#123;centos,epel,docker-ce,remi,mongodb,zabbix&#125;
+chown -R apache:apche &#x2F;var&#x2F;www&#x2F;repos<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-#additional packages that may be useful
-[extras]
-name&#x3D;CentOS-$releasever - Extras
-#mirrorlist&#x3D;http:&#x2F;&#x2F;mirrorlist.centos.org&#x2F;?release&#x3D;$releasever&amp;arch&#x3D;$basearch&amp;repo&#x3D;extras&amp;infra&#x3D;$infra
-baseurl&#x3D;https:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;centos&#x2F;$releasever&#x2F;extras&#x2F;$basearch&#x2F;os&#x2F;
-gpgcheck&#x3D;1
-enabled&#x3D;1
-gpgkey&#x3D;file:&#x2F;&#x2F;&#x2F;etc&#x2F;pki&#x2F;rpm-gpg&#x2F;RPM-GPG-KEY-centosofficial
+<h3 id="同步官方安装源"><a href="#同步官方安装源" class="headerlink" title="同步官方安装源"></a>同步官方安装源</h3><p>下载脚本如下,其中使用到了清华大学的镜像源和中科大的镜像源，其中包含了CentOS、epel、Zabbix、MongoDB、PHP的镜像，整个占用存储空间不到800G。</p>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">#!&#x2F;bin&#x2F;bash
+# CentOS
+rsync -avrt --delete --exclude&#x3D;isos --exclude&#x3D;aarch64 --exclude&#x3D;ppc64 --exclude&#x3D;drpms&#x2F; --exclude&#x3D;debug&#x2F; rsync:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;centos&#x2F; &#x2F;var&#x2F;www&#x2F;repos&#x2F;centos&#x2F;
 
-#additional packages that extend functionality of existing packages
-[centosplus]
-name&#x3D;CentOS-$releasever - Plus
-#mirrorlist&#x3D;http:&#x2F;&#x2F;mirrorlist.centos.org&#x2F;?release&#x3D;$releasever&amp;arch&#x3D;$basearch&amp;repo&#x3D;centosplus&amp;infra&#x3D;$infra
-baseurl&#x3D;https:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;centos&#x2F;$releasever&#x2F;centosplus&#x2F;$basearch&#x2F;os&#x2F;
-gpgcheck&#x3D;1
-enabled&#x3D;0
-gpgkey&#x3D;file:&#x2F;&#x2F;&#x2F;etc&#x2F;pki&#x2F;rpm-gpg&#x2F;RPM-GPG-KEY-centosofficial
+#EPEL
+rsync -avrt --delete --exclude&#x3D;isos --exclude&#x3D;aarch64 --exclude&#x3D;ppc64 --exclude&#x3D;drpms&#x2F; --exclude&#x3D;debug&#x2F; rsync:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;epel&#x2F; &#x2F;var&#x2F;www&#x2F;repos&#x2F;epel&#x2F;
 
-[AppStream]
-name&#x3D;CentOS-$releasever - AppStream
-#mirrorlist&#x3D;http:&#x2F;&#x2F;mirrorlist.centos.org&#x2F;?release&#x3D;$releasever&amp;arch&#x3D;$basearch&amp;repo&#x3D;AppStream&amp;infra&#x3D;$infra
-baseurl&#x3D;https:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;centos&#x2F;$releasever&#x2F;AppStream&#x2F;$basearch&#x2F;os&#x2F;
-gpgcheck&#x3D;1
-enabled&#x3D;1
-gpgkey&#x3D;file:&#x2F;&#x2F;&#x2F;etc&#x2F;pki&#x2F;rpm-gpg&#x2F;RPM-GPG-KEY-centosofficial
+#Docker_CE
+rsync -avrt --delete --exclude&#x3D;test --exclude&#x3D;nightly --exclude&#x3D;edge --exclude&#x3D;aarch64 --exclude&#x3D;drpms&#x2F; --exclude&#x3D;debug&#x2F; --exclude&#x3D;source&#x2F; --exclude&#x3D;debug-*&#x2F; rsync:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;repo&#x2F;docker-ce&#x2F;linux&#x2F;centos&#x2F; &#x2F;var&#x2F;www&#x2F;repos&#x2F;docker-ce&#x2F;linux&#x2F;centos&#x2F;
 
-[PowerTools]
-name&#x3D;CentOS-$releasever - PowerTools
-#mirrorlist&#x3D;http:&#x2F;&#x2F;mirrorlist.centos.org&#x2F;?release&#x3D;$releasever&amp;arch&#x3D;$basearch&amp;repo&#x3D;PowerTools&amp;infra&#x3D;$infra
-baseurl&#x3D;https:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;centos&#x2F;$releasever&#x2F;PowerTools&#x2F;$basearch&#x2F;os&#x2F;
-gpgcheck&#x3D;1
-enabled&#x3D;0
-gpgkey&#x3D;file:&#x2F;&#x2F;&#x2F;etc&#x2F;pki&#x2F;rpm-gpg&#x2F;RPM-GPG-KEY-centosofficial<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>]]></content>
+#Zabbix
+rsync -avrt --delete rsync:&#x2F;&#x2F;mirror.tuna.tsinghua.edu.cn&#x2F;zabbix&#x2F; &#x2F;var&#x2F;www&#x2F;repos&#x2F;zabbix&#x2F;
+
+#Mongodb
+rsync -avrt --delete  rsync:&#x2F;&#x2F;mirror.tuna.tsinghua.edu.cn&#x2F;mongodb&#x2F;yum&#x2F; &#x2F;var&#x2F;www&#x2F;repos&#x2F;mongodb&#x2F;yum&#x2F;
+
+#Remi
+rsync -avrt --delete  rsync:&#x2F;&#x2F;mirror.tuna.tsinghua.edu.cn&#x2F;remi&#x2F; &#x2F;var&#x2F;www&#x2F;repos&#x2F;remi&#x2F;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="设置本地打包软件源"><a href="#设置本地打包软件源" class="headerlink" title="设置本地打包软件源"></a>设置本地打包软件源</h3><p>由于官方软件的更新策略和时间限制，我们需要给部分软件进行自打包和更新升级，所以需要建立单独的本地仓库</p>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">cd &#x2F;var&#x2F;www&#x2F;repos
+mkdir -p &#x2F;var&#x2F;www&#x2F;repos&#x2F;local&#x2F;&#123;6,7,8&#125;&#x2F;x86_64
+creatrepo &#x2F;var&#x2F;www&#x2F;repos&#x2F;local&#x2F;6&#x2F;x86_64&#x2F;
+creatrepo &#x2F;var&#x2F;www&#x2F;repos&#x2F;local&#x2F;7&#x2F;x86_64&#x2F;
+creatrepo &#x2F;var&#x2F;www&#x2F;repos&#x2F;local&#x2F;8&#x2F;x86_64&#x2F;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>]]></content>
       <categories>
         <category>Linux</category>
         <category>Something</category>
       </categories>
       <tags>
         <tag>repo</tag>
-        <tag>centos8</tag>
-        <tag>mirrors</tag>
-        <tag>tsinghua</tag>
+        <tag>centos</tag>
+        <tag>dnf</tag>
+        <tag>RPM</tag>
+        <tag>yum</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>终端安全系统WAZUH的介绍</title>
+    <url>/2021/07/05/deploy-wazuh-on-distrbuted/</url>
+    <content><![CDATA[<p>[Wazuh](<a href="https://wazuh.com/">Wazuh · The Open Source Security Platform</a>)是一整套基于ossec安全检测工具和EFK日志工具构成的终端安全管理工具。不管是将其分类至HIDS，还是EDR，它都是一套通过监控主机日志行为，提供安全检测、分析和完整报告的开源、免费利器。Wazuh基于C/S架构，它的Agent支持Windows、MacOS、Linux、HP-UX、AIX等主流操作系统。其服务端负责提供认证和数据收集，然后通过filebeat进行日志清洗，最后导入ElasticSearch，通过Kinbana进行展示和输出日志。它不仅可以收集主机的事件日志进行一般的入侵检测功能，还可以通过第三方提供的系统漏洞检测feed文件，来实现主机的漏洞扫描和合规检查。</p>
+<h3 id="功能示例"><a href="#功能示例" class="headerlink" title="功能示例"></a>功能示例</h3><p><img src="data_flow1.png" alt="data_flow"></p>
+<h3 id=""><a href="#" class="headerlink" title=""></a></h3><hr>
+<h3 id="组件模块"><a href="#组件模块" class="headerlink" title="组件模块"></a>组件模块</h3><p>Wazuh的组件分为三部分：</p>
+<ol>
+<li><p>客户端的功能</p>
+<p><img src="https://cdn.sujx.net/architecture_agent1.png" alt="agent"></p>
+<ol>
+<li>收集日志和事件日志；</li>
+<li>文件和注册表的监控；</li>
+<li>运行进程和安装软件的信息收集；</li>
+<li>监控系统端口和网络配置；</li>
+<li>检测恶意软件；</li>
+<li>配置管理和策略监控</li>
+<li>检测主机响应</li>
+</ol>
+</li>
+<li><p>服务端</p>
+<p><img src="https://cdn.sujx.net/architecture_server1.png" alt="server"></p>
+<pre><code>1. 客户端的服务器注册；
+2. 实现客户端的连接服务；
+3. 根据各项规则实现事件日志的分析引擎；
+4. 提供RESTful API；
+5. 实现服务端的群集化；
+6. 使用Filebeat将日志文件吐给ES存储
+</code></pre>
+</li>
+<li><p>Elastic Stack</p>
+<p><img src="https://cdn.sujx.net/wazuh-show.PNG" alt="show"></p>
+</li>
+</ol>
+<hr>
+<h3 id="安装要求"><a href="#安装要求" class="headerlink" title="安装要求"></a>安装要求</h3><ol>
+<li><p>端口要求</p>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Software</th>
+<th>Port</th>
+<th>Protocol</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Wazuh server</td>
+<td>Wazuh manager</td>
+<td>1514</td>
+<td>TCP (default)</td>
+<td>Agents connection service</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>1514</td>
+<td>UDP</td>
+<td>Agents connection service</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>1515</td>
+<td>TCP</td>
+<td>Agents registration service</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>1516</td>
+<td>TCP</td>
+<td>Wazuh cluster daemon</td>
+</tr>
+<tr>
+<td></td>
+<td>Wazuh API</td>
+<td>55000</td>
+<td>TCP</td>
+<td>Wazuh RESTful API</td>
+</tr>
+<tr>
+<td>Elastic Stack</td>
+<td>Elasticsearch</td>
+<td>9200</td>
+<td>TCP</td>
+<td>Elasticsearch RESTful API</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>9300-9400</td>
+<td>TCP</td>
+<td>Elasticsearch cluster communication</td>
+</tr>
+<tr>
+<td></td>
+<td>Kibana</td>
+<td>5601</td>
+<td>TCP</td>
+<td>Kibana web interface</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>系统要求</p>
+<ol>
+<li>服务端只能部署到Linux主机上</li>
+<li>建议使用RHEL/CentOS 6.x、Ubuntu 12、Debian 7 版本以上</li>
+</ol>
+</li>
+<li><p> 硬件要求</p>
+</li>
+<li><p>主机配置</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>最小配置</th>
+<th></th>
+<th>建议配置</th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Component</td>
+<td>RAM (GB)</td>
+<td>CPU (cores)</td>
+<td>RAM (GB)</td>
+<td>CPU (cores)</td>
+</tr>
+<tr>
+<td>Wazuh server</td>
+<td>2</td>
+<td>2</td>
+<td>8</td>
+<td>4</td>
+</tr>
+<tr>
+<td>Elastic Stack</td>
+<td>4</td>
+<td>2</td>
+<td>16</td>
+<td>8</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>存储配置</p>
+<ol>
+<li>需要单独配置wazuh server的日志存储分区；</li>
+<li>需要按当前月度日志量x6的最低要求配置，实际运行建议至少每台Wazuh Server配置100G日志存储；</li>
+<li>Elastic存储需要汇总多台Wazuh Server日志，至少需要保留半年日志量，建议配置1T存储。</li>
+</ol>
+</li>
+<li><p>部署拓扑</p>
+<p><img src="https://cdn.sujx.net/deployment1.png" alt="topo"></p>
+</li>
+</ol>
+<hr>
+<p>未完待续……</p>
+]]></content>
+      <tags>
+        <tag>wazuh</tag>
+        <tag>EDR</tag>
+        <tag>HIDS</tag>
+        <tag>System</tag>
+        <tag>Security</tag>
       </tags>
   </entry>
   <entry>
@@ -1187,118 +1356,6 @@ shutdown &#x2F;r &#x2F;t 0<span aria-hidden="true" class="line-numbers-rows"><sp
       </tags>
   </entry>
   <entry>
-    <title>JumpServer的两项修改</title>
-    <url>/2020/08/21/modify_jumperserver/</url>
-    <content><![CDATA[<h2 id="JumpServer-扩容"><a href="#JumpServer-扩容" class="headerlink" title="JumpServer 扩容"></a>JumpServer 扩容</h2><h3 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h3><p>JumpSever的录像默认位置为： /opt/jumpserver/data/media/replay/ 为了防止录像文件把过大，需要为该目录挂载一块新的硬盘。</p>
-<h3 id="执行"><a href="#执行" class="headerlink" title="执行"></a>执行</h3><ol>
-<li> 为主机挂载一块20G硬盘</li>
-<li> 新建LVM分区</li>
-</ol>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">[root@jumpserver ~]# partprobe &#x2F;dev&#x2F;sdb
-[root@jumpserver ~]# pvcreate &#x2F;dev&#x2F;sdb
-[root@jumpserver ~]# vgcreate vg_jumpereplay &#x2F;dev&#x2F;sdb
-[root@jumpserver ~]# lvcreate -l 100%FREE -n lv_jump vg_jumpreplay
-[root@jumpserver ~]# mkfs.xfs &#x2F;dev&#x2F;vg_jumpreplay&#x2F;lv_jump<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<ol start="3">
-<li> 挂载</li>
-</ol>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">[root@jumpserver ~]# blkid
-&#x2F;dev&#x2F;mapper&#x2F;vg_jumpreplay-lv_jump: UUID&#x3D;&quot;7360e830-ec71-4f56-bbc8-765e42ba39cc&quot; TYPE&#x3D;&quot;xfs&quot; 
-[root@jumpserver ~]# vim &#x2F;etc&#x2F;fstab
-UUID&#x3D;7360e830-ec71-4f56-bbc8-765e42ba39cc   &#x2F;opt&#x2F;jumpserver&#x2F;data    xfs defaults    0 0
-[root@jumpserver ~]# mount -a<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<ol start="4">
-<li> 完成</li>
-</ol>
-<p>————————————————</p>
-<h2 id="JumpServer-修改KOKO端口号"><a href="#JumpServer-修改KOKO端口号" class="headerlink" title="JumpServer 修改KOKO端口号"></a>JumpServer 修改KOKO端口号</h2><h3 id="目标-1"><a href="#目标-1" class="headerlink" title="目标"></a>目标</h3><p>Jumpserver 在不使用web终端的情况下可以使用2222端口来直接访问堡垒机系统，然后跳转访问授权资产。现在需要修改默认的2222端口来访问堡垒机的koko。</p>
-<h3 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h3><ol>
-<li> 急速安装的堡垒机中2222端口是本地代理映射的Docker中的2222端口，所以我们只需要修改相关配置文件重新加载即可。</li>
-<li> 修改</li>
-</ol>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">[root@jumpserver ~]# cd &#x2F;opt&#x2F;setuptools&#x2F;
-[root@jumpserver setuptools]# .&#x2F;jmsctl.sh status
-MySQL   Check   ........................ [ OK ]
-Redis   Check   ........................ [ OK ]
-Ninx    Check   ........................ [ OK ]
-Py3     Check   ........................ [ OK ]
-Core    Check   ........................ [ OK ]
-Koko    Check   ........................ [ OK ]
-Guaca.  Check   ........................ [ OK ]
-# 查找koko镜像对应的容器ID
-[root@jumpserver setuptools]# docker ps
-CONTAINER ID        IMAGE                             COMMAND             CREATED             STATUS              PORTS                                               NAMES
-2ed1a83b1d98        jumpserver&#x2F;jms_guacamole:v2.1.2   &quot;.&#x2F;entrypoint.sh&quot;   21 hours ago        Up 35 seconds       127.0.0.1:8081-&gt;8080&#x2F;tcp                            jms_guacamole
-8351b191fd1d        jumpserver&#x2F;jms_koko:v2.1.2        &quot;.&#x2F;entrypoint.sh&quot;   21 hours ago        Up 35 seconds       127.0.0.1:5000-&gt;5000&#x2F;tcp, 0.0.0.0:2222-&gt;2222&#x2F;tcp   jms_koko
-[root@jumpserver ~]# sh &#x2F;opt&#x2F;setuptools&#x2F;jmsctl.sh stop
-[root@jumpserver ~]# updatedb &amp;&amp; locate 8351b191fd1d
-[root@jumpserver ~]# vim &#x2F;var&#x2F;lib&#x2F;docker&#x2F;containers&#x2F;8351b191fd1d9bbe3a0a3bd0f6de213ca5847e286d5cc164afbcc2e0f02cc8f2&#x2F;hostconfig.json
-# 修改[&quot;HostPort&quot;:&quot;2222&quot;]中的2222为目标端口
-&quot;PortBindings&quot;:&#123;&quot;2222&#x2F;tcp&quot;:[&#123;&quot;HostIp&quot;:&quot;&quot;,&quot;HostPort&quot;:&quot;2222&quot;&#125;],&quot;5000&#x2F;tcp&quot;:[&#123;&quot;HostIp&quot;:&quot;127.0.0.1&quot;,&quot;HostPort&quot;:&quot;5000&quot;&#125;]&#125;
-[root@jumpserver ~]# sh &#x2F;opt&#x2F;setuptools&#x2F;jmsctl.sh start<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<ol start="3">
-<li> 登陆测试</li>
-</ol>
-]]></content>
-      <categories>
-        <category>Linux</category>
-      </categories>
-      <tags>
-        <tag>jumpserver</tag>
-        <tag>linux</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>内网搭建KMS服务器</title>
-    <url>/2019/06/14/intranet-kms/</url>
-    <content><![CDATA[<p>在局域网环境中，我们可以使用开源的KMS服务来实现Windows系统和Office软件的激活工作。下面我们将在CentOS8之上来部署实施相关服务。</p>
-<h3 id="环境部署"><a href="#环境部署" class="headerlink" title="环境部署"></a>环境部署</h3><pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">yum install -y epel-release git
-yum update -y
-yum install -y supervisord
-
-systemctl enable supervisord --now
-firewall-cmd --permanent --add-port&#x3D;1688&#x2F;tcp
-firewall-cmd --reload<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h3 id="拉取代码"><a href="#拉取代码" class="headerlink" title="拉取代码"></a>拉取代码</h3><pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">cd &#x2F;opt
-git clone https:&#x2F;&#x2F;github.com&#x2F;SystemRage&#x2F;py-kms.git
-
-cat&gt; &#x2F;etc&#x2F;supervisord.d&#x2F;kms.ini &lt;&lt;EOF
-[program:kms]
-# command&#x3D;python &#x2F;opt&#x2F;py-kms&#x2F;py-kms&#x2F;pykms_Server.py       &#x2F;&#x2F;注意python的版本
-command&#x3D;python3 &#x2F;opt&#x2F;py-kms&#x2F;py-kms&#x2F;pykms_Server.py
-autostart&#x3D;true
-autorestart&#x3D;true
-user&#x3D;root
-stdout_logfile&#x3D;&#x2F;var&#x2F;log&#x2F;kms.log
-EOF
-
-systemctl restart supervisord
-netstat -tlnp grep 1688<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h3 id="发布服务"><a href="#发布服务" class="headerlink" title="发布服务"></a>发布服务</h3><h4 id="Windows-DNS"><a href="#Windows-DNS" class="headerlink" title="Windows DNS"></a>Windows DNS</h4><p>在Windows Server的DNS管理器中连接DNS服务器，打开‘正向查找区域’-‘域名所在zone’-‘_tcp’，新建“服务位置(SRV)”DNS记录值。 <a href="https://cdn.sujx.net/dns-kms.PNG" title="DNS-kms"><img src="https://cdn.sujx.net/dns-kms.PNG" alt="DNS-kms" title="DNS-kms"></a></p>
-<h4 id="Linux-BIND"><a href="#Linux-BIND" class="headerlink" title="Linux BIND"></a>Linux BIND</h4><p>在BIND服务的正向解析配置文件中新增记录并重启bind服务。</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">_vlmcs._tcp IN SRV 5 0 1688 xxx.xxx.xxx.xxx<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h4 id="Linux-DNSMASQ"><a href="#Linux-DNSMASQ" class="headerlink" title="Linux DNSMASQ"></a>Linux DNSMASQ</h4><pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">cat &gt; &#x2F;etc&#x2F;dnsmasq.d&#x2F;kms.conf &lt;&lt;EOF
-srv-host&#x3D;_vlmcs._tcp,xxx.xxx.xxx,1688,100,100
-EOF
-
-systemctl restart dnsmasq<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>]]></content>
-      <categories>
-        <category>Something</category>
-        <category>System</category>
-      </categories>
-      <tags>
-        <tag>centos</tag>
-        <tag>DNS</tag>
-        <tag>kms</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>修改Hosts文件加速访问GitHub</title>
     <url>/2020/03/15/ip-for-github/</url>
     <content><![CDATA[<p>在公司使用中国电信的公司宽带访问Github速度虽然不是飞快，但还是能够下载的。不过回家是用的移动宽带，访问github时能打开首页就算时烧高香了。那么首先想到的就是修改Hosts直接访问Github的地址，避免国内的CDN污染和线路瞎JB跳。 先说成果：</p>
@@ -1321,37 +1378,6 @@ systemctl restart dnsmasq<span aria-hidden="true" class="line-numbers-rows"><spa
       <tags>
         <tag>github</tag>
         <tag>hosts</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Windows修改默认路由</title>
-    <url>/2020/09/23/modify_windows_defualt_route/</url>
-    <content><![CDATA[<p>在实际运维中，遇到了一件XX的事情，就是改网关。其实吧，网关嘛，改一下没啥啊，so easy。但，项目要求网关一定是“default”，而不是跳数1。 简单来说，就是如下： 1. default</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
-Persistent Routes:
-  Network Address          Netmask  Gateway Address  Metric
-          0.0.0.0          0.0.0.0    172.16.10.254  Default
-&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<ol start="2">
-<li> 正常修改过的路由</li>
-</ol>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
-Persistent Routes:
-  Network Address          Netmask  Gateway Address  Metric
-          0.0.0.0          0.0.0.0    172.16.10.254       1
-&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>原因是，Windows只有默认第一个网卡配置的第一个网关才会是default，其他都会从1开始顺次增加，即便gateway的值已经变更，路由表里面没有了先前的网关地址。 这样的情况在使用环境中没有问题，但就是要让新建的网关作为default的话，需要以下操作： 1. “route -f”清空路由表，重启之后重设网关地址&lt;—此项非必须，选做； 2. 打开注册表，定位到HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\interfaces\ 然后搜索新建网关值（正常是第一个项）； 3. 修改“DefaultGatewayMetric”值为0； 4. 重启服务器</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">Persistent Routes:
-  Network Address          Netmask  Gateway Address  Metric
-          0.0.0.0          0.0.0.0    172.16.10.254  Default<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>]]></content>
-      <categories>
-        <category>Other</category>
-      </categories>
-      <tags>
-        <tag>Router</tag>
-        <tag>Windows</tag>
       </tags>
   </entry>
   <entry>
@@ -1494,25 +1520,115 @@ history -c<span aria-hidden="true" class="line-numbers-rows"><span></span><span>
       </tags>
   </entry>
   <entry>
-    <title>解决Windows Update一直为check状态</title>
-    <url>/2020/09/30/modify_winserver_wsus_check_stat/</url>
-    <content><![CDATA[<p>新部署的Windows Server 2012R2服务器在设置了WSUS服务之后，无法完成系统更新，始终处于check update的状态。检查Windows目录下的update log中，有”‘FATAL: GetClientUpdateUrl failed, err = 0x8024D009’ on all clients”的描述。根据0x8024D009这个关键字，找到了解决的方法：</p>
-<ol>
-<li> 重启Windows Update服务(建议)或者重启主机；</li>
-<li> 登录<a href="https://www.catalog.update.microsoft.com/Home.aspx" title="Windows补丁站点">Windows补丁站点</a>；</li>
-<li> 先安装补丁:<a href="https://www.catalog.update.microsoft.com/Search.aspx?q=KB4566425" title="KB4566425">KB4566425</a></li>
-<li> 然后安装补丁:<a href="https://www.catalog.update.microsoft.com/Search.aspx?q=KB4577066" title="KB4577066">KB4577066</a></li>
-<li> 通过控制面板，“check for updates”，即可连线打补丁了。</li>
-</ol>
-<p>以上的理论依据如下： 1. <a href="https://support.microsoft.com/zh-cn/help/4535697/servicing-stack-updates-ssu-frequently-ask-questions" title="什么是服务堆栈更新(SSU)">什么是服务堆栈更新(SSU)</a> 2. <a href="https://techcommunity.microsoft.com/t5/windows-it-pro-blog/changes-to-improve-security-for-windows-devices-scanning-wsus/ba-p/1645547" title="WSUS的安全改进">WSUS的安全改进</a> Windows 8.1 同理。</p>
-]]></content>
+    <title>内网搭建KMS服务器</title>
+    <url>/2019/06/14/intranet-kms/</url>
+    <content><![CDATA[<p>在局域网环境中，我们可以使用开源的KMS服务来实现Windows系统和Office软件的激活工作。下面我们将在CentOS8之上来部署实施相关服务。</p>
+<h3 id="环境部署"><a href="#环境部署" class="headerlink" title="环境部署"></a>环境部署</h3><pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">yum install -y epel-release git
+yum update -y
+yum install -y supervisord
+
+systemctl enable supervisord --now
+firewall-cmd --permanent --add-port&#x3D;1688&#x2F;tcp
+firewall-cmd --reload<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="拉取代码"><a href="#拉取代码" class="headerlink" title="拉取代码"></a>拉取代码</h3><pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">cd &#x2F;opt
+git clone https:&#x2F;&#x2F;github.com&#x2F;SystemRage&#x2F;py-kms.git
+
+cat&gt; &#x2F;etc&#x2F;supervisord.d&#x2F;kms.ini &lt;&lt;EOF
+[program:kms]
+# command&#x3D;python &#x2F;opt&#x2F;py-kms&#x2F;py-kms&#x2F;pykms_Server.py       &#x2F;&#x2F;注意python的版本
+command&#x3D;python3 &#x2F;opt&#x2F;py-kms&#x2F;py-kms&#x2F;pykms_Server.py
+autostart&#x3D;true
+autorestart&#x3D;true
+user&#x3D;root
+stdout_logfile&#x3D;&#x2F;var&#x2F;log&#x2F;kms.log
+EOF
+
+systemctl restart supervisord
+netstat -tlnp grep 1688<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="发布服务"><a href="#发布服务" class="headerlink" title="发布服务"></a>发布服务</h3><h4 id="Windows-DNS"><a href="#Windows-DNS" class="headerlink" title="Windows DNS"></a>Windows DNS</h4><p>在Windows Server的DNS管理器中连接DNS服务器，打开‘正向查找区域’-‘域名所在zone’-‘_tcp’，新建“服务位置(SRV)”DNS记录值。 <a href="https://cdn.sujx.net/dns-kms.PNG" title="DNS-kms"><img src="https://cdn.sujx.net/dns-kms.PNG" alt="DNS-kms" title="DNS-kms"></a></p>
+<h4 id="Linux-BIND"><a href="#Linux-BIND" class="headerlink" title="Linux BIND"></a>Linux BIND</h4><p>在BIND服务的正向解析配置文件中新增记录并重启bind服务。</p>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">_vlmcs._tcp IN SRV 5 0 1688 xxx.xxx.xxx.xxx<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h4 id="Linux-DNSMASQ"><a href="#Linux-DNSMASQ" class="headerlink" title="Linux DNSMASQ"></a>Linux DNSMASQ</h4><pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">cat &gt; &#x2F;etc&#x2F;dnsmasq.d&#x2F;kms.conf &lt;&lt;EOF
+srv-host&#x3D;_vlmcs._tcp,xxx.xxx.xxx,1688,100,100
+EOF
+
+systemctl restart dnsmasq<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>]]></content>
       <categories>
+        <category>Something</category>
         <category>System</category>
-        <category>Windows</category>
       </categories>
       <tags>
-        <tag>Windows</tag>
-        <tag>WSUS</tag>
+        <tag>centos</tag>
+        <tag>DNS</tag>
+        <tag>kms</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>JumpServer的两项修改</title>
+    <url>/2020/08/21/modify_jumperserver/</url>
+    <content><![CDATA[<h2 id="JumpServer-扩容"><a href="#JumpServer-扩容" class="headerlink" title="JumpServer 扩容"></a>JumpServer 扩容</h2><h3 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h3><p>JumpSever的录像默认位置为： /opt/jumpserver/data/media/replay/ 为了防止录像文件把过大，需要为该目录挂载一块新的硬盘。</p>
+<h3 id="执行"><a href="#执行" class="headerlink" title="执行"></a>执行</h3><ol>
+<li> 为主机挂载一块20G硬盘</li>
+<li> 新建LVM分区</li>
+</ol>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">[root@jumpserver ~]# partprobe &#x2F;dev&#x2F;sdb
+[root@jumpserver ~]# pvcreate &#x2F;dev&#x2F;sdb
+[root@jumpserver ~]# vgcreate vg_jumpereplay &#x2F;dev&#x2F;sdb
+[root@jumpserver ~]# lvcreate -l 100%FREE -n lv_jump vg_jumpreplay
+[root@jumpserver ~]# mkfs.xfs &#x2F;dev&#x2F;vg_jumpreplay&#x2F;lv_jump<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<ol start="3">
+<li> 挂载</li>
+</ol>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">[root@jumpserver ~]# blkid
+&#x2F;dev&#x2F;mapper&#x2F;vg_jumpreplay-lv_jump: UUID&#x3D;&quot;7360e830-ec71-4f56-bbc8-765e42ba39cc&quot; TYPE&#x3D;&quot;xfs&quot; 
+[root@jumpserver ~]# vim &#x2F;etc&#x2F;fstab
+UUID&#x3D;7360e830-ec71-4f56-bbc8-765e42ba39cc   &#x2F;opt&#x2F;jumpserver&#x2F;data    xfs defaults    0 0
+[root@jumpserver ~]# mount -a<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<ol start="4">
+<li> 完成</li>
+</ol>
+<p>————————————————</p>
+<h2 id="JumpServer-修改KOKO端口号"><a href="#JumpServer-修改KOKO端口号" class="headerlink" title="JumpServer 修改KOKO端口号"></a>JumpServer 修改KOKO端口号</h2><h3 id="目标-1"><a href="#目标-1" class="headerlink" title="目标"></a>目标</h3><p>Jumpserver 在不使用web终端的情况下可以使用2222端口来直接访问堡垒机系统，然后跳转访问授权资产。现在需要修改默认的2222端口来访问堡垒机的koko。</p>
+<h3 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h3><ol>
+<li> 急速安装的堡垒机中2222端口是本地代理映射的Docker中的2222端口，所以我们只需要修改相关配置文件重新加载即可。</li>
+<li> 修改</li>
+</ol>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">[root@jumpserver ~]# cd &#x2F;opt&#x2F;setuptools&#x2F;
+[root@jumpserver setuptools]# .&#x2F;jmsctl.sh status
+MySQL   Check   ........................ [ OK ]
+Redis   Check   ........................ [ OK ]
+Ninx    Check   ........................ [ OK ]
+Py3     Check   ........................ [ OK ]
+Core    Check   ........................ [ OK ]
+Koko    Check   ........................ [ OK ]
+Guaca.  Check   ........................ [ OK ]
+# 查找koko镜像对应的容器ID
+[root@jumpserver setuptools]# docker ps
+CONTAINER ID        IMAGE                             COMMAND             CREATED             STATUS              PORTS                                               NAMES
+2ed1a83b1d98        jumpserver&#x2F;jms_guacamole:v2.1.2   &quot;.&#x2F;entrypoint.sh&quot;   21 hours ago        Up 35 seconds       127.0.0.1:8081-&gt;8080&#x2F;tcp                            jms_guacamole
+8351b191fd1d        jumpserver&#x2F;jms_koko:v2.1.2        &quot;.&#x2F;entrypoint.sh&quot;   21 hours ago        Up 35 seconds       127.0.0.1:5000-&gt;5000&#x2F;tcp, 0.0.0.0:2222-&gt;2222&#x2F;tcp   jms_koko
+[root@jumpserver ~]# sh &#x2F;opt&#x2F;setuptools&#x2F;jmsctl.sh stop
+[root@jumpserver ~]# updatedb &amp;&amp; locate 8351b191fd1d
+[root@jumpserver ~]# vim &#x2F;var&#x2F;lib&#x2F;docker&#x2F;containers&#x2F;8351b191fd1d9bbe3a0a3bd0f6de213ca5847e286d5cc164afbcc2e0f02cc8f2&#x2F;hostconfig.json
+# 修改[&quot;HostPort&quot;:&quot;2222&quot;]中的2222为目标端口
+&quot;PortBindings&quot;:&#123;&quot;2222&#x2F;tcp&quot;:[&#123;&quot;HostIp&quot;:&quot;&quot;,&quot;HostPort&quot;:&quot;2222&quot;&#125;],&quot;5000&#x2F;tcp&quot;:[&#123;&quot;HostIp&quot;:&quot;127.0.0.1&quot;,&quot;HostPort&quot;:&quot;5000&quot;&#125;]&#125;
+[root@jumpserver ~]# sh &#x2F;opt&#x2F;setuptools&#x2F;jmsctl.sh start<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<ol start="3">
+<li> 登陆测试</li>
+</ol>
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>jumpserver</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -1726,28 +1842,6 @@ tcp        0      0 0.0.0.0:7180            0.0.0.0:*               LISTEN      
       </tags>
   </entry>
   <entry>
-    <title>离线加域</title>
-    <url>/2020/04/11/offline-join-ad/</url>
-    <content><![CDATA[<p>在MS ActiveDirectory的维护工作中，经常会出现承担多种域权限的主机需要重新刷系统的情况。一般的操作方式是退域、重装、删除域信息、重新加域、再次赋权，这样可以确保安全、可靠的维护域中计算机账号的权限正确。不过，从2008R2开始，MS提供了可以离线加域的方法，来避免这一麻烦的处理过程。简单来说，就是从AD中把计算机账号的属性导出为加密文本，然后再在新建的主机上导入，重启即可使用域账号登录并继承原有域权限。 实现方法就两条命令：</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"># 在可以正常登录AD的主机上导出域中计算机账号信息,然后把文本文件复制到新机上
-djoin &#x2F;provision &#x2F;domain domian_name &#x2F;machine machine_name &#x2F;savefile  &#x2F;reuse
-# 在重刷系统的主机上以管理员权限导入域信息
-djoin &#x2F;requestodj &#x2F;loadfile  &#x2F;windowspath c:\windows &#x2F;localos<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>具体的解析<a href="https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2008-R2-and-2008/dd392267(v=ws.10)?redirectedfrom=MSDN" title="在此">在此</a></p>
-]]></content>
-      <categories>
-        <category>Something</category>
-        <category>Tips</category>
-      </categories>
-      <tags>
-        <tag>Windows</tag>
-        <tag>offline</tag>
-        <tag>ActiveDirctory</tag>
-        <tag>djoin</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>PowerShell的小技巧</title>
     <url>/2020/04/22/powershell-usetips/</url>
     <content><![CDATA[<h3 id="Powershell环境的设置"><a href="#Powershell环境的设置" class="headerlink" title="Powershell环境的设置"></a>Powershell环境的设置</h3><ol>
@@ -1837,6 +1931,597 @@ D                           NTFS       Fixed     Healthy      OK                
       </tags>
   </entry>
   <entry>
+    <title>基于CentOS8快速部署iTop</title>
+    <url>/2019/11/20/quikly-deploy-itop-on-centos8/</url>
+    <content><![CDATA[<p>iTop是一个用PHP编写的基于ITIL理念打造的开源ITSM系统。本次将在CentOS8的虚机上安装部署一套iTOP系统。</p>
+<ol>
+<li> 系统准备 首先是准本LAMP环境，使用系统默认的Apache2.4.3、PHP7.2、Mariadb10.3.</li>
+</ol>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">yum update -y
+yum install -y cmake make autoconf gcc gcc-g++ unzip graphviz libzip-devel libzip-tools
+yum install -y httpd php php-fpm php-ldap php-soap
+yum install -y php-xmlrpc php-gd php-opcache php-mysqlnd php-json php-devel
+yum install -y libmcrypt libmcrypt-devel php-pecl-apcu mhash
+yum install -y php-odbc php-mbstring php-snmp
+yum install -y mariadb mariadb-server
+firewall-cmd --permanent --add-service&#x3D;http
+firewall-cmd --reload
+systemctl enable httpd php-fpm mariadb --now<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<ol start="2">
+<li> 上传iTop系统，修改配置文件 我们把iTop的程序文件放置到/var/www/web目录下，修改/etc/httpd/conf/httpd.conf配置文件，使得根文件系统指向web目录，同时对web目录进行赋权。</li>
+</ol>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">unzip iTop-2.6.1-4463.zip
+cp web&#x2F;* &#x2F;var&#x2F;www&#x2F;html&#x2F; -R
+chown -R apache:apache &#x2F;var&#x2F;www&#x2F;html&#x2F;
+mysql -uroot -p
+MariaDB [(none)]&gt; create database itop character set utf8 collate utf8_bin;
+MariaDB [(none)]&gt; grant all privileges on itop.* to itop@&#39;localhost&#39; identified by &#39;itop&#39;;
+MariaDB [(none)]&gt; flush privileges;
+MariaDB [(none)]&gt; exit;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<ol start="3">
+<li> 编译PHP扩展实现支持zip 使用YUM/DNF安装的PHP默认不支持zip扩展，因此默认配置下iTOP会出现白屏，日志报错： <code>PHP Fatal error: Class &#39;DBBackup&#39; not found in /var/www/html/itop/web/setup/applicationinstaller.class.inc.php</code> 所以，需要编译安装PHP的zip扩展。</li>
+</ol>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">wget http:&#x2F;&#x2F;pecl.php.net&#x2F;get&#x2F;zip
+tar zxvf zip
+cd zip-1.15.5
+phpize
+.&#x2F;configure 
+make 
+cp modules&#x2F;zip.so &#x2F;usr&#x2F;lib64&#x2F;php&#x2F;modules&#x2F;
+touch &#x2F;etc&#x2F;php.d&#x2F;20-zip.ini
+echo &#39;extension&#x3D;zip&#39; &gt;&gt; &#x2F;etc&#x2F;php.d&#x2F;20-zip.ini
+vim &#x2F;etc&#x2F;php.ini
+~~~~~~
+## 开启zlib压缩支持
+269 zlib.output_compression &#x3D; On
+~~~~~~
+systemctl restart php-fpm<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>然后打开站点就可以进行安装了。</p>
+<ol start="4">
+<li> iTOP部署 <a href="https://cdn.sujx.net/itop1.png" title="iTopDeploy1"><img src="https://cdn.sujx.net/itop1.png" alt="iTopDeploy1" title="iTopDeploy1"></a> <a href="https://cdn.sujx.net/itop2.png" title="iTopDeploy2"><img src="https://cdn.sujx.net/itop2.png" alt="iTopDeploy2" title="iTopDeploy2"></a> <a href="https://cdn.sujx.net/itop3.png" title="iTopDeploy3"><img src="https://cdn.sujx.net/itop3.png" alt="iTopDeploy3" title="iTopDeploy3"></a> <a href="https://cdn.sujx.net/itop4.png" title="iTopDeploy4"><img src="https://cdn.sujx.net/itop4.png" alt="iTopDeploy4" title="iTopDeploy4"></a> <a href="https://cdn.sujx.net/itop5.png" title="iTopDeploy5"><img src="https://cdn.sujx.net/itop5.png" alt="iTopDeploy5" title="iTopDeploy5"></a> <a href="https://cdn.sujx.net/itop6.png" title="iTopDeploy6"><img src="https://cdn.sujx.net/itop6.png" alt="iTopDeploy6" title="iTopDeploy6"></a> <a href="https://cdn.sujx.net/itop7.png" title="iTopDeploy7"><img src="https://cdn.sujx.net/itop7.png" alt="iTopDeploy7" title="iTopDeploy7"></a> <a href="https://cdn.sujx.net/itop8.png" title="iTopDeploy8"><img src="https://cdn.sujx.net/itop8.png" alt="iTopDeploy8" title="iTopDeploy8"></a> <a href="https://cdn.sujx.net/itop9.png" title="iTopDeploy9"><img src="https://cdn.sujx.net/itop9.png" alt="iTopDeploy9" title="iTopDeploy9"></a> <a href="https://cdn.sujx.net/itop10.png" title="iTopDeploy10"><img src="https://cdn.sujx.net/itop10.png" alt="iTopDeploy10" title="iTopDeploy10"></a> <a href="https://cdn.sujx.net/itop11.png" title="iTopDeploy11"><img src="https://cdn.sujx.net/itop11.png" alt="iTopDeploy11" title="iTopDeploy11"></a> <a href="https://cdn.sujx.net/itop12.png" title="iTopDeploy12"><img src="https://cdn.sujx.net/itop12.png" alt="iTopDeploy12" title="iTopDeploy12"></a> <a href="https://cdn.sujx.net/itop13.png" title="iTopDeploy13"><img src="https://cdn.sujx.net/itop13.png" alt="iTopDeploy13" title="iTopDeploy13"></a> <a href="https://cdn.sujx.net/itop14.png" title="iTopDeploy14"><img src="https://cdn.sujx.net/itop14.png" alt="iTopDeploy14" title="iTopDeploy14"></a> <a href="https://cdn.sujx.net/itop15.png" title="iTopDeploy15"><img src="https://cdn.sujx.net/itop15.png" alt="iTopDeploy15" title="iTopDeploy15"></a></li>
+</ol>
+]]></content>
+      <categories>
+        <category>Something</category>
+        <category>System</category>
+      </categories>
+      <tags>
+        <tag>centos</tag>
+        <tag>itop</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>离线加域</title>
+    <url>/2020/04/11/offline-join-ad/</url>
+    <content><![CDATA[<p>在MS ActiveDirectory的维护工作中，经常会出现承担多种域权限的主机需要重新刷系统的情况。一般的操作方式是退域、重装、删除域信息、重新加域、再次赋权，这样可以确保安全、可靠的维护域中计算机账号的权限正确。不过，从2008R2开始，MS提供了可以离线加域的方法，来避免这一麻烦的处理过程。简单来说，就是从AD中把计算机账号的属性导出为加密文本，然后再在新建的主机上导入，重启即可使用域账号登录并继承原有域权限。 实现方法就两条命令：</p>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"># 在可以正常登录AD的主机上导出域中计算机账号信息,然后把文本文件复制到新机上
+djoin &#x2F;provision &#x2F;domain domian_name &#x2F;machine machine_name &#x2F;savefile  &#x2F;reuse
+# 在重刷系统的主机上以管理员权限导入域信息
+djoin &#x2F;requestodj &#x2F;loadfile  &#x2F;windowspath c:\windows &#x2F;localos<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>具体的解析<a href="https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2008-R2-and-2008/dd392267(v=ws.10)?redirectedfrom=MSDN" title="在此">在此</a></p>
+]]></content>
+      <categories>
+        <category>Something</category>
+        <category>Tips</category>
+      </categories>
+      <tags>
+        <tag>offline</tag>
+        <tag>ActiveDirctory</tag>
+        <tag>djoin</tag>
+        <tag>Windows</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>解决Windows Update一直为check状态</title>
+    <url>/2020/09/30/modify_winserver_wsus_check_stat/</url>
+    <content><![CDATA[<p>新部署的Windows Server 2012R2服务器在设置了WSUS服务之后，无法完成系统更新，始终处于check update的状态。检查Windows目录下的update log中，有”‘FATAL: GetClientUpdateUrl failed, err = 0x8024D009’ on all clients”的描述。根据0x8024D009这个关键字，找到了解决的方法：</p>
+<ol>
+<li> 重启Windows Update服务(建议)或者重启主机；</li>
+<li> 登录<a href="https://www.catalog.update.microsoft.com/Home.aspx" title="Windows补丁站点">Windows补丁站点</a>；</li>
+<li> 先安装补丁:<a href="https://www.catalog.update.microsoft.com/Search.aspx?q=KB4566425" title="KB4566425">KB4566425</a></li>
+<li> 然后安装补丁:<a href="https://www.catalog.update.microsoft.com/Search.aspx?q=KB4577066" title="KB4577066">KB4577066</a></li>
+<li> 通过控制面板，“check for updates”，即可连线打补丁了。</li>
+</ol>
+<p>以上的理论依据如下： 1. <a href="https://support.microsoft.com/zh-cn/help/4535697/servicing-stack-updates-ssu-frequently-ask-questions" title="什么是服务堆栈更新(SSU)">什么是服务堆栈更新(SSU)</a> 2. <a href="https://techcommunity.microsoft.com/t5/windows-it-pro-blog/changes-to-improve-security-for-windows-devices-scanning-wsus/ba-p/1645547" title="WSUS的安全改进">WSUS的安全改进</a> Windows 8.1 同理。</p>
+]]></content>
+      <categories>
+        <category>System</category>
+        <category>Windows</category>
+      </categories>
+      <tags>
+        <tag>Windows</tag>
+        <tag>WSUS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Windows修改默认路由</title>
+    <url>/2020/09/23/modify_windows_defualt_route/</url>
+    <content><![CDATA[<p>在实际运维中，遇到了一件XX的事情，就是改网关。其实吧，网关嘛，改一下没啥啊，so easy。但，项目要求网关一定是“default”，而不是跳数1。 简单来说，就是如下： 1. default</p>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+Persistent Routes:
+  Network Address          Netmask  Gateway Address  Metric
+          0.0.0.0          0.0.0.0    172.16.10.254  Default
+&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<ol start="2">
+<li> 正常修改过的路由</li>
+</ol>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+Persistent Routes:
+  Network Address          Netmask  Gateway Address  Metric
+          0.0.0.0          0.0.0.0    172.16.10.254       1
+&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>原因是，Windows只有默认第一个网卡配置的第一个网关才会是default，其他都会从1开始顺次增加，即便gateway的值已经变更，路由表里面没有了先前的网关地址。 这样的情况在使用环境中没有问题，但就是要让新建的网关作为default的话，需要以下操作： 1. “route -f”清空路由表，重启之后重设网关地址&lt;—此项非必须，选做； 2. 打开注册表，定位到HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\interfaces\ 然后搜索新建网关值（正常是第一个项）； 3. 修改“DefaultGatewayMetric”值为0； 4. 重启服务器</p>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">Persistent Routes:
+  Network Address          Netmask  Gateway Address  Metric
+          0.0.0.0          0.0.0.0    172.16.10.254  Default<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>]]></content>
+      <categories>
+        <category>Other</category>
+      </categories>
+      <tags>
+        <tag>Windows</tag>
+        <tag>Router</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>升级CentOS8的OpenSSH版本</title>
+    <url>/2019/08/09/update-openssh-2-81p1/</url>
+    <content><![CDATA[<p>虽然说CentOS8的Openssl和OpenSSH的版本已经算是比较新的了，但是因为公司的信息安全建设的要求，在经过商业漏洞扫描软件扫描之后，还是需要进行升级操作(由于CentOS8的Openssl已经是比较新的1.1.1版本了，此次就不升级它了)。</p>
+<h3 id="安装包准备"><a href="#安装包准备" class="headerlink" title="安装包准备"></a>安装包准备</h3><pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"># 配置编译环境
+cd
+yum update -y
+yum install rpm-build zlib-devel openssl-devel gcc perl-devel pam-devel unzip -y
+mkdir -p ~&#x2F;rpmbuild&#x2F;&#123;SOURCES,SPECS&#125;
+# 下载安装包
+wget https:&#x2F;&#x2F;openbsd.hk&#x2F;pub&#x2F;OpenBSD&#x2F;OpenSSH&#x2F;portable&#x2F;openssh-8.1p1.tar.gz
+wget http:&#x2F;&#x2F;ftp.riken.jp&#x2F;Linux&#x2F;momonga&#x2F;6&#x2F;Everything&#x2F;SOURCES&#x2F;x11-ssh-askpass-1.2.4.1.tar.gz
+cp openssh-8.1p1.tar.gz x11-ssh-askpass-1.2.4.1.tar.gz ~&#x2F;rpmbuild&#x2F;SOURCES
+tar zxvf openssh-8.1p1.tar.gz
+cp openssh-8.1p1&#x2F;contrib&#x2F;redhat&#x2F;openssh.spec ~&#x2F;rpmbuild&#x2F;SPECS&#x2F;
+# 修改编译文件，去掉X11环境依赖和openssl依赖
+sed -i -e &quot;s&#x2F;%define no_x11_askpass 0&#x2F;%define no_x11_askpass 1&#x2F;g&quot; ~&#x2F;rpmbuild&#x2F;SPECS&#x2F;openssh.spec p
+sed -i -e &quot;s&#x2F;%define no_gnome_askpass 0&#x2F;%define no_gnome_askpass 1&#x2F;g&quot; ~&#x2F;rpmbuild&#x2F;SPECS&#x2F;openssh.spec
+sed -i -e &quot;s&#x2F;BuildRequires: openssl-devel &lt; 1.1&#x2F;#BuildRequires: openssl-devel &lt; 1.1&#x2F;g&quot; ~&#x2F;rpmbuild&#x2F;SPECS&#x2F;openssh.spec 
+# 开始编译rpm包
+rpmbuild -bp openssh.spec
+rpmbuild -ba openssh.spec
+# yum本地安装新编译的包
+yum localinstall -y ~&#x2F;rpmbuild&#x2F;RPMS&#x2F;x86_64&#x2F;openssh-*
+# 修改相关公钥权限
+chmod 0400 &#x2F;etc&#x2F;ssh&#x2F;ssh_host_ecdsa_key
+chmod 0400 &#x2F;etc&#x2F;ssh&#x2F;ssh_host_ed25519_key
+chmod 0400 &#x2F;etc&#x2F;ssh&#x2F;ssh_host_rsa_key
+# 修改配置文件
+sed -i -e &quot;s&#x2F;UsePAM yes&#x2F;UsePAM no&#x2F;g&quot; &#x2F;etc&#x2F;ssh&#x2F;sshd_config
+# 重置服务
+systemctl restart sshd
+# 查看新版本信息
+openssh -V<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="批量分发"><a href="#批量分发" class="headerlink" title="批量分发"></a>批量分发</h3><pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"># 上传文件到本地YUM仓库之后建立索引
+createrepo &#x2F;var&#x2F;www&#x2F;repos&#x2F;cnpe&#x2F;8&#x2F;x86_64&#x2F;
+# 安装
+ansible all -m yum -a &#39;name&#x3D;* state&#x3D;latest&#39; -b -K<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>]]></content>
+      <categories>
+        <category>Linux</category>
+        <category>Something</category>
+      </categories>
+      <tags>
+        <tag>centos8</tag>
+        <tag>centos</tag>
+        <tag>ssh</tag>
+        <tag>system</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>HDFS初步使用</title>
+    <url>/2020/03/01/use-hdfs-newbie/</url>
+    <content><![CDATA[<p>HDFS(Hadoop Distributed File System)是可扩展、容错、高性能的分布式文件系统，异步复制，一次写入多次读取，主要负责存储。其概念和内容可以参考<a href="https://www.cnblogs.com/binarylei/p/8903601.html" title="这里">[1]</a>。这里就做一个简单的实验来看一下其文件管理的功能。更多的Hadoop命令可以参考<a href="http://dblab.xmu.edu.cn/blog/1625-2/" title="这里">[2]</a>。</p>
+<h3 id="用户建立"><a href="#用户建立" class="headerlink" title="用户建立"></a>用户建立</h3><p>在实验环境中，不建议使用root账号直接登录运行，所以建立一个普通账号。</p>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"># Elephant主机执行
+# 安装ansible
+[root@elephant ~]# yum install -y ansible
+# 在&#x2F;etc&#x2F;ansible&#x2F;hosts中新增所有主机名
+# 建立ansible文件
+[root@elephant ~]# mkdir playbook
+[root@elephant ~]# vim .&#x2F;playbook&#x2F;useradd.yaml
+---
+- hosts: hadoop
+  remote_user: root
+  vars_prompt:
+    - name: user_name
+      prompt: Enter Username
+      private: no
+    - name: user_passwd
+      prompt: Enter Password
+      encrypt: &quot;sha512_crypt&quot;
+      confirm: yes
+  tasks:
+    - name: create user
+      user:
+        name: &quot;&#123;&#123;user_name&#125;&#125;&quot;
+        password: &quot;&#123;&#123;user_passwd&#125;&#125;&quot;
+
+# 执行
+[root@elephant ~]# ansible-playbook .&#x2F;playbook&#x2F;useradd.yaml
+Enter Username: sujx
+Enter Password:
+confirm Enter Password:
+
+PLAY [hadoop] *****************************************************************************<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="HDFS文件使用"><a href="#HDFS文件使用" class="headerlink" title="HDFS文件使用"></a>HDFS文件使用</h3><p>我们先将准备的481M文件(access.log)上传至用户家目录，看看这个文件将在hdfs文件系统中如何存储。</p>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">[root@elephant ~]# su hdfs
+[hdfs@elephant root]$ hadoop fs -mkdir &#x2F;user&#x2F;sujx
+[hdfs@elephant root]$ hadoop fs -chown sujx &#x2F;user&#x2F;sujx
+[hdfs@elephant root]$ su sujx -
+[hdfs@elephant root]$ hdfs dfs -put access_log weblog<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>然后，我们通过hdfs的web控制台就可以看到文件的存储情况，可见文件以3副本的形式，按照每个128M大小的存储块分割存储在namenode之上。当前情况是分成了4块。 <img src="https://cdn.sujx.net/hdfs_01.png" alt="show"> <img src="https://cdn.sujx.net/hdfs_02.png" alt="block"> 我们可以从lion主机中看到存储的数据块。</p>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">[root@lion ~]# tree &#x2F;dfs
+&#x2F;dfs
+&#96;-- dn
+    -- current
+       -- BP-752680285-192.168.174.131-1582986010714
+          -- current
+             -- VERSION
+             -- dfsUsed
+             -- finalized
+                &#96;-- subdir0
+                    -- subdir0
+                    -- subdir1
+                    -- subdir2
+                    -- subdir3
+                       -- blk_1073742734
+                       -- blk_1073742734_1910.meta
+                    &#96;-- subdir4
+             &#96;-- rbw
+          -- scanner.cursor
+          &#96;-- tmp
+       &#96;-- VERSION
+    &#96;-- in_use.lock<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>]]></content>
+      <categories>
+        <category>Something</category>
+        <category>Bigdata</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+        <tag>bigdata</tag>
+        <tag>hdfs</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>使用脚本一键部署堡垒机</title>
+    <url>/2019/12/19/use-sh-deploy-jumpsever/</url>
+    <content><![CDATA[<p>部门领导要求研究一下堡垒机的使用，所以花了两天时间研究了一下开源堡垒机的部署和使用。因为官方文档中有些已经有了部分错误，现在以官方的CentOS8版本的安装文档为蓝本把部署过程以脚本的形式备份一下。 其中，主要的变化是使用了官方源的nginx、修改了python安装的几个组件的版本、部署了堡垒机jms服务、koko服务和guacamole服务的systemd自启动脚本。</p>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">#!&#x2F;bin&#x2F;bash
+
+# 2020.01.15
+# sujx@live.cn
+
+# 安装依赖包
+yum update -y
+yum -y install wget gcc epel-release git telnet openssh-clients dnf-utils vim 
+yum update -y
+
+# 下载 Jumpserver
+cd &#x2F;opt&#x2F;
+git clone --depth&#x3D;1 https:&#x2F;&#x2F;github.com&#x2F;jumpserver&#x2F;jumpserver.git
+
+# 防火墙 与 selinux 设置说明, 如果已经关闭了 防火墙 和 Selinux 的用户请跳过设置
+systemctl start firewalld
+# nginx 端口
+firewall-cmd --zone&#x3D;public --add-service&#x3D;http --permanent  
+# 用户SSH登录端口 koko
+firewall-cmd --zone&#x3D;public --add-port&#x3D;2222&#x2F;tcp --permanent  
+# 重新载入规则
+firewall-cmd --reload  
+# SElinux配置
+setsebool -P httpd_can_network_connect 1
+
+# 安装 Redis, Jumpserver 使用 Redis 做 cache 和 celery broke
+yum -y install redis
+systemctl enable redis --now
+
+# 安装 MySQL, 如果不使用 Mysql 可以跳过相关 Mysql 安装和配置, 支持sqlite3, mysql, postgres等
+yum -y install mariadb mariadb-devel mariadb-server sshpass
+systemctl enable mariadb --now
+
+# 创建数据库 Jumpserver 并授权
+DB_PASSWORD&#x3D;&#96;cat &#x2F;dev&#x2F;urandom  tr -dc A-Za-z0-9  head -c 24&#96;  # 生成随机数据库密码
+
+cat &gt;~&#x2F;passwd.txt&lt;&lt;EOF
+数据库密码是 $DB_PASSWORD
+EOF
+
+mysql -uroot -e &quot;create database jumpserver default charset &#39;utf8&#39;; grant all on jumpserver.* to &#39;jumpserver&#39;@&#39;127.0.0.1&#39; identified by &#39;$DB_PASSWORD&#39;; flush privileges;&quot;
+
+# 安装 Nginx, 用作代理服务器整合 Jumpserver 与各个组件
+
+yum -y install nginx
+systemctl enable nginx --now
+
+# 安装 Python3.6
+yum -y install python36 python36-devel
+yum -y install krb5-devel libtiff-devel libjpeg-devel libzip-devel freetype-devel libwebp-devel tcl-devel tk-devel openldap-devel libffi-devel openldap-clients
+
+# 安装 Python 库依赖
+# 配置使用华为python源
+mkdir ~&#x2F;.pip
+cat &gt;~&#x2F;.pip&#x2F;pip.conf&lt;&lt;EOF
+[global]
+index-url &#x3D; https:&#x2F;&#x2F;mirrors.huaweicloud.com&#x2F;repository&#x2F;pypi&#x2F;simple
+trusted-host &#x3D; mirrors.huaweicloud.com
+timeout &#x3D; 120 
+EOF
+
+# 配置并载入 Python3 虚拟环境
+cd &#x2F;opt
+# py3 为虚拟环境名称, 可自定义
+python3 -m venv py3  
+# 退出虚拟环境可以使用 deactivate 命令
+source &#x2F;opt&#x2F;py3&#x2F;bin&#x2F;activate  
+
+pip install wheel setuptools
+pip install pip --upgrade
+pip install python-gssapi
+
+# 修改依赖包版本
+sed -i &quot;s&#x2F;Django&#x3D;&#x3D;2.1.11&#x2F;Django&#x3D;&#x3D;2.2&#x2F;g&quot; &#x2F;opt&#x2F;jumpserver&#x2F;requirements&#x2F;requirements.txt
+sed -i &quot;s&#x2F;cryptography&#x3D;&#x3D;2.3.1&#x2F;cryptography&#x3D;&#x3D;2.7&#x2F;g&quot; &#x2F;opt&#x2F;jumpserver&#x2F;requirements&#x2F;requirements.txt
+sed -i &quot;s&#x2F;pyasn1&#x3D;&#x3D;0.4.2&#x2F;pyasn1&#x3D;&#x3D;0.4.6&#x2F;g&quot; &#x2F;opt&#x2F;jumpserver&#x2F;requirements&#x2F;requirements.txt
+
+pip install -r &#x2F;opt&#x2F;jumpserver&#x2F;requirements&#x2F;requirements.txt
+
+# 修改 Jumpserver 配置文件
+cd &#x2F;opt&#x2F;jumpserver
+cp config_example.yml config.yml
+
+# 生成随机SECRET_KEY
+SECRET_KEY&#x3D;&#96;cat &#x2F;dev&#x2F;urandom  tr -dc A-Za-z0-9  head -c 50&#96;  
+echo &quot;SECRET_KEY&#x3D;$SECRET_KEY&quot; &gt;&gt; ~&#x2F;.bashrc
+
+# 生成随机BOOTSTRAP_TOKEN
+BOOTSTRAP_TOKEN&#x3D;&#96;cat &#x2F;dev&#x2F;urandom  tr -dc A-Za-z0-9  head -c 16&#96;  
+echo &quot;BOOTSTRAP_TOKEN&#x3D;$BOOTSTRAP_TOKEN&quot; &gt;&gt; ~&#x2F;.bashrc
+
+sed -i &quot;s&#x2F;SECRET_KEY:&#x2F;SECRET_KEY: $SECRET_KEY&#x2F;g&quot; &#x2F;opt&#x2F;jumpserver&#x2F;config.yml
+sed -i &quot;s&#x2F;BOOTSTRAP_TOKEN:&#x2F;BOOTSTRAP_TOKEN: $BOOTSTRAP_TOKEN&#x2F;g&quot; &#x2F;opt&#x2F;jumpserver&#x2F;config.yml
+sed -i &quot;s&#x2F;# DEBUG: true&#x2F;DEBUG: false&#x2F;g&quot; &#x2F;opt&#x2F;jumpserver&#x2F;config.yml
+sed -i &quot;s&#x2F;# LOG_LEVEL: DEBUG&#x2F;LOG_LEVEL: ERROR&#x2F;g&quot; &#x2F;opt&#x2F;jumpserver&#x2F;config.yml
+sed -i &quot;s&#x2F;# SESSION_EXPIRE_AT_BROWSER_CLOSE: false&#x2F;SESSION_EXPIRE_AT_BROWSER_CLOSE: true&#x2F;g&quot; &#x2F;opt&#x2F;jumpserver&#x2F;config.yml
+sed -i &quot;s&#x2F;DB_PASSWORD: &#x2F;DB_PASSWORD: $DB_PASSWORD&#x2F;g&quot; &#x2F;opt&#x2F;jumpserver&#x2F;config.yml
+
+echo -e &quot;SECRET_KEY是 $SECRET_KEY&quot; &gt;&gt; ~&#x2F;passwd.txt
+echo -e &quot;BOOTSTRAP_TOKEN是 $BOOTSTRAP_TOKEN&quot; &gt;&gt; ~&#x2F;passwd.txt
+
+# 退出虚拟环境可以使用 deactivate 命令
+
+# 运行 Jumpserver
+#cd &#x2F;opt&#x2F;jumpserver
+#.&#x2F;jms start -d  # 后台运行使用 -d 参数.&#x2F;jms start -d
+# 新版本更新了运行脚本, 使用方式.&#x2F;jms startstopstatus all  后台运行请添加 -d 参数
+cat &gt;&#x2F;usr&#x2F;lib&#x2F;systemd&#x2F;system&#x2F;jms.service&lt;&lt;EOF
+[Unit]
+Description&#x3D;jms
+After&#x3D;network.target mariadb.service redis.service
+Wants&#x3D;mariadb.service redis.service
+
+[Service]
+Type&#x3D;forking
+Environment&#x3D;&quot;PATH&#x3D;&#x2F;opt&#x2F;py3&#x2F;bin:&#x2F;usr&#x2F;local&#x2F;sbin:&#x2F;usr&#x2F;local&#x2F;bin:&#x2F;usr&#x2F;sbin:&#x2F;usr&#x2F;bin&quot;
+ExecStart&#x3D;&#x2F;opt&#x2F;jumpserver&#x2F;jms start -d
+ExecReload&#x3D;
+ExecStop&#x3D;&#x2F;opt&#x2F;jumpserver&#x2F;jms stop
+
+[Install]
+WantedBy&#x3D;multi-user.target
+EOF
+systemctl enable jms.service --now
+
+# 安装 podman 部署 koko 与 guacamole
+yum install -y podman-docker
+alias docker&#x3D;podman
+echo &quot;alias docker&#x3D;podman&quot; &gt;&gt; ~&#x2F;.bashrc
+
+# 配置 podman 镜像源
+sed -i &quot;s&#x2F;registry.redhat.io&#x2F;dockerhub.azk8s.cn&#x2F;g&quot; &#x2F;etc&#x2F;containers&#x2F;registries.conf
+sed -i &quot;s&#x2F;registry.access.redhat.com&#x2F;docker.mirrors.ustc.edu.cn&#x2F;g&quot; &#x2F;etc&#x2F;containers&#x2F;registries.conf
+
+# 允许 容器ip 访问宿主 8080 端口, (容器的 ip 可以进入容器查看)
+firewall-cmd --permanent --add-rich-rule&#x3D;&quot;rule family&#x3D;&quot;ipv4&quot; source address&#x3D;&quot;10.88.0.0&#x2F;16&quot; port protocol&#x3D;&quot;tcp&quot; port&#x3D;&quot;8080&quot; accept&quot;
+firewall-cmd --reload
+# 10.88.0.x 是 podman 容器默认的IP池, 这里偷懒直接授权ip段了, 可以根据实际情况单独授权IP
+
+# 获取当前服务器 IP
+Server_IP&#x3D;&#96;ip addr  grep &#39;state UP&#39; -A2  grep inet  egrep -v &#39;(127.0.0.1inet6docker)&#39;  awk &#39;&#123;print $2&#125;&#39;  tr -d &quot;addr:&quot;  head -n 1  cut -d &#x2F; -f1&#96;
+echo -e &quot;服务器IP是 $Server_IP&quot; &gt;&gt; ~&#x2F;passwd.txt
+
+# http:&#x2F;&#x2F;&lt;Jumpserver_url&gt; 指向 jumpserver 的服务端口, 如 http:&#x2F;&#x2F;192.168.244.144:8080
+# BOOTSTRAP_TOKEN 为 Jumpserver&#x2F;config.yml 里面的 BOOTSTRAP_TOKEN
+docker run --name jms_koko -d -p 2222:2222 -p 127.0.0.1:5000:5000 -e CORE_HOST&#x3D;http:&#x2F;&#x2F;$Server_IP:8080 -e BOOTSTRAP_TOKEN&#x3D;$BOOTSTRAP_TOKEN jumpserver&#x2F;jms_koko:1.5.6
+docker run --name jms_guacamole -d -p 127.0.0.1:8081:8080 -e JUMPSERVER_SERVER&#x3D;http:&#x2F;&#x2F;$Server_IP:8080 -e BOOTSTRAP_TOKEN&#x3D;$BOOTSTRAP_TOKEN jumpserver&#x2F;jms_guacamole:1.5.6
+
+# 配置KOKO自启动
+cat &gt; &#x2F;usr&#x2F;lib&#x2F;systemd&#x2F;system&#x2F;koko.service &lt;&lt; EOF
+[Unit]
+Description&#x3D;Podman JMS_koko Service
+After&#x3D;network.target
+After&#x3D;network-online.target
+
+[Service]
+Type&#x3D;simple
+ExecStart&#x3D;&#x2F;usr&#x2F;bin&#x2F;podman start -a jms_koko
+ExecStop&#x3D;&#x2F;usr&#x2F;bin&#x2F;podman stop -t 10 jms_koko
+Restart&#x3D;always
+
+[Install]
+WantedBy&#x3D;multi-user.target
+EOF
+
+systemctl enable koko.service
+
+# 配置guacamole自启动
+cat &gt; &#x2F;usr&#x2F;lib&#x2F;systemd&#x2F;system&#x2F;guacamole.service &lt;&lt; EOF
+[Unit]
+Description&#x3D;Podman JMS_guacamole Service
+After&#x3D;network.target
+After&#x3D;network-online.target
+
+[Service]
+Type&#x3D;simple
+ExecStart&#x3D;&#x2F;usr&#x2F;bin&#x2F;podman start -a jms_guacamole
+ExecStop&#x3D;&#x2F;usr&#x2F;bin&#x2F;podman stop -t 10 jms_guacamole
+Restart&#x3D;always
+
+[Install]
+WantedBy&#x3D;multi-user.target
+EOF
+
+systemctl enable guacamole.service
+
+# 安装 Web Terminal 前端: Luna  需要 Nginx 来运行访问 访问(https:&#x2F;&#x2F;github.com&#x2F;jumpserver&#x2F;luna&#x2F;releases)下载对应版本的 release 包, 直接解压, 不需要编译
+cd &#x2F;opt
+# wget https:&#x2F;&#x2F;github.com&#x2F;jumpserver&#x2F;luna&#x2F;releases&#x2F;download&#x2F;1.5.6&#x2F;luna.tar.gz
+
+# 如果网络有问题导致下载无法完成可以使用下面地址
+wget https:&#x2F;&#x2F;demo.jumpserver.org&#x2F;download&#x2F;luna&#x2F;1.5.6&#x2F;luna.tar.gz
+
+tar xvzf luna.tar.gz
+chown -R root:root luna
+
+# 配置 Nginx 整合各组件
+rm -rf &#x2F;etc&#x2F;nginx&#x2F;conf.d&#x2F;default.conf
+
+cp &#x2F;etc&#x2F;nginx&#x2F;nginx.conf &#x2F;etc&#x2F;nginx.conf.bak
+sed -i &quot;38,58d&quot; &#x2F;etc&#x2F;nginx&#x2F;nginx.conf
+cat &gt; &#x2F;etc&#x2F;nginx&#x2F;conf.d&#x2F;jumpserver.conf &lt;&lt; &quot;EOF&quot;
+server &#123;
+    listen 80;
+    # server_name _;
+
+    client_max_body_size 100m;  # 录像及文件上传大小限制
+
+    location &#x2F;luna&#x2F; &#123;
+        try_files $uri &#x2F; &#x2F;index.html;
+        alias &#x2F;opt&#x2F;luna&#x2F;;  # luna 路径, 如果修改安装目录, 此处需要修改
+    &#125;
+
+    location &#x2F;media&#x2F; &#123;
+        add_header Content-Encoding gzip;
+        root &#x2F;opt&#x2F;jumpserver&#x2F;data&#x2F;;  # 录像位置, 如果修改安装目录, 此处需要修改
+    &#125;
+
+    location &#x2F;static&#x2F; &#123;
+        root &#x2F;opt&#x2F;jumpserver&#x2F;data&#x2F;;  # 静态资源, 如果修改安装目录, 此处需要修改
+    &#125;
+
+    location &#x2F;koko&#x2F; &#123;
+        proxy_pass       http:&#x2F;&#x2F;localhost:5000;
+        proxy_buffering off;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection &quot;upgrade&quot;;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        access_log off;
+    &#125;
+
+    location &#x2F;guacamole&#x2F; &#123;
+        proxy_pass       http:&#x2F;&#x2F;localhost:8081&#x2F;;
+        proxy_buffering off;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection $http_connection;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        access_log off;
+    &#125;
+
+    location &#x2F;ws&#x2F; &#123;
+        proxy_pass http:&#x2F;&#x2F;localhost:8070;
+        proxy_http_version 1.1;
+        proxy_buffering off;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection &quot;upgrade&quot;;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        access_log off;
+    &#125;
+
+    location &#x2F; &#123;
+        proxy_pass http:&#x2F;&#x2F;localhost:8080;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        access_log off;
+             &#125;
+&#125;
+EOF
+
+# 确保配置没有问题, 有问题请先解决
+nginx -t   
+systemctl restart nginx<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>然后网页访问主机地址. <a href="https://cdn.sujx.net/jumpserver.png" title="jumpserver"><img src="https://cdn.sujx.net/jumpserver.png" alt="jumpserver" title="jumpserver"></a></p>
+<hr>
+<p>另外，脚本的下载地址如下： <a href="https://cdn.sujx.net/jumpserver.sh" title="jumpserver">jumpserver安装脚本</a></p>
+]]></content>
+      <categories>
+        <category>Linux</category>
+        <category>Something</category>
+      </categories>
+      <tags>
+        <tag>centos</tag>
+        <tag>jumpserver</tag>
+        <tag>shell</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>戴尔服务器iDRAC设置Tips</title>
+    <url>/2020/10/19/set_idrac/</url>
+    <content><![CDATA[<ol>
+<li> 戴尔服务器iDRAC可以使用 概览-iDRAC设置-设置-时区和NTP 来设置时区和校时；</li>
+<li> 戴尔服务器iDRAC可从 概览-服务器-故障排除-SupportAssist-保存收集 来收集Lifecycle日志；</li>
+<li> 上一条主要要选择 编辑集合数据 来开启Raid控制器日志；</li>
+<li> 收集日志期间，不要关闭、刷新、打开其他标签等，否则会中断日志收集；</li>
+<li> 戴尔服务器R630、R730xd需要先将Lifecycle升级到2.41.40版本，然后再升级到2.75.75版本。升级完成之后就可以直接升级BIOS、NIC、SAS等固件了。否则会上传失败；</li>
+<li> 命令行设置戴尔服务器时间和时区</li>
+</ol>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"># Set NTP settings on a Dell server with iDRAC7
+# Set the DNS first to ensure the iDRAC can resolve the NTP host names:
+racadm -r 10.1.1.100 -u root -p calvin set idrac.ipv4static.dns1 8.8.8.8
+# Set the NTP server names:
+racadm -r 10.1.1.100 -u root -p calvin set idrac.NTPConfigGroup.ntp1 0.asia.pool.ntp.org
+racadm -r 10.1.1.100 -u root -p calvin set idrac.NTPConfigGroup.ntp2 1.asia.pool.ntp.org
+racadm -r 10.1.1.100 -u root -p calvin set idrac.NTPConfigGroup.ntp3 2.asia.pool.ntp.org
+# In case it won’t update the time when FQDN’s are used, IP addresses can also be used:
+racadm -r 10.1.1.100 -u root -p calvin set idrac.NTPConfigGroup.ntp1 129.250.35.250
+racadm -r 10.1.1.100 -u root -p calvin set idrac.NTPConfigGroup.ntp2 180.211.88.50
+racadm -r 10.1.1.100 -u root -p calvin set idrac.NTPConfigGroup.ntp3 202.112.29.82
+# Enable NTP and set max hops:
+racadm -r 10.1.1.100 -u root -p calvin set idrac.NTPConfigGroup.NTPEnable Enabled
+racadm -r 10.1.1.100 -u root -p calvin set idrac.NTPConfigGroup.NTPMaxDist 16
+# Set the timezone:
+racadm -r 10.1.1.100 -u root -p calvin set idrac.time.timezone Japan<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>]]></content>
+      <categories>
+        <category>System</category>
+        <category>Tips</category>
+      </categories>
+      <tags>
+        <tag>dell</tag>
+        <tag>idrac</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>网卡配置项</title>
     <url>/2020/03/30/set-netcard/</url>
     <content><![CDATA[<p>修改电脑网卡高级设置可以提高网络速度。另外，建议关闭在Realtek网卡高级设置中的以下其他选项：流控制/FlowControl、巨型帧/Jumboframe、大量传送负载/OffloadLargesend、EEE(Energy Efficient Ethernet)、环保节能/GreenEthernet、硬件效验和/OffloadChksum。</p>
@@ -1908,119 +2593,6 @@ D                           NTFS       Fixed     Healthy      OK                
       </tags>
   </entry>
   <entry>
-    <title>基于CentOS8快速部署iTop</title>
-    <url>/2019/11/20/quikly-deploy-itop-on-centos8/</url>
-    <content><![CDATA[<p>iTop是一个用PHP编写的基于ITIL理念打造的开源ITSM系统。本次将在CentOS8的虚机上安装部署一套iTOP系统。</p>
-<ol>
-<li> 系统准备 首先是准本LAMP环境，使用系统默认的Apache2.4.3、PHP7.2、Mariadb10.3.</li>
-</ol>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">yum update -y
-yum install -y cmake make autoconf gcc gcc-g++ unzip graphviz libzip-devel libzip-tools
-yum install -y httpd php php-fpm php-ldap php-soap
-yum install -y php-xmlrpc php-gd php-opcache php-mysqlnd php-json php-devel
-yum install -y libmcrypt libmcrypt-devel php-pecl-apcu mhash
-yum install -y php-odbc php-mbstring php-snmp
-yum install -y mariadb mariadb-server
-firewall-cmd --permanent --add-service&#x3D;http
-firewall-cmd --reload
-systemctl enable httpd php-fpm mariadb --now<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<ol start="2">
-<li> 上传iTop系统，修改配置文件 我们把iTop的程序文件放置到/var/www/web目录下，修改/etc/httpd/conf/httpd.conf配置文件，使得根文件系统指向web目录，同时对web目录进行赋权。</li>
-</ol>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">unzip iTop-2.6.1-4463.zip
-cp web&#x2F;* &#x2F;var&#x2F;www&#x2F;html&#x2F; -R
-chown -R apache:apache &#x2F;var&#x2F;www&#x2F;html&#x2F;
-mysql -uroot -p
-MariaDB [(none)]&gt; create database itop character set utf8 collate utf8_bin;
-MariaDB [(none)]&gt; grant all privileges on itop.* to itop@&#39;localhost&#39; identified by &#39;itop&#39;;
-MariaDB [(none)]&gt; flush privileges;
-MariaDB [(none)]&gt; exit;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<ol start="3">
-<li> 编译PHP扩展实现支持zip 使用YUM/DNF安装的PHP默认不支持zip扩展，因此默认配置下iTOP会出现白屏，日志报错： <code>PHP Fatal error: Class &#39;DBBackup&#39; not found in /var/www/html/itop/web/setup/applicationinstaller.class.inc.php</code> 所以，需要编译安装PHP的zip扩展。</li>
-</ol>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">wget http:&#x2F;&#x2F;pecl.php.net&#x2F;get&#x2F;zip
-tar zxvf zip
-cd zip-1.15.5
-phpize
-.&#x2F;configure 
-make 
-cp modules&#x2F;zip.so &#x2F;usr&#x2F;lib64&#x2F;php&#x2F;modules&#x2F;
-touch &#x2F;etc&#x2F;php.d&#x2F;20-zip.ini
-echo &#39;extension&#x3D;zip&#39; &gt;&gt; &#x2F;etc&#x2F;php.d&#x2F;20-zip.ini
-vim &#x2F;etc&#x2F;php.ini
-~~~~~~
-## 开启zlib压缩支持
-269 zlib.output_compression &#x3D; On
-~~~~~~
-systemctl restart php-fpm<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>然后打开站点就可以进行安装了。</p>
-<ol start="4">
-<li> iTOP部署 <a href="https://cdn.sujx.net/itop1.png" title="iTopDeploy1"><img src="https://cdn.sujx.net/itop1.png" alt="iTopDeploy1" title="iTopDeploy1"></a> <a href="https://cdn.sujx.net/itop2.png" title="iTopDeploy2"><img src="https://cdn.sujx.net/itop2.png" alt="iTopDeploy2" title="iTopDeploy2"></a> <a href="https://cdn.sujx.net/itop3.png" title="iTopDeploy3"><img src="https://cdn.sujx.net/itop3.png" alt="iTopDeploy3" title="iTopDeploy3"></a> <a href="https://cdn.sujx.net/itop4.png" title="iTopDeploy4"><img src="https://cdn.sujx.net/itop4.png" alt="iTopDeploy4" title="iTopDeploy4"></a> <a href="https://cdn.sujx.net/itop5.png" title="iTopDeploy5"><img src="https://cdn.sujx.net/itop5.png" alt="iTopDeploy5" title="iTopDeploy5"></a> <a href="https://cdn.sujx.net/itop6.png" title="iTopDeploy6"><img src="https://cdn.sujx.net/itop6.png" alt="iTopDeploy6" title="iTopDeploy6"></a> <a href="https://cdn.sujx.net/itop7.png" title="iTopDeploy7"><img src="https://cdn.sujx.net/itop7.png" alt="iTopDeploy7" title="iTopDeploy7"></a> <a href="https://cdn.sujx.net/itop8.png" title="iTopDeploy8"><img src="https://cdn.sujx.net/itop8.png" alt="iTopDeploy8" title="iTopDeploy8"></a> <a href="https://cdn.sujx.net/itop9.png" title="iTopDeploy9"><img src="https://cdn.sujx.net/itop9.png" alt="iTopDeploy9" title="iTopDeploy9"></a> <a href="https://cdn.sujx.net/itop10.png" title="iTopDeploy10"><img src="https://cdn.sujx.net/itop10.png" alt="iTopDeploy10" title="iTopDeploy10"></a> <a href="https://cdn.sujx.net/itop11.png" title="iTopDeploy11"><img src="https://cdn.sujx.net/itop11.png" alt="iTopDeploy11" title="iTopDeploy11"></a> <a href="https://cdn.sujx.net/itop12.png" title="iTopDeploy12"><img src="https://cdn.sujx.net/itop12.png" alt="iTopDeploy12" title="iTopDeploy12"></a> <a href="https://cdn.sujx.net/itop13.png" title="iTopDeploy13"><img src="https://cdn.sujx.net/itop13.png" alt="iTopDeploy13" title="iTopDeploy13"></a> <a href="https://cdn.sujx.net/itop14.png" title="iTopDeploy14"><img src="https://cdn.sujx.net/itop14.png" alt="iTopDeploy14" title="iTopDeploy14"></a> <a href="https://cdn.sujx.net/itop15.png" title="iTopDeploy15"><img src="https://cdn.sujx.net/itop15.png" alt="iTopDeploy15" title="iTopDeploy15"></a></li>
-</ol>
-]]></content>
-      <categories>
-        <category>Something</category>
-        <category>System</category>
-      </categories>
-      <tags>
-        <tag>centos</tag>
-        <tag>itop</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>升级CentOS8的OpenSSH版本</title>
-    <url>/2019/08/09/update-openssh-2-81p1/</url>
-    <content><![CDATA[<p>虽然说CentOS8的Openssl和OpenSSH的版本已经算是比较新的了，但是因为公司的信息安全建设的要求，在经过商业漏洞扫描软件扫描之后，还是需要进行升级操作(由于CentOS8的Openssl已经是比较新的1.1.1版本了，此次就不升级它了)。</p>
-<h3 id="安装包准备"><a href="#安装包准备" class="headerlink" title="安装包准备"></a>安装包准备</h3><pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"># 配置编译环境
-cd
-yum update -y
-yum install rpm-build zlib-devel openssl-devel gcc perl-devel pam-devel unzip -y
-mkdir -p ~&#x2F;rpmbuild&#x2F;&#123;SOURCES,SPECS&#125;
-# 下载安装包
-wget https:&#x2F;&#x2F;openbsd.hk&#x2F;pub&#x2F;OpenBSD&#x2F;OpenSSH&#x2F;portable&#x2F;openssh-8.1p1.tar.gz
-wget http:&#x2F;&#x2F;ftp.riken.jp&#x2F;Linux&#x2F;momonga&#x2F;6&#x2F;Everything&#x2F;SOURCES&#x2F;x11-ssh-askpass-1.2.4.1.tar.gz
-cp openssh-8.1p1.tar.gz x11-ssh-askpass-1.2.4.1.tar.gz ~&#x2F;rpmbuild&#x2F;SOURCES
-tar zxvf openssh-8.1p1.tar.gz
-cp openssh-8.1p1&#x2F;contrib&#x2F;redhat&#x2F;openssh.spec ~&#x2F;rpmbuild&#x2F;SPECS&#x2F;
-# 修改编译文件，去掉X11环境依赖和openssl依赖
-sed -i -e &quot;s&#x2F;%define no_x11_askpass 0&#x2F;%define no_x11_askpass 1&#x2F;g&quot; ~&#x2F;rpmbuild&#x2F;SPECS&#x2F;openssh.spec p
-sed -i -e &quot;s&#x2F;%define no_gnome_askpass 0&#x2F;%define no_gnome_askpass 1&#x2F;g&quot; ~&#x2F;rpmbuild&#x2F;SPECS&#x2F;openssh.spec
-sed -i -e &quot;s&#x2F;BuildRequires: openssl-devel &lt; 1.1&#x2F;#BuildRequires: openssl-devel &lt; 1.1&#x2F;g&quot; ~&#x2F;rpmbuild&#x2F;SPECS&#x2F;openssh.spec 
-# 开始编译rpm包
-rpmbuild -bp openssh.spec
-rpmbuild -ba openssh.spec
-# yum本地安装新编译的包
-yum localinstall -y ~&#x2F;rpmbuild&#x2F;RPMS&#x2F;x86_64&#x2F;openssh-*
-# 修改相关公钥权限
-chmod 0400 &#x2F;etc&#x2F;ssh&#x2F;ssh_host_ecdsa_key
-chmod 0400 &#x2F;etc&#x2F;ssh&#x2F;ssh_host_ed25519_key
-chmod 0400 &#x2F;etc&#x2F;ssh&#x2F;ssh_host_rsa_key
-# 修改配置文件
-sed -i -e &quot;s&#x2F;UsePAM yes&#x2F;UsePAM no&#x2F;g&quot; &#x2F;etc&#x2F;ssh&#x2F;sshd_config
-# 重置服务
-systemctl restart sshd
-# 查看新版本信息
-openssh -V<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h3 id="批量分发"><a href="#批量分发" class="headerlink" title="批量分发"></a>批量分发</h3><pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"># 上传文件到本地YUM仓库之后建立索引
-createrepo &#x2F;var&#x2F;www&#x2F;repos&#x2F;cnpe&#x2F;8&#x2F;x86_64&#x2F;
-# 安装
-ansible all -m yum -a &#39;name&#x3D;* state&#x3D;latest&#39; -b -K<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>]]></content>
-      <categories>
-        <category>Linux</category>
-        <category>Something</category>
-      </categories>
-      <tags>
-        <tag>centos</tag>
-        <tag>centos8</tag>
-        <tag>ssh</tag>
-        <tag>system</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>CentOS的免密登录</title>
     <url>/2019/07/20/ssh-nopasswd-centos/</url>
     <content><![CDATA[<p>实现CentOS的免密登录还是挺简单的。</p>
@@ -2089,438 +2661,55 @@ Last login: Fri Dec 20 14:59:11 2019 from 192.168.174.147
       </tags>
   </entry>
   <entry>
-    <title>戴尔服务器iDRAC设置Tips</title>
-    <url>/2020/10/19/set_idrac/</url>
-    <content><![CDATA[<ol>
-<li> 戴尔服务器iDRAC可以使用 概览-iDRAC设置-设置-时区和NTP 来设置时区和校时；</li>
-<li> 戴尔服务器iDRAC可从 概览-服务器-故障排除-SupportAssist-保存收集 来收集Lifecycle日志；</li>
-<li> 上一条主要要选择 编辑集合数据 来开启Raid控制器日志；</li>
-<li> 收集日志期间，不要关闭、刷新、打开其他标签等，否则会中断日志收集；</li>
-<li> 戴尔服务器R630、R730xd需要先将Lifecycle升级到2.41.40版本，然后再升级到2.75.75版本。升级完成之后就可以直接升级BIOS、NIC、SAS等固件了。否则会上传失败；</li>
-<li> 命令行设置戴尔服务器时间和时区</li>
+    <title>wHAT is HDFS?</title>
+    <url>/2020/02/23/what-is-hdfs/</url>
+    <content><![CDATA[<p>Hadoop实现了一个分布式文件系统（Hadoop Distributed File System），简称HDFS。HDFS有高容错性的特点，并且设计用来部署在低廉的（low-cost）硬件上；而且它提供高吞吐量（high throughput）来访问应用程序的数据，适合那些有着超大数据集（large data set）的应用程序。HDFS放宽了（relax）POSIX的要求，可以以流的形式访问（streaming access）文件系统中的数据。</p>
+<h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><ol>
+<li> HDFS集群分为两大角色：NameNode、DataNode；</li>
+<li> NameNode负责管理整个文件系统的元数据,second namenode是namenode的冷备；</li>
+<li> DataNode 负责管理用户的文件数据块；</li>
+<li> 文件会按照固定的大小（blocksize）(128M)切成若干块后分布式存储在若干台datanode上；</li>
+<li> 每一个文件块可以有多个副本，并存放在不同的datanode上；</li>
+<li> Datanode会定期向Namenode汇报自身所保存的文件block信息，而namenode则会负责保持文件的副本数量；</li>
+<li> HDFS的内部工作机制对客户端保持透明，客户端请求访问HDFS都是通过向namenode申请来进行；</li>
 </ol>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"><span class="token comment"># Set NTP settings on a Dell server with iDRAC7</span>
-<span class="token comment"># Set the DNS first to ensure the iDRAC can resolve the NTP host names:</span>
-racadm -r <span class="token number">10.1</span>.1.100 -u root -p calvin <span class="token builtin class-name">set</span> idrac.ipv4static.dns1 <span class="token number">8.8</span>.8.8
-<span class="token comment"># Set the NTP server names:</span>
-racadm -r <span class="token number">10.1</span>.1.100 -u root -p calvin <span class="token builtin class-name">set</span> idrac.NTPConfigGroup.ntp1 <span class="token number">0</span>.asia.pool.ntp.org
-racadm -r <span class="token number">10.1</span>.1.100 -u root -p calvin <span class="token builtin class-name">set</span> idrac.NTPConfigGroup.ntp2 <span class="token number">1</span>.asia.pool.ntp.org
-racadm -r <span class="token number">10.1</span>.1.100 -u root -p calvin <span class="token builtin class-name">set</span> idrac.NTPConfigGroup.ntp3 <span class="token number">2</span>.asia.pool.ntp.org
-<span class="token comment"># In case it won’t update the time when FQDN’s are used, IP addresses can also be used:</span>
-racadm -r <span class="token number">10.1</span>.1.100 -u root -p calvin <span class="token builtin class-name">set</span> idrac.NTPConfigGroup.ntp1 <span class="token number">129.250</span>.35.250
-racadm -r <span class="token number">10.1</span>.1.100 -u root -p calvin <span class="token builtin class-name">set</span> idrac.NTPConfigGroup.ntp2 <span class="token number">180.211</span>.88.50
-racadm -r <span class="token number">10.1</span>.1.100 -u root -p calvin <span class="token builtin class-name">set</span> idrac.NTPConfigGroup.ntp3 <span class="token number">202.112</span>.29.82
-<span class="token comment"># Enable NTP and set max hops:</span>
-racadm -r <span class="token number">10.1</span>.1.100 -u root -p calvin <span class="token builtin class-name">set</span> idrac.NTPConfigGroup.NTPEnable Enabled
-racadm -r <span class="token number">10.1</span>.1.100 -u root -p calvin <span class="token builtin class-name">set</span> idrac.NTPConfigGroup.NTPMaxDist <span class="token number">16</span>
-<span class="token comment"># Set the timezone:</span>
-racadm -r <span class="token number">10.1</span>.1.100 -u root -p calvin <span class="token builtin class-name">set</span> idrac.time.timezone Japan<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>]]></content>
+<h3 id="写过程"><a href="#写过程" class="headerlink" title="写过程"></a>写过程</h3><h2 id=""><a href="#" class="headerlink" title=""></a><img src="https://cdn.sujx.net/hdfswrite.png" alt="HDFS_write" title="HDFS_write"></h2><ol>
+<li> Client调用DistributedFileSystem对象的create方法，创建一个文件输出流（FSDataOutputStream）对象</li>
+<li> 通过DistributedFileSystem对象与Hadoop集群的NameNode进行一次RPC远程调用，在HDFS的Namespace中创建一个文件条目（Entry），该条目没有任何的Block</li>
+<li> 通过FSDataOutputStream对象，向DataNode写入数据，数据首先被写入FSDataOutputStream对象内部的Buffer中，然后数据被分割成一个个Packet数据包</li>
+<li> 以Packet最小单位，基于Socket连接发送到按特定算法选择的HDFS集群中一组DataNode（正常是3个，可能大于等于1）中的一个节点上，在这组DataNode组成的Pipeline上依次传输Packet</li>
+<li> 这组DataNode组成的Pipeline反方向上，发送ack，最终由Pipeline中第一个DataNode节点将Pipeline ack发送给Client</li>
+<li> 完成向文件写入数据，Client在文件输出流（FSDataOutputStream）对象上调用close方法，关闭流</li>
+<li> 调用DistributedFileSystem对象的complete方法，通知NameNode文件写入成功</li>
+</ol>
+<h3 id="读过程"><a href="#读过程" class="headerlink" title="读过程"></a>读过程</h3><h2 id="-1"><a href="#-1" class="headerlink" title=""></a><img src="https://cdn.sujx.net/hdfsread.png" alt="HDFS_read" title="HDFS_read"></h2><ol>
+<li> Client向NameNode发起RPC请求,来确定请求文件block所在的位置</li>
+<li> NameNode会视情况返回文件的部分或者全部block列表,对于每个block,NameNode都会返回含有该block副本的DataNode地址</li>
+<li> 这些返回的DN地址,会按照集群拓扑结构得出DataNode与客户端的距离,然后进行排序,排序两个规则:网络拓扑结构中距离Client的排在前;心跳机制中超时汇报的DN状态为STALE,这样的排在后</li>
+<li> Clietn选取排序靠前的DataNode来读取block,如果客户端本身就是DataNode,那么将从本地直接获取数据</li>
+<li> 底层本质是建立Socket Stream(FSDataInputStream) ,重复调用父类DataInputStream的read方法,知道这个块上的数据读取完毕</li>
+<li> 当读完列表的block后,若文件读取还没有结束,客户端会继续想NameNode获取下一批的block列表</li>
+<li> 读取完一个Block都会进行checksum验证,如果读取DataNode时出现错误,客户端会通知NameNode,然后再从下一个拥有该block副本的DataNode继续读取。注: 如果在读取过程中DFSInputStream检测到block错误,DFSInputStream也会检查从datanode读取来的数据的校验和,如果发现有数据损坏,它会把坏掉的block报告给namenode同时重新读取其他datanode上的其他block备份</li>
+<li> read方法是并行的读取block信息,不是一块一块的读取,NameNode只是返回Client请求包含块的DataNode地址,并不是返回请求块的数据</li>
+<li> 最终读取哎所有的block会合并成一个完整的最终文件</li>
+</ol>
+<h3 id="副本放置策略"><a href="#副本放置策略" class="headerlink" title="副本放置策略"></a>副本放置策略</h3><ol>
+<li> 第一个副本：放置在上传文件的DN；如果是集群外提交，则随机挑选一台磁盘不太满，CPU不太忙的节点</li>
+<li> 第二个副本：放置在于第一个副本不同的机架的节点上</li>
+<li> 第三个副本：与第二个副本相同机架的节点</li>
+<li> 更多副本：随机节点</li>
+</ol>
+<h3 id="NameNode-内存使用"><a href="#NameNode-内存使用" class="headerlink" title="NameNode 内存使用"></a>NameNode 内存使用</h3><p>NameNode内存数据主要对整个文件系统元数据的管理。Namenode目前元数据管理可以分成两个层次，一个是Namespace的管理层，这一层负责管理HDFS分布式文件系统中的树状目录和文件结构；另一层则为Block管理层，这一层负责管理HDFS分布式文件系统中存储文件到物理块之间的映射关系BlocksMap元数据。其中对Namespace的管理数据除在内存常驻外，会定期Flush到持久化设备中；对BlocksMap元数据的管理只存在内存；当NameNode发生重启，需要从持久化设备中读取Namespace管理数据，并重新构造BlocksMap。 除了对文件系统本身元数据的管理外，NameNode还需要维护DataNode本身的元数据，这部分空间相对固定，且占用空间较小。 从实际Hadoop集群环境历史数据看，当Namespace中包含INode（目录和文件总量）<del>140M，数据块数量</del>160M，常驻内存使用量达在~50G。随着数据规模的持续增长，内存占用接近同步线性增长。在整个HDFS服务中，NameNode的核心作用及内存数据结构的重要地位，所以分析内存使用情况对维护HDFS服务稳定性至关重要。</p>
+<h3 id="漫画HDFS"><a href="#漫画HDFS" class="headerlink" title="漫画HDFS"></a>漫画HDFS</h3><p><img src="https://cdn.sujx.net/HDFS_001.png" alt="HDFS_001" title="HDFS_001"> <img src="https://cdn.sujx.net/HDFS_002.png" alt="HDFS_002" title="HDFS_002"> <img src="https://cdn.sujx.net/HDFS_003.png" alt="HDFS_003" title="HDFS_003"></p>
+]]></content>
       <categories>
         <category>System</category>
-        <category>Tips</category>
-      </categories>
-      <tags>
-        <tag>dell</tag>
-        <tag>idrac</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>HDFS初步使用</title>
-    <url>/2020/03/01/use-hdfs-newbie/</url>
-    <content><![CDATA[<p>HDFS(Hadoop Distributed File System)是可扩展、容错、高性能的分布式文件系统，异步复制，一次写入多次读取，主要负责存储。其概念和内容可以参考<a href="https://www.cnblogs.com/binarylei/p/8903601.html" title="这里">[1]</a>。这里就做一个简单的实验来看一下其文件管理的功能。更多的Hadoop命令可以参考<a href="http://dblab.xmu.edu.cn/blog/1625-2/" title="这里">[2]</a>。</p>
-<h3 id="用户建立"><a href="#用户建立" class="headerlink" title="用户建立"></a>用户建立</h3><p>在实验环境中，不建议使用root账号直接登录运行，所以建立一个普通账号。</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"><span class="token comment"># Elephant主机执行</span>
-<span class="token comment"># 安装ansible</span>
-<span class="token punctuation">[</span>root@elephant ~<span class="token punctuation">]</span><span class="token comment"># yum install -y ansible</span>
-<span class="token comment"># 在/etc/ansible/hosts中新增所有主机名</span>
-<span class="token comment"># 建立ansible文件</span>
-<span class="token punctuation">[</span>root@elephant ~<span class="token punctuation">]</span><span class="token comment"># mkdir playbook</span>
-<span class="token punctuation">[</span>root@elephant ~<span class="token punctuation">]</span><span class="token comment"># vim ./playbook/useradd.yaml</span>
----
-- hosts: hadoop
-  remote_user: root
-  vars_prompt:
-    - name: user_name
-      prompt: Enter Username
-      private: no
-    - name: user_passwd
-      prompt: Enter Password
-      encrypt: <span class="token string">"sha512_crypt"</span>
-      confirm: <span class="token function">yes</span>
-  tasks:
-    - name: create user
-      user:
-        name: <span class="token string">"&#123;&#123;user_name&#125;&#125;"</span>
-        password: <span class="token string">"&#123;&#123;user_passwd&#125;&#125;"</span>
-
-<span class="token comment"># 执行</span>
-<span class="token punctuation">[</span>root@elephant ~<span class="token punctuation">]</span><span class="token comment"># ansible-playbook ./playbook/useradd.yaml</span>
-Enter Username: sujx
-Enter Password:
-confirm Enter Password:
-
-PLAY <span class="token punctuation">[</span>hadoop<span class="token punctuation">]</span> *****************************************************************************<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h3 id="HDFS文件使用"><a href="#HDFS文件使用" class="headerlink" title="HDFS文件使用"></a>HDFS文件使用</h3><p>我们先将准备的481M文件(access.log)上传至用户家目录，看看这个文件将在hdfs文件系统中如何存储。</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"><span class="token punctuation">[</span>root@elephant ~<span class="token punctuation">]</span><span class="token comment"># su hdfs</span>
-<span class="token punctuation">[</span>hdfs@elephant root<span class="token punctuation">]</span>$ hadoop fs -mkdir /user/sujx
-<span class="token punctuation">[</span>hdfs@elephant root<span class="token punctuation">]</span>$ hadoop fs -chown sujx /user/sujx
-<span class="token punctuation">[</span>hdfs@elephant root<span class="token punctuation">]</span>$ <span class="token function">su</span> sujx -
-<span class="token punctuation">[</span>hdfs@elephant root<span class="token punctuation">]</span>$ hdfs dfs -put access_log weblog<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>然后，我们通过hdfs的web控制台就可以看到文件的存储情况，可见文件以3副本的形式，按照每个128M大小的存储块分割存储在namenode之上。当前情况是分成了4块。 <img src="https://cdn.sujx.net/hdfs_01.png" alt="show"> <img src="https://cdn.sujx.net/hdfs_02.png" alt="block"> 我们可以从lion主机中看到存储的数据块。</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"><span class="token punctuation">[</span>root@lion ~<span class="token punctuation">]</span><span class="token comment"># tree /dfs</span>
-/dfs
-<span class="token variable"><span class="token variable">`</span>-- dn
-    -- current
-       -- BP-752680285-192.168.174.131-1582986010714
-          -- current
-             -- VERSION
-             -- dfsUsed
-             -- finalized
-                <span class="token variable">`</span></span>-- subdir0
-                    -- subdir0
-                    -- subdir1
-                    -- subdir2
-                    -- subdir3
-                       -- blk_1073742734
-                       -- blk_1073742734_1910.meta
-                    <span class="token variable"><span class="token variable">`</span>-- subdir4
-             <span class="token variable">`</span></span>-- rbw
-          -- scanner.cursor
-          <span class="token variable"><span class="token variable">`</span>-- tmp
-       <span class="token variable">`</span></span>-- VERSION
-    `-- in_use.lock<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>]]></content>
-      <categories>
-        <category>Something</category>
         <category>Bigdata</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>bigdata</tag>
         <tag>hdfs</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>使用Xshell免费版远程调用图形界面</title>
-    <url>/2019/04/20/xshell-x11/</url>
-    <content><![CDATA[<p>使用Xshell套装可以通过Xshell调用Xmanager来实现Linux图形界面的ssh转发，从而实现Linux的GUI界面的远程调用。但对于使用edu账号申请下来的免费版Xshell就没有这个功能了。那么，我们就需要使用xshell+xming来实现类似功能。</p>
-<h3 id="SSHD配置"><a href="#SSHD配置" class="headerlink" title="SSHD配置"></a>SSHD配置</h3><pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"><span class="token comment"># 要打开SSH服务的X11转发功能</span>
-<span class="token function">sed</span> -i <span class="token string">"s/#X11Forwarding yes/X11Forwarding yes/g"</span>
-<span class="token function">sed</span> -i <span class="token string">"s/#X11DisplayOffset 10/X11DisplayOffset 10/g"</span>
-<span class="token function">sed</span> -i <span class="token string">"s/#X11UseLocalhost yes/X11UseLocalhost yes/g"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h3 id="安装Xming"><a href="#安装Xming" class="headerlink" title="安装Xming"></a>安装Xming</h3><p>我们下载好<a href="https://sourceforge.net/projects/xming/" title="Xming">[1]</a>之后，执行安装。需要配置的只有两项:</p>
-<ol>
-<li> 取消安装自带的putty</li>
-</ol>
-<p><a href="https://cdn.sujx.net/xming1.PNG" title="Xming_install"><img src="https://cdn.sujx.net/xming1.PNG" alt="Xming_install" title="Xming_install"></a></p>
-<ol start="2">
-<li> 指定接受的端口10</li>
-</ol>
-<p><a href="https://cdn.sujx.net/xming2.PNG" title="Xming_port"><img src="https://cdn.sujx.net/xming2.PNG" alt="Xming_port" title="Xming_port"></a></p>
-<h3 id="配置Xshell"><a href="#配置Xshell" class="headerlink" title="配置Xshell"></a>配置Xshell</h3><p>在xshell中配置客户端,在”SSH”-“隧道”中选择”转发x11连接到：’XDisplay:localhost:10.0’” <a href="https://cdn.sujx.net/xming3.PNG" title="xming_xshell"><img src="https://cdn.sujx.net/xming3.PNG" alt="xming_xshell" title="xming_xshell"></a></p>
-<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><p>在本地xshell客户端上调用远程GUI程序，比如gparted. <a href="https://cdn.sujx.net/xming4.PNG" title="xming_gui"><img src="https://cdn.sujx.net/xming4.PNG" alt="xming_gui" title="xming_xshell"></a></p>
-]]></content>
-      <categories>
-        <category>Something</category>
-        <category>System</category>
-      </categories>
-      <tags>
-        <tag>linux</tag>
-        <tag>ssh</tag>
-        <tag>x11</tag>
-        <tag>xming</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>使用脚本一键部署堡垒机</title>
-    <url>/2019/12/19/use-sh-deploy-jumpsever/</url>
-    <content><![CDATA[<p>部门领导要求研究一下堡垒机的使用，所以花了两天时间研究了一下开源堡垒机的部署和使用。因为官方文档中有些已经有了部分错误，现在以官方的CentOS8版本的安装文档为蓝本把部署过程以脚本的形式备份一下。 其中，主要的变化是使用了官方源的nginx、修改了python安装的几个组件的版本、部署了堡垒机jms服务、koko服务和guacamole服务的systemd自启动脚本。</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"><span class="token shebang important">#!/bin/bash</span>
-
-<span class="token comment"># 2020.01.15</span>
-<span class="token comment"># sujx@live.cn</span>
-
-<span class="token comment"># 安装依赖包</span>
-yum update -y
-yum -y <span class="token function">install</span> <span class="token function">wget</span> gcc epel-release <span class="token function">git</span> telnet openssh-clients dnf-utils <span class="token function">vim</span> 
-yum update -y
-
-<span class="token comment"># 下载 Jumpserver</span>
-<span class="token builtin class-name">cd</span> /opt/
-<span class="token function">git</span> clone --depth<span class="token operator">=</span><span class="token number">1</span> https://github.com/jumpserver/jumpserver.git
-
-<span class="token comment"># 防火墙 与 selinux 设置说明, 如果已经关闭了 防火墙 和 Selinux 的用户请跳过设置</span>
-systemctl start firewalld
-<span class="token comment"># nginx 端口</span>
-firewall-cmd --zone<span class="token operator">=</span>public --add-service<span class="token operator">=</span>http --permanent  
-<span class="token comment"># 用户SSH登录端口 koko</span>
-firewall-cmd --zone<span class="token operator">=</span>public --add-port<span class="token operator">=</span><span class="token number">2222</span>/tcp --permanent  
-<span class="token comment"># 重新载入规则</span>
-firewall-cmd --reload  
-<span class="token comment"># SElinux配置</span>
-setsebool -P httpd_can_network_connect <span class="token number">1</span>
-
-<span class="token comment"># 安装 Redis, Jumpserver 使用 Redis 做 cache 和 celery broke</span>
-yum -y <span class="token function">install</span> redis
-systemctl <span class="token builtin class-name">enable</span> redis --now
-
-<span class="token comment"># 安装 MySQL, 如果不使用 Mysql 可以跳过相关 Mysql 安装和配置, 支持sqlite3, mysql, postgres等</span>
-yum -y <span class="token function">install</span> mariadb mariadb-devel mariadb-server sshpass
-systemctl <span class="token builtin class-name">enable</span> mariadb --now
-
-<span class="token comment"># 创建数据库 Jumpserver 并授权</span>
-<span class="token assign-left variable">DB_PASSWORD</span><span class="token operator">=</span><span class="token variable"><span class="token variable">`</span><span class="token function">cat</span> /dev/urandom  <span class="token function">tr</span> -dc A-Za-z0-9  <span class="token function">head</span> -c <span class="token number">24</span><span class="token variable">`</span></span>  <span class="token comment"># 生成随机数据库密码</span>
-
-<span class="token function">cat</span> <span class="token operator">></span>~/passwd.txt<span class="token operator">&lt;&lt;</span><span class="token string">EOF
-数据库密码是 <span class="token variable">$DB_PASSWORD</span>
-EOF</span>
-
-mysql -uroot -e <span class="token string">"create database jumpserver default charset 'utf8'; grant all on jumpserver.* to 'jumpserver'@'127.0.0.1' identified by '<span class="token variable">$DB_PASSWORD</span>'; flush privileges;"</span>
-
-<span class="token comment"># 安装 Nginx, 用作代理服务器整合 Jumpserver 与各个组件</span>
-
-yum -y <span class="token function">install</span> nginx
-systemctl <span class="token builtin class-name">enable</span> nginx --now
-
-<span class="token comment"># 安装 Python3.6</span>
-yum -y <span class="token function">install</span> python36 python36-devel
-yum -y <span class="token function">install</span> krb5-devel libtiff-devel libjpeg-devel libzip-devel freetype-devel libwebp-devel tcl-devel tk-devel openldap-devel libffi-devel openldap-clients
-
-<span class="token comment"># 安装 Python 库依赖</span>
-<span class="token comment"># 配置使用华为python源</span>
-<span class="token function">mkdir</span> ~/.pip
-<span class="token function">cat</span> <span class="token operator">></span>~/.pip/pip.conf<span class="token operator">&lt;&lt;</span><span class="token string">EOF
-[global]
-index-url = https://mirrors.huaweicloud.com/repository/pypi/simple
-trusted-host = mirrors.huaweicloud.com
-timeout = 120 
-EOF</span>
-
-<span class="token comment"># 配置并载入 Python3 虚拟环境</span>
-<span class="token builtin class-name">cd</span> /opt
-<span class="token comment"># py3 为虚拟环境名称, 可自定义</span>
-python3 -m venv py3  
-<span class="token comment"># 退出虚拟环境可以使用 deactivate 命令</span>
-<span class="token builtin class-name">source</span> /opt/py3/bin/activate  
-
-pip <span class="token function">install</span> wheel setuptools
-pip <span class="token function">install</span> pip --upgrade
-pip <span class="token function">install</span> python-gssapi
-
-<span class="token comment"># 修改依赖包版本</span>
-<span class="token function">sed</span> -i <span class="token string">"s/Django==2.1.11/Django==2.2/g"</span> /opt/jumpserver/requirements/requirements.txt
-<span class="token function">sed</span> -i <span class="token string">"s/cryptography==2.3.1/cryptography==2.7/g"</span> /opt/jumpserver/requirements/requirements.txt
-<span class="token function">sed</span> -i <span class="token string">"s/pyasn1==0.4.2/pyasn1==0.4.6/g"</span> /opt/jumpserver/requirements/requirements.txt
-
-pip <span class="token function">install</span> -r /opt/jumpserver/requirements/requirements.txt
-
-<span class="token comment"># 修改 Jumpserver 配置文件</span>
-<span class="token builtin class-name">cd</span> /opt/jumpserver
-<span class="token function">cp</span> config_example.yml config.yml
-
-<span class="token comment"># 生成随机SECRET_KEY</span>
-<span class="token assign-left variable">SECRET_KEY</span><span class="token operator">=</span><span class="token variable"><span class="token variable">`</span><span class="token function">cat</span> /dev/urandom  <span class="token function">tr</span> -dc A-Za-z0-9  <span class="token function">head</span> -c <span class="token number">50</span><span class="token variable">`</span></span>  
-<span class="token builtin class-name">echo</span> <span class="token string">"SECRET_KEY=<span class="token variable">$SECRET_KEY</span>"</span> <span class="token operator">>></span> ~/.bashrc
-
-<span class="token comment"># 生成随机BOOTSTRAP_TOKEN</span>
-<span class="token assign-left variable">BOOTSTRAP_TOKEN</span><span class="token operator">=</span><span class="token variable"><span class="token variable">`</span><span class="token function">cat</span> /dev/urandom  <span class="token function">tr</span> -dc A-Za-z0-9  <span class="token function">head</span> -c <span class="token number">16</span><span class="token variable">`</span></span>  
-<span class="token builtin class-name">echo</span> <span class="token string">"BOOTSTRAP_TOKEN=<span class="token variable">$BOOTSTRAP_TOKEN</span>"</span> <span class="token operator">>></span> ~/.bashrc
-
-<span class="token function">sed</span> -i <span class="token string">"s/SECRET_KEY:/SECRET_KEY: <span class="token variable">$SECRET_KEY</span>/g"</span> /opt/jumpserver/config.yml
-<span class="token function">sed</span> -i <span class="token string">"s/BOOTSTRAP_TOKEN:/BOOTSTRAP_TOKEN: <span class="token variable">$BOOTSTRAP_TOKEN</span>/g"</span> /opt/jumpserver/config.yml
-<span class="token function">sed</span> -i <span class="token string">"s/# DEBUG: true/DEBUG: false/g"</span> /opt/jumpserver/config.yml
-<span class="token function">sed</span> -i <span class="token string">"s/# LOG_LEVEL: DEBUG/LOG_LEVEL: ERROR/g"</span> /opt/jumpserver/config.yml
-<span class="token function">sed</span> -i <span class="token string">"s/# SESSION_EXPIRE_AT_BROWSER_CLOSE: false/SESSION_EXPIRE_AT_BROWSER_CLOSE: true/g"</span> /opt/jumpserver/config.yml
-<span class="token function">sed</span> -i <span class="token string">"s/DB_PASSWORD: /DB_PASSWORD: <span class="token variable">$DB_PASSWORD</span>/g"</span> /opt/jumpserver/config.yml
-
-<span class="token builtin class-name">echo</span> -e <span class="token string">"SECRET_KEY是 <span class="token variable">$SECRET_KEY</span>"</span> <span class="token operator">>></span> ~/passwd.txt
-<span class="token builtin class-name">echo</span> -e <span class="token string">"BOOTSTRAP_TOKEN是 <span class="token variable">$BOOTSTRAP_TOKEN</span>"</span> <span class="token operator">>></span> ~/passwd.txt
-
-<span class="token comment"># 退出虚拟环境可以使用 deactivate 命令</span>
-
-<span class="token comment"># 运行 Jumpserver</span>
-<span class="token comment">#cd /opt/jumpserver</span>
-<span class="token comment">#./jms start -d  # 后台运行使用 -d 参数./jms start -d</span>
-<span class="token comment"># 新版本更新了运行脚本, 使用方式./jms startstopstatus all  后台运行请添加 -d 参数</span>
-<span class="token function">cat</span> <span class="token operator">></span>/usr/lib/systemd/system/jms.service<span class="token operator">&lt;&lt;</span><span class="token string">EOF
-[Unit]
-Description=jms
-After=network.target mariadb.service redis.service
-Wants=mariadb.service redis.service
-
-[Service]
-Type=forking
-Environment="PATH=/opt/py3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin"
-ExecStart=/opt/jumpserver/jms start -d
-ExecReload=
-ExecStop=/opt/jumpserver/jms stop
-
-[Install]
-WantedBy=multi-user.target
-EOF</span>
-systemctl <span class="token builtin class-name">enable</span> jms.service --now
-
-<span class="token comment"># 安装 podman 部署 koko 与 guacamole</span>
-yum <span class="token function">install</span> -y podman-docker
-<span class="token builtin class-name">alias</span> <span class="token assign-left variable">docker</span><span class="token operator">=</span>podman
-<span class="token builtin class-name">echo</span> <span class="token string">"alias docker=podman"</span> <span class="token operator">>></span> ~/.bashrc
-
-<span class="token comment"># 配置 podman 镜像源</span>
-<span class="token function">sed</span> -i <span class="token string">"s/registry.redhat.io/dockerhub.azk8s.cn/g"</span> /etc/containers/registries.conf
-<span class="token function">sed</span> -i <span class="token string">"s/registry.access.redhat.com/docker.mirrors.ustc.edu.cn/g"</span> /etc/containers/registries.conf
-
-<span class="token comment"># 允许 容器ip 访问宿主 8080 端口, (容器的 ip 可以进入容器查看)</span>
-firewall-cmd --permanent --add-rich-rule<span class="token operator">=</span><span class="token string">"rule family="</span>ipv4<span class="token string">" source address="</span><span class="token number">10.88</span>.0.0/16<span class="token string">" port protocol="</span>tcp<span class="token string">" port="</span><span class="token number">8080</span><span class="token string">" accept"</span>
-firewall-cmd --reload
-<span class="token comment"># 10.88.0.x 是 podman 容器默认的IP池, 这里偷懒直接授权ip段了, 可以根据实际情况单独授权IP</span>
-
-<span class="token comment"># 获取当前服务器 IP</span>
-<span class="token assign-left variable">Server_IP</span><span class="token operator">=</span><span class="token variable"><span class="token variable">`</span><span class="token function">ip</span> addr  <span class="token function">grep</span> <span class="token string">'state UP'</span> -A2  <span class="token function">grep</span> inet  <span class="token function">egrep</span> -v <span class="token string">'(127.0.0.1inet6docker)'</span>  <span class="token function">awk</span> <span class="token string">'&#123;print $2&#125;'</span>  <span class="token function">tr</span> -d <span class="token string">"addr:"</span>  <span class="token function">head</span> -n <span class="token number">1</span>  <span class="token function">cut</span> -d / -f1<span class="token variable">`</span></span>
-<span class="token builtin class-name">echo</span> -e <span class="token string">"服务器IP是 <span class="token variable">$Server_IP</span>"</span> <span class="token operator">>></span> ~/passwd.txt
-
-<span class="token comment"># http://&lt;Jumpserver_url> 指向 jumpserver 的服务端口, 如 http://192.168.244.144:8080</span>
-<span class="token comment"># BOOTSTRAP_TOKEN 为 Jumpserver/config.yml 里面的 BOOTSTRAP_TOKEN</span>
-docker run --name jms_koko -d -p <span class="token number">2222</span>:2222 -p <span class="token number">127.0</span>.0.1:5000:5000 -e <span class="token assign-left variable">CORE_HOST</span><span class="token operator">=</span>http://<span class="token variable">$Server_IP</span>:8080 -e <span class="token assign-left variable">BOOTSTRAP_TOKEN</span><span class="token operator">=</span><span class="token variable">$BOOTSTRAP_TOKEN</span> jumpserver/jms_koko:1.5.6
-docker run --name jms_guacamole -d -p <span class="token number">127.0</span>.0.1:8081:8080 -e <span class="token assign-left variable">JUMPSERVER_SERVER</span><span class="token operator">=</span>http://<span class="token variable">$Server_IP</span>:8080 -e <span class="token assign-left variable">BOOTSTRAP_TOKEN</span><span class="token operator">=</span><span class="token variable">$BOOTSTRAP_TOKEN</span> jumpserver/jms_guacamole:1.5.6
-
-<span class="token comment"># 配置KOKO自启动</span>
-<span class="token function">cat</span> <span class="token operator">></span> /usr/lib/systemd/system/koko.service <span class="token operator">&lt;&lt;</span> <span class="token string">EOF
-[Unit]
-Description=Podman JMS_koko Service
-After=network.target
-After=network-online.target
-
-[Service]
-Type=simple
-ExecStart=/usr/bin/podman start -a jms_koko
-ExecStop=/usr/bin/podman stop -t 10 jms_koko
-Restart=always
-
-[Install]
-WantedBy=multi-user.target
-EOF</span>
-
-systemctl <span class="token builtin class-name">enable</span> koko.service
-
-<span class="token comment"># 配置guacamole自启动</span>
-<span class="token function">cat</span> <span class="token operator">></span> /usr/lib/systemd/system/guacamole.service <span class="token operator">&lt;&lt;</span> <span class="token string">EOF
-[Unit]
-Description=Podman JMS_guacamole Service
-After=network.target
-After=network-online.target
-
-[Service]
-Type=simple
-ExecStart=/usr/bin/podman start -a jms_guacamole
-ExecStop=/usr/bin/podman stop -t 10 jms_guacamole
-Restart=always
-
-[Install]
-WantedBy=multi-user.target
-EOF</span>
-
-systemctl <span class="token builtin class-name">enable</span> guacamole.service
-
-<span class="token comment"># 安装 Web Terminal 前端: Luna  需要 Nginx 来运行访问 访问(https://github.com/jumpserver/luna/releases)下载对应版本的 release 包, 直接解压, 不需要编译</span>
-<span class="token builtin class-name">cd</span> /opt
-<span class="token comment"># wget https://github.com/jumpserver/luna/releases/download/1.5.6/luna.tar.gz</span>
-
-<span class="token comment"># 如果网络有问题导致下载无法完成可以使用下面地址</span>
-<span class="token function">wget</span> https://demo.jumpserver.org/download/luna/1.5.6/luna.tar.gz
-
-<span class="token function">tar</span> xvzf luna.tar.gz
-<span class="token function">chown</span> -R root:root luna
-
-<span class="token comment"># 配置 Nginx 整合各组件</span>
-<span class="token function">rm</span> -rf /etc/nginx/conf.d/default.conf
-
-<span class="token function">cp</span> /etc/nginx/nginx.conf /etc/nginx.conf.bak
-<span class="token function">sed</span> -i <span class="token string">"38,58d"</span> /etc/nginx/nginx.conf
-<span class="token function">cat</span> <span class="token operator">></span> /etc/nginx/conf.d/jumpserver.conf <span class="token operator">&lt;&lt;</span> <span class="token string">"EOF"
-server &#123;
-    listen 80;
-    # server_name _;
-
-    client_max_body_size 100m;  # 录像及文件上传大小限制
-
-    location /luna/ &#123;
-        try_files $uri / /index.html;
-        alias /opt/luna/;  # luna 路径, 如果修改安装目录, 此处需要修改
-    &#125;
-
-    location /media/ &#123;
-        add_header Content-Encoding gzip;
-        root /opt/jumpserver/data/;  # 录像位置, 如果修改安装目录, 此处需要修改
-    &#125;
-
-    location /static/ &#123;
-        root /opt/jumpserver/data/;  # 静态资源, 如果修改安装目录, 此处需要修改
-    &#125;
-
-    location /koko/ &#123;
-        proxy_pass       http://localhost:5000;
-        proxy_buffering off;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection "upgrade";
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header Host $host;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        access_log off;
-    &#125;
-
-    location /guacamole/ &#123;
-        proxy_pass       http://localhost:8081/;
-        proxy_buffering off;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection $http_connection;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header Host $host;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        access_log off;
-    &#125;
-
-    location /ws/ &#123;
-        proxy_pass http://localhost:8070;
-        proxy_http_version 1.1;
-        proxy_buffering off;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection "upgrade";
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header Host $host;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        access_log off;
-    &#125;
-
-    location / &#123;
-        proxy_pass http://localhost:8080;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header Host $host;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        access_log off;
-             &#125;
-&#125;
-EOF</span>
-
-<span class="token comment"># 确保配置没有问题, 有问题请先解决</span>
-nginx -t   
-systemctl restart nginx<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>然后网页访问主机地址. <a href="https://cdn.sujx.net/jumpserver.png" title="jumpserver"><img src="https://cdn.sujx.net/jumpserver.png" alt="jumpserver" title="jumpserver"></a></p>
-<hr>
-<p>另外，脚本的下载地址如下： <a href="https://cdn.sujx.net/jumpserver.sh" title="jumpserver">jumpserver安装脚本</a></p>
-]]></content>
-      <categories>
-        <category>Linux</category>
-        <category>Something</category>
-      </categories>
-      <tags>
-        <tag>centos</tag>
-        <tag>jumpserver</tag>
-        <tag>shell</tag>
+        <tag>hdoop</tag>
       </tags>
   </entry>
   <entry>
@@ -2602,55 +2791,35 @@ wrought,        <span class="token number">4</span>
       </tags>
   </entry>
   <entry>
-    <title>wHAT is HDFS?</title>
-    <url>/2020/02/23/what-is-hdfs/</url>
-    <content><![CDATA[<p>Hadoop实现了一个分布式文件系统（Hadoop Distributed File System），简称HDFS。HDFS有高容错性的特点，并且设计用来部署在低廉的（low-cost）硬件上；而且它提供高吞吐量（high throughput）来访问应用程序的数据，适合那些有着超大数据集（large data set）的应用程序。HDFS放宽了（relax）POSIX的要求，可以以流的形式访问（streaming access）文件系统中的数据。</p>
-<h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><ol>
-<li> HDFS集群分为两大角色：NameNode、DataNode；</li>
-<li> NameNode负责管理整个文件系统的元数据,second namenode是namenode的冷备；</li>
-<li> DataNode 负责管理用户的文件数据块；</li>
-<li> 文件会按照固定的大小（blocksize）(128M)切成若干块后分布式存储在若干台datanode上；</li>
-<li> 每一个文件块可以有多个副本，并存放在不同的datanode上；</li>
-<li> Datanode会定期向Namenode汇报自身所保存的文件block信息，而namenode则会负责保持文件的副本数量；</li>
-<li> HDFS的内部工作机制对客户端保持透明，客户端请求访问HDFS都是通过向namenode申请来进行；</li>
+    <title>使用Xshell免费版远程调用图形界面</title>
+    <url>/2019/04/20/xshell-x11/</url>
+    <content><![CDATA[<p>使用Xshell套装可以通过Xshell调用Xmanager来实现Linux图形界面的ssh转发，从而实现Linux的GUI界面的远程调用。但对于使用edu账号申请下来的免费版Xshell就没有这个功能了。那么，我们就需要使用xshell+xming来实现类似功能。</p>
+<h3 id="SSHD配置"><a href="#SSHD配置" class="headerlink" title="SSHD配置"></a>SSHD配置</h3><pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"><span class="token comment"># 要打开SSH服务的X11转发功能</span>
+<span class="token function">sed</span> -i <span class="token string">"s/#X11Forwarding yes/X11Forwarding yes/g"</span>
+<span class="token function">sed</span> -i <span class="token string">"s/#X11DisplayOffset 10/X11DisplayOffset 10/g"</span>
+<span class="token function">sed</span> -i <span class="token string">"s/#X11UseLocalhost yes/X11UseLocalhost yes/g"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="安装Xming"><a href="#安装Xming" class="headerlink" title="安装Xming"></a>安装Xming</h3><p>我们下载好<a href="https://sourceforge.net/projects/xming/" title="Xming">[1]</a>之后，执行安装。需要配置的只有两项:</p>
+<ol>
+<li> 取消安装自带的putty</li>
 </ol>
-<h3 id="写过程"><a href="#写过程" class="headerlink" title="写过程"></a>写过程</h3><h2 id=""><a href="#" class="headerlink" title=""></a><img src="https://cdn.sujx.net/hdfswrite.png" alt="HDFS_write" title="HDFS_write"></h2><ol>
-<li> Client调用DistributedFileSystem对象的create方法，创建一个文件输出流（FSDataOutputStream）对象</li>
-<li> 通过DistributedFileSystem对象与Hadoop集群的NameNode进行一次RPC远程调用，在HDFS的Namespace中创建一个文件条目（Entry），该条目没有任何的Block</li>
-<li> 通过FSDataOutputStream对象，向DataNode写入数据，数据首先被写入FSDataOutputStream对象内部的Buffer中，然后数据被分割成一个个Packet数据包</li>
-<li> 以Packet最小单位，基于Socket连接发送到按特定算法选择的HDFS集群中一组DataNode（正常是3个，可能大于等于1）中的一个节点上，在这组DataNode组成的Pipeline上依次传输Packet</li>
-<li> 这组DataNode组成的Pipeline反方向上，发送ack，最终由Pipeline中第一个DataNode节点将Pipeline ack发送给Client</li>
-<li> 完成向文件写入数据，Client在文件输出流（FSDataOutputStream）对象上调用close方法，关闭流</li>
-<li> 调用DistributedFileSystem对象的complete方法，通知NameNode文件写入成功</li>
+<p><a href="https://cdn.sujx.net/xming1.PNG" title="Xming_install"><img src="https://cdn.sujx.net/xming1.PNG" alt="Xming_install" title="Xming_install"></a></p>
+<ol start="2">
+<li> 指定接受的端口10</li>
 </ol>
-<h3 id="读过程"><a href="#读过程" class="headerlink" title="读过程"></a>读过程</h3><h2 id="-1"><a href="#-1" class="headerlink" title=""></a><img src="https://cdn.sujx.net/hdfsread.png" alt="HDFS_read" title="HDFS_read"></h2><ol>
-<li> Client向NameNode发起RPC请求,来确定请求文件block所在的位置</li>
-<li> NameNode会视情况返回文件的部分或者全部block列表,对于每个block,NameNode都会返回含有该block副本的DataNode地址</li>
-<li> 这些返回的DN地址,会按照集群拓扑结构得出DataNode与客户端的距离,然后进行排序,排序两个规则:网络拓扑结构中距离Client的排在前;心跳机制中超时汇报的DN状态为STALE,这样的排在后</li>
-<li> Clietn选取排序靠前的DataNode来读取block,如果客户端本身就是DataNode,那么将从本地直接获取数据</li>
-<li> 底层本质是建立Socket Stream(FSDataInputStream) ,重复调用父类DataInputStream的read方法,知道这个块上的数据读取完毕</li>
-<li> 当读完列表的block后,若文件读取还没有结束,客户端会继续想NameNode获取下一批的block列表</li>
-<li> 读取完一个Block都会进行checksum验证,如果读取DataNode时出现错误,客户端会通知NameNode,然后再从下一个拥有该block副本的DataNode继续读取。注: 如果在读取过程中DFSInputStream检测到block错误,DFSInputStream也会检查从datanode读取来的数据的校验和,如果发现有数据损坏,它会把坏掉的block报告给namenode同时重新读取其他datanode上的其他block备份</li>
-<li> read方法是并行的读取block信息,不是一块一块的读取,NameNode只是返回Client请求包含块的DataNode地址,并不是返回请求块的数据</li>
-<li> 最终读取哎所有的block会合并成一个完整的最终文件</li>
-</ol>
-<h3 id="副本放置策略"><a href="#副本放置策略" class="headerlink" title="副本放置策略"></a>副本放置策略</h3><ol>
-<li> 第一个副本：放置在上传文件的DN；如果是集群外提交，则随机挑选一台磁盘不太满，CPU不太忙的节点</li>
-<li> 第二个副本：放置在于第一个副本不同的机架的节点上</li>
-<li> 第三个副本：与第二个副本相同机架的节点</li>
-<li> 更多副本：随机节点</li>
-</ol>
-<h3 id="NameNode-内存使用"><a href="#NameNode-内存使用" class="headerlink" title="NameNode 内存使用"></a>NameNode 内存使用</h3><p>NameNode内存数据主要对整个文件系统元数据的管理。Namenode目前元数据管理可以分成两个层次，一个是Namespace的管理层，这一层负责管理HDFS分布式文件系统中的树状目录和文件结构；另一层则为Block管理层，这一层负责管理HDFS分布式文件系统中存储文件到物理块之间的映射关系BlocksMap元数据。其中对Namespace的管理数据除在内存常驻外，会定期Flush到持久化设备中；对BlocksMap元数据的管理只存在内存；当NameNode发生重启，需要从持久化设备中读取Namespace管理数据，并重新构造BlocksMap。 除了对文件系统本身元数据的管理外，NameNode还需要维护DataNode本身的元数据，这部分空间相对固定，且占用空间较小。 从实际Hadoop集群环境历史数据看，当Namespace中包含INode（目录和文件总量）<del>140M，数据块数量</del>160M，常驻内存使用量达在~50G。随着数据规模的持续增长，内存占用接近同步线性增长。在整个HDFS服务中，NameNode的核心作用及内存数据结构的重要地位，所以分析内存使用情况对维护HDFS服务稳定性至关重要。</p>
-<h3 id="漫画HDFS"><a href="#漫画HDFS" class="headerlink" title="漫画HDFS"></a>漫画HDFS</h3><p><img src="https://cdn.sujx.net/HDFS_001.png" alt="HDFS_001" title="HDFS_001"> <img src="https://cdn.sujx.net/HDFS_002.png" alt="HDFS_002" title="HDFS_002"> <img src="https://cdn.sujx.net/HDFS_003.png" alt="HDFS_003" title="HDFS_003"></p>
+<p><a href="https://cdn.sujx.net/xming2.PNG" title="Xming_port"><img src="https://cdn.sujx.net/xming2.PNG" alt="Xming_port" title="Xming_port"></a></p>
+<h3 id="配置Xshell"><a href="#配置Xshell" class="headerlink" title="配置Xshell"></a>配置Xshell</h3><p>在xshell中配置客户端,在”SSH”-“隧道”中选择”转发x11连接到：’XDisplay:localhost:10.0’” <a href="https://cdn.sujx.net/xming3.PNG" title="xming_xshell"><img src="https://cdn.sujx.net/xming3.PNG" alt="xming_xshell" title="xming_xshell"></a></p>
+<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><p>在本地xshell客户端上调用远程GUI程序，比如gparted. <a href="https://cdn.sujx.net/xming4.PNG" title="xming_gui"><img src="https://cdn.sujx.net/xming4.PNG" alt="xming_gui" title="xming_xshell"></a></p>
 ]]></content>
       <categories>
+        <category>Something</category>
         <category>System</category>
-        <category>Bigdata</category>
       </categories>
       <tags>
-        <tag>bigdata</tag>
-        <tag>hdfs</tag>
-        <tag>hdoop</tag>
+        <tag>linux</tag>
+        <tag>ssh</tag>
+        <tag>x11</tag>
+        <tag>xming</tag>
       </tags>
   </entry>
   <entry>

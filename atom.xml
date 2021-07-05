@@ -6,7 +6,7 @@
   <link href="https://sujx.net/atom.xml" rel="self"/>
   
   <link href="https://sujx.net/"/>
-  <updated>2021-07-05T06:41:12.526Z</updated>
+  <updated>2021-07-05T11:24:49.701Z</updated>
   <id>https://sujx.net/</id>
   
   <author>
@@ -15,6 +15,37 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>终端安全系统WAZUH的介绍</title>
+    <link href="https://sujx.net/2021/07/05/deploy-wazuh-on-distrbuted/"/>
+    <id>https://sujx.net/2021/07/05/deploy-wazuh-on-distrbuted/</id>
+    <published>2021-07-05T10:30:02.000Z</published>
+    <updated>2021-07-05T11:24:49.701Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;[Wazuh](&lt;a href=&quot;https://wazuh.com/&quot;&gt;Wazuh · The Open Source Security</summary>
+        
+      
+    
+    
+    
+    
+    <category term="wazuh" scheme="https://sujx.net/tags/wazuh/"/>
+    
+    <category term="EDR" scheme="https://sujx.net/tags/EDR/"/>
+    
+    <category term="HIDS" scheme="https://sujx.net/tags/HIDS/"/>
+    
+    <category term="System" scheme="https://sujx.net/tags/System/"/>
+    
+    <category term="Security" scheme="https://sujx.net/tags/Security/"/>
+    
+  </entry>
   
   <entry>
     <title>使用Hexo构建静态博客站点</title>
@@ -177,9 +208,9 @@
     <category term="Other" scheme="https://sujx.net/categories/Other/"/>
     
     
-    <category term="Router" scheme="https://sujx.net/tags/Router/"/>
-    
     <category term="Windows" scheme="https://sujx.net/tags/Windows/"/>
+    
+    <category term="Router" scheme="https://sujx.net/tags/Router/"/>
     
   </entry>
   
@@ -380,13 +411,13 @@
     <category term="Tips" scheme="https://sujx.net/categories/Tips/"/>
     
     
-    <category term="Windows" scheme="https://sujx.net/tags/Windows/"/>
-    
     <category term="offline" scheme="https://sujx.net/tags/offline/"/>
     
     <category term="ActiveDirctory" scheme="https://sujx.net/tags/ActiveDirctory/"/>
     
     <category term="djoin" scheme="https://sujx.net/tags/djoin/"/>
+    
+    <category term="Windows" scheme="https://sujx.net/tags/Windows/"/>
     
   </entry>
   
@@ -572,42 +603,6 @@
     <category term="bigdata" scheme="https://sujx.net/tags/bigdata/"/>
     
     <category term="hdfs" scheme="https://sujx.net/tags/hdfs/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>离线部署CDH5.16.2</title>
-    <link href="https://sujx.net/2020/02/29/offline-deploy-cdh5/"/>
-    <id>https://sujx.net/2020/02/29/offline-deploy-cdh5/</id>
-    <published>2020-02-29T14:36:44.000Z</published>
-    <updated>2021-07-01T12:07:28.502Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;p&gt;在实践了CDH6的离线部署之后，发现Cloudera的官方教程是基于CDH5.10的。同时，CDH6的内存占用比较高，我的机器有点遭不住，所以又把CDH5的部署实施走了一遍。&lt;/p&gt;
-&lt;h3 id=&quot;模板部署&quot;&gt;&lt;a href=&quot;#模板部署&quot;</summary>
-        
-      
-    
-    
-    
-    <category term="Something" scheme="https://sujx.net/categories/Something/"/>
-    
-    <category term="System" scheme="https://sujx.net/categories/System/"/>
-    
-    <category term="Bigdata" scheme="https://sujx.net/categories/Bigdata/"/>
-    
-    
-    <category term="cdh" scheme="https://sujx.net/tags/cdh/"/>
-    
-    <category term="bigdata" scheme="https://sujx.net/tags/bigdata/"/>
-    
-    <category term="cdh5" scheme="https://sujx.net/tags/cdh5/"/>
-    
-    <category term="offline" scheme="https://sujx.net/tags/offline/"/>
     
   </entry>
   
