@@ -548,7 +548,7 @@ npm install hexo-renderer-pug hexo-renderer-stylus --save
 npm install hexo-wordcount --save<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
 </ol>
 <hr>
-<h2 id="配置站点"><a href="#配置站点" class="headerlink" title="配置站点"></a>配置站点</h2><ol>
+<h3 id="配置站点"><a href="#配置站点" class="headerlink" title="配置站点"></a>配置站点</h3><ol>
 <li>修改配置<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">vim ~&#x2F;blog&#x2F;_config.yml
    
    # 站点信息
@@ -591,8 +591,7 @@ touch ~&#x2F;blog&#x2F;_config.butterfly.yml
 cat ~&#x2F;blog&#x2F;node_modules&#x2F;hexo-theme-butterfly&#x2F;_config.yml &gt;&gt; ~&#x2F;blog&#x2F;_config.butterfly.yml
 vim ~&#x2F;blog&#x2F;_config.butterfly.yml
 
-略……
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+略……<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
 </ol>
 <hr>
 <h3 id="创建内容"><a href="#创建内容" class="headerlink" title="创建内容"></a>创建内容</h3><ol>
@@ -605,8 +604,7 @@ hexo migrate wordpress ..&#x2F;givemetime.WordPress.2021-06-27.xml<span aria-hid
 </ol>
 <hr>
 <h3 id="站点部署"><a href="#站点部署" class="headerlink" title="站点部署"></a>站点部署</h3><ol>
-<li><p>多站点同步部署</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"># 使用FTP工具导出
+<li>多站点同步部署<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"># 使用FTP工具导出
 vim ~&#x2F;blog&#x2F;_config.yml
 
 deploy:
@@ -630,8 +628,7 @@ deploy:
   delete: true # 上传本地文件是否删除ftp中的所有文件
   verbose: true # 是否打印调试信息
   ignore_errors: false # 是否忽略错误<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
-<li><p>站点发布</p>
-<pre class="line-numbers language-none"><code class="language-none">综上，使用阿里云的智能DNS，海外线路走github、电信线路走oss南方区域、万网虚拟主机走联通线路，实现一个廉价版的多区域部署。<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+<li>站点发布<pre class="line-numbers language-none"><code class="language-none">综上，使用阿里云的智能DNS，海外线路走github、电信线路走oss南方区域、万网虚拟主机走联通线路，实现一个廉价版的多区域部署。<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
 </ol>
 ]]></content>
       <tags>
