@@ -6,7 +6,7 @@
   <link href="https://sujx.net/atom.xml" rel="self"/>
   
   <link href="https://sujx.net/"/>
-  <updated>2021-07-01T12:07:28.488Z</updated>
+  <updated>2021-07-05T03:12:37.074Z</updated>
   <id>https://sujx.net/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://sujx.net/2021/06/29/deploy_hexo/"/>
     <id>https://sujx.net/2021/06/29/deploy_hexo/</id>
     <published>2021-06-29T09:25:44.000Z</published>
-    <updated>2021-07-01T12:07:28.488Z</updated>
+    <updated>2021-07-05T03:12:37.074Z</updated>
     
     
       
@@ -115,9 +115,9 @@
     
     
     
-    <category term="System" scheme="https://sujx.net/categories/System/"/>
-    
     <category term="Tips" scheme="https://sujx.net/categories/Tips/"/>
+    
+    <category term="System" scheme="https://sujx.net/categories/System/"/>
     
     
     <category term="dell" scheme="https://sujx.net/tags/dell/"/>
