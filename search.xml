@@ -380,9 +380,9 @@ creatrepo &#x2F;var&#x2F;www&#x2F;repos&#x2F;local&#x2F;8&#x2F;x86_64&#x2F;<span
   <entry>
     <title>终端安全系统WAZUH的介绍</title>
     <url>/2021/07/05/deploy-wazuh-on-distrbuted/</url>
-    <content><![CDATA[<p>[Wazuh](<a href="https://wazuh.com/">Wazuh · The Open Source Security Platform</a>)是一整套基于ossec安全检测工具和EFK日志工具构成的终端安全管理工具。不管是将其分类至HIDS，还是EDR，它都是一套通过监控主机日志行为，提供安全检测、分析和完整报告的开源、免费利器。Wazuh基于C/S架构，它的Agent支持Windows、MacOS、Linux、HP-UX、AIX等主流操作系统。其服务端负责提供认证和数据收集，然后通过filebeat进行日志清洗，最后导入ElasticSearch，通过Kinbana进行展示和输出日志。它不仅可以收集主机的事件日志进行一般的入侵检测功能，还可以通过第三方提供的系统漏洞检测feed文件，来实现主机的漏洞扫描和合规检查。</p>
-<h3 id="功能示例"><a href="#功能示例" class="headerlink" title="功能示例"></a>功能示例</h3><p><img src="data_flow1.png" alt="data_flow"></p>
-<h3 id=""><a href="#" class="headerlink" title=""></a></h3><hr>
+    <content><![CDATA[<h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>[Wazuh](<a href="https://wazuh.com/">Wazuh · The Open Source Security Platform</a>)是一整套基于ossec安全检测工具和EFK日志工具构成的终端安全管理工具。不管是将其分类至HIDS，还是EDR，它都是一套通过监控主机日志行为，提供安全检测、分析和完整报告的开源、免费利器。Wazuh基于C/S架构，它的Agent支持Windows、MacOS、Linux、HP-UX、AIX等主流操作系统。其服务端负责提供认证和数据收集，然后通过filebeat进行日志清洗，最后导入ElasticSearch，通过Kinbana进行展示和输出日志。它不仅可以收集主机的事件日志进行一般的入侵检测功能，还可以通过第三方提供的系统漏洞检测feed文件，来实现主机的漏洞扫描和合规检查。</p>
+<h3 id="功能示例"><a href="#功能示例" class="headerlink" title="功能示例"></a>功能示例</h3><p><img src="https://cdn.sujx.net/data_flow1.png" alt="data_flow"></p>
+<hr>
 <h3 id="组件模块"><a href="#组件模块" class="headerlink" title="组件模块"></a>组件模块</h3><p>Wazuh的组件分为三部分：</p>
 <ol>
 <li><p>客户端的功能</p>
@@ -399,13 +399,14 @@ creatrepo &#x2F;var&#x2F;www&#x2F;repos&#x2F;local&#x2F;8&#x2F;x86_64&#x2F;<span
 </li>
 <li><p>服务端</p>
 <p><img src="https://cdn.sujx.net/architecture_server1.png" alt="server"></p>
-<pre><code>1. 客户端的服务器注册；
-2. 实现客户端的连接服务；
-3. 根据各项规则实现事件日志的分析引擎；
-4. 提供RESTful API；
-5. 实现服务端的群集化；
-6. 使用Filebeat将日志文件吐给ES存储
-</code></pre>
+<ol>
+<li>客户端的服务器注册；</li>
+<li>实现客户端的连接服务；</li>
+<li>根据各项规则实现事件日志的分析引擎；</li>
+<li>提供RESTful API；</li>
+<li>实现服务端的群集化；</li>
+<li>使用Filebeat将日志文件吐给ES存储</li>
+</ol>
 </li>
 <li><p>Elastic Stack</p>
 <p><img src="https://cdn.sujx.net/wazuh-show.PNG" alt="show"></p>
@@ -502,7 +503,7 @@ creatrepo &#x2F;var&#x2F;www&#x2F;repos&#x2F;local&#x2F;8&#x2F;x86_64&#x2F;<span
 </tr>
 </thead>
 <tbody><tr>
-<td>Component</td>
+<td>组件</td>
 <td>RAM (GB)</td>
 <td>CPU (cores)</td>
 <td>RAM (GB)</td>
