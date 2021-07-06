@@ -6,7 +6,7 @@
   <link href="https://sujx.net/atom.xml" rel="self"/>
   
   <link href="https://sujx.net/"/>
-  <updated>2021-07-05T11:33:38.223Z</updated>
+  <updated>2021-07-06T10:44:45.431Z</updated>
   <id>https://sujx.net/</id>
   
   <author>
@@ -17,9 +17,44 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Wazuh的基本部署</title>
+    <link href="https://sujx.net/2021/07/06/deploy-wazuh-first/"/>
+    <id>https://sujx.net/2021/07/06/deploy-wazuh-first/</id>
+    <published>2021-07-06T04:07:05.000Z</published>
+    <updated>2021-07-06T10:44:45.431Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;本次将部署一套分布式Wazuh方案，实现其基本功能。其中：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;wazuh-master启用全功能组件；&lt;/li&gt;
+&lt;li&gt;ElasticStack将使用官方基本授权，不启用X-pack和加密连接；&lt;/li&gt;
+&lt;li&gt;Linux版本Agent将安装到K</summary>
+        
+      
+    
+    
+    
+    
+    <category term="wazuh" scheme="https://sujx.net/tags/wazuh/"/>
+    
+    <category term="EDR" scheme="https://sujx.net/tags/EDR/"/>
+    
+    <category term="HIDS" scheme="https://sujx.net/tags/HIDS/"/>
+    
+    <category term="Security" scheme="https://sujx.net/tags/Security/"/>
+    
+    <category term="system" scheme="https://sujx.net/tags/system/"/>
+    
+  </entry>
+  
+  <entry>
     <title>终端安全系统WAZUH的介绍</title>
-    <link href="https://sujx.net/2021/07/05/deploy-wazuh-on-distrbuted/"/>
-    <id>https://sujx.net/2021/07/05/deploy-wazuh-on-distrbuted/</id>
+    <link href="https://sujx.net/2021/07/05/basic_info_wazuh/"/>
+    <id>https://sujx.net/2021/07/05/basic_info_wazuh/</id>
     <published>2021-07-05T10:30:02.000Z</published>
     <updated>2021-07-05T11:33:38.223Z</updated>
     
@@ -442,11 +477,11 @@
     
     <category term="Windows" scheme="https://sujx.net/tags/Windows/"/>
     
-    <category term="offline" scheme="https://sujx.net/tags/offline/"/>
-    
     <category term="ActiveDirctory" scheme="https://sujx.net/tags/ActiveDirctory/"/>
     
     <category term="djoin" scheme="https://sujx.net/tags/djoin/"/>
+    
+    <category term="offline" scheme="https://sujx.net/tags/offline/"/>
     
   </entry>
   
@@ -469,9 +504,9 @@
     
     
     
-    <category term="ServerCore" scheme="https://sujx.net/categories/ServerCore/"/>
-    
     <category term="Tips" scheme="https://sujx.net/categories/Tips/"/>
+    
+    <category term="ServerCore" scheme="https://sujx.net/categories/ServerCore/"/>
     
     
     <category term="hyper-v" scheme="https://sujx.net/tags/hyper-v/"/>
@@ -567,40 +602,6 @@
     <category term="github" scheme="https://sujx.net/tags/github/"/>
     
     <category term="hosts" scheme="https://sujx.net/tags/hosts/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>使用CDH示例程序进行字数统计</title>
-    <link href="https://sujx.net/2020/03/09/wordcount-by-cdh/"/>
-    <id>https://sujx.net/2020/03/09/wordcount-by-cdh/</id>
-    <published>2020-03-08T19:06:52.000Z</published>
-    <updated>2021-07-01T12:07:28.511Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;p&gt;Wordcount程序是Hadoop上的经典“HelloWorld”程序。CDH系统自带了wordcount程序来检测部署的成功与否。&lt;/p&gt;
-&lt;pre class=&quot;line-numbers language-shell&quot;</summary>
-        
-      
-    
-    
-    
-    <category term="Other" scheme="https://sujx.net/categories/Other/"/>
-    
-    <category term="Bigdata" scheme="https://sujx.net/categories/Bigdata/"/>
-    
-    
-    <category term="bigdata" scheme="https://sujx.net/tags/bigdata/"/>
-    
-    <category term="mapreduce" scheme="https://sujx.net/tags/mapreduce/"/>
-    
-    <category term="wordcount" scheme="https://sujx.net/tags/wordcount/"/>
-    
-    <category term="yarn" scheme="https://sujx.net/tags/yarn/"/>
     
   </entry>
   
