@@ -6,7 +6,7 @@
   <link href="https://sujx.net/atom.xml" rel="self"/>
   
   <link href="https://sujx.net/"/>
-  <updated>2021-07-05T11:30:50.439Z</updated>
+  <updated>2021-07-05T11:33:38.223Z</updated>
   <id>https://sujx.net/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://sujx.net/2021/07/05/deploy-wazuh-on-distrbuted/"/>
     <id>https://sujx.net/2021/07/05/deploy-wazuh-on-distrbuted/</id>
     <published>2021-07-05T10:30:02.000Z</published>
-    <updated>2021-07-05T11:30:50.439Z</updated>
+    <updated>2021-07-05T11:33:38.223Z</updated>
     
     
       
@@ -122,6 +122,35 @@
     
     
     <category term="Hyper-V Ubuntu VM Template" scheme="https://sujx.net/tags/Hyper-V-Ubuntu-VM-Template/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>批量修改Windows主机本地管理员密码</title>
+    <link href="https://sujx.net/2021/02/02/change-localadmin-password/"/>
+    <id>https://sujx.net/2021/02/02/change-localadmin-password/</id>
+    <published>2021-02-02T03:43:51.000Z</published>
+    <updated>2021-07-06T04:02:53.419Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;在Windows活动目录中的主机依据合规的要求，至少每年都应当按照密码规则进行一次本地管理员的密码变更。&lt;/p&gt;
+&lt;p&gt;以下脚本是使用有域管理员权限的域账号进行批量执行来修改主机管理员密码。&lt;/p&gt;
+&lt;pre class=&quot;line-numbers</summary>
+        
+      
+    
+    
+    
+    
+    <category term="Windows" scheme="https://sujx.net/tags/Windows/"/>
+    
+    <category term="powershell" scheme="https://sujx.net/tags/powershell/"/>
+    
+    <category term="system" scheme="https://sujx.net/tags/system/"/>
     
   </entry>
   
@@ -411,13 +440,13 @@
     <category term="Tips" scheme="https://sujx.net/categories/Tips/"/>
     
     
+    <category term="Windows" scheme="https://sujx.net/tags/Windows/"/>
+    
     <category term="offline" scheme="https://sujx.net/tags/offline/"/>
     
     <category term="ActiveDirctory" scheme="https://sujx.net/tags/ActiveDirctory/"/>
     
     <category term="djoin" scheme="https://sujx.net/tags/djoin/"/>
-    
-    <category term="Windows" scheme="https://sujx.net/tags/Windows/"/>
     
   </entry>
   
@@ -440,9 +469,9 @@
     
     
     
-    <category term="Tips" scheme="https://sujx.net/categories/Tips/"/>
-    
     <category term="ServerCore" scheme="https://sujx.net/categories/ServerCore/"/>
+    
+    <category term="Tips" scheme="https://sujx.net/categories/Tips/"/>
     
     
     <category term="hyper-v" scheme="https://sujx.net/tags/hyper-v/"/>
@@ -572,37 +601,6 @@
     <category term="wordcount" scheme="https://sujx.net/tags/wordcount/"/>
     
     <category term="yarn" scheme="https://sujx.net/tags/yarn/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>HDFS初步使用</title>
-    <link href="https://sujx.net/2020/03/01/use-hdfs-newbie/"/>
-    <id>https://sujx.net/2020/03/01/use-hdfs-newbie/</id>
-    <published>2020-03-01T14:36:24.000Z</published>
-    <updated>2021-07-01T12:07:28.508Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;p&gt;HDFS(Hadoop Distributed File System)是可扩展、容错、高性能的分布式文件系统，异步复制，一次写入多次读取，主要负责存储。其概念和内容可以参考&lt;a</summary>
-        
-      
-    
-    
-    
-    <category term="Something" scheme="https://sujx.net/categories/Something/"/>
-    
-    <category term="Bigdata" scheme="https://sujx.net/categories/Bigdata/"/>
-    
-    
-    <category term="linux" scheme="https://sujx.net/tags/linux/"/>
-    
-    <category term="bigdata" scheme="https://sujx.net/tags/bigdata/"/>
-    
-    <category term="hdfs" scheme="https://sujx.net/tags/hdfs/"/>
     
   </entry>
   

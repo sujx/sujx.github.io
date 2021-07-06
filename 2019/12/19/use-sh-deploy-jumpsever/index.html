@@ -1,9 +1,9 @@
-<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>使用脚本一键部署堡垒机 | 灰黑化挥花悔黑</title><meta name="keywords" content="centos,jumpserver,shell"><meta name="author" content="grepsu"><meta name="copyright" content="grepsu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="部门领导要求研究一下堡垒机的使用，所以花了两天时间研究了一下开源堡垒机的部署和使用。因为官方文档中有些已经有了部分错误，现在以官方的CentOS8版本的安装文档为蓝本把部署过程以脚本的形式备份一下。 其中，主要的变化是使用了官方源的nginx、修改了python安装的几个组件的版本、部署了堡垒机jms服务、koko服务和guacamole服务的systemd自启动脚本。 #!&#x2F;bin&amp;#">
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>使用脚本一键部署堡垒机 | 灰黑化挥花悔黑</title><meta name="keywords" content="centos,jumpserver,shell"><meta name="author" content="grepsu"><meta name="copyright" content="grepsu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="部门领导要求研究一下堡垒机的使用，所以花了两天时间研究了一下开源堡垒机的部署和使用。因为官方文档中有些已经有了部分错误，现在以官方的CentOS8版本的安装文档为蓝本把部署过程以脚本的形式备份一下。 其中，主要的变化是使用了官方源的nginx、修改了python安装的几个组件的版本、部署了堡垒机jms服务、koko服务和guacamole服务的systemd自启动脚本。 #!&#x2F;bin&#x2F;bash">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用脚本一键部署堡垒机">
 <meta property="og:url" content="https://sujx.net/2019/12/19/use-sh-deploy-jumpsever/index.html">
 <meta property="og:site_name" content="灰黑化挥花悔黑">
-<meta property="og:description" content="部门领导要求研究一下堡垒机的使用，所以花了两天时间研究了一下开源堡垒机的部署和使用。因为官方文档中有些已经有了部分错误，现在以官方的CentOS8版本的安装文档为蓝本把部署过程以脚本的形式备份一下。 其中，主要的变化是使用了官方源的nginx、修改了python安装的几个组件的版本、部署了堡垒机jms服务、koko服务和guacamole服务的systemd自启动脚本。 #!&#x2F;bin&amp;#">
+<meta property="og:description" content="部门领导要求研究一下堡垒机的使用，所以花了两天时间研究了一下开源堡垒机的部署和使用。因为官方文档中有些已经有了部分错误，现在以官方的CentOS8版本的安装文档为蓝本把部署过程以脚本的形式备份一下。 其中，主要的变化是使用了官方源的nginx、修改了python安装的几个组件的版本、部署了堡垒机jms服务、koko服务和guacamole服务的systemd自启动脚本。 #!&#x2F;bin&#x2F;bash">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://cdn.sujx.net/wallhaven-g8d9dd.jpg">
 <meta property="article:published_time" content="2019-12-19T09:15:13.000Z">
@@ -143,243 +143,243 @@
         }
       }
     })(window)</script><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="灰黑化挥花悔黑" type="application/atom+xml">
-</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">34</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">65</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">Categories</div><div class="length-num">9</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">灰黑化挥花悔黑</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">使用脚本一键部署堡垒机</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2019-12-19T09:15:13.000Z" title="Created 2019-12-19 17:15:13">2019-12-19</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2021-07-01T12:07:28.509Z" title="Updated 2021-07-01 20:07:28">2021-07-01</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Linux/">Linux</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Something/">Something</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word count:</span><span class="word-count">2.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading time:</span><span>11min</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="使用脚本一键部署堡垒机"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div><article class="post-content" id="article-container"><p>部门领导要求研究一下堡垒机的使用，所以花了两天时间研究了一下开源堡垒机的部署和使用。因为官方文档中有些已经有了部分错误，现在以官方的CentOS8版本的安装文档为蓝本把部署过程以脚本的形式备份一下。 其中，主要的变化是使用了官方源的nginx、修改了python安装的几个组件的版本、部署了堡垒机jms服务、koko服务和guacamole服务的systemd自启动脚本。</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">#!&#x2F;bin&#x2F;bash
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">35</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">65</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">Categories</div><div class="length-num">9</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">灰黑化挥花悔黑</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">使用脚本一键部署堡垒机</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2019-12-19T09:15:13.000Z" title="Created 2019-12-19 17:15:13">2019-12-19</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2021-07-01T12:07:28.509Z" title="Updated 2021-07-01 20:07:28">2021-07-01</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Something/">Something</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Linux/">Linux</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word count:</span><span class="word-count">1.7k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading time:</span><span>8min</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="使用脚本一键部署堡垒机"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div><article class="post-content" id="article-container"><p>部门领导要求研究一下堡垒机的使用，所以花了两天时间研究了一下开源堡垒机的部署和使用。因为官方文档中有些已经有了部分错误，现在以官方的CentOS8版本的安装文档为蓝本把部署过程以脚本的形式备份一下。 其中，主要的变化是使用了官方源的nginx、修改了python安装的几个组件的版本、部署了堡垒机jms服务、koko服务和guacamole服务的systemd自启动脚本。</p>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"><span class="token shebang important">#!/bin/bash</span>
 
-# 2020.01.15
-# sujx@live.cn
+<span class="token comment"># 2020.01.15</span>
+<span class="token comment"># sujx@live.cn</span>
 
-# 安装依赖包
+<span class="token comment"># 安装依赖包</span>
 yum update -y
-yum -y install wget gcc epel-release git telnet openssh-clients dnf-utils vim 
+yum -y <span class="token function">install</span> <span class="token function">wget</span> gcc epel-release <span class="token function">git</span> telnet openssh-clients dnf-utils <span class="token function">vim</span> 
 yum update -y
 
-# 下载 Jumpserver
-cd &#x2F;opt&#x2F;
-git clone --depth&#x3D;1 https:&#x2F;&#x2F;github.com&#x2F;jumpserver&#x2F;jumpserver.git
+<span class="token comment"># 下载 Jumpserver</span>
+<span class="token builtin class-name">cd</span> /opt/
+<span class="token function">git</span> clone --depth<span class="token operator">=</span><span class="token number">1</span> https://github.com/jumpserver/jumpserver.git
 
-# 防火墙 与 selinux 设置说明, 如果已经关闭了 防火墙 和 Selinux 的用户请跳过设置
+<span class="token comment"># 防火墙 与 selinux 设置说明, 如果已经关闭了 防火墙 和 Selinux 的用户请跳过设置</span>
 systemctl start firewalld
-# nginx 端口
-firewall-cmd --zone&#x3D;public --add-service&#x3D;http --permanent  
-# 用户SSH登录端口 koko
-firewall-cmd --zone&#x3D;public --add-port&#x3D;2222&#x2F;tcp --permanent  
-# 重新载入规则
+<span class="token comment"># nginx 端口</span>
+firewall-cmd --zone<span class="token operator">=</span>public --add-service<span class="token operator">=</span>http --permanent  
+<span class="token comment"># 用户SSH登录端口 koko</span>
+firewall-cmd --zone<span class="token operator">=</span>public --add-port<span class="token operator">=</span><span class="token number">2222</span>/tcp --permanent  
+<span class="token comment"># 重新载入规则</span>
 firewall-cmd --reload  
-# SElinux配置
-setsebool -P httpd_can_network_connect 1
+<span class="token comment"># SElinux配置</span>
+setsebool -P httpd_can_network_connect <span class="token number">1</span>
 
-# 安装 Redis, Jumpserver 使用 Redis 做 cache 和 celery broke
-yum -y install redis
-systemctl enable redis --now
+<span class="token comment"># 安装 Redis, Jumpserver 使用 Redis 做 cache 和 celery broke</span>
+yum -y <span class="token function">install</span> redis
+systemctl <span class="token builtin class-name">enable</span> redis --now
 
-# 安装 MySQL, 如果不使用 Mysql 可以跳过相关 Mysql 安装和配置, 支持sqlite3, mysql, postgres等
-yum -y install mariadb mariadb-devel mariadb-server sshpass
-systemctl enable mariadb --now
+<span class="token comment"># 安装 MySQL, 如果不使用 Mysql 可以跳过相关 Mysql 安装和配置, 支持sqlite3, mysql, postgres等</span>
+yum -y <span class="token function">install</span> mariadb mariadb-devel mariadb-server sshpass
+systemctl <span class="token builtin class-name">enable</span> mariadb --now
 
-# 创建数据库 Jumpserver 并授权
-DB_PASSWORD&#x3D;&#96;cat &#x2F;dev&#x2F;urandom  tr -dc A-Za-z0-9  head -c 24&#96;  # 生成随机数据库密码
+<span class="token comment"># 创建数据库 Jumpserver 并授权</span>
+<span class="token assign-left variable">DB_PASSWORD</span><span class="token operator">=</span><span class="token variable"><span class="token variable">`</span><span class="token function">cat</span> /dev/urandom  <span class="token function">tr</span> -dc A-Za-z0-9  <span class="token function">head</span> -c <span class="token number">24</span><span class="token variable">`</span></span>  <span class="token comment"># 生成随机数据库密码</span>
 
-cat &gt;~&#x2F;passwd.txt&lt;&lt;EOF
-数据库密码是 $DB_PASSWORD
-EOF
+<span class="token function">cat</span> <span class="token operator">></span>~/passwd.txt<span class="token operator">&lt;&lt;</span><span class="token string">EOF
+数据库密码是 <span class="token variable">$DB_PASSWORD</span>
+EOF</span>
 
-mysql -uroot -e &quot;create database jumpserver default charset &#39;utf8&#39;; grant all on jumpserver.* to &#39;jumpserver&#39;@&#39;127.0.0.1&#39; identified by &#39;$DB_PASSWORD&#39;; flush privileges;&quot;
+mysql -uroot -e <span class="token string">"create database jumpserver default charset 'utf8'; grant all on jumpserver.* to 'jumpserver'@'127.0.0.1' identified by '<span class="token variable">$DB_PASSWORD</span>'; flush privileges;"</span>
 
-# 安装 Nginx, 用作代理服务器整合 Jumpserver 与各个组件
+<span class="token comment"># 安装 Nginx, 用作代理服务器整合 Jumpserver 与各个组件</span>
 
-yum -y install nginx
-systemctl enable nginx --now
+yum -y <span class="token function">install</span> nginx
+systemctl <span class="token builtin class-name">enable</span> nginx --now
 
-# 安装 Python3.6
-yum -y install python36 python36-devel
-yum -y install krb5-devel libtiff-devel libjpeg-devel libzip-devel freetype-devel libwebp-devel tcl-devel tk-devel openldap-devel libffi-devel openldap-clients
+<span class="token comment"># 安装 Python3.6</span>
+yum -y <span class="token function">install</span> python36 python36-devel
+yum -y <span class="token function">install</span> krb5-devel libtiff-devel libjpeg-devel libzip-devel freetype-devel libwebp-devel tcl-devel tk-devel openldap-devel libffi-devel openldap-clients
 
-# 安装 Python 库依赖
-# 配置使用华为python源
-mkdir ~&#x2F;.pip
-cat &gt;~&#x2F;.pip&#x2F;pip.conf&lt;&lt;EOF
+<span class="token comment"># 安装 Python 库依赖</span>
+<span class="token comment"># 配置使用华为python源</span>
+<span class="token function">mkdir</span> ~/.pip
+<span class="token function">cat</span> <span class="token operator">></span>~/.pip/pip.conf<span class="token operator">&lt;&lt;</span><span class="token string">EOF
 [global]
-index-url &#x3D; https:&#x2F;&#x2F;mirrors.huaweicloud.com&#x2F;repository&#x2F;pypi&#x2F;simple
-trusted-host &#x3D; mirrors.huaweicloud.com
-timeout &#x3D; 120 
-EOF
+index-url = https://mirrors.huaweicloud.com/repository/pypi/simple
+trusted-host = mirrors.huaweicloud.com
+timeout = 120 
+EOF</span>
 
-# 配置并载入 Python3 虚拟环境
-cd &#x2F;opt
-# py3 为虚拟环境名称, 可自定义
+<span class="token comment"># 配置并载入 Python3 虚拟环境</span>
+<span class="token builtin class-name">cd</span> /opt
+<span class="token comment"># py3 为虚拟环境名称, 可自定义</span>
 python3 -m venv py3  
-# 退出虚拟环境可以使用 deactivate 命令
-source &#x2F;opt&#x2F;py3&#x2F;bin&#x2F;activate  
+<span class="token comment"># 退出虚拟环境可以使用 deactivate 命令</span>
+<span class="token builtin class-name">source</span> /opt/py3/bin/activate  
 
-pip install wheel setuptools
-pip install pip --upgrade
-pip install python-gssapi
+pip <span class="token function">install</span> wheel setuptools
+pip <span class="token function">install</span> pip --upgrade
+pip <span class="token function">install</span> python-gssapi
 
-# 修改依赖包版本
-sed -i &quot;s&#x2F;Django&#x3D;&#x3D;2.1.11&#x2F;Django&#x3D;&#x3D;2.2&#x2F;g&quot; &#x2F;opt&#x2F;jumpserver&#x2F;requirements&#x2F;requirements.txt
-sed -i &quot;s&#x2F;cryptography&#x3D;&#x3D;2.3.1&#x2F;cryptography&#x3D;&#x3D;2.7&#x2F;g&quot; &#x2F;opt&#x2F;jumpserver&#x2F;requirements&#x2F;requirements.txt
-sed -i &quot;s&#x2F;pyasn1&#x3D;&#x3D;0.4.2&#x2F;pyasn1&#x3D;&#x3D;0.4.6&#x2F;g&quot; &#x2F;opt&#x2F;jumpserver&#x2F;requirements&#x2F;requirements.txt
+<span class="token comment"># 修改依赖包版本</span>
+<span class="token function">sed</span> -i <span class="token string">"s/Django==2.1.11/Django==2.2/g"</span> /opt/jumpserver/requirements/requirements.txt
+<span class="token function">sed</span> -i <span class="token string">"s/cryptography==2.3.1/cryptography==2.7/g"</span> /opt/jumpserver/requirements/requirements.txt
+<span class="token function">sed</span> -i <span class="token string">"s/pyasn1==0.4.2/pyasn1==0.4.6/g"</span> /opt/jumpserver/requirements/requirements.txt
 
-pip install -r &#x2F;opt&#x2F;jumpserver&#x2F;requirements&#x2F;requirements.txt
+pip <span class="token function">install</span> -r /opt/jumpserver/requirements/requirements.txt
 
-# 修改 Jumpserver 配置文件
-cd &#x2F;opt&#x2F;jumpserver
-cp config_example.yml config.yml
+<span class="token comment"># 修改 Jumpserver 配置文件</span>
+<span class="token builtin class-name">cd</span> /opt/jumpserver
+<span class="token function">cp</span> config_example.yml config.yml
 
-# 生成随机SECRET_KEY
-SECRET_KEY&#x3D;&#96;cat &#x2F;dev&#x2F;urandom  tr -dc A-Za-z0-9  head -c 50&#96;  
-echo &quot;SECRET_KEY&#x3D;$SECRET_KEY&quot; &gt;&gt; ~&#x2F;.bashrc
+<span class="token comment"># 生成随机SECRET_KEY</span>
+<span class="token assign-left variable">SECRET_KEY</span><span class="token operator">=</span><span class="token variable"><span class="token variable">`</span><span class="token function">cat</span> /dev/urandom  <span class="token function">tr</span> -dc A-Za-z0-9  <span class="token function">head</span> -c <span class="token number">50</span><span class="token variable">`</span></span>  
+<span class="token builtin class-name">echo</span> <span class="token string">"SECRET_KEY=<span class="token variable">$SECRET_KEY</span>"</span> <span class="token operator">>></span> ~/.bashrc
 
-# 生成随机BOOTSTRAP_TOKEN
-BOOTSTRAP_TOKEN&#x3D;&#96;cat &#x2F;dev&#x2F;urandom  tr -dc A-Za-z0-9  head -c 16&#96;  
-echo &quot;BOOTSTRAP_TOKEN&#x3D;$BOOTSTRAP_TOKEN&quot; &gt;&gt; ~&#x2F;.bashrc
+<span class="token comment"># 生成随机BOOTSTRAP_TOKEN</span>
+<span class="token assign-left variable">BOOTSTRAP_TOKEN</span><span class="token operator">=</span><span class="token variable"><span class="token variable">`</span><span class="token function">cat</span> /dev/urandom  <span class="token function">tr</span> -dc A-Za-z0-9  <span class="token function">head</span> -c <span class="token number">16</span><span class="token variable">`</span></span>  
+<span class="token builtin class-name">echo</span> <span class="token string">"BOOTSTRAP_TOKEN=<span class="token variable">$BOOTSTRAP_TOKEN</span>"</span> <span class="token operator">>></span> ~/.bashrc
 
-sed -i &quot;s&#x2F;SECRET_KEY:&#x2F;SECRET_KEY: $SECRET_KEY&#x2F;g&quot; &#x2F;opt&#x2F;jumpserver&#x2F;config.yml
-sed -i &quot;s&#x2F;BOOTSTRAP_TOKEN:&#x2F;BOOTSTRAP_TOKEN: $BOOTSTRAP_TOKEN&#x2F;g&quot; &#x2F;opt&#x2F;jumpserver&#x2F;config.yml
-sed -i &quot;s&#x2F;# DEBUG: true&#x2F;DEBUG: false&#x2F;g&quot; &#x2F;opt&#x2F;jumpserver&#x2F;config.yml
-sed -i &quot;s&#x2F;# LOG_LEVEL: DEBUG&#x2F;LOG_LEVEL: ERROR&#x2F;g&quot; &#x2F;opt&#x2F;jumpserver&#x2F;config.yml
-sed -i &quot;s&#x2F;# SESSION_EXPIRE_AT_BROWSER_CLOSE: false&#x2F;SESSION_EXPIRE_AT_BROWSER_CLOSE: true&#x2F;g&quot; &#x2F;opt&#x2F;jumpserver&#x2F;config.yml
-sed -i &quot;s&#x2F;DB_PASSWORD: &#x2F;DB_PASSWORD: $DB_PASSWORD&#x2F;g&quot; &#x2F;opt&#x2F;jumpserver&#x2F;config.yml
+<span class="token function">sed</span> -i <span class="token string">"s/SECRET_KEY:/SECRET_KEY: <span class="token variable">$SECRET_KEY</span>/g"</span> /opt/jumpserver/config.yml
+<span class="token function">sed</span> -i <span class="token string">"s/BOOTSTRAP_TOKEN:/BOOTSTRAP_TOKEN: <span class="token variable">$BOOTSTRAP_TOKEN</span>/g"</span> /opt/jumpserver/config.yml
+<span class="token function">sed</span> -i <span class="token string">"s/# DEBUG: true/DEBUG: false/g"</span> /opt/jumpserver/config.yml
+<span class="token function">sed</span> -i <span class="token string">"s/# LOG_LEVEL: DEBUG/LOG_LEVEL: ERROR/g"</span> /opt/jumpserver/config.yml
+<span class="token function">sed</span> -i <span class="token string">"s/# SESSION_EXPIRE_AT_BROWSER_CLOSE: false/SESSION_EXPIRE_AT_BROWSER_CLOSE: true/g"</span> /opt/jumpserver/config.yml
+<span class="token function">sed</span> -i <span class="token string">"s/DB_PASSWORD: /DB_PASSWORD: <span class="token variable">$DB_PASSWORD</span>/g"</span> /opt/jumpserver/config.yml
 
-echo -e &quot;SECRET_KEY是 $SECRET_KEY&quot; &gt;&gt; ~&#x2F;passwd.txt
-echo -e &quot;BOOTSTRAP_TOKEN是 $BOOTSTRAP_TOKEN&quot; &gt;&gt; ~&#x2F;passwd.txt
+<span class="token builtin class-name">echo</span> -e <span class="token string">"SECRET_KEY是 <span class="token variable">$SECRET_KEY</span>"</span> <span class="token operator">>></span> ~/passwd.txt
+<span class="token builtin class-name">echo</span> -e <span class="token string">"BOOTSTRAP_TOKEN是 <span class="token variable">$BOOTSTRAP_TOKEN</span>"</span> <span class="token operator">>></span> ~/passwd.txt
 
-# 退出虚拟环境可以使用 deactivate 命令
+<span class="token comment"># 退出虚拟环境可以使用 deactivate 命令</span>
 
-# 运行 Jumpserver
-#cd &#x2F;opt&#x2F;jumpserver
-#.&#x2F;jms start -d  # 后台运行使用 -d 参数.&#x2F;jms start -d
-# 新版本更新了运行脚本, 使用方式.&#x2F;jms startstopstatus all  后台运行请添加 -d 参数
-cat &gt;&#x2F;usr&#x2F;lib&#x2F;systemd&#x2F;system&#x2F;jms.service&lt;&lt;EOF
+<span class="token comment"># 运行 Jumpserver</span>
+<span class="token comment">#cd /opt/jumpserver</span>
+<span class="token comment">#./jms start -d  # 后台运行使用 -d 参数./jms start -d</span>
+<span class="token comment"># 新版本更新了运行脚本, 使用方式./jms startstopstatus all  后台运行请添加 -d 参数</span>
+<span class="token function">cat</span> <span class="token operator">></span>/usr/lib/systemd/system/jms.service<span class="token operator">&lt;&lt;</span><span class="token string">EOF
 [Unit]
-Description&#x3D;jms
-After&#x3D;network.target mariadb.service redis.service
-Wants&#x3D;mariadb.service redis.service
+Description=jms
+After=network.target mariadb.service redis.service
+Wants=mariadb.service redis.service
 
 [Service]
-Type&#x3D;forking
-Environment&#x3D;&quot;PATH&#x3D;&#x2F;opt&#x2F;py3&#x2F;bin:&#x2F;usr&#x2F;local&#x2F;sbin:&#x2F;usr&#x2F;local&#x2F;bin:&#x2F;usr&#x2F;sbin:&#x2F;usr&#x2F;bin&quot;
-ExecStart&#x3D;&#x2F;opt&#x2F;jumpserver&#x2F;jms start -d
-ExecReload&#x3D;
-ExecStop&#x3D;&#x2F;opt&#x2F;jumpserver&#x2F;jms stop
+Type=forking
+Environment="PATH=/opt/py3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin"
+ExecStart=/opt/jumpserver/jms start -d
+ExecReload=
+ExecStop=/opt/jumpserver/jms stop
 
 [Install]
-WantedBy&#x3D;multi-user.target
-EOF
-systemctl enable jms.service --now
+WantedBy=multi-user.target
+EOF</span>
+systemctl <span class="token builtin class-name">enable</span> jms.service --now
 
-# 安装 podman 部署 koko 与 guacamole
-yum install -y podman-docker
-alias docker&#x3D;podman
-echo &quot;alias docker&#x3D;podman&quot; &gt;&gt; ~&#x2F;.bashrc
+<span class="token comment"># 安装 podman 部署 koko 与 guacamole</span>
+yum <span class="token function">install</span> -y podman-docker
+<span class="token builtin class-name">alias</span> <span class="token assign-left variable">docker</span><span class="token operator">=</span>podman
+<span class="token builtin class-name">echo</span> <span class="token string">"alias docker=podman"</span> <span class="token operator">>></span> ~/.bashrc
 
-# 配置 podman 镜像源
-sed -i &quot;s&#x2F;registry.redhat.io&#x2F;dockerhub.azk8s.cn&#x2F;g&quot; &#x2F;etc&#x2F;containers&#x2F;registries.conf
-sed -i &quot;s&#x2F;registry.access.redhat.com&#x2F;docker.mirrors.ustc.edu.cn&#x2F;g&quot; &#x2F;etc&#x2F;containers&#x2F;registries.conf
+<span class="token comment"># 配置 podman 镜像源</span>
+<span class="token function">sed</span> -i <span class="token string">"s/registry.redhat.io/dockerhub.azk8s.cn/g"</span> /etc/containers/registries.conf
+<span class="token function">sed</span> -i <span class="token string">"s/registry.access.redhat.com/docker.mirrors.ustc.edu.cn/g"</span> /etc/containers/registries.conf
 
-# 允许 容器ip 访问宿主 8080 端口, (容器的 ip 可以进入容器查看)
-firewall-cmd --permanent --add-rich-rule&#x3D;&quot;rule family&#x3D;&quot;ipv4&quot; source address&#x3D;&quot;10.88.0.0&#x2F;16&quot; port protocol&#x3D;&quot;tcp&quot; port&#x3D;&quot;8080&quot; accept&quot;
+<span class="token comment"># 允许 容器ip 访问宿主 8080 端口, (容器的 ip 可以进入容器查看)</span>
+firewall-cmd --permanent --add-rich-rule<span class="token operator">=</span><span class="token string">"rule family="</span>ipv4<span class="token string">" source address="</span><span class="token number">10.88</span>.0.0/16<span class="token string">" port protocol="</span>tcp<span class="token string">" port="</span><span class="token number">8080</span><span class="token string">" accept"</span>
 firewall-cmd --reload
-# 10.88.0.x 是 podman 容器默认的IP池, 这里偷懒直接授权ip段了, 可以根据实际情况单独授权IP
+<span class="token comment"># 10.88.0.x 是 podman 容器默认的IP池, 这里偷懒直接授权ip段了, 可以根据实际情况单独授权IP</span>
 
-# 获取当前服务器 IP
-Server_IP&#x3D;&#96;ip addr  grep &#39;state UP&#39; -A2  grep inet  egrep -v &#39;(127.0.0.1inet6docker)&#39;  awk &#39;&#123;print $2&#125;&#39;  tr -d &quot;addr:&quot;  head -n 1  cut -d &#x2F; -f1&#96;
-echo -e &quot;服务器IP是 $Server_IP&quot; &gt;&gt; ~&#x2F;passwd.txt
+<span class="token comment"># 获取当前服务器 IP</span>
+<span class="token assign-left variable">Server_IP</span><span class="token operator">=</span><span class="token variable"><span class="token variable">`</span><span class="token function">ip</span> addr  <span class="token function">grep</span> <span class="token string">'state UP'</span> -A2  <span class="token function">grep</span> inet  <span class="token function">egrep</span> -v <span class="token string">'(127.0.0.1inet6docker)'</span>  <span class="token function">awk</span> <span class="token string">'&#123;print $2&#125;'</span>  <span class="token function">tr</span> -d <span class="token string">"addr:"</span>  <span class="token function">head</span> -n <span class="token number">1</span>  <span class="token function">cut</span> -d / -f1<span class="token variable">`</span></span>
+<span class="token builtin class-name">echo</span> -e <span class="token string">"服务器IP是 <span class="token variable">$Server_IP</span>"</span> <span class="token operator">>></span> ~/passwd.txt
 
-# http:&#x2F;&#x2F;&lt;Jumpserver_url&gt; 指向 jumpserver 的服务端口, 如 http:&#x2F;&#x2F;192.168.244.144:8080
-# BOOTSTRAP_TOKEN 为 Jumpserver&#x2F;config.yml 里面的 BOOTSTRAP_TOKEN
-docker run --name jms_koko -d -p 2222:2222 -p 127.0.0.1:5000:5000 -e CORE_HOST&#x3D;http:&#x2F;&#x2F;$Server_IP:8080 -e BOOTSTRAP_TOKEN&#x3D;$BOOTSTRAP_TOKEN jumpserver&#x2F;jms_koko:1.5.6
-docker run --name jms_guacamole -d -p 127.0.0.1:8081:8080 -e JUMPSERVER_SERVER&#x3D;http:&#x2F;&#x2F;$Server_IP:8080 -e BOOTSTRAP_TOKEN&#x3D;$BOOTSTRAP_TOKEN jumpserver&#x2F;jms_guacamole:1.5.6
+<span class="token comment"># http://&lt;Jumpserver_url> 指向 jumpserver 的服务端口, 如 http://192.168.244.144:8080</span>
+<span class="token comment"># BOOTSTRAP_TOKEN 为 Jumpserver/config.yml 里面的 BOOTSTRAP_TOKEN</span>
+docker run --name jms_koko -d -p <span class="token number">2222</span>:2222 -p <span class="token number">127.0</span>.0.1:5000:5000 -e <span class="token assign-left variable">CORE_HOST</span><span class="token operator">=</span>http://<span class="token variable">$Server_IP</span>:8080 -e <span class="token assign-left variable">BOOTSTRAP_TOKEN</span><span class="token operator">=</span><span class="token variable">$BOOTSTRAP_TOKEN</span> jumpserver/jms_koko:1.5.6
+docker run --name jms_guacamole -d -p <span class="token number">127.0</span>.0.1:8081:8080 -e <span class="token assign-left variable">JUMPSERVER_SERVER</span><span class="token operator">=</span>http://<span class="token variable">$Server_IP</span>:8080 -e <span class="token assign-left variable">BOOTSTRAP_TOKEN</span><span class="token operator">=</span><span class="token variable">$BOOTSTRAP_TOKEN</span> jumpserver/jms_guacamole:1.5.6
 
-# 配置KOKO自启动
-cat &gt; &#x2F;usr&#x2F;lib&#x2F;systemd&#x2F;system&#x2F;koko.service &lt;&lt; EOF
+<span class="token comment"># 配置KOKO自启动</span>
+<span class="token function">cat</span> <span class="token operator">></span> /usr/lib/systemd/system/koko.service <span class="token operator">&lt;&lt;</span> <span class="token string">EOF
 [Unit]
-Description&#x3D;Podman JMS_koko Service
-After&#x3D;network.target
-After&#x3D;network-online.target
+Description=Podman JMS_koko Service
+After=network.target
+After=network-online.target
 
 [Service]
-Type&#x3D;simple
-ExecStart&#x3D;&#x2F;usr&#x2F;bin&#x2F;podman start -a jms_koko
-ExecStop&#x3D;&#x2F;usr&#x2F;bin&#x2F;podman stop -t 10 jms_koko
-Restart&#x3D;always
+Type=simple
+ExecStart=/usr/bin/podman start -a jms_koko
+ExecStop=/usr/bin/podman stop -t 10 jms_koko
+Restart=always
 
 [Install]
-WantedBy&#x3D;multi-user.target
-EOF
+WantedBy=multi-user.target
+EOF</span>
 
-systemctl enable koko.service
+systemctl <span class="token builtin class-name">enable</span> koko.service
 
-# 配置guacamole自启动
-cat &gt; &#x2F;usr&#x2F;lib&#x2F;systemd&#x2F;system&#x2F;guacamole.service &lt;&lt; EOF
+<span class="token comment"># 配置guacamole自启动</span>
+<span class="token function">cat</span> <span class="token operator">></span> /usr/lib/systemd/system/guacamole.service <span class="token operator">&lt;&lt;</span> <span class="token string">EOF
 [Unit]
-Description&#x3D;Podman JMS_guacamole Service
-After&#x3D;network.target
-After&#x3D;network-online.target
+Description=Podman JMS_guacamole Service
+After=network.target
+After=network-online.target
 
 [Service]
-Type&#x3D;simple
-ExecStart&#x3D;&#x2F;usr&#x2F;bin&#x2F;podman start -a jms_guacamole
-ExecStop&#x3D;&#x2F;usr&#x2F;bin&#x2F;podman stop -t 10 jms_guacamole
-Restart&#x3D;always
+Type=simple
+ExecStart=/usr/bin/podman start -a jms_guacamole
+ExecStop=/usr/bin/podman stop -t 10 jms_guacamole
+Restart=always
 
 [Install]
-WantedBy&#x3D;multi-user.target
-EOF
+WantedBy=multi-user.target
+EOF</span>
 
-systemctl enable guacamole.service
+systemctl <span class="token builtin class-name">enable</span> guacamole.service
 
-# 安装 Web Terminal 前端: Luna  需要 Nginx 来运行访问 访问(https:&#x2F;&#x2F;github.com&#x2F;jumpserver&#x2F;luna&#x2F;releases)下载对应版本的 release 包, 直接解压, 不需要编译
-cd &#x2F;opt
-# wget https:&#x2F;&#x2F;github.com&#x2F;jumpserver&#x2F;luna&#x2F;releases&#x2F;download&#x2F;1.5.6&#x2F;luna.tar.gz
+<span class="token comment"># 安装 Web Terminal 前端: Luna  需要 Nginx 来运行访问 访问(https://github.com/jumpserver/luna/releases)下载对应版本的 release 包, 直接解压, 不需要编译</span>
+<span class="token builtin class-name">cd</span> /opt
+<span class="token comment"># wget https://github.com/jumpserver/luna/releases/download/1.5.6/luna.tar.gz</span>
 
-# 如果网络有问题导致下载无法完成可以使用下面地址
-wget https:&#x2F;&#x2F;demo.jumpserver.org&#x2F;download&#x2F;luna&#x2F;1.5.6&#x2F;luna.tar.gz
+<span class="token comment"># 如果网络有问题导致下载无法完成可以使用下面地址</span>
+<span class="token function">wget</span> https://demo.jumpserver.org/download/luna/1.5.6/luna.tar.gz
 
-tar xvzf luna.tar.gz
-chown -R root:root luna
+<span class="token function">tar</span> xvzf luna.tar.gz
+<span class="token function">chown</span> -R root:root luna
 
-# 配置 Nginx 整合各组件
-rm -rf &#x2F;etc&#x2F;nginx&#x2F;conf.d&#x2F;default.conf
+<span class="token comment"># 配置 Nginx 整合各组件</span>
+<span class="token function">rm</span> -rf /etc/nginx/conf.d/default.conf
 
-cp &#x2F;etc&#x2F;nginx&#x2F;nginx.conf &#x2F;etc&#x2F;nginx.conf.bak
-sed -i &quot;38,58d&quot; &#x2F;etc&#x2F;nginx&#x2F;nginx.conf
-cat &gt; &#x2F;etc&#x2F;nginx&#x2F;conf.d&#x2F;jumpserver.conf &lt;&lt; &quot;EOF&quot;
+<span class="token function">cp</span> /etc/nginx/nginx.conf /etc/nginx.conf.bak
+<span class="token function">sed</span> -i <span class="token string">"38,58d"</span> /etc/nginx/nginx.conf
+<span class="token function">cat</span> <span class="token operator">></span> /etc/nginx/conf.d/jumpserver.conf <span class="token operator">&lt;&lt;</span> <span class="token string">"EOF"
 server &#123;
     listen 80;
     # server_name _;
 
     client_max_body_size 100m;  # 录像及文件上传大小限制
 
-    location &#x2F;luna&#x2F; &#123;
-        try_files $uri &#x2F; &#x2F;index.html;
-        alias &#x2F;opt&#x2F;luna&#x2F;;  # luna 路径, 如果修改安装目录, 此处需要修改
+    location /luna/ &#123;
+        try_files $uri / /index.html;
+        alias /opt/luna/;  # luna 路径, 如果修改安装目录, 此处需要修改
     &#125;
 
-    location &#x2F;media&#x2F; &#123;
+    location /media/ &#123;
         add_header Content-Encoding gzip;
-        root &#x2F;opt&#x2F;jumpserver&#x2F;data&#x2F;;  # 录像位置, 如果修改安装目录, 此处需要修改
+        root /opt/jumpserver/data/;  # 录像位置, 如果修改安装目录, 此处需要修改
     &#125;
 
-    location &#x2F;static&#x2F; &#123;
-        root &#x2F;opt&#x2F;jumpserver&#x2F;data&#x2F;;  # 静态资源, 如果修改安装目录, 此处需要修改
+    location /static/ &#123;
+        root /opt/jumpserver/data/;  # 静态资源, 如果修改安装目录, 此处需要修改
     &#125;
 
-    location &#x2F;koko&#x2F; &#123;
-        proxy_pass       http:&#x2F;&#x2F;localhost:5000;
+    location /koko/ &#123;
+        proxy_pass       http://localhost:5000;
         proxy_buffering off;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection &quot;upgrade&quot;;
+        proxy_set_header Connection "upgrade";
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header Host $host;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         access_log off;
     &#125;
 
-    location &#x2F;guacamole&#x2F; &#123;
-        proxy_pass       http:&#x2F;&#x2F;localhost:8081&#x2F;;
+    location /guacamole/ &#123;
+        proxy_pass       http://localhost:8081/;
         proxy_buffering off;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
@@ -390,33 +390,33 @@ server &#123;
         access_log off;
     &#125;
 
-    location &#x2F;ws&#x2F; &#123;
-        proxy_pass http:&#x2F;&#x2F;localhost:8070;
+    location /ws/ &#123;
+        proxy_pass http://localhost:8070;
         proxy_http_version 1.1;
         proxy_buffering off;
         proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection &quot;upgrade&quot;;
+        proxy_set_header Connection "upgrade";
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header Host $host;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         access_log off;
     &#125;
 
-    location &#x2F; &#123;
-        proxy_pass http:&#x2F;&#x2F;localhost:8080;
+    location / &#123;
+        proxy_pass http://localhost:8080;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header Host $host;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         access_log off;
              &#125;
 &#125;
-EOF
+EOF</span>
 
-# 确保配置没有问题, 有问题请先解决
+<span class="token comment"># 确保配置没有问题, 有问题请先解决</span>
 nginx -t   
 systemctl restart nginx<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>然后网页访问主机地址. <a target="_blank" rel="noopener" href="https://cdn.sujx.net/jumpserver.png" title="jumpserver"><img src="https://cdn.sujx.net/jumpserver.png" alt="jumpserver" title="jumpserver"></a></p>
 <hr>
 <p>另外，脚本的下载地址如下： <a target="_blank" rel="noopener" href="https://cdn.sujx.net/jumpserver.sh" title="jumpserver">jumpserver安装脚本</a></p>
-</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">grepsu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://sujx.net/2019/12/19/use-sh-deploy-jumpsever/">https://sujx.net/2019/12/19/use-sh-deploy-jumpsever/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/centos/">centos</a><a class="post-meta__tags" href="/tags/jumpserver/">jumpserver</a><a class="post-meta__tags" href="/tags/shell/">shell</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.sujx.net/wallhaven-g8d9dd.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2020/01/21/how-to-expain-the-cloud/"><img class="prev-cover" src="https://cdn.sujx.net/wallhaven-g8d9dd.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">How to expain the Cloud to Non-techie Friends</div></div></a></div><div class="next-post pull-right"><a href="/2019/11/20/quikly-deploy-itop-on-centos8/"><img class="next-cover" src="https://cdn.sujx.net/wallhaven-g8d9dd.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">基于CentOS8快速部署iTop</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">grepsu</div><div class="author-info__description">逝者如斯夫,不舍昼夜</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">34</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">65</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">Categories</div><div class="length-num">9</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/sujx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://gitee.com/grepsu" target="_blank" title="Gitee"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:sujx@live.cn" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS链接"><i class="fa  fa-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2021/07/05/deploy-wazuh-on-distrbuted/" title="终端安全系统WAZUH的介绍">终端安全系统WAZUH的介绍</a><time datetime="2021-07-05T10:30:02.000Z" title="Created 2021-07-05 18:30:02">2021-07-05</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2021/06/29/deploy_hexo/" title="使用Hexo构建静态博客站点">使用Hexo构建静态博客站点</a><time datetime="2021-06-29T09:25:44.000Z" title="Created 2021-06-29 17:25:44">2021-06-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2021/06/29/Preper-WindowsPE/" title="简单制作WindowsPE镜像">简单制作WindowsPE镜像</a><time datetime="2021-06-29T06:14:44.000Z" title="Created 2021-06-29 14:14:44">2021-06-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2021/06/28/make-ubuntu-template-on-Hyper-V/" title="制作Hyper-V的Ubuntu虚机模板">制作Hyper-V的Ubuntu虚机模板</a><time datetime="2021-06-28T05:45:38.000Z" title="Created 2021-06-28 13:45:38">2021-06-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2020/10/19/set_idrac/" title="戴尔服务器iDRAC设置Tips">戴尔服务器iDRAC设置Tips</a><time datetime="2020-10-19T10:28:44.000Z" title="Created 2020-10-19 18:28:44">2020-10-19</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By grepsu</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">京ICP备17034757号-1</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">Local search</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">grepsu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://sujx.net/2019/12/19/use-sh-deploy-jumpsever/">https://sujx.net/2019/12/19/use-sh-deploy-jumpsever/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/centos/">centos</a><a class="post-meta__tags" href="/tags/jumpserver/">jumpserver</a><a class="post-meta__tags" href="/tags/shell/">shell</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.sujx.net/wallhaven-g8d9dd.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2020/01/21/how-to-expain-the-cloud/"><img class="prev-cover" src="https://cdn.sujx.net/wallhaven-g8d9dd.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">How to expain the Cloud to Non-techie Friends</div></div></a></div><div class="next-post pull-right"><a href="/2019/11/20/quikly-deploy-itop-on-centos8/"><img class="next-cover" src="https://cdn.sujx.net/wallhaven-g8d9dd.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">基于CentOS8快速部署iTop</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">grepsu</div><div class="author-info__description">逝者如斯夫,不舍昼夜</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">35</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">65</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">Categories</div><div class="length-num">9</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/sujx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://gitee.com/grepsu" target="_blank" title="Gitee"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:sujx@live.cn" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS链接"><i class="fa  fa-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2021/07/05/deploy-wazuh-on-distrbuted/" title="终端安全系统WAZUH的介绍">终端安全系统WAZUH的介绍</a><time datetime="2021-07-05T10:30:02.000Z" title="Created 2021-07-05 18:30:02">2021-07-05</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2021/06/29/deploy_hexo/" title="使用Hexo构建静态博客站点">使用Hexo构建静态博客站点</a><time datetime="2021-06-29T09:25:44.000Z" title="Created 2021-06-29 17:25:44">2021-06-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2021/06/29/Preper-WindowsPE/" title="简单制作WindowsPE镜像">简单制作WindowsPE镜像</a><time datetime="2021-06-29T06:14:44.000Z" title="Created 2021-06-29 14:14:44">2021-06-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2021/06/28/make-ubuntu-template-on-Hyper-V/" title="制作Hyper-V的Ubuntu虚机模板">制作Hyper-V的Ubuntu虚机模板</a><time datetime="2021-06-28T05:45:38.000Z" title="Created 2021-06-28 13:45:38">2021-06-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2021/02/02/change-localadmin-password/" title="批量修改Windows主机本地管理员密码">批量修改Windows主机本地管理员密码</a><time datetime="2021-02-02T03:43:51.000Z" title="Created 2021-02-02 11:43:51">2021-02-02</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By grepsu</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">京ICP备17034757号-1</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">Local search</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
