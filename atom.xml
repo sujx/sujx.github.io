@@ -6,7 +6,7 @@
   <link href="https://sujx.net/atom.xml" rel="self"/>
   
   <link href="https://sujx.net/"/>
-  <updated>2021-07-06T10:44:45.431Z</updated>
+  <updated>2021-07-07T03:22:44.548Z</updated>
   <id>https://sujx.net/</id>
   
   <author>
@@ -15,6 +15,36 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>通过Wazuh实现漏洞扫描</title>
+    <link href="https://sujx.net/2021/07/07/wazuh-vulnerabilities/"/>
+    <id>https://sujx.net/2021/07/07/wazuh-vulnerabilities/</id>
+    <published>2021-07-07T03:21:23.000Z</published>
+    <updated>2021-07-07T03:22:44.548Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;Wazuh是个复杂的积木式系统，由ossec、ElasticStack和wazuh插件以及第三方的漏扫、病毒查杀、文件监控等等安全工具组合而成。本文将简述Wazuh的漏洞扫描模块的使用。&lt;/p&gt;
+&lt;h3 id=&quot;应用原理&quot;&gt;&lt;a href=&quot;#应用原理&quot;</summary>
+        
+      
+    
+    
+    
+    
+    <category term="wazuh" scheme="https://sujx.net/tags/wazuh/"/>
+    
+    <category term="EDR" scheme="https://sujx.net/tags/EDR/"/>
+    
+    <category term="Security" scheme="https://sujx.net/tags/Security/"/>
+    
+    <category term="Vulnerability" scheme="https://sujx.net/tags/Vulnerability/"/>
+    
+  </entry>
   
   <entry>
     <title>Wazuh的基本部署</title>
@@ -43,9 +73,9 @@
     
     <category term="EDR" scheme="https://sujx.net/tags/EDR/"/>
     
-    <category term="HIDS" scheme="https://sujx.net/tags/HIDS/"/>
-    
     <category term="Security" scheme="https://sujx.net/tags/Security/"/>
+    
+    <category term="HIDS" scheme="https://sujx.net/tags/HIDS/"/>
     
     <category term="system" scheme="https://sujx.net/tags/system/"/>
     
@@ -74,11 +104,11 @@
     
     <category term="EDR" scheme="https://sujx.net/tags/EDR/"/>
     
+    <category term="Security" scheme="https://sujx.net/tags/Security/"/>
+    
     <category term="HIDS" scheme="https://sujx.net/tags/HIDS/"/>
     
     <category term="System" scheme="https://sujx.net/tags/System/"/>
-    
-    <category term="Security" scheme="https://sujx.net/tags/Security/"/>
     
   </entry>
   
@@ -570,38 +600,9 @@
     <category term="Tips" scheme="https://sujx.net/categories/Tips/"/>
     
     
-    <category term="tips" scheme="https://sujx.net/tags/tips/"/>
-    
     <category term="netcard" scheme="https://sujx.net/tags/netcard/"/>
     
-  </entry>
-  
-  <entry>
-    <title>修改Hosts文件加速访问GitHub</title>
-    <link href="https://sujx.net/2020/03/15/ip-for-github/"/>
-    <id>https://sujx.net/2020/03/15/ip-for-github/</id>
-    <published>2020-03-15T14:07:01.000Z</published>
-    <updated>2021-07-01T12:07:28.498Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;p&gt;在公司使用中国电信的公司宽带访问Github速度虽然不是飞快，但还是能够下载的。不过回家是用的移动宽带，访问github时能打开首页就算时烧高香了。那么首先想到的就是修改Hosts直接访问Github的地址，避免国内的CDN污染和线路瞎JB跳。</summary>
-        
-      
-    
-    
-    
-    <category term="Something" scheme="https://sujx.net/categories/Something/"/>
-    
-    <category term="System" scheme="https://sujx.net/categories/System/"/>
-    
-    
-    <category term="github" scheme="https://sujx.net/tags/github/"/>
-    
-    <category term="hosts" scheme="https://sujx.net/tags/hosts/"/>
+    <category term="tips" scheme="https://sujx.net/tags/tips/"/>
     
   </entry>
   
