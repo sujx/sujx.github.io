@@ -73,9 +73,9 @@
     
     <category term="EDR" scheme="https://sujx.net/tags/EDR/"/>
     
-    <category term="Security" scheme="https://sujx.net/tags/Security/"/>
-    
     <category term="HIDS" scheme="https://sujx.net/tags/HIDS/"/>
+    
+    <category term="Security" scheme="https://sujx.net/tags/Security/"/>
     
     <category term="system" scheme="https://sujx.net/tags/system/"/>
     
@@ -104,11 +104,11 @@
     
     <category term="EDR" scheme="https://sujx.net/tags/EDR/"/>
     
-    <category term="Security" scheme="https://sujx.net/tags/Security/"/>
-    
     <category term="HIDS" scheme="https://sujx.net/tags/HIDS/"/>
     
     <category term="System" scheme="https://sujx.net/tags/System/"/>
+    
+    <category term="Security" scheme="https://sujx.net/tags/Security/"/>
     
   </entry>
   
@@ -143,30 +143,6 @@
   </entry>
   
   <entry>
-    <title>简单制作WindowsPE镜像</title>
-    <link href="https://sujx.net/2021/06/29/Preper-WindowsPE/"/>
-    <id>https://sujx.net/2021/06/29/Preper-WindowsPE/</id>
-    <published>2021-06-29T06:14:44.000Z</published>
-    <updated>2021-07-01T12:07:28.481Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;h3 id=&quot;下载部署文件&quot;&gt;&lt;a href=&quot;#下载部署文件&quot; class=&quot;headerlink&quot; title=&quot;下载部署文件&quot;&gt;&lt;/a&gt;下载部署文件&lt;/h3&gt;&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;下载适用于 Windows 10 版本 2004 的 Windows ADK&lt;br&gt;&lt;a</summary>
-        
-      
-    
-    
-    
-    
-    <category term="Windows WindowsPE" scheme="https://sujx.net/tags/Windows-WindowsPE/"/>
-    
-  </entry>
-  
-  <entry>
     <title>制作Hyper-V的Ubuntu虚机模板</title>
     <link href="https://sujx.net/2021/06/28/make-ubuntu-template-on-Hyper-V/"/>
     <id>https://sujx.net/2021/06/28/make-ubuntu-template-on-Hyper-V/</id>
@@ -191,6 +167,32 @@
   </entry>
   
   <entry>
+    <title>简单制作WindowsPE镜像</title>
+    <link href="https://sujx.net/2021/03/29/preper_windowpe/"/>
+    <id>https://sujx.net/2021/03/29/preper_windowpe/</id>
+    <published>2021-03-29T06:14:44.000Z</published>
+    <updated>2021-07-07T03:31:01.750Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h3 id=&quot;下载部署文件&quot;&gt;&lt;a href=&quot;#下载部署文件&quot; class=&quot;headerlink&quot; title=&quot;下载部署文件&quot;&gt;&lt;/a&gt;下载部署文件&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;下载适用于 Windows 10 版本 2004 的 Windows ADK&lt;br&gt;&lt;a</summary>
+        
+      
+    
+    
+    
+    
+    <category term="Windows" scheme="https://sujx.net/tags/Windows/"/>
+    
+    <category term="WindowsPE" scheme="https://sujx.net/tags/WindowsPE/"/>
+    
+  </entry>
+  
+  <entry>
     <title>批量修改Windows主机本地管理员密码</title>
     <link href="https://sujx.net/2021/02/02/change-localadmin-password/"/>
     <id>https://sujx.net/2021/02/02/change-localadmin-password/</id>
@@ -211,11 +213,11 @@
     
     
     
+    <category term="system" scheme="https://sujx.net/tags/system/"/>
+    
     <category term="Windows" scheme="https://sujx.net/tags/Windows/"/>
     
     <category term="powershell" scheme="https://sujx.net/tags/powershell/"/>
-    
-    <category term="system" scheme="https://sujx.net/tags/system/"/>
     
   </entry>
   
@@ -363,11 +365,11 @@
     <category term="System" scheme="https://sujx.net/categories/System/"/>
     
     
-    <category term="linux" scheme="https://sujx.net/tags/linux/"/>
-    
     <category term="itop" scheme="https://sujx.net/tags/itop/"/>
     
     <category term="itsm" scheme="https://sujx.net/tags/itsm/"/>
+    
+    <category term="linux" scheme="https://sujx.net/tags/linux/"/>
     
   </entry>
   
@@ -392,9 +394,9 @@
     <category term="Linux" scheme="https://sujx.net/categories/Linux/"/>
     
     
-    <category term="jumpserver" scheme="https://sujx.net/tags/jumpserver/"/>
-    
     <category term="linux" scheme="https://sujx.net/tags/linux/"/>
+    
+    <category term="jumpserver" scheme="https://sujx.net/tags/jumpserver/"/>
     
   </entry>
   
@@ -419,9 +421,9 @@
     <category term="Linux" scheme="https://sujx.net/categories/Linux/"/>
     
     
-    <category term="jumpserver" scheme="https://sujx.net/tags/jumpserver/"/>
-    
     <category term="linux" scheme="https://sujx.net/tags/linux/"/>
+    
+    <category term="jumpserver" scheme="https://sujx.net/tags/jumpserver/"/>
     
   </entry>
   
@@ -507,11 +509,11 @@
     
     <category term="Windows" scheme="https://sujx.net/tags/Windows/"/>
     
+    <category term="offline" scheme="https://sujx.net/tags/offline/"/>
+    
     <category term="ActiveDirctory" scheme="https://sujx.net/tags/ActiveDirctory/"/>
     
     <category term="djoin" scheme="https://sujx.net/tags/djoin/"/>
-    
-    <category term="offline" scheme="https://sujx.net/tags/offline/"/>
     
   </entry>
   
