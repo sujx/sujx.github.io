@@ -6,11 +6,11 @@
   <link href="https://sujx.net/atom.xml" rel="self"/>
   
   <link href="https://sujx.net/"/>
-  <updated>2021-07-07T03:22:44.548Z</updated>
+  <updated>2021-07-07T07:38:51.218Z</updated>
   <id>https://sujx.net/</id>
   
   <author>
-    <name>grepsu</name>
+    <name>靖轩</name>
     
   </author>
   
@@ -21,7 +21,7 @@
     <link href="https://sujx.net/2021/07/07/wazuh-vulnerabilities/"/>
     <id>https://sujx.net/2021/07/07/wazuh-vulnerabilities/</id>
     <published>2021-07-07T03:21:23.000Z</published>
-    <updated>2021-07-07T03:22:44.548Z</updated>
+    <updated>2021-07-07T07:38:51.218Z</updated>
     
     
       
@@ -48,10 +48,10 @@
   
   <entry>
     <title>Wazuh的基本部署</title>
-    <link href="https://sujx.net/2021/07/06/deploy-wazuh-first/"/>
-    <id>https://sujx.net/2021/07/06/deploy-wazuh-first/</id>
+    <link href="https://sujx.net/2021/07/06/wazuh_deploy_first/"/>
+    <id>https://sujx.net/2021/07/06/wazuh_deploy_first/</id>
     <published>2021-07-06T04:07:05.000Z</published>
-    <updated>2021-07-06T10:44:45.431Z</updated>
+    <updated>2021-07-07T03:44:19.015Z</updated>
     
     
       
@@ -69,22 +69,22 @@
     
     
     
+    <category term="system" scheme="https://sujx.net/tags/system/"/>
+    
     <category term="wazuh" scheme="https://sujx.net/tags/wazuh/"/>
     
     <category term="EDR" scheme="https://sujx.net/tags/EDR/"/>
     
-    <category term="HIDS" scheme="https://sujx.net/tags/HIDS/"/>
-    
     <category term="Security" scheme="https://sujx.net/tags/Security/"/>
     
-    <category term="system" scheme="https://sujx.net/tags/system/"/>
+    <category term="HIDS" scheme="https://sujx.net/tags/HIDS/"/>
     
   </entry>
   
   <entry>
     <title>终端安全系统WAZUH的介绍</title>
-    <link href="https://sujx.net/2021/07/05/basic_info_wazuh/"/>
-    <id>https://sujx.net/2021/07/05/basic_info_wazuh/</id>
+    <link href="https://sujx.net/2021/07/05/wazuh_basic_info/"/>
+    <id>https://sujx.net/2021/07/05/wazuh_basic_info/</id>
     <published>2021-07-05T10:30:02.000Z</published>
     <updated>2021-07-05T11:33:38.223Z</updated>
     
@@ -100,15 +100,15 @@
     
     
     
+    <category term="System" scheme="https://sujx.net/tags/System/"/>
+    
     <category term="wazuh" scheme="https://sujx.net/tags/wazuh/"/>
     
     <category term="EDR" scheme="https://sujx.net/tags/EDR/"/>
     
-    <category term="HIDS" scheme="https://sujx.net/tags/HIDS/"/>
-    
-    <category term="System" scheme="https://sujx.net/tags/System/"/>
-    
     <category term="Security" scheme="https://sujx.net/tags/Security/"/>
+    
+    <category term="HIDS" scheme="https://sujx.net/tags/HIDS/"/>
     
   </entry>
   
@@ -167,6 +167,36 @@
   </entry>
   
   <entry>
+    <title>制作CentOS 8的黄金模板</title>
+    <link href="https://sujx.net/2021/05/08/centos-8-make-template/"/>
+    <id>https://sujx.net/2021/05/08/centos-8-make-template/</id>
+    <published>2021-05-08T03:25:00.000Z</published>
+    <updated>2021-07-08T04:26:04.829Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h3 id=&quot;前期准备&quot;&gt;&lt;a href=&quot;#前期准备&quot; class=&quot;headerlink&quot; title=&quot;前期准备&quot;&gt;&lt;/a&gt;前期准备&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;在虚拟化环境中部署CentOS</summary>
+        
+      
+    
+    
+    
+    
+    <category term="CentOS" scheme="https://sujx.net/tags/CentOS/"/>
+    
+    <category term="VirtualMachine" scheme="https://sujx.net/tags/VirtualMachine/"/>
+    
+    <category term="System" scheme="https://sujx.net/tags/System/"/>
+    
+    <category term="Linux" scheme="https://sujx.net/tags/Linux/"/>
+    
+  </entry>
+  
+  <entry>
     <title>简单制作WindowsPE镜像</title>
     <link href="https://sujx.net/2021/03/29/preper_windowpe/"/>
     <id>https://sujx.net/2021/03/29/preper_windowpe/</id>
@@ -213,11 +243,11 @@
     
     
     
-    <category term="system" scheme="https://sujx.net/tags/system/"/>
-    
     <category term="Windows" scheme="https://sujx.net/tags/Windows/"/>
     
     <category term="powershell" scheme="https://sujx.net/tags/powershell/"/>
+    
+    <category term="system" scheme="https://sujx.net/tags/system/"/>
     
   </entry>
   
@@ -365,11 +395,11 @@
     <category term="System" scheme="https://sujx.net/categories/System/"/>
     
     
+    <category term="linux" scheme="https://sujx.net/tags/linux/"/>
+    
     <category term="itop" scheme="https://sujx.net/tags/itop/"/>
     
     <category term="itsm" scheme="https://sujx.net/tags/itsm/"/>
-    
-    <category term="linux" scheme="https://sujx.net/tags/linux/"/>
     
   </entry>
   
@@ -394,9 +424,9 @@
     <category term="Linux" scheme="https://sujx.net/categories/Linux/"/>
     
     
-    <category term="linux" scheme="https://sujx.net/tags/linux/"/>
-    
     <category term="jumpserver" scheme="https://sujx.net/tags/jumpserver/"/>
+    
+    <category term="linux" scheme="https://sujx.net/tags/linux/"/>
     
   </entry>
   
@@ -421,9 +451,9 @@
     <category term="Linux" scheme="https://sujx.net/categories/Linux/"/>
     
     
-    <category term="linux" scheme="https://sujx.net/tags/linux/"/>
-    
     <category term="jumpserver" scheme="https://sujx.net/tags/jumpserver/"/>
+    
+    <category term="linux" scheme="https://sujx.net/tags/linux/"/>
     
   </entry>
   
@@ -509,11 +539,11 @@
     
     <category term="Windows" scheme="https://sujx.net/tags/Windows/"/>
     
-    <category term="offline" scheme="https://sujx.net/tags/offline/"/>
-    
     <category term="ActiveDirctory" scheme="https://sujx.net/tags/ActiveDirctory/"/>
     
     <category term="djoin" scheme="https://sujx.net/tags/djoin/"/>
+    
+    <category term="offline" scheme="https://sujx.net/tags/offline/"/>
     
   </entry>
   
@@ -578,33 +608,6 @@
     <category term="idrac" scheme="https://sujx.net/tags/idrac/"/>
     
     <category term="java" scheme="https://sujx.net/tags/java/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>网卡配置项</title>
-    <link href="https://sujx.net/2020/03/30/set-netcard/"/>
-    <id>https://sujx.net/2020/03/30/set-netcard/</id>
-    <published>2020-03-30T09:38:11.000Z</published>
-    <updated>2021-07-01T12:07:28.505Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;p&gt;修改电脑网卡高级设置可以提高网络速度。另外，建议关闭在Realtek网卡高级设置中的以下其他选项：流控制/FlowControl、巨型帧/Jumboframe、大量传送负载/OffloadLargesend、EEE(Energy Efficient</summary>
-        
-      
-    
-    
-    
-    <category term="Tips" scheme="https://sujx.net/categories/Tips/"/>
-    
-    
-    <category term="netcard" scheme="https://sujx.net/tags/netcard/"/>
-    
-    <category term="tips" scheme="https://sujx.net/tags/tips/"/>
     
   </entry>
   
