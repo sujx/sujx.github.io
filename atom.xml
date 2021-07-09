@@ -6,7 +6,7 @@
   <link href="https://sujx.net/atom.xml" rel="self"/>
   
   <link href="https://sujx.net/"/>
-  <updated>2021-07-07T07:38:51.218Z</updated>
+  <updated>2021-07-09T11:11:39.212Z</updated>
   <id>https://sujx.net/</id>
   
   <author>
@@ -17,11 +17,73 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>建立内网Linux防病毒系统</title>
+    <link href="https://sujx.net/2021/07/09/clamav-privte-depoly/"/>
+    <id>https://sujx.net/2021/07/09/clamav-privte-depoly/</id>
+    <published>2021-07-09T10:57:23.000Z</published>
+    <updated>2021-07-09T11:11:39.212Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;ClamAV本来是为了Postfix邮件网关而开发的防毒软件，主要目的是对邮件队列里面的邮件进行病毒查杀。然后，这个防毒模块独立出来成为一个提供病毒、恶意软件、蠕虫的查杀能力的开源软件，成为了Linux环境下实现文件安全的主要选择。�&lt;/p&gt;
+&lt;h3</summary>
+        
+      
+    
+    
+    
+    
+    <category term="Linux" scheme="https://sujx.net/tags/Linux/"/>
+    
+    <category term="Sysstem" scheme="https://sujx.net/tags/Sysstem/"/>
+    
+    <category term="Antivirus" scheme="https://sujx.net/tags/Antivirus/"/>
+    
+    <category term="ClamAV" scheme="https://sujx.net/tags/ClamAV/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>使用Wazuh检测PostgreSQL漏洞</title>
+    <link href="https://sujx.net/2021/07/09/wazuh-vulner-detec-postgresql/"/>
+    <id>https://sujx.net/2021/07/09/wazuh-vulner-detec-postgresql/</id>
+    <published>2021-07-09T08:08:15.000Z</published>
+    <updated>2021-07-09T08:13:19.199Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;本文的源于领导的一句问句，Wazuh能监控PG数据库的漏洞么？然后结合实际环境搭建了一套环境进行了测试。&lt;br&gt;结论是：能，然而并不能。&lt;/p&gt;
+&lt;!--以下使用centos8.4系统进行测试--&gt;
+
+&lt;h3 id=&quot;使用操作系统官方软件库&quot;&gt;&lt;a</summary>
+        
+      
+    
+    
+    
+    
+    <category term="centos" scheme="https://sujx.net/tags/centos/"/>
+    
+    <category term="wazuh" scheme="https://sujx.net/tags/wazuh/"/>
+    
+    <category term="postgresql" scheme="https://sujx.net/tags/postgresql/"/>
+    
+    <category term="vulnerability" scheme="https://sujx.net/tags/vulnerability/"/>
+    
+  </entry>
+  
+  <entry>
     <title>通过Wazuh实现漏洞扫描</title>
     <link href="https://sujx.net/2021/07/07/wazuh-vulnerabilities/"/>
     <id>https://sujx.net/2021/07/07/wazuh-vulnerabilities/</id>
     <published>2021-07-07T03:21:23.000Z</published>
-    <updated>2021-07-07T07:38:51.218Z</updated>
+    <updated>2021-07-09T08:17:06.436Z</updated>
     
     
       
@@ -36,7 +98,7 @@
     
     
     
-    <category term="wazuh" scheme="https://sujx.net/tags/wazuh/"/>
+    <category term="Wazuh" scheme="https://sujx.net/tags/Wazuh/"/>
     
     <category term="EDR" scheme="https://sujx.net/tags/EDR/"/>
     
@@ -114,8 +176,8 @@
   
   <entry>
     <title>使用Hexo构建静态博客站点</title>
-    <link href="https://sujx.net/2021/06/29/deploy_hexo/"/>
-    <id>https://sujx.net/2021/06/29/deploy_hexo/</id>
+    <link href="https://sujx.net/2021/06/29/hexo-deploy/"/>
+    <id>https://sujx.net/2021/06/29/hexo-deploy/</id>
     <published>2021-06-29T09:25:44.000Z</published>
     <updated>2021-07-05T06:41:12.526Z</updated>
     
@@ -171,7 +233,7 @@
     <link href="https://sujx.net/2021/05/08/centos-8-make-template/"/>
     <id>https://sujx.net/2021/05/08/centos-8-make-template/</id>
     <published>2021-05-08T03:25:00.000Z</published>
-    <updated>2021-07-08T04:26:04.829Z</updated>
+    <updated>2021-07-09T10:08:27.666Z</updated>
     
     
       
@@ -539,75 +601,11 @@
     
     <category term="Windows" scheme="https://sujx.net/tags/Windows/"/>
     
+    <category term="offline" scheme="https://sujx.net/tags/offline/"/>
+    
     <category term="ActiveDirctory" scheme="https://sujx.net/tags/ActiveDirctory/"/>
     
     <category term="djoin" scheme="https://sujx.net/tags/djoin/"/>
-    
-    <category term="offline" scheme="https://sujx.net/tags/offline/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Hyper-V主机的开局</title>
-    <link href="https://sujx.net/2020/04/07/hyper-v-host-init/"/>
-    <id>https://sujx.net/2020/04/07/hyper-v-host-init/</id>
-    <published>2020-04-07T10:24:59.000Z</published>
-    <updated>2021-07-01T12:07:28.495Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;p&gt;Hyper-V是微软推出的虚拟化平台，它具有免费、高效、功能完备和安全的特性，但他的管理是基于powershell和winrm来进行管理配置。习惯了windows的图形界面配置和Linux的Bash管理，初次上手还是有点难度。&lt;/p&gt;
-&lt;h3 id=&quot;安装&quot;&gt;&lt;a</summary>
-        
-      
-    
-    
-    
-    <category term="Tips" scheme="https://sujx.net/categories/Tips/"/>
-    
-    <category term="ServerCore" scheme="https://sujx.net/categories/ServerCore/"/>
-    
-    
-    <category term="hyper-v" scheme="https://sujx.net/tags/hyper-v/"/>
-    
-    <category term="servercore" scheme="https://sujx.net/tags/servercore/"/>
-    
-    <category term="virtualization" scheme="https://sujx.net/tags/virtualization/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>如何打开iDRAC虚拟控制台</title>
-    <link href="https://sujx.net/2020/04/01/how-to-use-idrac/"/>
-    <id>https://sujx.net/2020/04/01/how-to-use-idrac/</id>
-    <published>2020-04-01T09:26:46.000Z</published>
-    <updated>2021-07-01T12:07:28.492Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;p&gt;在戴尔服务器的日常运维中，我们可以使用服务器自带的iDRAC带外管理器来进行远程的系统安装、配置以及开关机、重启的操作。在实际使用中，iDRAC的虚拟控制台会通过浏览器下载启动链接，再调用相关接口来在本地显示远程服务器图形界面。&lt;/p&gt;
-&lt;h2 id=&quot;&quot;&gt;&lt;a</summary>
-        
-      
-    
-    
-    
-    <category term="Something" scheme="https://sujx.net/categories/Something/"/>
-    
-    <category term="Tips" scheme="https://sujx.net/categories/Tips/"/>
-    
-    
-    <category term="dell" scheme="https://sujx.net/tags/dell/"/>
-    
-    <category term="idrac" scheme="https://sujx.net/tags/idrac/"/>
-    
-    <category term="java" scheme="https://sujx.net/tags/java/"/>
     
   </entry>
   
