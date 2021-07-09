@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://sujx.net/categories/index.html</loc>
+    
+    <lastmod>2021-07-09</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://sujx.net/tags/index.html</loc>
+    
+    <lastmod>2021-07-09</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://sujx.net/2021/07/09/clamav-privte-depoly/</loc>
     
     <lastmod>2021-07-09</lastmod>
@@ -149,14 +163,14 @@
   </url>
   
   <url>
-    <loc>https://sujx.net/2020/04/11/offline-join-ad/</loc>
+    <loc>https://sujx.net/2020/04/22/powershell-usetips/</loc>
     
     <lastmod>2021-07-01</lastmod>
     
   </url>
   
   <url>
-    <loc>https://sujx.net/2020/04/22/powershell-usetips/</loc>
+    <loc>https://sujx.net/2020/04/11/offline-join-ad/</loc>
     
     <lastmod>2021-07-01</lastmod>
     
@@ -319,6 +333,34 @@
   </url>
   
   <url>
+    <loc>https://sujx.net/tags/CentOS/</loc>
+    <lastmod>2021-07-09</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://sujx.net/tags/VirtualMachine/</loc>
+    <lastmod>2021-07-09</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://sujx.net/tags/System/</loc>
+    <lastmod>2021-07-09</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://sujx.net/tags/Linux/</loc>
+    <lastmod>2021-07-09</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://sujx.net/tags/centos8/</loc>
     <lastmod>2021-07-09</lastmod>
     <changefreq>daily</changefreq>
@@ -347,6 +389,27 @@
   </url>
   
   <url>
+    <loc>https://sujx.net/tags/Sysstem/</loc>
+    <lastmod>2021-07-09</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://sujx.net/tags/Antivirus/</loc>
+    <lastmod>2021-07-09</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://sujx.net/tags/ClamAV/</loc>
+    <lastmod>2021-07-09</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://sujx.net/tags/dnf/</loc>
     <lastmod>2021-07-09</lastmod>
     <changefreq>daily</changefreq>
@@ -368,56 +431,7 @@
   </url>
   
   <url>
-    <loc>https://sujx.net/tags/ssh/</loc>
-    <lastmod>2021-07-09</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://sujx.net/tags/Windows/</loc>
-    <lastmod>2021-07-09</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://sujx.net/tags/powershell/</loc>
-    <lastmod>2021-07-09</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://sujx.net/tags/system/</loc>
-    <lastmod>2021-07-09</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://sujx.net/tags/CentOS/</loc>
-    <lastmod>2021-07-09</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://sujx.net/tags/VirtualMachine/</loc>
-    <lastmod>2021-07-09</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://sujx.net/tags/System/</loc>
-    <lastmod>2021-07-09</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://sujx.net/tags/Linux/</loc>
+    <loc>https://sujx.net/tags/docker/</loc>
     <lastmod>2021-07-09</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -459,6 +473,104 @@
   </url>
   
   <url>
+    <loc>https://sujx.net/tags/dell/</loc>
+    <lastmod>2021-07-09</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://sujx.net/tags/idrac/</loc>
+    <lastmod>2021-07-09</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://sujx.net/tags/java/</loc>
+    <lastmod>2021-07-09</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://sujx.net/tags/Windows/</loc>
+    <lastmod>2021-07-09</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://sujx.net/tags/powershell/</loc>
+    <lastmod>2021-07-09</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://sujx.net/tags/system/</loc>
+    <lastmod>2021-07-09</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://sujx.net/tags/ssh/</loc>
+    <lastmod>2021-07-09</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://sujx.net/tags/DNS/</loc>
+    <lastmod>2021-07-09</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://sujx.net/tags/kms/</loc>
+    <lastmod>2021-07-09</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://sujx.net/tags/github/</loc>
+    <lastmod>2021-07-09</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://sujx.net/tags/hosts/</loc>
+    <lastmod>2021-07-09</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://sujx.net/tags/Hyper-V-Ubuntu-VM-Template/</loc>
+    <lastmod>2021-07-09</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://sujx.net/tags/Router/</loc>
+    <lastmod>2021-07-09</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://sujx.net/tags/WSUS/</loc>
+    <lastmod>2021-07-09</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://sujx.net/tags/hyper-v/</loc>
     <lastmod>2021-07-09</lastmod>
     <changefreq>daily</changefreq>
@@ -494,49 +606,14 @@
   </url>
   
   <url>
-    <loc>https://sujx.net/tags/DNS/</loc>
+    <loc>https://sujx.net/tags/WindowsPE/</loc>
     <lastmod>2021-07-09</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://sujx.net/tags/kms/</loc>
-    <lastmod>2021-07-09</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://sujx.net/tags/github/</loc>
-    <lastmod>2021-07-09</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://sujx.net/tags/hosts/</loc>
-    <lastmod>2021-07-09</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://sujx.net/tags/Router/</loc>
-    <lastmod>2021-07-09</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://sujx.net/tags/Hyper-V-Ubuntu-VM-Template/</loc>
-    <lastmod>2021-07-09</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://sujx.net/tags/WSUS/</loc>
+    <loc>https://sujx.net/tags/tips/</loc>
     <lastmod>2021-07-09</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -564,6 +641,20 @@
   </url>
   
   <url>
+    <loc>https://sujx.net/tags/disk/</loc>
+    <lastmod>2021-07-09</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://sujx.net/tags/lvm/</loc>
+    <lastmod>2021-07-09</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://sujx.net/tags/ActiveDirctory/</loc>
     <lastmod>2021-07-09</lastmod>
     <changefreq>daily</changefreq>
@@ -578,35 +669,7 @@
   </url>
   
   <url>
-    <loc>https://sujx.net/tags/tips/</loc>
-    <lastmod>2021-07-09</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://sujx.net/tags/WindowsPE/</loc>
-    <lastmod>2021-07-09</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://sujx.net/tags/netcard/</loc>
-    <lastmod>2021-07-09</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://sujx.net/tags/dell/</loc>
-    <lastmod>2021-07-09</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://sujx.net/tags/idrac/</loc>
     <lastmod>2021-07-09</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -711,20 +774,6 @@
   </url>
   
   <url>
-    <loc>https://sujx.net/tags/x11/</loc>
-    <lastmod>2021-07-09</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://sujx.net/tags/xming/</loc>
-    <lastmod>2021-07-09</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://sujx.net/tags/monitor/</loc>
     <lastmod>2021-07-09</lastmod>
     <changefreq>daily</changefreq>
@@ -739,28 +788,14 @@
   </url>
   
   <url>
-    <loc>https://sujx.net/tags/disk/</loc>
+    <loc>https://sujx.net/tags/x11/</loc>
     <lastmod>2021-07-09</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://sujx.net/tags/lvm/</loc>
-    <lastmod>2021-07-09</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://sujx.net/tags/docker/</loc>
-    <lastmod>2021-07-09</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://sujx.net/tags/java/</loc>
+    <loc>https://sujx.net/tags/xming/</loc>
     <lastmod>2021-07-09</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -775,27 +810,6 @@
   
   <url>
     <loc>https://sujx.net/tags/sysadmin/</loc>
-    <lastmod>2021-07-09</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://sujx.net/tags/Sysstem/</loc>
-    <lastmod>2021-07-09</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://sujx.net/tags/Antivirus/</loc>
-    <lastmod>2021-07-09</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://sujx.net/tags/ClamAV/</loc>
     <lastmod>2021-07-09</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -825,13 +839,6 @@
   </url>
   
   <url>
-    <loc>https://sujx.net/categories/ServerCore/</loc>
-    <lastmod>2021-07-09</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://sujx.net/categories/Other/</loc>
     <lastmod>2021-07-09</lastmod>
     <changefreq>daily</changefreq>
@@ -846,7 +853,7 @@
   </url>
   
   <url>
-    <loc>https://sujx.net/categories/Bigdata/</loc>
+    <loc>https://sujx.net/categories/ServerCore/</loc>
     <lastmod>2021-07-09</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -854,6 +861,13 @@
   
   <url>
     <loc>https://sujx.net/categories/Windows/</loc>
+    <lastmod>2021-07-09</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://sujx.net/categories/Bigdata/</loc>
     <lastmod>2021-07-09</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
