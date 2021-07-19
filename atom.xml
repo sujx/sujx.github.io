@@ -6,7 +6,7 @@
   <link href="https://sujx.net/atom.xml" rel="self"/>
   
   <link href="https://sujx.net/"/>
-  <updated>2021-07-09T11:11:39.212Z</updated>
+  <updated>2021-07-19T15:45:27.093Z</updated>
   <id>https://sujx.net/</id>
   
   <author>
@@ -15,6 +15,36 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>手机短信转发电子邮件</title>
+    <link href="https://sujx.net/2021/07/13/sms2email/"/>
+    <id>https://sujx.net/2021/07/13/sms2email/</id>
+    <published>2021-07-13T07:37:30.000Z</published>
+    <updated>2021-07-19T15:45:27.093Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;在运维工作中，我们经常会用到公用手机不在手边的情况。比如，我们在休假或者外出期间紧急对公司注册的云资源进行变更的时候，相关验证码必须要使用短信接收，而手机却在半个城市之外的公司办公室。还有一种情况就是每天都有人来找公用手机翻检验证码，这样对当值运维人员不胜其烦。&lt;/p&gt;
+&lt;</summary>
+        
+      
+    
+    
+    
+    
+    <category term="Android" scheme="https://sujx.net/tags/Android/"/>
+    
+    <category term="SMS" scheme="https://sujx.net/tags/SMS/"/>
+    
+    <category term="E-mail" scheme="https://sujx.net/tags/E-mail/"/>
+    
+    <category term="Tools" scheme="https://sujx.net/tags/Tools/"/>
+    
+  </entry>
   
   <entry>
     <title>建立内网Linux防病毒系统</title>
@@ -233,7 +263,7 @@
     <link href="https://sujx.net/2021/05/08/centos-8-make-template/"/>
     <id>https://sujx.net/2021/05/08/centos-8-make-template/</id>
     <published>2021-05-08T03:25:00.000Z</published>
-    <updated>2021-07-09T10:08:27.666Z</updated>
+    <updated>2021-07-14T02:59:17.071Z</updated>
     
     
       
@@ -573,39 +603,6 @@
     <category term="powershell" scheme="https://sujx.net/tags/powershell/"/>
     
     <category term="tips" scheme="https://sujx.net/tags/tips/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>离线加域</title>
-    <link href="https://sujx.net/2020/04/11/offline-join-ad/"/>
-    <id>https://sujx.net/2020/04/11/offline-join-ad/</id>
-    <published>2020-04-11T15:09:16.000Z</published>
-    <updated>2021-07-01T12:07:28.503Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;p&gt;在MS</summary>
-        
-      
-    
-    
-    
-    <category term="Something" scheme="https://sujx.net/categories/Something/"/>
-    
-    <category term="Tips" scheme="https://sujx.net/categories/Tips/"/>
-    
-    
-    <category term="Windows" scheme="https://sujx.net/tags/Windows/"/>
-    
-    <category term="offline" scheme="https://sujx.net/tags/offline/"/>
-    
-    <category term="ActiveDirctory" scheme="https://sujx.net/tags/ActiveDirctory/"/>
-    
-    <category term="djoin" scheme="https://sujx.net/tags/djoin/"/>
     
   </entry>
   
