@@ -6,7 +6,7 @@
   <link href="https://sujx.net/atom.xml" rel="self"/>
   
   <link href="https://sujx.net/"/>
-  <updated>2021-07-19T15:45:27.093Z</updated>
+  <updated>2021-07-20T15:22:35.361Z</updated>
   <id>https://sujx.net/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Elasticsearch常用查询语句</title>
+    <link href="https://sujx.net/2021/07/19/elasticsearch-common-cmd/"/>
+    <id>https://sujx.net/2021/07/19/elasticsearch-common-cmd/</id>
+    <published>2021-07-19T07:37:30.000Z</published>
+    <updated>2021-07-20T15:22:35.361Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h3 id=&quot;节点状态相关&quot;&gt;&lt;a href=&quot;#节点状态相关&quot; class=&quot;headerlink&quot; title=&quot;节点状态相关&quot;&gt;&lt;/a&gt;节点状态相关&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;检查节点是否运行&lt;/p&gt;
+&lt;pre class=&quot;line-numbers</summary>
+        
+      
+    
+    
+    
+    
+    <category term="Elasticsearch" scheme="https://sujx.net/tags/Elasticsearch/"/>
+    
+    <category term="ELK" scheme="https://sujx.net/tags/ELK/"/>
+    
+  </entry>
   
   <entry>
     <title>手机短信转发电子邮件</title>
@@ -573,36 +600,6 @@
     <category term="disk" scheme="https://sujx.net/tags/disk/"/>
     
     <category term="lvm" scheme="https://sujx.net/tags/lvm/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>PowerShell的小技巧</title>
-    <link href="https://sujx.net/2020/04/22/powershell-usetips/"/>
-    <id>https://sujx.net/2020/04/22/powershell-usetips/</id>
-    <published>2020-04-22T03:29:30.000Z</published>
-    <updated>2021-07-01T12:07:28.503Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;h3 id=&quot;Powershell环境的设置&quot;&gt;&lt;a href=&quot;#Powershell环境的设置&quot; class=&quot;headerlink&quot; title=&quot;Powershell环境的设置&quot;&gt;&lt;/a&gt;Powershell环境的设置&lt;/h3&gt;&lt;ol&gt;
-&lt;li&gt;</summary>
-        
-      
-    
-    
-    
-    <category term="Something" scheme="https://sujx.net/categories/Something/"/>
-    
-    <category term="Tips" scheme="https://sujx.net/categories/Tips/"/>
-    
-    
-    <category term="powershell" scheme="https://sujx.net/tags/powershell/"/>
-    
-    <category term="tips" scheme="https://sujx.net/tags/tips/"/>
     
   </entry>
   

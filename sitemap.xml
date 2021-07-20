@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://sujx.net/2021/07/19/elasticsearch-common-cmd/</loc>
+    
+    <lastmod>2021-07-20</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://sujx.net/2021/06/28/make-ubuntu-template-on-Hyper-V/</loc>
     
     <lastmod>2021-07-20</lastmod>
@@ -845,6 +852,20 @@
   
   <url>
     <loc>https://sujx.net/tags/sysadmin/</loc>
+    <lastmod>2021-07-20</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://sujx.net/tags/Elasticsearch/</loc>
+    <lastmod>2021-07-20</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://sujx.net/tags/ELK/</loc>
     <lastmod>2021-07-20</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>

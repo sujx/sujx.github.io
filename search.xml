@@ -4229,4 +4229,43 @@ Enjoy OCS Inventory NG <span class="token punctuation">;</span>-<span class="tok
         <tag>sysadmin</tag>
       </tags>
   </entry>
+  <entry>
+    <title>Elasticsearch常用查询语句</title>
+    <url>/2021/07/19/elasticsearch-common-cmd/</url>
+    <content><![CDATA[<h3 id="节点状态相关"><a href="#节点状态相关" class="headerlink" title="节点状态相关"></a>节点状态相关</h3><ol>
+<li><p>检查节点是否运行</p>
+<pre class="line-numbers language-none"><code class="language-none">curl -XGET http:&#x2F;&#x2F;localhost:9200<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+<li><p>检查节点健康状态</p>
+<pre class="line-numbers language-none"><code class="language-none">curl -XGET http:&#x2F;&#x2F;localhost:9200&#x2F;_cluster&#x2F;health\?pretty<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+<li><p>检查群集节点状态</p>
+<pre class="line-numbers language-none"><code class="language-none">curl -XGET http:&#x2F;&#x2F;192.168.248.148:9200&#x2F;_cat&#x2F;nodes?v<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h3 id="分片状态相关"><a href="#分片状态相关" class="headerlink" title="分片状态相关"></a>分片状态相关</h3></li>
+<li><p>检查分片健康</p>
+<pre class="line-numbers language-none"><code class="language-none">curl http:&#x2F;&#x2F;localhost:9200&#x2F;_cat&#x2F;indices<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+<li><p>检查所有分片</p>
+<pre class="line-numbers language-none"><code class="language-none">curl -XGET http:&#x2F;&#x2F;localhost:9200&#x2F;_cat&#x2F;shards<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+<li><p>删除分片</p>
+<pre class="line-numbers language-none"><code class="language-none">curl -XDELETE http:&#x2F;&#x2F;127.0.0.1:9200&#x2F;wazuh-alerts-3.x-2021.05.16<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+<li><p>设置分片数</p>
+<pre class="line-numbers language-none"><code class="language-none">   curl -XPUT  &quot;127.0.0.1:9200&#x2F;_cluster&#x2F;settings&quot; -H &#39;Content-Type: application&#x2F;json&#39; -d &#39;&#123;&quot;transient&quot;:&#123;&quot;cluster&quot;:&#123;&quot;max_shards_per_node&quot;:20000&#125;&#125;&#125;&#39;
+   &#96;&#96;&#96;  
+
+### 存储相关
+
+1. 设置存储水位<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>curl -X PUT “<a href="http://127.0.0.1:9200/_cluster/settings&quot;">http://127.0.0.1:9200/_cluster/settings&quot;</a> -H ‘Content-Type: application/json’ -d’</p>
+<p>{</p>
+<p> “persistent”: {</p>
+<p>  “cluster.routing.allocation.disk.watermark.low”:”90%”</p>
+<p> }</p>
+<p>}</p>
+<p>‘<br>```</p>
+</li>
+</ol>
+]]></content>
+      <tags>
+        <tag>Elasticsearch</tag>
+        <tag>ELK</tag>
+      </tags>
+  </entry>
 </search>
