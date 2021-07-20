@@ -1495,127 +1495,147 @@ data blocks changed from <span class="token number">2620416</span> to <span clas
 <li><p>初始访问权限：<br> 设置静态IP: 172.16.100.199<br> 初始用户:ubuntu<br> 密码: ubuntu<br> 主机名: vlnx000000</p>
 </li>
 <li><p>升级系统软件包</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"><span class="token function">apt</span> update
-<span class="token function">apt</span> upgrade -y<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">apt update
+apt upgrade -y<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
 <li><p>安装软件包</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"><span class="token comment"># 安装网络工具包</span>
-<span class="token function">apt</span> <span class="token function">install</span> -y <span class="token function">curl</span> <span class="token function">wget</span> net-tools <span class="token function">mutt</span>
-<span class="token comment"># 安装监控工具包</span>
-<span class="token function">apt</span> <span class="token function">install</span> -y <span class="token function">htop</span> iftop iotop atop
-<span class="token comment"># 安装其他工具包</span>
-<span class="token function">apt</span> <span class="token function">install</span> -y <span class="token function">locate</span> <span class="token function">zip</span> <span class="token function">unzip</span> tree
-<span class="token comment"># 安装加域工具包</span>
-<span class="token function">apt</span> <span class="token function">install</span> -y realmd sssd sssd-tools libnss-sss libpam-sss adcli samba-common-bin oddjob oddjob-mkhomedir packagekit sssd-krb5 sssd-krb5-commo
-systemctl <span class="token builtin class-name">enable</span> sssd
-pam-auth-update<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"># 安装网络工具包
+apt install -y curl wget net-tools curl
+# 安装监控工具包
+apt install -y htop iftop iotop atop
+# 安装其他工具包
+apt install -y locate unzip tree
+# 安装加域工具包
+apt install -y realmd sssd sssd-tools libnss-sss libpam-sss adcli samba-common-bin oddjob oddjob-mkhomedir packagekit sssd-krb5 sssd-krb5-common
+systemctl enable sssd
+
+# 域用户自动创建Home目录
+pam-auth-update<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
 <li><p>清除无用软件</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"><span class="token comment"># 删除cloud-init</span>
-<span class="token function">apt</span> purge -y cloud-init
-<span class="token comment"># rm -rf /etc/cloud/</span>
-<span class="token comment"># 删除snapd</span>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"># 删除cloud-init
+apt purge -y cloud-init apparmor
+
+# rm -rf &#x2F;etc&#x2F;cloud&#x2F;
+# 删除snapd
 snap remove lxd
 snap remove core18
 snap remove snapd
-<span class="token function">apt</span> purge -y snapd
-<span class="token comment"># rm -rf /root/snap</span>
-<span class="token comment"># 删除自动升级</span>
-<span class="token function">apt</span> purge -y unattended-upgrades
-<span class="token function">apt</span> autoremove -y
+apt purge -y snapd
+# rm -rf &#x2F;root&#x2F;snap
+
+# 删除自动升级
+apt purge -y unattended-upgrades
+apt autoremove -y
+
 ldconfig
-updatedb<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+updatedb<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
 <li><p>安装Hyper-V驱动(安装完成之后，手动在Hyper-V Manager中打开该虚机的”Intergration Serverices”中的“Guest services”)</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"><span class="token function">apt</span> <span class="token function">install</span> -y linux-image-virtual linux-tools-virtual linux-cloud-tools-virtual<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">apt install -y linux-image-virtual linux-tools-virtual linux-cloud-tools-virtual<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <h2 id="设置访问权限"><a href="#设置访问权限" class="headerlink" title="设置访问权限"></a>设置访问权限</h2></li>
 <li><p>启用root(密码Ubuntu)</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">$ <span class="token function">sudo</span> <span class="token function">passwd</span> <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">$ sudo passwd <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
 <li><p>打开防火墙端口</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">ufw <span class="token builtin class-name">enable</span> 
-ufw allow <span class="token function">ssh</span>
-ufw allow <span class="token number">9100</span>/tcp
-ufw allow <span class="token number">1514</span>/tcp
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">ufw enable 
+ufw allow ssh
+ufw allow 9100&#x2F;tcp
+ufw allow 1514&#x2F;tcp
 ufw reload<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
 <li><p>修改sshd配置文件</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"><span class="token comment"># vim /etc/ssh/sshd_config</span>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"># vim &#x2F;etc&#x2F;ssh&#x2F;sshd_config
 LoginGraceTime 2m
-PermitRootLogin <span class="token function">yes</span>
-StrictModes <span class="token function">yes</span>
-MaxAuthTries <span class="token number">6</span>
-MaxSessions <span class="token number">10</span>
+PermitRootLogin yes
+StrictModes yes
+MaxAuthTries 6
+MaxSessions 10
 
-PasswordAuthentication <span class="token function">yes</span>
+PasswordAuthentication yes
 PermitEmptyPasswords no
 
 GSSAPIAuthentication no
 
-UsePAM <span class="token function">yes</span>
+UsePAM yes
 
 X11Forwarding no
 PrintMotd no
-PrintLastLog <span class="token function">yes</span>
-TCPKeepAlive <span class="token function">yes</span>
+PrintLastLog yes
+TCPKeepAlive yes
 Compression delayed
 
 UseDNS no
 Banner none<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
 <li><p>新建开机运行程序</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"><span class="token builtin class-name">echo</span> <span class="token string">'@reboot root /bin/bash /root/firstboot.sh'</span><span class="token operator">>></span>/etc/crontab<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">echo &#39;@reboot root &#x2F;bin&#x2F;bash &#x2F;root&#x2F;firstboot.sh&#39;&gt;&gt;&#x2F;etc&#x2F;crontab<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <h2 id="修改管理方式"><a href="#修改管理方式" class="headerlink" title="修改管理方式"></a>修改管理方式</h2></li>
 <li><p>使用NetworkMangager管理网络</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"><span class="token function">apt</span> <span class="token function">install</span> -y network-manager
-systemctl <span class="token builtin class-name">enable</span> network-manager --now
-<span class="token function">sed</span> -i <span class="token string">"s/false/true/g"</span> /etc/NetworkManager/NetworkManager.conf
-<span class="token function">mkdir</span> /etc/netplan/bak
-<span class="token function">mv</span> /etc/netplan/*.yaml /etc/netplan/bak/
-<span class="token function">cat</span> <span class="token operator">></span> /etc/netplan/01-network-manager-all.yaml <span class="token operator">&lt;&lt;</span> <span class="token string">EOF
-# This is the network config written by 'subiquity'
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">apt install -y network-manager
+systemctl enable network-manager --now
+systemctl disable networkd
+
+sed -i &quot;s&#x2F;false&#x2F;true&#x2F;g&quot; &#x2F;etc&#x2F;NetworkManager&#x2F;NetworkManager.conf
+mkdir &#x2F;etc&#x2F;netplan&#x2F;bak
+mv &#x2F;etc&#x2F;netplan&#x2F;*.yaml &#x2F;etc&#x2F;netplan&#x2F;bak&#x2F;
+
+cat &gt; &#x2F;etc&#x2F;netplan&#x2F;01-network-manager-all.yaml &lt;&lt; EOF
+# This is the network config written by &#39;subiquity&#39;
 network:
  version: 2
  renderer: NetworkManager
-EOF</span>
+EOF
+
+netplan apply
+
 systemctl restart network-manager
-nmcli c m Wired<span class="token punctuation">\</span> connection<span class="token punctuation">\</span> <span class="token number">1</span> con-name eth0
-nmcli c m eth0 ipv4.method manual ipv4.addresses <span class="token number">172.16</span>.100.199/16 ipv4.gateway <span class="token number">172.16</span>.100.254 ipv4.dns <span class="token number">172.16</span>.100.1,172.16.100.2
+nmcli c m Wired\ connection\ 1 con-name eth0
+nmcli c m eth0 ipv4.method manual ipv4.addresses 172.16.100.199&#x2F;16 ipv4.gateway 172.16.100.254 ipv4.dns 172.16.100.1,172.16.100.2
 nmcli c d eth0
-nmcli c u eth0<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+nmcli c u eth0
+
+# 开启BBR
+echo net.core.default_qdisc&#x3D;fq &gt;&gt; &#x2F;etc&#x2F;sysctl.conf
+echo net.ipv4.tcp_congestion_control&#x3D;bbr &gt;&gt; &#x2F;etc&#x2F;sysctl.conf<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
 <li><p>使用chrony管理时间</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"><span class="token function">apt</span> <span class="token function">install</span> -y chrony
-systemctl <span class="token builtin class-name">enable</span> chrony --now<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">apt install -y chrony
+systemctl enable chrony --now<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
 <li><p>使用北京时间</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">timedatectl set-timezone Asia/Shanghai<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">timedatectl set-timezone Asia&#x2F;Shanghai<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
 <li><p>使用24小时制</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"><span class="token builtin class-name">echo</span> <span class="token string">'LC_TIME=en_DK.UTF-8'</span> <span class="token operator">>></span> /etc/default/locale<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">echo &#39;LC_TIME&#x3D;en_DK.UTF-8&#39; &gt;&gt; &#x2F;etc&#x2F;default&#x2F;locale<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
 <li><p>使用vim作为默认编辑器</p>
 <pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">update-alternatives --config editor
-There are <span class="token number">4</span> choices <span class="token keyword">for</span> the alternative editor <span class="token punctuation">(</span>providing /usr/bin/editor<span class="token punctuation">)</span>.
+There are 4 choices for the alternative editor (providing &#x2F;usr&#x2F;bin&#x2F;editor).
 
   Selection    Path                Priority   Status
 ------------------------------------------------------------
-  <span class="token number">0</span>            /bin/nano            <span class="token number">40</span>        auto mode
-  <span class="token number">1</span>            /bin/ed             -100       manual mode
-  <span class="token number">2</span>            /bin/nano            <span class="token number">40</span>        manual mode
-* <span class="token number">3</span>            /usr/bin/vim.basic   <span class="token number">30</span>        manual mode
-  <span class="token number">4</span>            /usr/bin/vim.tiny    <span class="token number">15</span>        manual mode
+  0            &#x2F;bin&#x2F;nano            40        auto mode
+  1            &#x2F;bin&#x2F;ed             -100       manual mode
+  2            &#x2F;bin&#x2F;nano            40        manual mode
+* 3            &#x2F;usr&#x2F;bin&#x2F;vim.basic   30        manual mode
+  4            &#x2F;usr&#x2F;bin&#x2F;vim.tiny    15        manual mode
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="清理痕迹"><a href="#清理痕迹" class="headerlink" title="清理痕迹"></a>清理痕迹</h2></li>
 <li><p>重启主机</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"><span class="token function">sync</span>
-<span class="token function">reboot</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">sync
+reboot<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
 <li><p>使用root登录删除安装用户</p>
 <pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">deluser ubuntu
-<span class="token function">rm</span> -rf /home/ubuntu<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
+rm -rf &#x2F;home&#x2F;ubuntu<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
 <li><p>清除Machine ID</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"><span class="token operator">></span>/etc/machine-id<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">&gt;&#x2F;etc&#x2F;machine-id<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
 <li><p>清除SSH公钥</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"><span class="token function">rm</span> -rf /etc/ssh/*key*<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">rm -rf &#x2F;etc&#x2F;ssh&#x2F;*key*<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
 <li><p>清除apt缓存</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"><span class="token function">apt</span> clean<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">apt clean<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
 <li><p>清除访问历史</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"><span class="token function">rm</span> –rf /tmp/*
-<span class="token function">rm</span> –rf /var/tmp/*
-<span class="token function">history</span> -c<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></li>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">rm –rf &#x2F;tmp&#x2F;*
+rm –rf &#x2F;var&#x2F;tmp&#x2F;*
+history -c<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></li>
 <li><p>使用Hyper-V管理器shutdown虚机</p>
+<hr>
 </li>
 </ol>
+<h3 id="收尾"><a href="#收尾" class="headerlink" title="收尾"></a>收尾</h3><pre><code>- 新部署的主机需要使用`dpkg -reconfigure openssh-server`来重新SSHD的key，否则是登录不上22端口的；
+- Ubuntu 20.04 使用swap.img来替代以往的swap分区，导致在虚机部署中磁盘空间占用要大于centos至少一倍以上；
+- Hyper-V虚机的默认blocksize是32M，会导致vhdx文件远远大于vmdk
+</code></pre>
 ]]></content>
       <tags>
         <tag>Hyper-V Ubuntu VM Template</tag>
