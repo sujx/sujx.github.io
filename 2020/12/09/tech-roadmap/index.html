@@ -1,0 +1,201 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>互联网公司的技术架构 | 灰黑化挥花悔黑</title><meta name="keywords" content="Tools,Technology Roadmap"><meta name="author" content="靖轩"><meta name="copyright" content="靖轩"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="借用一下尚硅谷的拓扑图，细节部分会有出入。   开发工具 开发工具：后台Java研发主要使用intellij idea，终端研发分别用android studio和xcode，前端研发主要用vscode; 知识库管理：用confluence搭建公司wiki平台，用于积累案例库、经验分享、产品设计文档等; 研发管理：利用腾讯TAPD的优秀能力，做研发进度跟踪，BUG管理等工作; 代码平台：利用gi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="互联网公司的技术架构">
+<meta property="og:url" content="https://sujx.net/2020/12/09/tech-roadmap/index.html">
+<meta property="og:site_name" content="灰黑化挥花悔黑">
+<meta property="og:description" content="借用一下尚硅谷的拓扑图，细节部分会有出入。   开发工具 开发工具：后台Java研发主要使用intellij idea，终端研发分别用android studio和xcode，前端研发主要用vscode; 知识库管理：用confluence搭建公司wiki平台，用于积累案例库、经验分享、产品设计文档等; 研发管理：利用腾讯TAPD的优秀能力，做研发进度跟踪，BUG管理等工作; 代码平台：利用gi">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://cdn.sujx.net/wallhaven-g8d9dd.jpg">
+<meta property="article:published_time" content="2020-12-09T02:37:30.000Z">
+<meta property="article:modified_time" content="2021-12-07T07:32:04.386Z">
+<meta property="article:author" content="靖轩">
+<meta property="article:tag" content="Tools">
+<meta property="article:tag" content="Technology Roadmap">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.sujx.net/wallhaven-g8d9dd.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://sujx.net/2020/12/09/tech-roadmap/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?417b20ac1984432f821159fac27d3bb5";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"We didn't find any results for the search: ${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"prismjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '互联网公司的技术架构',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-12-07 15:32:04'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="灰黑化挥花悔黑" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">61</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">117</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">Categories</div><div class="length-num">13</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fas fa-book-open"></i><span> Books</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fas fa-tv"></i><span> Movies</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">灰黑化挥花悔黑</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fas fa-book-open"></i><span> Books</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fas fa-tv"></i><span> Movies</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">互联网公司的技术架构</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2020-12-09T02:37:30.000Z" title="Created 2020-12-09 10:37:30">2020-12-09</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2021-12-07T07:32:04.386Z" title="Updated 2021-12-07 15:32:04">2021-12-07</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Technology/">Technology</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word count:</span><span class="word-count">664</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading time:</span><span>2min</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="互联网公司的技术架构"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div><article class="post-content" id="article-container"><blockquote>
+<p>借用一下尚硅谷的拓扑图，细节部分会有出入。</p>
+</blockquote>
+<p><img src="https://cdn.sujx.net/jgsph.png"></p>
+<h3 id="开发工具"><a href="#开发工具" class="headerlink" title="开发工具"></a>开发工具</h3><ol>
+<li>开发工具：后台Java研发主要使用intellij idea，终端研发分别用android studio和xcode，前端研发主要用vscode;</li>
+<li>知识库管理：用confluence搭建公司wiki平台，用于积累案例库、经验分享、产品设计文档等;</li>
+<li>研发管理：利用腾讯TAPD的优秀能力，做研发进度跟踪，BUG管理等工作;</li>
+<li>代码平台：利用gitlab搭建公司代码仓库，配合sonarqube做代码质量检测，在fisheye平台上做代码审查，利用jenkins制作docker镜像，通过spinnaker平滑发布到Habor容器库.</li>
+</ol>
+<h3 id="应用工具"><a href="#应用工具" class="headerlink" title="应用工具"></a>应用工具</h3><ol>
+<li>运行环境：基于kubernetes搭建的容器云环境，利用其自动伸缩+健康监测等特性保障服务高可用。</li>
+<li>存储组件：核心业务数据放在Postgresql，部分数据放MongoDB和Mysql，多媒体数据放在FastDFS分布式文件系统，大数据分析用了HDFS，监控及搜索用了ElasticSearch</li>
+<li>缓存层：基于Redis构建了高效的缓存层</li>
+<li>消息系统：业务消息强调实时性都存在RocketMQ中、日志类消息强调吞吐量放到了Kafka</li>
+<li>监控告警：基于ELK套件构建日志告警、Prometheus + Grafana实现对K8S的监控</li>
+</ol>
+<h3 id="硬件环境"><a href="#硬件环境" class="headerlink" title="硬件环境"></a>硬件环境</h3><ol>
+<li>硬件环境：戴尔R730xd、R630服务器以及FC存储；</li>
+<li>异地灾备：设立主机房和辅助机房，间隔80公里以上，同时部署广州机房作为异地灾备；</li>
+<li>虚拟化层：使用VMware vSphere以OpenStack私有云方案；</li>
+<li>网络接入：主辅机房多个运营商接入，灾备机房通过ipsecVPN连接，使用阿里云、华为云、Azure海外节点提供国外访问，同时，用CDN加速静态资源访问；</li>
+<li>负载均衡:：使用LVS+Keeplived+NGINX；</li>
+<li>监控告警：硬件层使用戴尔OpenManage Essentials提供监控告警，网络层使用zabbix，主机层使用Open-falcon</li>
+<li>云上环境：使用OSS、CDN提供相应分发服务，使用ECS和RDS提供前端访问加速；</li>
+</ol>
+<h3 id="技术类型"><a href="#技术类型" class="headerlink" title="技术类型"></a>技术类型</h3><p>1.运行环境应用软件选型</p>
+<p>（1）操作系统（WEB服务器、APP服务器、接口服务器）： Nginx、LVS。</p>
+<p>（2）操作系统（数据库服务器）： CentOS。</p>
+<p>（3）数据库： PostgreSql、Mysql。</p>
+<p>（4）安全框架： shiro。</p>
+<p>（5）HTTPS： TLS 1.2。</p>
+<p>2.研发环境应用软件选型</p>
+<p>（1）开发语言平台： Java，Object C。</p>
+<p>（2）开发工具： intellij idea，android studio，xcode，vscode。</p>
+<p>（3）版本控制工具 ： gitlab，jenkins，spinnaker，sonarqube。</p>
+<p>（4）开发框架： Vue。</p>
+<p>（5）网页层： nginx。</p>
+<p>（6）服务层： Java、kubernetes、Docker。</p>
+<p>（7）数据访问层： PostgreSql、Mysql、MongoDB、FastDFS、HDFS、ElasticSearch。</p>
+<p>（8）MQ: RocketMQ、Kafka。</p>
+<p>（9）缓存：Redis</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">靖轩</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://sujx.net/2020/12/09/tech-roadmap/">https://sujx.net/2020/12/09/tech-roadmap/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Tools/">Tools</a><a class="post-meta__tags" href="/tags/Technology-Roadmap/">Technology Roadmap</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.sujx.net/wallhaven-g8d9dd.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/02/02/change-localadmin-password/"><img class="prev-cover" src="https://cdn.sujx.net/wallhaven-g8d9dd.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">批量修改Windows主机本地管理员密码</div></div></a></div><div class="next-post pull-right"><a href="/2020/10/19/idrac-set/"><img class="next-cover" src="https://cdn.sujx.net/wallhaven-g8d9dd.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">戴尔服务器iDRAC设置Tips</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">靖轩</div><div class="author-info__description">逝者如斯夫,不舍昼夜</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">61</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">117</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">Categories</div><div class="length-num">13</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/sujx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://gitee.com/grepsu" target="_blank" title="Gitee"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:sujx@live.cn" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS链接"><i class="fa  fa-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7"><span class="toc-number">1.</span> <span class="toc-text">开发工具</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E5%B7%A5%E5%85%B7"><span class="toc-number">2.</span> <span class="toc-text">应用工具</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A1%AC%E4%BB%B6%E7%8E%AF%E5%A2%83"><span class="toc-number">3.</span> <span class="toc-text">硬件环境</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8A%80%E6%9C%AF%E7%B1%BB%E5%9E%8B"><span class="toc-number">4.</span> <span class="toc-text">技术类型</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2021/12/06/centos7-discuzq/" title="CentOS7上使用yum部署Discuz!Q">CentOS7上使用yum部署Discuz!Q</a><time datetime="2021-12-06T09:35:28.000Z" title="Created 2021-12-06 17:35:28">2021-12-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2021/12/01/centos7-mcafee/" title="Linux上安装McAfee杀毒软件">Linux上安装McAfee杀毒软件</a><time datetime="2021-11-30T23:35:28.000Z" title="Created 2021-12-01 07:35:28">2021-12-01</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2021/11/09/centos8-allinone-itop-ocsng-glpi/" title="整合部署开源ITSM管理平台(1)">整合部署开源ITSM管理平台(1)</a><time datetime="2021-11-09T08:37:30.000Z" title="Created 2021-11-09 16:37:30">2021-11-09</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2021/11/01/vmdk2vhdx/" title="VMware磁盘文件转化为Hyper-V磁盘">VMware磁盘文件转化为Hyper-V磁盘</a><time datetime="2021-10-31T21:37:30.000Z" title="Created 2021-11-01 05:37:30">2021-11-01</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2021/10/29/fail2ban/" title="CentOS8与Fail2Ban的联合使用">CentOS8与Fail2Ban的联合使用</a><time datetime="2021-10-29T14:37:30.000Z" title="Created 2021-10-29 22:37:30">2021-10-29</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By 靖轩</div><div class="footer_custom_text">京ICP备17034757号-1</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">Local search</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

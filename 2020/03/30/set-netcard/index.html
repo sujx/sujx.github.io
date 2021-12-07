@@ -1,0 +1,218 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>网卡配置项 | 灰黑化挥花悔黑</title><meta name="keywords" content="tips,netcard"><meta name="author" content="靖轩"><meta name="copyright" content="靖轩"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="修改电脑网卡高级设置可以提高网络速度。另外，建议关闭在Realtek网卡高级设置中的以下其他选项：流控制&#x2F;FlowControl、巨型帧&#x2F;Jumboframe、大量传送负载&#x2F;OffloadLargesend、EEE(Energy Efficient Ethernet)、环保节能&#x2F;GreenEthernet、硬件效验和&#x2F;OffloadChksum。   自动关闭 PCIe (省电) 设置此选项可进入">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网卡配置项">
+<meta property="og:url" content="https://sujx.net/2020/03/30/set-netcard/index.html">
+<meta property="og:site_name" content="灰黑化挥花悔黑">
+<meta property="og:description" content="修改电脑网卡高级设置可以提高网络速度。另外，建议关闭在Realtek网卡高级设置中的以下其他选项：流控制&#x2F;FlowControl、巨型帧&#x2F;Jumboframe、大量传送负载&#x2F;OffloadLargesend、EEE(Energy Efficient Ethernet)、环保节能&#x2F;GreenEthernet、硬件效验和&#x2F;OffloadChksum。   自动关闭 PCIe (省电) 设置此选项可进入">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://cdn.sujx.net/wallhaven-g8d9dd.jpg">
+<meta property="article:published_time" content="2020-03-30T09:38:11.000Z">
+<meta property="article:modified_time" content="2021-12-07T07:32:03.950Z">
+<meta property="article:author" content="靖轩">
+<meta property="article:tag" content="tips">
+<meta property="article:tag" content="netcard">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.sujx.net/wallhaven-g8d9dd.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://sujx.net/2020/03/30/set-netcard/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?417b20ac1984432f821159fac27d3bb5";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"We didn't find any results for the search: ${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"prismjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '网卡配置项',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2021-12-07 15:32:03'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="灰黑化挥花悔黑" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">61</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">117</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">Categories</div><div class="length-num">13</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fas fa-book-open"></i><span> Books</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fas fa-tv"></i><span> Movies</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">灰黑化挥花悔黑</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fas fa-book-open"></i><span> Books</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fas fa-tv"></i><span> Movies</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">网卡配置项</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2020-03-30T09:38:11.000Z" title="Created 2020-03-30 17:38:11">2020-03-30</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2021-12-07T07:32:03.950Z" title="Updated 2021-12-07 15:32:03">2021-12-07</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Tips/">Tips</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word count:</span><span class="word-count">2.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading time:</span><span>7min</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="网卡配置项"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div><article class="post-content" id="article-container"><p>修改电脑网卡高级设置可以提高网络速度。另外，建议关闭在Realtek网卡高级设置中的以下其他选项：流控制/FlowControl、巨型帧/Jumboframe、大量传送负载/OffloadLargesend、EEE(Energy Efficient Ethernet)、环保节能/GreenEthernet、硬件效验和/OffloadChksum。</p>
+<ol>
+<li> 自动关闭 PCIe (省电) 设置此选项可进入网络控制器省电模式设置此選項可進入网路卡省电模式</li>
+</ol>
+<p>选项 说明 关闭 关闭自动关闭PCIe (省电) 开启, 电池 当使用电池且网络线未插入时，自动关闭PCIe连接 开启, 电池或 AC 当使用电池或AC且网络线未插入时，自动关闭PCIe连接</p>
+<ol start="2">
+<li> 自动关闭 PHY (省电) 设置此选项可进入网络控制器省电模式</li>
+</ol>
+<p>选项 说明 关闭 关闭自动关闭PHY (省电) 开启, 电池 当使用电池且网络线未插入时，自动关闭PHY连接 开启, 电池或 AC 当使用电池或AC且网络线未插入时，自动关闭PHY连接</p>
+<ol start="3">
+<li>流控制(Flow Control) 允许暂时停止传输数据包以适应接收端速度 选项 说明 开启 开启流控制 (默认值) 关闭 关闭流控制 据说开流控制会导致掉线，关</li>
+<li>中断调整(interrupt moderation) 根据网络的流量状况，动态调整发起处理器中断的频率</li>
+</ol>
+<p>选项 说明 开启 开启中断调整合适化 (默认值) 关闭 关闭中断调整合适化 建议：关</p>
+<ol start="5">
+<li> IPv4 硬件校验和（IPv4 Checksum Offload） 设置硬件加速IPv4校验和</li>
+</ol>
+<p>选项 说明 关闭 关闭硬件加速IPv4校验和 Rx &amp; Tx 开启 启用硬件加速接收端和传输端IPv4校验和(默认值) Rx 开启 启用硬件加速接收端IPv4校验和 Tx 开启 启用硬件加速传输端IPv4校验和 据说很多程序因为网卡校验和问题造成连接问题，关。</p>
+<ol start="6">
+<li>802.1Q/1p 虚拟网络标签 IEEE 802.1Q帧信息用以表示每一个帧的优先级和其所属的虚拟局域网，设置这个选项可以启用硬件加速优先级帧传输和加入虚拟局域网识别标签。 选项 说明 开启 启用优先级传输和虚拟局域网 关闭 禁用优先级传输和虚拟局域网 (默认值)</li>
+<li>大量传送减负 (IPv4)(Large Send Offload(IPv4)) 设置网络控制器硬件加速IPv4数据包切割功能</li>
+</ol>
+<p>选项 说明 开启 开启IPv4大量传送减负 (默认值) 关闭 关闭IPv4大量传送减负 大量传送减负是用网卡硬件分割TCP数据包,但其实只有关闭它才可以发挥网卡的真正性能，cpu占用率会提升，但不明显。网络处理速度会快一些。 这个一定要关，比如xp mode和win7主机局域网传文件慢就是这个造成的</p>
+<ol start="8">
+<li> 大量传送减负 (IPv6) (Large Send Offload(IPv6)) 设置网络控制器硬件加速IPv6数据包切割功能</li>
+</ol>
+<p>选项 说明 开启 开启IPv6大量传送减负 (默认值) 关闭 关闭IPv6大量传送减负 这个一定要关，比如xp mode和win7主机局域网传文件慢就是这个造成的</p>
+<ol start="9">
+<li>巨型帧(Jumbo Frame) Ethernet的数据最大传输单元定义为1500字节，数据长度大于1500字节封包即称为巨型帧，此选项可以调整Ethernet封包內所带数据的长度 选项 说明 2KB 最大传输单元 设置巨型帧为2K字节 3KB 最大传输单元 设置巨型帧为3K字节 4KB 最大传输单元 设置巨型帧为4K字节 5KB 最大传输单元 设置巨型帧为5K字节 6KB 最大传输单元 设置巨型帧为6K字节 7KB 最大传输单元 设置巨型帧为7K字节 8KB 最大传输单元 设置巨型帧为8K字节 9KB 最大传输单元 设置巨型帧为9K字节 关闭 禁用巨型帧(默认值) 注意:启用巨型帧选项，网络控制器另一端所连接的网络设备也需支持巨型帧</li>
+<li>网络地址（Priority &amp; VLAN） 改变网络控制器MAC地址 默认值：不存在</li>
+<li>优先级和VLAN IEEE 802.1Q数据包信息用以表示每一个数据包的优先级和其所属的虚拟局域网，设置这个选项可以启用硬件加速优先级数据包传输或加入虚拟局域网识别标志 选项 说明 优先级 &amp; VLAN 关闭 关闭优先级传输和虚拟局域网 优先级 &amp; VLAN 开启 开启优先级传输和虚拟局域网 (默认值) 优先级开启 开机优先级传输 VLAN 开启 开启虚拟局域网硬件标志功能</li>
+<li>接收端缓冲区(Receive Buffers) 设置接收端缓冲区 选项 范围 缓冲区大小 1~512 (默认值:512) 建议：开最大。</li>
+<li>接收端调整 接收端调整(Received Side Scaling, RSS)是一种动态指派多核心处理器接收数据包的负载均衡机制，借由调整多核心处理器处理接收数据包以达到多核心系统的处理器负载均衡。 选项 说明 开启 开启接收端调整 (默认值) 关闭 关闭接收端调整 注意： RTL8168C及RTL8102E系列网络控制器才支持接收端调整。</li>
+<li>关机网络唤醒 设置关机后可从网络唤醒</li>
+</ol>
+<p>选项 说明 开启 开机关机后网络唤醒 关闭 关闭关机后网络唤醒(默认值)</p>
+<ol start="15">
+<li>连接速度/双工模式(Speed &amp; Duplex) 切换连接速度和双工模式 选项 说明 自动侦测 自动侦测连接网络的连接速度和双工模式(默认值) 10Mbps半双工 设置为 10Mbps半双工连接模式 10Mbps全双工 设置为 10Mbps全双工连接模式 100Mbps半双工 设置为 100Mbps半双工连接模式 100Mbps全双工 设置为100Mbps全双工连接模式 1000Mbps全双工 设置为1000Mbps全双工连接模式 (*) 注意：RTL8101E、RTL8102E及RTL8139系列网络控制器为10/100 Mbps，所以并不支持1000 Mbps的连接速度。</li>
+<li>TCP 硬件校验和 (IPv4) （TCP Checksum Offload(IPv4)） 设置硬件加速TCP校验和 (IPv4)</li>
+</ol>
+<p>选项 说明 关闭 关闭硬件加速TCP校验和(IPv4) Rx &amp; Tx 开启 启用硬件加速接收端及传输端TCP校验和(IPv4)(默认值) Rx 开启 启用硬件加速接收端TCP校验和(IPv4) Tx 开启 启用硬件加速传输端TCP校验和 (IPv4) 据说很多程序因为网卡校验和问题造成连接问题，建议：关，校验还是用cpu。</p>
+<ol start="17">
+<li> TCP 硬件校验和 (IPv6) （TCP Checksum Offload(IPv4)） 设置硬件加速TCP校验和 (IPv6)</li>
+</ol>
+<p>选项 说明 关闭 关闭硬件加速TCP校验和(IPv6) Rx &amp; Tx 开启 启用硬件加速接收端及传输端TCP校验和(IPv6)(默认值) Rx 开启 启用硬件加速接收端TCP校验和(IPv6) Tx 开启 启用硬件加速传输端TCP校验和(IPv6) 据说很多程序因为网卡校验和问题造成连接问题，建议：关，校验还是用cpu。</p>
+<ol start="18">
+<li>传送缓冲区（Transmit Buffers） 设置传送缓冲区 缓冲区大小:1~128 (默认值:128) 建议：最大</li>
+<li>UDP 硬件校验和 (IPv4)（UDP Checksum Offload(IPv4)） 设置硬件加速UDP校验和 (IPv4)</li>
+</ol>
+<p>选项 说明 关闭 关闭硬件加速UDP校验和(IPv4) Rx &amp; Tx 开启 启用硬件加速接收端及传输端UDP校验和(IPv4)(默认值) Rx 开启 启用硬件加速接收端UDP校验和(IPv4) Tx 开启 启用硬件加速传输端UDP校验和(IPv4) 据说很多程序因为网卡校验和问题造成连接问题，建议：关，校验还是用cpu。</p>
+<ol start="20">
+<li> UDP 硬件校验和 (IPv6) (IPv4)（UDP Checksum Offload(IPv6)） 设置硬件加速UDP校验和 (IPv6)</li>
+</ol>
+<p>选项 说明 关闭 关闭硬件加速UDP校验和(IPv6) Rx &amp; Tx 开启 启用硬件加速接收端及传输端UDP校验和(IPv6)(默认值) Rx 开启 启用硬件加速接收端UDP校验和(IPv6) Tx 开启 启用硬件加速传输端UDP校验和(IPv6) 据说很多程序因为网卡校验和问题造成连接问题，建议：关，校验还是用cpu。</p>
+<ol start="21">
+<li>Wake on Magic Packet AMD公司的一项技术，网络发送(magic packet)数据包到某网卡，唤醒计算机的。</li>
+<li>Wake on pattern match</li>
+</ol>
+<p>又是一种唤醒技术</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">靖轩</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://sujx.net/2020/03/30/set-netcard/">https://sujx.net/2020/03/30/set-netcard/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/tips/">tips</a><a class="post-meta__tags" href="/tags/netcard/">netcard</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.sujx.net/wallhaven-g8d9dd.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2020/04/01/how-to-use-idrac/"><img class="prev-cover" src="https://cdn.sujx.net/wallhaven-g8d9dd.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">如何打开iDRAC虚拟控制台</div></div></a></div><div class="next-post pull-right"><a href="/2020/03/15/ip-for-github/"><img class="next-cover" src="https://cdn.sujx.net/wallhaven-g8d9dd.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">修改Hosts文件加速访问GitHub</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">靖轩</div><div class="author-info__description">逝者如斯夫,不舍昼夜</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">61</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">117</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">Categories</div><div class="length-num">13</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/sujx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://gitee.com/grepsu" target="_blank" title="Gitee"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:sujx@live.cn" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS链接"><i class="fa  fa-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2021/12/06/centos7-discuzq/" title="CentOS7上使用yum部署Discuz!Q">CentOS7上使用yum部署Discuz!Q</a><time datetime="2021-12-06T09:35:28.000Z" title="Created 2021-12-06 17:35:28">2021-12-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2021/12/01/centos7-mcafee/" title="Linux上安装McAfee杀毒软件">Linux上安装McAfee杀毒软件</a><time datetime="2021-11-30T23:35:28.000Z" title="Created 2021-12-01 07:35:28">2021-12-01</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2021/11/09/centos8-allinone-itop-ocsng-glpi/" title="整合部署开源ITSM管理平台(1)">整合部署开源ITSM管理平台(1)</a><time datetime="2021-11-09T08:37:30.000Z" title="Created 2021-11-09 16:37:30">2021-11-09</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2021/11/01/vmdk2vhdx/" title="VMware磁盘文件转化为Hyper-V磁盘">VMware磁盘文件转化为Hyper-V磁盘</a><time datetime="2021-10-31T21:37:30.000Z" title="Created 2021-11-01 05:37:30">2021-11-01</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2021/10/29/fail2ban/" title="CentOS8与Fail2Ban的联合使用">CentOS8与Fail2Ban的联合使用</a><time datetime="2021-10-29T14:37:30.000Z" title="Created 2021-10-29 22:37:30">2021-10-29</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By 靖轩</div><div class="footer_custom_text">京ICP备17034757号-1</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">Local search</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

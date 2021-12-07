@@ -1,0 +1,821 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Wazuh系统的群集化改造 | 灰黑化挥花悔黑</title><meta name="keywords" content="System,Elasticsearch,Wazuh,Security,HIDS,keeplived,lvs"><meta name="author" content="靖轩"><meta name="copyright" content="靖轩"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="综述在中大型网络环境中，单台Allinone的Wazuh系统或者单节点的分布式部署Wazuh系统从性能上已经无法满足日志分析和漏洞扫描的需求，因此应当采用高可用、多节点的分布式部署来满足Wazuh对CPU和存储的要求。    序号 系统描述 配置 网络地址 系统角色    1 Lvsnode1 1c&#x2F;1g 192.168.79.51 LVS+KeepLived 提供VIP和负载均衡   2 Lvs">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Wazuh系统的群集化改造">
+<meta property="og:url" content="https://sujx.net/2021/08/01/wazuh_depoly_cluster/index.html">
+<meta property="og:site_name" content="灰黑化挥花悔黑">
+<meta property="og:description" content="综述在中大型网络环境中，单台Allinone的Wazuh系统或者单节点的分布式部署Wazuh系统从性能上已经无法满足日志分析和漏洞扫描的需求，因此应当采用高可用、多节点的分布式部署来满足Wazuh对CPU和存储的要求。    序号 系统描述 配置 网络地址 系统角色    1 Lvsnode1 1c&#x2F;1g 192.168.79.51 LVS+KeepLived 提供VIP和负载均衡   2 Lvs">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://cdn.sujx.net/wallhaven-g8d9dd.jpg">
+<meta property="article:published_time" content="2021-08-01T07:37:30.000Z">
+<meta property="article:modified_time" content="2021-12-07T07:32:05.957Z">
+<meta property="article:author" content="靖轩">
+<meta property="article:tag" content="System">
+<meta property="article:tag" content="Elasticsearch">
+<meta property="article:tag" content="Wazuh">
+<meta property="article:tag" content="Security">
+<meta property="article:tag" content="HIDS">
+<meta property="article:tag" content="keeplived">
+<meta property="article:tag" content="lvs">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.sujx.net/wallhaven-g8d9dd.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://sujx.net/2021/08/01/wazuh_depoly_cluster/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?417b20ac1984432f821159fac27d3bb5";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"We didn't find any results for the search: ${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"prismjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Wazuh系统的群集化改造',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-12-07 15:32:05'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="灰黑化挥花悔黑" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">61</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">117</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">Categories</div><div class="length-num">13</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fas fa-book-open"></i><span> Books</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fas fa-tv"></i><span> Movies</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">灰黑化挥花悔黑</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fas fa-book-open"></i><span> Books</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fas fa-tv"></i><span> Movies</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">Wazuh系统的群集化改造</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2021-08-01T07:37:30.000Z" title="Created 2021-08-01 15:37:30">2021-08-01</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2021-12-07T07:32:05.957Z" title="Updated 2021-12-07 15:32:05">2021-12-07</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Security/">Security</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word count:</span><span class="word-count">3.5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading time:</span><span>19min</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Wazuh系统的群集化改造"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div><article class="post-content" id="article-container"><h3 id="综述"><a href="#综述" class="headerlink" title="综述"></a>综述</h3><p>在中大型网络环境中，单台Allinone的Wazuh系统或者单节点的分布式部署Wazuh系统从性能上已经无法满足日志分析和漏洞扫描的需求，因此应当采用高可用、多节点的分布式部署来满足Wazuh对CPU和存储的要求。</p>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>系统描述</th>
+<th>配置</th>
+<th>网络地址</th>
+<th>系统角色</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>Lvsnode1</td>
+<td>1c/1g</td>
+<td>192.168.79.51</td>
+<td>LVS+KeepLived 提供VIP和负载均衡</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Lvsnode2</td>
+<td>1c/1g</td>
+<td>192.168.79.52</td>
+<td>LVS+KeepLived 提供VIP和负载均衡</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Wazuhnode0</td>
+<td>2c/2g</td>
+<td>192.168.79.60</td>
+<td>Wazuh主节点，提供认证以及cve库</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Wazuhnode1</td>
+<td>1c/1g</td>
+<td>192.168.79.61</td>
+<td>WazuhWorker，工作节点，提供事件日志分析和漏洞扫描</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Wazuhnode2</td>
+<td>1c/1g</td>
+<td>192.168.79.62</td>
+<td>WazuhWorker，工作节点，提供事件日志分析和漏洞扫描</td>
+</tr>
+<tr>
+<td>6</td>
+<td>KibanaNode</td>
+<td>2c/4g</td>
+<td>192.168.79.80</td>
+<td>Kibana展示节点</td>
+</tr>
+<tr>
+<td>7</td>
+<td>ElasticNode1</td>
+<td>4c/4g</td>
+<td>192.168.79.81</td>
+<td>ElasticSearch 群集节点</td>
+</tr>
+<tr>
+<td>8</td>
+<td>ElasticNode2</td>
+<td>4c/4g</td>
+<td>192.168.79.82</td>
+<td>ElasticSearch 群集节点</td>
+</tr>
+<tr>
+<td>9</td>
+<td>ElasticNode3</td>
+<td>4c/4g</td>
+<td>192.168.79.83</td>
+<td>ElasticSearch 群集节点</td>
+</tr>
+<tr>
+<td>10</td>
+<td>UbuntuNode</td>
+<td>1c/1g</td>
+<td>192.168.79.127</td>
+<td>Ubuntu 20.04 LTS 测试机 + Wordpress</td>
+</tr>
+<tr>
+<td>11</td>
+<td>CentOSNode</td>
+<td>1c/1g</td>
+<td>192.168.79.128</td>
+<td>CentOS 8.4 测试机 + PostgreSQL</td>
+</tr>
+<tr>
+<td>12</td>
+<td>WindowsNode</td>
+<td>2c/2g</td>
+<td>192.168.79.129</td>
+<td>Windows Server 2012R2 测试机+ SQL Server</td>
+</tr>
+<tr>
+<td>13</td>
+<td>VIP</td>
+<td>——-</td>
+<td>192.168.79.50</td>
+<td>前端访问IP</td>
+</tr>
+<tr>
+<td>14</td>
+<td>Gateway</td>
+<td>1c/1g</td>
+<td>192.168.79.254</td>
+<td>使用iKuai提供网关服务和外部DNS服务</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>以下内容仅限wazuh 4.5.1版本和ELK  7.11.2版本</p>
+</blockquote>
+<p><img src="https://cdn.sujx.net/distributed_no_title4.png"></p>
+<h3 id="后端存储群集"><a href="#后端存储群集" class="headerlink" title="后端存储群集"></a>后端存储群集</h3><ol>
+<li><p>ElasticSearch三节点部署</p>
+<pre class="line-numbers language-none"><code class="language-none"># 安装前置软件
+yum install -y zip unzip curl
+# 导入秘钥
+rpm --import https:&#x2F;&#x2F;artifacts.elastic.co&#x2F;GPG-KEY-elasticsearch
+# 增加官方源
+cat &gt; &#x2F;etc&#x2F;yum.repos.d&#x2F;elastic.repo &lt;&lt; EOF
+[elasticsearch-7.x]
+name&#x3D;Elasticsearch repository for 7.x packages
+baseurl&#x3D;https:&#x2F;&#x2F;artifacts.elastic.co&#x2F;packages&#x2F;7.x&#x2F;yum
+gpgcheck&#x3D;1
+gpgkey&#x3D;https:&#x2F;&#x2F;artifacts.elastic.co&#x2F;GPG-KEY-elasticsearch
+enabled&#x3D;1
+autorefresh&#x3D;1
+type&#x3D;rpm-md
+EOF
+# 安装软件
+yum makecache
+yum upgrade -y
+yum install -y elasticsearch-7.11.2
+
+# 导入配置文件
+cp -a &#x2F;etc&#x2F;elasticsearch&#x2F;elasticsearch.yml&#123;,_$(date +%F)&#125;
+
+# 依次在各个节点上设置
+cat &gt; &#x2F;etc&#x2F;elasticsearch&#x2F;elasticsearch.yml &lt;&lt; EOF
+network.host: 192.168.79.81
+node.name: elasticnode1
+cluster.name: elastic
+cluster.initial_master_nodes:
+        - elasticnode1
+        - elasticnode2
+        - elasticnode3
+discovery.seed_hosts:
+        - 192.168.79.81
+        - 192.168.79.82
+        - 192.168.79.83
+EOF
+
+# 开通防火墙
+firewall-cmd --permanent --add-service&#x3D;elasticsearch 
+firewall-cmd --reload
+
+# 启动服务
+systemctl daemon-reload
+systemctl enable elasticsearch
+systemctl start elasticsearch
+
+# 禁用软件源，避免非控升级组件
+sed -i &quot;s&#x2F;^enabled&#x3D;1&#x2F;enabled&#x3D;0&#x2F;&quot; &#x2F;etc&#x2F;yum.repos.d&#x2F;elastic.repo
+
+# 在各个节点上依次部署，注意变更主机名和IP地址<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+<li><p>ElasticSearch群集验证</p>
+<pre class="line-numbers language-none"><code class="language-none">sujx@LEGION:~$ curl http:&#x2F;&#x2F;192.168.79.81:9200&#x2F;_cluster&#x2F;health?pretty
+&#123;
+  &quot;cluster_name&quot; : &quot;elastic&quot;,
+  &quot;status&quot; : &quot;green&quot;,
+  &quot;timed_out&quot; : false,
+  &quot;number_of_nodes&quot; : 3,
+  &quot;number_of_data_nodes&quot; : 3,
+  &quot;active_primary_shards&quot; : 0,
+  &quot;active_shards&quot; : 0,
+  &quot;relocating_shards&quot; : 0,
+  &quot;initializing_shards&quot; : 0,
+  &quot;unassigned_shards&quot; : 0,
+  &quot;delayed_unassigned_shards&quot; : 0,
+  &quot;number_of_pending_tasks&quot; : 0,
+  &quot;number_of_in_flight_fetch&quot; : 0,
+  &quot;task_max_waiting_in_queue_millis&quot; : 0,
+  &quot;active_shards_percent_as_number&quot; : 100.0
+&#125;
+
+sujx@LEGION:~$ curl http:&#x2F;&#x2F;192.168.79.81:9200&#x2F;_cat&#x2F;nodes?v
+ip            heap.percent ram.percent cpu load_1m load_5m load_15m node.role  master name
+192.168.79.83           10          86   0    0.08    0.08     0.03 cdhilmrstw -      elasticnode3
+192.168.79.82           18          97   0    0.01    0.12     0.08 cdhilmrstw *      elasticnode2
+192.168.79.81           16          95   0    0.06    0.08     0.08 cdhilmrstw -      elasticnode1<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<hr>
+<h3 id="处理系统群集"><a href="#处理系统群集" class="headerlink" title="处理系统群集"></a>处理系统群集</h3><ol>
+<li><p>Wazuh Master的部署</p>
+<pre class="line-numbers language-none"><code class="language-none"># 安装前置软件
+yum install -y zip unzip curl
+# 导入秘钥
+rpm --import https:&#x2F;&#x2F;packages.wazuh.com&#x2F;key&#x2F;GPG-KEY-WAZUH
+rpm --import https:&#x2F;&#x2F;artifacts.elastic.co&#x2F;GPG-KEY-elasticsearch
+
+# 配置官方软件源
+cat &gt; &#x2F;etc&#x2F;yum.repos.d&#x2F;wazuh.repo &lt;&lt; EOF
+[wazuh]
+gpgcheck&#x3D;1
+gpgkey&#x3D;https:&#x2F;&#x2F;packages.wazuh.com&#x2F;key&#x2F;GPG-KEY-WAZUH
+enabled&#x3D;1
+name&#x3D;EL-$releasever - Wazuh
+baseurl&#x3D;https:&#x2F;&#x2F;packages.wazuh.com&#x2F;4.x&#x2F;yum&#x2F;
+protect&#x3D;1
+EOF
+
+cat &gt; &#x2F;etc&#x2F;yum.repos.d&#x2F;elastic.repo &lt;&lt; EOF
+[elasticsearch-7.x]
+name&#x3D;Elasticsearch repository for 7.x packages
+baseurl&#x3D;https:&#x2F;&#x2F;artifacts.elastic.co&#x2F;packages&#x2F;7.x&#x2F;yum
+gpgcheck&#x3D;1
+gpgkey&#x3D;https:&#x2F;&#x2F;artifacts.elastic.co&#x2F;GPG-KEY-elasticsearch
+enabled&#x3D;1
+autorefresh&#x3D;1
+type&#x3D;rpm-md
+EOF
+
+# 安装软件
+yum makecache
+yum upgrade -y
+
+yum install -y wazuh-manager
+yum install -y filebeat-7.11.2
+
+# 配置Filebeat
+cp -a &#x2F;etc&#x2F;filebeat&#x2F;filebeat.yml&#123;,_$(date +%F)&#125;
+
+cat &gt; &#x2F;etc&#x2F;filebeat&#x2F;filebeat.yml&lt;&lt;EOF
+filebeat.modules:
+  - module: wazuh
+    alerts:
+      enabled: true
+    archives:
+      enabled: false
+
+setup.template.json.enabled: true
+setup.template.json.path: &#39;&#x2F;etc&#x2F;filebeat&#x2F;wazuh-template.json&#39;
+setup.template.json.name: &#39;wazuh&#39;
+setup.template.overwrite: true
+setup.ilm.enabled: false
+
+output.elasticsearch.hosts: [&#39;http:&#x2F;&#x2F;192.168.79.81:9200&#39;,&#39;http:&#x2F;&#x2F;192.168.79.82:9200&#39;,&#39;http:&#x2F;&#x2F;192.168.79.83:9200&#39;]
+EOF
+
+# 导入filebeat的wazuh日志模板
+curl -so &#x2F;etc&#x2F;filebeat&#x2F;wazuh-template.json https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;wazuh&#x2F;wazuh&#x2F;4.1&#x2F;extensions&#x2F;elasticsearch&#x2F;7.x&#x2F;wazuh-template.json
+chmod go+r &#x2F;etc&#x2F;filebeat&#x2F;wazuh-template.json
+
+# 导入filebeat的wazuh日志模型
+curl -s https:&#x2F;&#x2F;packages.wazuh.com&#x2F;4.x&#x2F;filebeat&#x2F;wazuh-filebeat-0.1.tar.gz | tar -xvz -C &#x2F;usr&#x2F;share&#x2F;filebeat&#x2F;module
+
+# 配置防火墙规则
+firewall-cmd --permanent --add-port&#x3D;&#123;1514&#x2F;tcp,1515&#x2F;tcp,1516&#x2F;tcp,55000&#x2F;tcp&#125;
+firewall-cmd --reload
+
+# 禁用软件源，避免非控升级组件
+sed -i &quot;s&#x2F;^enabled&#x3D;1&#x2F;enabled&#x3D;0&#x2F;&quot; &#x2F;etc&#x2F;yum.repos.d&#x2F;elastic.repo
+sed -i &quot;s&#x2F;^enabled&#x3D;1&#x2F;enabled&#x3D;0&#x2F;&quot; &#x2F;etc&#x2F;yum.repos.d&#x2F;wazuh.repo
+
+# 启动服务
+systemctl daemon-reload
+systemctl enable --now wazuh-manager
+systemctl enable --now filebeat
+
+# 测试filebeat
+[root@WazuhNode0 wazuh]# filebeat test output
+elasticsearch: http:&#x2F;&#x2F;192.168.79.81:9200...
+  parse url... OK
+  connection...
+    parse host... OK
+    dns lookup... OK
+    addresses: 192.168.79.81
+    dial up... OK
+  TLS... WARN secure connection disabled
+  talk to server... OK
+  version: 7.11.2
+elasticsearch: http:&#x2F;&#x2F;192.168.79.82:9200...
+  parse url... OK
+  connection...
+    parse host... OK
+    dns lookup... OK
+    addresses: 192.168.79.82
+    dial up... OK
+  TLS... WARN secure connection disabled
+  talk to server... OK
+  version: 7.11.2
+elasticsearch: http:&#x2F;&#x2F;192.168.79.83:9200...
+  parse url... OK
+  connection...
+    parse host... OK
+    dns lookup... OK
+    addresses: 192.168.79.83
+    dial up... OK
+  TLS... WARN secure connection disabled
+  talk to server... OK
+  version: 7.11.2<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+<li><p>Wazuh worker的部署</p>
+<pre class="line-numbers language-none"><code class="language-none"># 同Master部署一致
+
+# 安装软件
+yum install -y wazuh-manager
+yum install -y filebeat-7.11.2
+
+# 配置Filebeat
+cp -a &#x2F;etc&#x2F;filebeat&#x2F;filebeat.yml&#123;,_$(date +%F)&#125;
+
+cat &gt; &#x2F;etc&#x2F;filebeat&#x2F;filebeat.yml&lt;&lt;EOF
+filebeat.modules:
+  - module: wazuh
+    alerts:
+      enabled: true
+    archives:
+      enabled: false
+
+setup.template.json.enabled: true
+setup.template.json.path: &#39;&#x2F;etc&#x2F;filebeat&#x2F;wazuh-template.json&#39;
+setup.template.json.name: &#39;wazuh&#39;
+setup.template.overwrite: true
+setup.ilm.enabled: false
+
+output.elasticsearch.hosts: [&#39;http:&#x2F;&#x2F;192.168.79.81:9200&#39;,&#39;http:&#x2F;&#x2F;192.168.79.82:9200&#39;,&#39;http:&#x2F;&#x2F;192.168.79.83:9200&#39;]
+EOF
+
+# 导入filebeat的wazuh日志模板
+curl -so &#x2F;etc&#x2F;filebeat&#x2F;wazuh-template.json https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;wazuh&#x2F;wazuh&#x2F;4.1&#x2F;extensions&#x2F;elasticsearch&#x2F;7.x&#x2F;wazuh-template.json
+chmod go+r &#x2F;etc&#x2F;filebeat&#x2F;wazuh-template.json
+
+# 导入filebeat的wazuh日志模型
+curl -s https:&#x2F;&#x2F;packages.wazuh.com&#x2F;4.x&#x2F;filebeat&#x2F;wazuh-filebeat-0.1.tar.gz | tar -xvz -C &#x2F;usr&#x2F;share&#x2F;filebeat&#x2F;module
+
+# 配置防火墙规则
+firewall-cmd --permanent --add-port&#x3D;&#123;1514&#x2F;tcp,1516&#x2F;tcp&#125;
+firewall-cmd --reload
+
+# 启动服务
+systemctl daemon-reload
+systemctl enable --now wazuh-manager
+systemctl enable --now filebeat<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+<li><p>实现wazuh群集</p>
+<pre class="line-numbers language-none"><code class="language-none"># 进行群集认证
+# Master节点
+#生成随机串值
+openssl rand -hex 16
+d84691d111f86e70e8ed7eff80cde39e
+
+# 编辑ossec.conf的cluster
+
+  &lt;cluster&gt;
+    &lt;name&gt;wazuh&lt;&#x2F;name&gt;
+    &lt;node_name&gt;wazuhnode0&lt;&#x2F;node_name&gt;
+    &lt;node_type&gt;master&lt;&#x2F;node_type&gt;
+    &lt;key&gt;d84691d111f86e70e8ed7eff80cde39e&lt;&#x2F;key&gt;
+    &lt;port&gt;1516&lt;&#x2F;port&gt;
+    &lt;bind_addr&gt;0.0.0.0&lt;&#x2F;bind_addr&gt;
+    &lt;nodes&gt;
+        &lt;node&gt;192.168.79.60&lt;&#x2F;node&gt;
+    &lt;&#x2F;nodes&gt;
+    &lt;hidden&gt;no&lt;&#x2F;hidden&gt;
+    &lt;disabled&gt;no&lt;&#x2F;disabled&gt;
+  &lt;&#x2F;cluster&gt;
+  
+# Worker节点
+# 编辑ossec.conf的cluster
+
+  &lt;cluster&gt;
+    &lt;name&gt;wazuh&lt;&#x2F;name&gt;
+    &lt;node_name&gt;wazuhnode1&lt;&#x2F;node_name&gt;
+    &lt;node_type&gt;worker&lt;&#x2F;node_type&gt;
+    &lt;key&gt;d84691d111f86e70e8ed7eff80cde39e&lt;&#x2F;key&gt;
+    &lt;port&gt;1516&lt;&#x2F;port&gt;
+    &lt;bind_addr&gt;0.0.0.0&lt;&#x2F;bind_addr&gt;
+    &lt;nodes&gt;
+        &lt;node&gt;192.168.79.60&lt;&#x2F;node&gt;
+    &lt;&#x2F;nodes&gt;
+    &lt;hidden&gt;no&lt;&#x2F;hidden&gt;
+    &lt;disabled&gt;no&lt;&#x2F;disabled&gt;
+  &lt;&#x2F;cluster&gt;
+  
+# 验证
+[root@WazuhNode0 bin]# .&#x2F;cluster_control -l
+NAME        TYPE    VERSION  ADDRESS        
+wazuhnode0  master  4.1.5    192.168.79.60  
+wazuhnode1  worker  4.1.5    192.168.79.61  
+wauzhnode2  worker  4.1.5    192.168.79.62<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+</ol>
+</li>
+</ol>
+<hr>
+<h3 id="前端访问群集"><a href="#前端访问群集" class="headerlink" title="前端访问群集"></a>前端访问群集</h3><ol>
+<li><p>概览</p>
+<p>前端部署采用Keeplived+Nginx代理的模式，提供一个VIP供Wazuh的agent进行部署。</p>
+</li>
+<li><p>部署Nginx的TCP代理节点</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 部署第一个节点Node1</span>
+<span class="token comment"># 开放防火墙端口</span>
+firewall-cmd --permanent --add-port<span class="token operator">=</span><span class="token punctuation">&#123;</span><span class="token number">1514</span>/tcp,1515/tcp<span class="token punctuation">&#125;</span>
+firewall-cmd --reload
+
+<span class="token comment"># 新增官方源地址</span>
+<span class="token function">cat</span> <span class="token operator">></span> /etc/yum.repos.d/nginx.repo <span class="token operator">&lt;&lt;</span><span class="token punctuation">\</span>EOF
+<span class="token punctuation">[</span>nginx<span class="token punctuation">]</span>
+<span class="token assign-left variable">name</span><span class="token operator">=</span>nginx repo
+<span class="token assign-left variable">baseurl</span><span class="token operator">=</span>http://nginx.org/packages/centos/<span class="token variable">$releasever</span>/<span class="token variable">$basearch</span>/
+<span class="token assign-left variable">gpgcheck</span><span class="token operator">=</span><span class="token number">0</span>
+<span class="token assign-left variable">enabled</span><span class="token operator">=</span><span class="token number">1</span>
+EOF
+
+<span class="token comment"># 安装Nginx</span>
+yum makecache
+yum <span class="token function">install</span> -y nginx
+systemctl daemon-reload
+systemctl <span class="token builtin class-name">enable</span> nginx.service --now
+
+<span class="token comment"># 配置stream</span>
+<span class="token builtin class-name">cd</span> /etc/nginx
+<span class="token function">cp</span> -a nginx.conf<span class="token punctuation">&#123;</span>,_<span class="token variable"><span class="token variable">$(</span><span class="token function">date</span> +%F<span class="token variable">)</span></span><span class="token punctuation">&#125;</span>
+<span class="token function">cat</span> <span class="token operator">>></span> /etc/nginx/nginx.conf <span class="token operator">&lt;&lt;</span><span class="token string">EOF
+include /etc/nginx/stream.d/*.conf;
+EOF</span>
+
+<span class="token function">mkdir</span> ./stream.d
+<span class="token function">touch</span> /etc/nginx/stream.d/wazuh.conf
+
+<span class="token function">cat</span> <span class="token operator">></span> /etc/nginx/stream.d/wazuh.conf<span class="token operator">&lt;&lt;</span><span class="token string">EOF
+stream &#123;
+    upstream cluster &#123;
+        hash <span class="token variable">$remote_addr</span> consistent;
+        server 192.168.79.61:1514;
+        server 192.168.79.62:1514;
+    &#125;
+    upstream master &#123;
+        server 192.168.79.60:1515;
+    &#125;
+    server &#123;
+        listen 1514;
+        proxy_pass cluster;
+    &#125;
+    server &#123;
+        listen 1515;
+        proxy_pass master;
+    &#125;
+&#125;
+EOF</span>
+
+<span class="token comment"># 重启Nginx</span>
+systemctl restart nginx
+<span class="token comment"># 检查端口情况</span>
+<span class="token punctuation">[</span>root@lvsnode1 nginx<span class="token punctuation">]</span><span class="token comment"># netstat -tlnp</span>
+Active Internet connections <span class="token punctuation">(</span>only servers<span class="token punctuation">)</span>
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        <span class="token number">0</span>      <span class="token number">0</span> <span class="token number">0.0</span>.0.0:1514            <span class="token number">0.0</span>.0.0:*               LISTEN      <span class="token number">1897</span>/nginx: master  
+tcp        <span class="token number">0</span>      <span class="token number">0</span> <span class="token number">0.0</span>.0.0:1515            <span class="token number">0.0</span>.0.0:*               LISTEN      <span class="token number">1897</span>/nginx: master  
+tcp        <span class="token number">0</span>      <span class="token number">0</span> <span class="token number">0.0</span>.0.0:80              <span class="token number">0.0</span>.0.0:*               LISTEN      <span class="token number">1897</span>/nginx: master  
+tcp        <span class="token number">0</span>      <span class="token number">0</span> <span class="token number">0.0</span>.0.0:22              <span class="token number">0.0</span>.0.0:*               LISTEN      <span class="token number">1022</span>/sshd           
+tcp6       <span class="token number">0</span>      <span class="token number">0</span> :::80                   :::*                    LISTEN      <span class="token number">1897</span>/nginx: master  
+tcp6       <span class="token number">0</span>      <span class="token number">0</span> :::22                   :::*                    LISTEN      <span class="token number">1022</span>/sshd   
+
+<span class="token comment"># 安装Keeplived</span>
+yum <span class="token function">install</span> -y keepalived
+<span class="token builtin class-name">cd</span> /etc/keepalived/
+<span class="token function">cp</span> -a keepalived.conf<span class="token punctuation">&#123;</span>,_<span class="token variable"><span class="token variable">$(</span><span class="token function">date</span> +%F<span class="token variable">)</span></span><span class="token punctuation">&#125;</span>
+
+<span class="token comment"># 进行配置</span>
+<span class="token function">cat</span> <span class="token operator">></span> keepalived.conf<span class="token operator">&lt;&lt;</span><span class="token string">EOF
+# Configuration File for keepalived
+#
+global_defs &#123;
+    router_id nginxnode1
+    vrrp_mcast_group4 224.0.0.18
+    lvs_timeouts tcp 900 tcpfin 30 udp 300
+    lvs_sync_daemon ens160 route_lvs
+    vrrp_skip_check_adv_addr
+    #vrrp_strict
+    vrrp_garp_interval 0
+    vrrp_gna_interval 0
+&#125;
+vrrp_instance route_lvs &#123;
+    state BACKUP
+    priority 100
+    virtual_router_id 18
+    interface ens160
+    track_interface &#123;
+        ens160
+    &#125;
+    advert_int 3
+    authentication &#123;
+        auth_type PASS
+        auth_pass password
+    &#125;
+    virtual_ipaddress &#123;
+        192.168.79.50/24 dev ens160 label ens160:0
+    &#125;
+&#125;
+EOF</span>
+
+systemctl <span class="token builtin class-name">enable</span> keepalived.service --now<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+<li><p>验证服务</p>
+<pre class="line-numbers language-none"><code class="language-none">sujx@LEGION:~$ ping 192.168.79.50
+PING 192.168.79.50 (192.168.79.50) 56(84) bytes of data.
+64 bytes from 192.168.79.50: icmp_seq&#x3D;1 ttl&#x3D;64 time&#x3D;0.330 ms
+64 bytes from 192.168.79.50: icmp_seq&#x3D;2 ttl&#x3D;64 time&#x3D;0.306 ms
+
+--- 192.168.79.50 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2002ms
+rtt min&#x2F;avg&#x2F;max&#x2F;mdev &#x3D; 0.306&#x2F;0.430&#x2F;0.655&#x2F;0.159 ms
+
+sujx@LEGION:~$ telnet 192.168.79.50 1515
+Trying 192.168.79.140...
+Connected to 192.168.79.140.
+Escape character is &#39;^]&#39;.
+   
+sujx@LEGION:~$ telnet 192.168.79.50 1514
+Trying 192.168.79.140...
+Connected to 192.168.79.140.
+Escape character is &#39;^]&#39;.
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+</ol>
+<hr>
+<h3 id="面板访问群集"><a href="#面板访问群集" class="headerlink" title="面板访问群集"></a>面板访问群集</h3><ol>
+<li><p>部署Elastic协调节点</p>
+<pre class="line-numbers language-none"><code class="language-none"># 如果 Elasticsearch 集群有多个节点，分发 Kibana 节点之间请求的最简单的方法就是在 Kibana 机器上运行一个 Elasticsearch 协调（Coordinating only node） 的节点。Elasticsearch 协调节点本质上是智能负载均衡器，也是集群的一部分，如果有需要，这些节点会处理传入 HTTP 请求，重定向操作给集群中其它节点，收集并返回结果
+
+# 在Kibana节点上安装Elasticsearch
+# 安装前置软件
+yum install -y zip unzip curl
+# 导入源秘钥
+rpm --import https:&#x2F;&#x2F;artifacts.elastic.co&#x2F;GPG-KEY-elasticsearch
+# 增加官方源
+cat &gt; &#x2F;etc&#x2F;yum.repos.d&#x2F;elastic.repo &lt;&lt; EOF
+[elasticsearch-7.x]
+name&#x3D;Elasticsearch repository for 7.x packages
+baseurl&#x3D;https:&#x2F;&#x2F;artifacts.elastic.co&#x2F;packages&#x2F;7.x&#x2F;yum
+gpgcheck&#x3D;1
+gpgkey&#x3D;https:&#x2F;&#x2F;artifacts.elastic.co&#x2F;GPG-KEY-elasticsearch
+enabled&#x3D;1
+autorefresh&#x3D;1
+type&#x3D;rpm-md
+EOF
+
+# 安装软件
+yum makecache
+yum upgrade -y
+yum install -y elasticsearch-7.11.2
+
+#配置防火墙
+firewall-cmd --permanent --add-service&#x3D;http
+firewall-cmd --permanent --add-service&#x3D;elasticsearch
+firewall-cmd --reload
+
+# 修改配置
+# 其他ES节点也需要增加该主机NodeIP，并重启服务
+cat &gt;&gt; &#x2F;etc&#x2F;elasticsearch&#x2F;elasticsearch.yml&lt;&lt;EOF
+node.name: kibananode0
+cluster.name: elastic
+node.master: false
+node.data: false
+node.ingest: false
+network.host: localhost
+http.port: 9200
+transport.host: 192.168.79.80
+transport.tcp.port: 9300
+
+discovery.seed_hosts:
+        - 192.168.79.81
+        - 192.168.79.82
+        - 192.168.79.83
+        - 192.168.79.80
+EOF
+
+# 查看群集信息，只允许本机Kibana访问
+[root@kibana wazuh]# curl http:&#x2F;&#x2F;localhost:9200&#x2F;_cat&#x2F;nodes?v
+ip            heap.percent ram.percent cpu load_1m load_5m load_15m node.role  master name
+192.168.79.81           18          96   0    0.04    0.06     0.02 cdhilmrstw -      elasticnode1
+192.168.79.80           12          97   3    0.01    0.08     0.07 lr         -      kibananode0
+192.168.79.82           23          96   0    0.04    0.09     0.04 cdhilmrstw *      elasticnode2
+192.168.79.83           23          87   0    0.09    0.11     0.05 cdhilmrstw -      elasticnode3<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+<li><p>配置Kibana</p>
+<pre class="line-numbers language-none"><code class="language-none">yum install -y kibana-7.11.2
+
+# 修改配置文件
+cp -a &#x2F;etc&#x2F;kibana&#x2F;kibana.yml&#123;,_$(date +%F)&#125;
+
+cat &gt;&gt; &#x2F;etc&#x2F;kibana&#x2F;kibana.yml &lt;&lt; EOF
+server.port: 5601
+server.host: &quot;localhost&quot;
+server.name: &quot;kibana&quot;
+i18n.locale: &quot;zh-CN&quot;
+elasticsearch.hosts: [&quot;http:&#x2F;&#x2F;localhost:9200&quot;]
+kibana.index: &quot;.kibana&quot;
+kibana.defaultAppId: &quot;home&quot;
+server.defaultRoute : &quot;&#x2F;app&#x2F;wazuh&quot;
+EOF
+
+# 创建数据目录
+mkdir &#x2F;usr&#x2F;share&#x2F;kibana&#x2F;data
+chown -R kibana:kibana &#x2F;usr&#x2F;share&#x2F;kibana
+
+# 离线安装插件
+wget https:&#x2F;&#x2F;packages.wazuh.com&#x2F;4.x&#x2F;ui&#x2F;kibana&#x2F;wazuh_kibana-4.1.5_7.11.2-1.zip
+cp .&#x2F;wazuh_kibana-4.1.5_7.11.2-1.zip &#x2F;tmp
+cd &#x2F;usr&#x2F;share&#x2F;kibana
+sudo -u kibana &#x2F;usr&#x2F;share&#x2F;kibana&#x2F;bin&#x2F;kibana-plugin install file:&#x2F;&#x2F;&#x2F;tmp&#x2F;wazuh_kibana-4.1.5_7.11.2-1.zip
+
+# 配置服务
+systemctl daemon-reload
+systemctl enable kibana
+systemctl start kibana
+
+# 禁用软件源，避免非控升级组件
+sed -i &quot;s&#x2F;^enabled&#x3D;1&#x2F;enabled&#x3D;0&#x2F;&quot; &#x2F;etc&#x2F;yum.repos.d&#x2F;elastic.repo
+
+# 配置反向代理
+yum install -y nginx
+systemctl enable --now nginx
+vim &#x2F;etc&#x2F;ngix&#x2F;nginx.conf
+# 在server&#123;&#125;中添加配置项
+​&#96;&#96;&#96;
+        proxy_redirect           off;
+        proxy_set_header         X-Real-IP $remote_addr;
+        proxy_set_header         X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header         Host $http_host;
+
+        location &#x2F; &#123;
+                proxy_pass http:&#x2F;&#x2F;localhost:5601&#x2F;;
+        &#125;
+​&#96;&#96;&#96;
+nginx -s reload
+
+# 登录kibana之后选择wazuh插件
+# 返回控制台修改插件配置文件
+sed -i &quot;s&#x2F;localhost&#x2F;192.168.79.60&#x2F;g&quot; &#x2F;usr&#x2F;share&#x2F;kibana&#x2F;data&#x2F;wazuh&#x2F;config&#x2F;wazuh.yml<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="客户端验证"><a href="#客户端验证" class="headerlink" title="客户端验证"></a>客户端验证</h3></li>
+<li><p>部署Wazuh-Agent</p>
+<pre class="line-numbers language-none"><code class="language-none"># CentOS主机
+sudo WAZUH_MANAGER&#x3D;&#39;192.168.79.50&#39; WAZUH_AGENT_GROUP&#x3D;&#39;default&#39; yum install https:&#x2F;&#x2F;packages.wazuh.com&#x2F;4.x&#x2F;yum&#x2F;wazuh-agent-4.1.5-1.x86_64.rpm -y
+
+# Ubuntu主机
+curl -so wazuh-agent.deb https:&#x2F;&#x2F;packages.wazuh.com&#x2F;4.x&#x2F;apt&#x2F;pool&#x2F;main&#x2F;w&#x2F;wazuh-agent&#x2F;wazuh-agent_4.1.5-1_amd64.deb &amp;&amp; sudo WAZUH_MANAGER&#x3D;&#39;192.168.79.60&#39; WAZUH_AGENT_GROUP&#x3D;&#39;default&#39; dpkg -i .&#x2F;wazuh-agent.deb
+
+# 启动服务
+systemctl daemon-reload
+systemctl enable wazuh-agent
+systemctl start wazuh-agent
+
+# Windows主机
+Invoke-WebRequest -Uri https:&#x2F;&#x2F;packages.wazuh.com&#x2F;4.x&#x2F;windows&#x2F;wazuh-agent-4.1.5-1.msi -OutFile wazuh-agent.msi; .&#x2F;wazuh-agent.msi &#x2F;q WAZUH_MANAGER&#x3D;&#39;192.168.79.50&#39; WAZUH_REGISTRATION_SERVER&#x3D;&#39;192.168.79.50&#39; WAZUH_AGENT_GROUP&#x3D;&#39;default&#39; 
+start-service wazuh<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+<li><p>验证客户端所在管理节点</p>
+<p><img src="https://cdn.sujx.net/wazuh-client.PNG"></p>
+</li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">靖轩</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://sujx.net/2021/08/01/wazuh_depoly_cluster/">https://sujx.net/2021/08/01/wazuh_depoly_cluster/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/System/">System</a><a class="post-meta__tags" href="/tags/Elasticsearch/">Elasticsearch</a><a class="post-meta__tags" href="/tags/Wazuh/">Wazuh</a><a class="post-meta__tags" href="/tags/Security/">Security</a><a class="post-meta__tags" href="/tags/HIDS/">HIDS</a><a class="post-meta__tags" href="/tags/keeplived/">keeplived</a><a class="post-meta__tags" href="/tags/lvs/">lvs</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.sujx.net/wallhaven-g8d9dd.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/08/05/wazuh-cluster-update/"><img class="prev-cover" src="https://cdn.sujx.net/wallhaven-g8d9dd.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">批量更新Wazuh主机配置文件和漏洞库</div></div></a></div><div class="next-post pull-right"><a href="/2021/07/19/elasticsearch-common-cmd/"><img class="next-cover" src="https://cdn.sujx.net/wallhaven-g8d9dd.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">Elasticsearch常用查询语句</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">靖轩</div><div class="author-info__description">逝者如斯夫,不舍昼夜</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">61</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">117</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">Categories</div><div class="length-num">13</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/sujx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://gitee.com/grepsu" target="_blank" title="Gitee"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:sujx@live.cn" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS链接"><i class="fa  fa-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%BC%E8%BF%B0"><span class="toc-number">1.</span> <span class="toc-text">综述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%8E%E7%AB%AF%E5%AD%98%E5%82%A8%E7%BE%A4%E9%9B%86"><span class="toc-number">2.</span> <span class="toc-text">后端存储群集</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%84%E7%90%86%E7%B3%BB%E7%BB%9F%E7%BE%A4%E9%9B%86"><span class="toc-number">3.</span> <span class="toc-text">处理系统群集</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%89%8D%E7%AB%AF%E8%AE%BF%E9%97%AE%E7%BE%A4%E9%9B%86"><span class="toc-number">4.</span> <span class="toc-text">前端访问群集</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9D%A2%E6%9D%BF%E8%AE%BF%E9%97%AE%E7%BE%A4%E9%9B%86"><span class="toc-number">5.</span> <span class="toc-text">面板访问群集</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF%E9%AA%8C%E8%AF%81"><span class="toc-number">6.</span> <span class="toc-text">客户端验证</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2021/12/06/centos7-discuzq/" title="CentOS7上使用yum部署Discuz!Q">CentOS7上使用yum部署Discuz!Q</a><time datetime="2021-12-06T09:35:28.000Z" title="Created 2021-12-06 17:35:28">2021-12-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2021/12/01/centos7-mcafee/" title="Linux上安装McAfee杀毒软件">Linux上安装McAfee杀毒软件</a><time datetime="2021-11-30T23:35:28.000Z" title="Created 2021-12-01 07:35:28">2021-12-01</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2021/11/09/centos8-allinone-itop-ocsng-glpi/" title="整合部署开源ITSM管理平台(1)">整合部署开源ITSM管理平台(1)</a><time datetime="2021-11-09T08:37:30.000Z" title="Created 2021-11-09 16:37:30">2021-11-09</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2021/11/01/vmdk2vhdx/" title="VMware磁盘文件转化为Hyper-V磁盘">VMware磁盘文件转化为Hyper-V磁盘</a><time datetime="2021-10-31T21:37:30.000Z" title="Created 2021-11-01 05:37:30">2021-11-01</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2021/10/29/fail2ban/" title="CentOS8与Fail2Ban的联合使用">CentOS8与Fail2Ban的联合使用</a><time datetime="2021-10-29T14:37:30.000Z" title="Created 2021-10-29 22:37:30">2021-10-29</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By 靖轩</div><div class="footer_custom_text">京ICP备17034757号-1</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">Local search</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
