@@ -615,20 +615,6 @@
   </url>
   
   <url>
-    <loc>https://sujx.net/tags/yum/</loc>
-    <lastmod>2021-12-07</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://sujx.net/tags/discuz/</loc>
-    <lastmod>2021-12-07</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://sujx.net/tags/antivirus/</loc>
     <lastmod>2021-12-07</lastmod>
     <changefreq>weekly</changefreq>
@@ -798,6 +784,13 @@
   
   <url>
     <loc>https://sujx.net/tags/RPM/</loc>
+    <lastmod>2021-12-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://sujx.net/tags/yum/</loc>
     <lastmod>2021-12-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1008,6 +1001,13 @@
   
   <url>
     <loc>https://sujx.net/tags/s3/</loc>
+    <lastmod>2021-12-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://sujx.net/tags/discuz/</loc>
     <lastmod>2021-12-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1308,6 +1308,20 @@
   </url>
   
   <url>
+    <loc>https://sujx.net/tags/monitor/</loc>
+    <lastmod>2021-12-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://sujx.net/tags/Zabbix/</loc>
+    <lastmod>2021-12-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://sujx.net/tags/mapreduce/</loc>
     <lastmod>2021-12-07</lastmod>
     <changefreq>weekly</changefreq>
@@ -1337,20 +1351,6 @@
   
   <url>
     <loc>https://sujx.net/tags/xming/</loc>
-    <lastmod>2021-12-07</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://sujx.net/tags/monitor/</loc>
-    <lastmod>2021-12-07</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://sujx.net/tags/Zabbix/</loc>
     <lastmod>2021-12-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>

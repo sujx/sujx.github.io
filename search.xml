@@ -206,108 +206,6 @@ cd<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><
       </tags>
   </entry>
   <entry>
-    <title>CentOS7上使用yum部署Discuz!Q</title>
-    <url>/2021/12/06/centos7-discuzq/</url>
-    <content><![CDATA[<h2 id="文档资料"><a href="#文档资料" class="headerlink" title="文档资料"></a>文档资料</h2><h3 id="官方指引"><a href="#官方指引" class="headerlink" title="官方指引"></a>官方指引</h3><ol>
-<li><p>官方站点: <a href="https://discuz.com/">https://discuz.com/</a></p>
-</li>
-<li><p>示例站点：<a href="https://discuz.chat/">https://discuz.chat/</a></p>
-</li>
-<li><p>安装指引: <a href="https://discuz.com/docs/Linux%20%E4%B8%BB%E6%9C%BA.html#nginx">https://discuz.com/docs/Linux%20%E4%B8%BB%E6%9C%BA.html#nginx</a></p>
-</li>
-<li><p>后台使用：<a href="https://discuz.com/manual-admin/">https://discuz.com/manual-admin/</a></p>
-</li>
-<li><p>程序下载: <a href="https://dl.discuz.chat/dzq_latest_install.zip">https://dl.discuz.chat/dzq_latest_install.zip</a></p>
-</li>
-</ol>
-<h3 id="社区使用"><a href="#社区使用" class="headerlink" title="社区使用"></a>社区使用</h3><p>站点：<a href="http://forum.subwin.cn/">社区</a></p>
-<p>后台登录：<a href="http://forum.subwin.cn/admin">管理中心首页</a></p>
-<h2 id="程序部署"><a href="#程序部署" class="headerlink" title="程序部署"></a>程序部署</h2><h3 id="系统准备"><a href="#系统准备" class="headerlink" title="系统准备"></a>系统准备</h3><pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">#!&#x2F;bin&#x2F;bash
-yum makecache
-yum update -y
-
-# 创建本地软件源
-tar zxvf php74.tar.gz -C &#x2F;opt&#x2F;
-yum install -y createrepo
-createrepo &#x2F;opt&#x2F;php74&#x2F;
-yum-config-manager --add-repo file:&#x2F;opt&#x2F;php74
-
-# 安装软件包打包证书
-# wget https:&#x2F;&#x2F;rpms.remirepo.net&#x2F;RPM-GPG-KEY-remi
-
-#导入证书
-rpm --import RPM-GPG-KEY-remi
-# 安装nginx和PHP
-yum install -y nginx
-yum install -y php php-cli php-fpm php-gd php-mysqlnd php-odbc php-bcmath php-curl php-fileinfo php-nette-tokenizer php-xmlrpc php-date php-soap php-ldap php-mbstring libmcrypt libmcrypt-devel php-pecl-apcu mhash php-dom php-xmlreader php-date php-exif php-filter  php-hash php-iconv php-json php-libxml php-mysqlnd php-openssl php-pcre php-posix hp-tokenizer php-zlib php-opcache php-zip
-# 拉起服务
-systemctl daemon-reload
-systemctl enable --now nginx php-fpm
-# 开放80端口
-firewall-cmd --permanent --add-service&#x3D;http
-firewall-cmd --reload
-#论坛程序部署
-mkdir -p &#x2F;wwwroot&#x2F;discuz&#x2F;public
-unzip dzq_latest_install.zip -d &#x2F;wwwroot&#x2F;discuz&#x2F;
-chown -R nginx:nginx &#x2F;wwwroot&#x2F;
-
-# 配置PHP-fpm
-sed -i &#39;s\;exif.\exif.\g&#39; &#x2F;etc&#x2F;php.ini
-sed -i &#39;s@date.timezone &#x3D;@date.timezone &#x3D; Asia\Shanghai@g&#39; &#x2F;etc&#x2F;php.ini
-sed -i &#39;s\zlib.output_compression &#x3D; Off\zlib.output_compression &#x3D; On\g&#39; &#x2F;etc&#x2F;php.ini
-sed -i &#39;s\user &#x3D; apache\ user &#x3D; nginx\g&#39; &#x2F;etc&#x2F;php-fpm.d&#x2F;www.conf
-sed -i &#39;s\group &#x3D; apache\ group &#x3D; nginx\g&#39; &#x2F;etc&#x2F;php-fpm.d&#x2F;www.conf
-
-systemctl restart php-fpm.service
-
-netstat -tlnp<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h3 id="配置Nginx"><a href="#配置Nginx" class="headerlink" title="配置Nginx"></a>配置Nginx</h3><p>将下述文件粘贴到/etc/nginx/nginx.conf</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">server &#123;
-    listen       80;
-    listen       [::]:80;
-    server_name  forum.fxiaoke.com;
-    # 修改root目录
-    root         &#x2F;wwwroot&#x2F;discuz&#x2F;public&#x2F;;
-
-    # Load configuration files for the default server block.
-    include &#x2F;etc&#x2F;nginx&#x2F;default.d&#x2F;*.conf;
-    # 添加配置参数
-    index index.php;
-    gzip on;
-    gzip_min_length 1024;
-    gzip_types application&#x2F;json text&#x2F;css application&#x2F;x-javascript application&#x2F;javascript application&#x2F;vnd.api+json;
-    gzip_disable &quot;MSIE [1-6]\.&quot;;
-    gzip_comp_level 2;
-   # 配置rewrite模块 
-    location &#x2F; &#123;
-            try_files $uri $uri&#x2F; &#x2F;index.php?$query_string;
-    &#125;
-   # 添加PHP支持
-    location ~ \.php$ &#123;
-        fastcgi_pass   127.0.0.1:9000;
-        fastcgi_param  SCRIPT_FILENAME $document_root$fastcgi_script_name;
-        fastcgi_param  PATH_INFO $fastcgi_path_info;
-        include        fastcgi_params;
-    &#125;
-            error_page 404 &#x2F;404.html;
-    location &#x3D; &#x2F;404.html &#123;
-    &#125;
-
-    error_page 500 502 503 504 &#x2F;50x.html;
-    location &#x3D; &#x2F;50x.html &#123;
-    &#125;
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
-]]></content>
-      <tags>
-        <tag>centos</tag>
-        <tag>yum</tag>
-        <tag>discuz</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Linux上安装McAfee杀毒软件</title>
     <url>/2021/12/01/centos7-mcafee/</url>
     <content><![CDATA[<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>为了满足客户的安全需求，我司需要至少使用两种杀毒软件对交付的应用服务程序进行安全检查。因此，在ClamAV的基础上，我们还需要另外一种Linux版本的杀毒软件。不幸的是，无论使用baidu或者google检索出的所有免费可用杀毒软件大多已经没有Linux版本了，要么交付不菲的费用、要么产品下线、要么必须安装GTK桌面。</p>
@@ -1296,10 +1194,10 @@ creatrepo /var/www/repos/local/8/x86_64/<span aria-hidden="true" class="line-num
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>yum</tag>
         <tag>repo</tag>
         <tag>dnf</tag>
         <tag>RPM</tag>
+        <tag>yum</tag>
       </tags>
   </entry>
   <entry>
@@ -2724,6 +2622,108 @@ acl &#x3D; private<span aria-hidden="true" class="line-numbers-rows"><span></spa
         <tag>rclone</tag>
         <tag>minio</tag>
         <tag>s3</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CentOS7上使用yum部署Discuz!Q</title>
+    <url>/2021/12/06/centos7-discuzq/</url>
+    <content><![CDATA[<h2 id="文档资料"><a href="#文档资料" class="headerlink" title="文档资料"></a>文档资料</h2><h3 id="官方指引"><a href="#官方指引" class="headerlink" title="官方指引"></a>官方指引</h3><ol>
+<li><p>官方站点: <a href="https://discuz.com/">https://discuz.com/</a></p>
+</li>
+<li><p>示例站点：<a href="https://discuz.chat/">https://discuz.chat/</a></p>
+</li>
+<li><p>安装指引: <a href="https://discuz.com/docs/Linux%20%E4%B8%BB%E6%9C%BA.html#nginx">https://discuz.com/docs/Linux%20%E4%B8%BB%E6%9C%BA.html#nginx</a></p>
+</li>
+<li><p>后台使用：<a href="https://discuz.com/manual-admin/">https://discuz.com/manual-admin/</a></p>
+</li>
+<li><p>程序下载: <a href="https://dl.discuz.chat/dzq_latest_install.zip">https://dl.discuz.chat/dzq_latest_install.zip</a></p>
+</li>
+</ol>
+<h3 id="社区使用"><a href="#社区使用" class="headerlink" title="社区使用"></a>社区使用</h3><p>站点：<a href="http://forum.subwin.cn/">社区</a></p>
+<p>后台登录：<a href="http://forum.subwin.cn/admin">管理中心首页</a></p>
+<h2 id="程序部署"><a href="#程序部署" class="headerlink" title="程序部署"></a>程序部署</h2><h3 id="系统准备"><a href="#系统准备" class="headerlink" title="系统准备"></a>系统准备</h3><pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"><span class="token shebang important">#!/bin/bash</span>
+yum makecache
+yum update -y
+
+<span class="token comment"># 创建本地软件源</span>
+<span class="token function">tar</span> zxvf php74.tar.gz -C /opt/
+yum <span class="token function">install</span> -y createrepo
+createrepo /opt/php74/
+yum-config-manager --add-repo file:/opt/php74
+
+<span class="token comment"># 安装软件包打包证书</span>
+<span class="token comment"># wget https://rpms.remirepo.net/RPM-GPG-KEY-remi</span>
+
+<span class="token comment">#导入证书</span>
+<span class="token function">rpm</span> --import RPM-GPG-KEY-remi
+<span class="token comment"># 安装nginx和PHP</span>
+yum <span class="token function">install</span> -y nginx
+yum <span class="token function">install</span> -y php php-cli php-fpm php-gd php-mysqlnd php-odbc php-bcmath php-curl php-fileinfo php-nette-tokenizer php-xmlrpc php-date php-soap php-ldap php-mbstring libmcrypt libmcrypt-devel php-pecl-apcu mhash php-dom php-xmlreader php-date php-exif php-filter  php-hash php-iconv php-json php-libxml php-mysqlnd php-openssl php-pcre php-posix hp-tokenizer php-zlib php-opcache php-zip
+<span class="token comment"># 拉起服务</span>
+systemctl daemon-reload
+systemctl <span class="token builtin class-name">enable</span> --now nginx php-fpm
+<span class="token comment"># 开放80端口</span>
+firewall-cmd --permanent --add-service<span class="token operator">=</span>http
+firewall-cmd --reload
+<span class="token comment">#论坛程序部署</span>
+<span class="token function">mkdir</span> -p /wwwroot/discuz/public
+<span class="token function">unzip</span> dzq_latest_install.zip -d /wwwroot/discuz/
+<span class="token function">chown</span> -R nginx:nginx /wwwroot/
+
+<span class="token comment"># 配置PHP-fpm</span>
+<span class="token function">sed</span> -i <span class="token string">'s\;exif.\exif.\g'</span> /etc/php.ini
+<span class="token function">sed</span> -i <span class="token string">'s@date.timezone =@date.timezone = Asia\Shanghai@g'</span> /etc/php.ini
+<span class="token function">sed</span> -i <span class="token string">'s\zlib.output_compression = Off\zlib.output_compression = On\g'</span> /etc/php.ini
+<span class="token function">sed</span> -i <span class="token string">'s\user = apache\ user = nginx\g'</span> /etc/php-fpm.d/www.conf
+<span class="token function">sed</span> -i <span class="token string">'s\group = apache\ group = nginx\g'</span> /etc/php-fpm.d/www.conf
+
+systemctl restart php-fpm.service
+
+<span class="token function">netstat</span> -tlnp<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="配置Nginx"><a href="#配置Nginx" class="headerlink" title="配置Nginx"></a>配置Nginx</h3><p>将下述文件粘贴到/etc/nginx/nginx.conf</p>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">server <span class="token punctuation">&#123;</span>
+    listen       <span class="token number">80</span><span class="token punctuation">;</span>
+    listen       <span class="token punctuation">[</span>::<span class="token punctuation">]</span>:80<span class="token punctuation">;</span>
+    server_name  forum.fxiaoke.com<span class="token punctuation">;</span>
+    <span class="token comment"># 修改root目录</span>
+    root         /wwwroot/discuz/public/<span class="token punctuation">;</span>
+
+    <span class="token comment"># Load configuration files for the default server block.</span>
+    include /etc/nginx/default.d/*.conf<span class="token punctuation">;</span>
+    <span class="token comment"># 添加配置参数</span>
+    index index.php<span class="token punctuation">;</span>
+    <span class="token function">gzip</span> on<span class="token punctuation">;</span>
+    gzip_min_length <span class="token number">1024</span><span class="token punctuation">;</span>
+    gzip_types application/json text/css application/x-javascript application/javascript application/vnd.api+json<span class="token punctuation">;</span>
+    gzip_disable <span class="token string">"MSIE [1-6]\."</span><span class="token punctuation">;</span>
+    gzip_comp_level <span class="token number">2</span><span class="token punctuation">;</span>
+   <span class="token comment"># 配置rewrite模块 </span>
+    location / <span class="token punctuation">&#123;</span>
+            try_files <span class="token variable">$uri</span> <span class="token variable">$uri</span>/ /index.php?<span class="token variable">$query_string</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+   <span class="token comment"># 添加PHP支持</span>
+    location ~ <span class="token punctuation">\</span>.php$ <span class="token punctuation">&#123;</span>
+        fastcgi_pass   <span class="token number">127.0</span>.0.1:9000<span class="token punctuation">;</span>
+        fastcgi_param  SCRIPT_FILENAME <span class="token variable">$document_root</span><span class="token variable">$fastcgi_script_name</span><span class="token punctuation">;</span>
+        fastcgi_param  PATH_INFO <span class="token variable">$fastcgi_path_info</span><span class="token punctuation">;</span>
+        include        fastcgi_params<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+            error_page <span class="token number">404</span> /404.html<span class="token punctuation">;</span>
+    location <span class="token operator">=</span> /404.html <span class="token punctuation">&#123;</span>
+    <span class="token punctuation">&#125;</span>
+
+    error_page <span class="token number">500</span> <span class="token number">502</span> <span class="token number">503</span> <span class="token number">504</span> /50x.html<span class="token punctuation">;</span>
+    location <span class="token operator">=</span> /50x.html <span class="token punctuation">&#123;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+]]></content>
+      <tags>
+        <tag>centos</tag>
+        <tag>yum</tag>
+        <tag>discuz</tag>
       </tags>
   </entry>
   <entry>
@@ -5849,6 +5849,127 @@ elasticsearch: http://192.168.248.146:9200<span class="token punctuation">..</sp
       </tags>
   </entry>
   <entry>
+    <title>Zabbix的集中式部署</title>
+    <url>/2019/10/23/zabbix-deploy/</url>
+    <content><![CDATA[<p>Zabbix是一种高效、快速、开源的企业级监控系统。本文将基于Zabbix4.4和CentOS8来实现集中式部署一台监控主站点。</p>
+<ol>
+<li> 主机部署</li>
+</ol>
+<p>首先部署两台CentOS8（Zabbix:10.30.2.67、MySQL:10.30.2.68）主机，并安装epel-release源和zabbix源，其中建议使用<a href="https://mirrors.tuna.tsinghua.edu.cn/" title="清华大学软件源">[1]</a>。</p>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">dnf upgrade -y
+dnf <span class="token function">install</span> -y epel-release
+<span class="token function">rpm</span> -Uvh https://repo.zabbix.com/zabbix/4.4/rhel/8/x86_64/zabbix-release-4.4-1.el8.noarch.rpm
+dnf upgrade -y<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<ol start="2">
+<li> Zabbix服务部署</li>
+</ol>
+<p>登录Zabbix服务器，安装主程序</p>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">dnf -y upgrade
+dnf -y <span class="token function">install</span> httpd php php-fpm
+dnf -y <span class="token function">install</span> zabbix-server-mysql zabbix-web-mysql zabbix-apache-conf zabbix-agent
+
+<span class="token comment">#修改启动项</span>
+systemctl <span class="token builtin class-name">enable</span> httpd php-fpm
+systemctl <span class="token builtin class-name">enable</span> zabbix-agent.service zabbix-server.service
+
+<span class="token comment">#开放防火墙</span>
+firewall-cmd --permanent --add-service<span class="token operator">=</span><span class="token punctuation">&#123;</span>http,https<span class="token punctuation">&#125;</span>
+firewall-cmd --permanent --add-port<span class="token operator">=</span><span class="token punctuation">&#123;</span><span class="token number">10051</span>/tcp,10050/tcp<span class="token punctuation">&#125;</span>
+firewall-cmd --reload
+
+<span class="token comment">#传输监控数据库架构文件</span>
+<span class="token function">scp</span> /usr/share/doc/zabbix-server-mysql/create.sql.gz root@10.30.2.68:/root
+
+<span class="token comment">#修改php配置文件</span>
+<span class="token function">vim</span> /etc/php-fpm.d/zabbix.conf
+~~~~~~~~~~~~
+<span class="token comment">#修改第24行，去掉；号并修改时区位亚洲/上海</span>
+php_value<span class="token punctuation">[</span>date.timezone<span class="token punctuation">]</span> <span class="token operator">=</span> Asia/Shanghai
+~~~~~~~~~~~~
+
+<span class="token comment">#修改zabbix主程序文件</span>
+<span class="token function">vim</span> /etc/zabbix/zabbix_server.conf
+~~~~~~~~~~~~
+<span class="token comment">#修改第92行</span>
+<span class="token assign-left variable">DBHost</span><span class="token operator">=</span><span class="token number">10.30</span>.2.68
+<span class="token comment">#修改124行，设置数据库用户密码</span>
+<span class="token assign-left variable">DBPassword</span><span class="token operator">=</span>password
+~~~~~~~~~~~~
+
+<span class="token comment">#重启服务</span>
+systemctl restart httpd php-fpm
+systemctl restart zabbix-agent.service zabbix-server.service<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<ol start="3">
+<li> 数据库部署</li>
+</ol>
+<p>登录数据库服务器10.30.2.68，安装数据库文件，并进行配置</p>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">dnf -y <span class="token function">install</span> zabbix-agent
+dnf -y <span class="token function">install</span> mariadb mariadb-server
+systemctl <span class="token builtin class-name">enable</span> mariadb zabbix-agent.service --now
+
+<span class="token comment">#修改密码，删除匿名用户和测试库</span>
+mysql_secure_installation 
+
+<span class="token comment">#安装数据库</span>
+<span class="token comment"># mysql -uroot -p</span>
+password
+mysql<span class="token operator">></span> create database zabbix character <span class="token builtin class-name">set</span> utf8 collate utf8_bin<span class="token punctuation">;</span>
+mysql<span class="token operator">></span> grant all privileges on zabbix.* to zabbix@<span class="token string">'%'</span> identified by <span class="token string">'password'</span><span class="token punctuation">;</span>
+mysql<span class="token operator">></span> flush privileges<span class="token punctuation">;</span>
+mysql<span class="token operator">></span> quit<span class="token punctuation">;</span>
+
+<span class="token comment">#导入架构</span>
+zcat create.sql.gz  mysql -uzabbix -p zabbix
+
+<span class="token comment">#配置防火墙</span>
+firewall-cmd --permanent --add-service<span class="token operator">=</span>mysql
+firewall-cmd --permanent --add-port<span class="token operator">=</span><span class="token number">10050</span>/tcp
+firewall-cmd --reload
+
+<span class="token comment">#配置监控客户端</span>
+<span class="token function">vim</span> /etc/zabbix/zabbix-agent.conf
+~~~~~~~~~~~~
+<span class="token comment">#第98行</span>
+<span class="token assign-left variable">Server</span><span class="token operator">=</span><span class="token number">10.30</span>.2.67
+
+<span class="token comment">#第139行</span>
+<span class="token assign-left variable">ServerActive</span><span class="token operator">=</span><span class="token number">10.30</span>.2.67
+
+<span class="token comment">#第150行，注释掉</span>
+<span class="token comment">#Hostname=Zabbix server</span>
+
+<span class="token comment">#第158行</span>
+<span class="token assign-left variable">HostnameItem</span><span class="token operator">=</span>system.hostname
+~~~~~~~~~~~~
+systemctl restart mariadb zabbix-agent<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<ol start="4">
+<li><p> Zabbix站点配置</p>
+<span id="more"></span>
+<p>默认管理员为Admin，密码为zabbix <a href="https://cdn.sujx.net/zabbix_1.png" title="配置首页"><img src="https://cdn.sujx.net/zabbix_1.png" alt="配置首页" title="配置首页"></a> <a href="https://cdn.sujx.net/zabbix_2.png" title="配置检查"><img src="https://cdn.sujx.net/zabbix_2.png" alt="配置检查" title="配置检查"></a> <a href="https://cdn.sujx.net/zabbix_3.png" title="数据库配置"><img src="https://cdn.sujx.net/zabbix_3.png" alt="数据库配置" title="数据库配置"></a> <a href="https://cdn.sujx.net/zabbix_4.png" title="服务器设置"><img src="https://cdn.sujx.net/zabbix_4.png" alt="服务器设置" title="服务器设置"></a> <a href="https://cdn.sujx.net/zabbix_5.png" title="完成配置"><img src="https://cdn.sujx.net/zabbix_5.png" alt="完成配置" title="完成配置"></a> <a href="https://cdn.sujx.net/zabbix_6.png" title="登录"><img src="https://cdn.sujx.net/zabbix_6.png" alt="登录系统" title="登录"></a> <a href="https://cdn.sujx.net/zabbix_7.png" title="首页展示"><img src="https://cdn.sujx.net/zabbix_7.png" alt="首页展示" title="首页展示"></a></p>
+</li>
+<li><p>解决中文显示问题</p>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"><span class="token comment"># 安装中文字体</span>
+dnf <span class="token function">install</span> -y wqy*
+<span class="token builtin class-name">cd</span> /etc/alternatives
+<span class="token function">rm</span> zabbix-web-font
+<span class="token function">ln</span> -s /usr/share/fonts/wqy-microhei/wqy-microhei.ttc zabbix-web-font
+systemctl restart httpd<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+</ol>
+]]></content>
+      <categories>
+        <category>Something</category>
+        <category>Zabbix</category>
+      </categories>
+      <tags>
+        <tag>centos8</tag>
+        <tag>monitor</tag>
+        <tag>Zabbix</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>简单制作WindowsPE镜像</title>
     <url>/2021/03/29/windowspe_build/</url>
     <content><![CDATA[<h3 id="下载部署文件"><a href="#下载部署文件" class="headerlink" title="下载部署文件"></a>下载部署文件</h3><ol>
@@ -6006,127 +6127,6 @@ wrought,        <span class="token number">4</span>
         <tag>linux</tag>
         <tag>x11</tag>
         <tag>xming</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Zabbix的集中式部署</title>
-    <url>/2019/10/23/zabbix-deploy/</url>
-    <content><![CDATA[<p>Zabbix是一种高效、快速、开源的企业级监控系统。本文将基于Zabbix4.4和CentOS8来实现集中式部署一台监控主站点。</p>
-<ol>
-<li> 主机部署</li>
-</ol>
-<p>首先部署两台CentOS8（Zabbix:10.30.2.67、MySQL:10.30.2.68）主机，并安装epel-release源和zabbix源，其中建议使用<a href="https://mirrors.tuna.tsinghua.edu.cn/" title="清华大学软件源">[1]</a>。</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">dnf upgrade -y
-dnf <span class="token function">install</span> -y epel-release
-<span class="token function">rpm</span> -Uvh https://repo.zabbix.com/zabbix/4.4/rhel/8/x86_64/zabbix-release-4.4-1.el8.noarch.rpm
-dnf upgrade -y<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
-<ol start="2">
-<li> Zabbix服务部署</li>
-</ol>
-<p>登录Zabbix服务器，安装主程序</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">dnf -y upgrade
-dnf -y <span class="token function">install</span> httpd php php-fpm
-dnf -y <span class="token function">install</span> zabbix-server-mysql zabbix-web-mysql zabbix-apache-conf zabbix-agent
-
-<span class="token comment">#修改启动项</span>
-systemctl <span class="token builtin class-name">enable</span> httpd php-fpm
-systemctl <span class="token builtin class-name">enable</span> zabbix-agent.service zabbix-server.service
-
-<span class="token comment">#开放防火墙</span>
-firewall-cmd --permanent --add-service<span class="token operator">=</span><span class="token punctuation">&#123;</span>http,https<span class="token punctuation">&#125;</span>
-firewall-cmd --permanent --add-port<span class="token operator">=</span><span class="token punctuation">&#123;</span><span class="token number">10051</span>/tcp,10050/tcp<span class="token punctuation">&#125;</span>
-firewall-cmd --reload
-
-<span class="token comment">#传输监控数据库架构文件</span>
-<span class="token function">scp</span> /usr/share/doc/zabbix-server-mysql/create.sql.gz root@10.30.2.68:/root
-
-<span class="token comment">#修改php配置文件</span>
-<span class="token function">vim</span> /etc/php-fpm.d/zabbix.conf
-~~~~~~~~~~~~
-<span class="token comment">#修改第24行，去掉；号并修改时区位亚洲/上海</span>
-php_value<span class="token punctuation">[</span>date.timezone<span class="token punctuation">]</span> <span class="token operator">=</span> Asia/Shanghai
-~~~~~~~~~~~~
-
-<span class="token comment">#修改zabbix主程序文件</span>
-<span class="token function">vim</span> /etc/zabbix/zabbix_server.conf
-~~~~~~~~~~~~
-<span class="token comment">#修改第92行</span>
-<span class="token assign-left variable">DBHost</span><span class="token operator">=</span><span class="token number">10.30</span>.2.68
-<span class="token comment">#修改124行，设置数据库用户密码</span>
-<span class="token assign-left variable">DBPassword</span><span class="token operator">=</span>password
-~~~~~~~~~~~~
-
-<span class="token comment">#重启服务</span>
-systemctl restart httpd php-fpm
-systemctl restart zabbix-agent.service zabbix-server.service<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<ol start="3">
-<li> 数据库部署</li>
-</ol>
-<p>登录数据库服务器10.30.2.68，安装数据库文件，并进行配置</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">dnf -y <span class="token function">install</span> zabbix-agent
-dnf -y <span class="token function">install</span> mariadb mariadb-server
-systemctl <span class="token builtin class-name">enable</span> mariadb zabbix-agent.service --now
-
-<span class="token comment">#修改密码，删除匿名用户和测试库</span>
-mysql_secure_installation 
-
-<span class="token comment">#安装数据库</span>
-<span class="token comment"># mysql -uroot -p</span>
-password
-mysql<span class="token operator">></span> create database zabbix character <span class="token builtin class-name">set</span> utf8 collate utf8_bin<span class="token punctuation">;</span>
-mysql<span class="token operator">></span> grant all privileges on zabbix.* to zabbix@<span class="token string">'%'</span> identified by <span class="token string">'password'</span><span class="token punctuation">;</span>
-mysql<span class="token operator">></span> flush privileges<span class="token punctuation">;</span>
-mysql<span class="token operator">></span> quit<span class="token punctuation">;</span>
-
-<span class="token comment">#导入架构</span>
-zcat create.sql.gz  mysql -uzabbix -p zabbix
-
-<span class="token comment">#配置防火墙</span>
-firewall-cmd --permanent --add-service<span class="token operator">=</span>mysql
-firewall-cmd --permanent --add-port<span class="token operator">=</span><span class="token number">10050</span>/tcp
-firewall-cmd --reload
-
-<span class="token comment">#配置监控客户端</span>
-<span class="token function">vim</span> /etc/zabbix/zabbix-agent.conf
-~~~~~~~~~~~~
-<span class="token comment">#第98行</span>
-<span class="token assign-left variable">Server</span><span class="token operator">=</span><span class="token number">10.30</span>.2.67
-
-<span class="token comment">#第139行</span>
-<span class="token assign-left variable">ServerActive</span><span class="token operator">=</span><span class="token number">10.30</span>.2.67
-
-<span class="token comment">#第150行，注释掉</span>
-<span class="token comment">#Hostname=Zabbix server</span>
-
-<span class="token comment">#第158行</span>
-<span class="token assign-left variable">HostnameItem</span><span class="token operator">=</span>system.hostname
-~~~~~~~~~~~~
-systemctl restart mariadb zabbix-agent<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<ol start="4">
-<li><p> Zabbix站点配置</p>
-<span id="more"></span>
-<p>默认管理员为Admin，密码为zabbix <a href="https://cdn.sujx.net/zabbix_1.png" title="配置首页"><img src="https://cdn.sujx.net/zabbix_1.png" alt="配置首页" title="配置首页"></a> <a href="https://cdn.sujx.net/zabbix_2.png" title="配置检查"><img src="https://cdn.sujx.net/zabbix_2.png" alt="配置检查" title="配置检查"></a> <a href="https://cdn.sujx.net/zabbix_3.png" title="数据库配置"><img src="https://cdn.sujx.net/zabbix_3.png" alt="数据库配置" title="数据库配置"></a> <a href="https://cdn.sujx.net/zabbix_4.png" title="服务器设置"><img src="https://cdn.sujx.net/zabbix_4.png" alt="服务器设置" title="服务器设置"></a> <a href="https://cdn.sujx.net/zabbix_5.png" title="完成配置"><img src="https://cdn.sujx.net/zabbix_5.png" alt="完成配置" title="完成配置"></a> <a href="https://cdn.sujx.net/zabbix_6.png" title="登录"><img src="https://cdn.sujx.net/zabbix_6.png" alt="登录系统" title="登录"></a> <a href="https://cdn.sujx.net/zabbix_7.png" title="首页展示"><img src="https://cdn.sujx.net/zabbix_7.png" alt="首页展示" title="首页展示"></a></p>
-</li>
-<li><p>解决中文显示问题</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"><span class="token comment"># 安装中文字体</span>
-dnf <span class="token function">install</span> -y wqy*
-<span class="token builtin class-name">cd</span> /etc/alternatives
-<span class="token function">rm</span> zabbix-web-font
-<span class="token function">ln</span> -s /usr/share/fonts/wqy-microhei/wqy-microhei.ttc zabbix-web-font
-systemctl restart httpd<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
-</ol>
-]]></content>
-      <categories>
-        <category>Something</category>
-        <category>Zabbix</category>
-      </categories>
-      <tags>
-        <tag>centos8</tag>
-        <tag>monitor</tag>
-        <tag>Zabbix</tag>
       </tags>
   </entry>
   <entry>
