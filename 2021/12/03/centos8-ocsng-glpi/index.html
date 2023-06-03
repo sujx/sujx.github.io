@@ -1,0 +1,349 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>资产管理软件GLPI的部署以及与OCSInverntoryNG的整合 | 靖</title><meta name="author" content="靖轩"><meta name="copyright" content="靖轩"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="概述​	我们可以使用OCSinverntory搜集整理资产信息并导入GLPI系统作为CMDB的形式来实现公司资产管理的数字化，方便资产的统一管理和信息维护。 名词解释OCSInverntoryNG​	OCSinventoyNG 使用perl编写的开源资产管理软件，它通过agent上报相关信息来获取部"><link rel="shortcut icon" href="https://cdn.sujx.net/about/favicon.png"><link rel="canonical" href="https://www.sujx.net/2021/12/03/centos8-ocsng-glpi/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin=""/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?417b20ac1984432f821159fac27d3bb5";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web&amp;display=swap" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":5,"unescape":false,"languages":{"hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"prismjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '资产管理软件GLPI的部署以及与OCSInverntoryNG的整合',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-05-06 18:58:01'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="靖" type="application/atom+xml">
+</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://cdn.sujx.net/about/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">94</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">179</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">13</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Posts</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fas fa-book-open"></i><span> Books</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fas fa-tv"></i><span> Movies</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="靖"><span class="site-name">靖</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Posts</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fas fa-book-open"></i><span> Books</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fas fa-tv"></i><span> Movies</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">资产管理软件GLPI的部署以及与OCSInverntoryNG的整合</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2021-12-03T08:37:30.000Z" title="Created 2021-12-03 16:37:30">2021-12-03</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2023-05-06T10:58:01.899Z" title="Updated 2023-05-06 18:58:01">2023-05-06</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Technology/">Technology</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word count:</span><span class="word-count">1.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading time:</span><span>5min</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="资产管理软件GLPI的部署以及与OCSInverntoryNG的整合"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="post-content" id="article-container"><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>​	我们可以使用OCSinverntory搜集整理资产信息并导入GLPI系统作为CMDB的形式来实现公司资产管理的数字化，方便资产的统一管理和信息维护。</p>
+<h3 id="名词解释"><a href="#名词解释" class="headerlink" title="名词解释"></a>名词解释</h3><h4 id="OCSInverntoryNG"><a href="#OCSInverntoryNG" class="headerlink" title="OCSInverntoryNG"></a>OCSInverntoryNG</h4><p>​	<a target="_blank" rel="noopener" href="https://ocsinventory-ng.org/">OCSinventoyNG</a> 使用perl编写的开源资产管理软件，它通过agent上报相关信息来获取部署范围内的Windows、Unix、MacOS、andriod等资产信息。</p>
+<h4 id="GLPI"><a href="#GLPI" class="headerlink" title="GLPI"></a>GLPI</h4><p>​	<a target="_blank" rel="noopener" href="https://glpi-project.org/">GLPI</a>是一款由法国人开发的开源CMDB软件，GLPI是法语Gestionnaire libre de parc informatique的缩写，它使用PHP开发。</p>
+<hr>
+<h2 id="系统部署"><a href="#系统部署" class="headerlink" title="系统部署"></a>系统部署</h2><h3 id="基础设施"><a href="#基础设施" class="headerlink" title="基础设施"></a>基础设施</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 系统更新</span>
+dnf <span class="token function">install</span> <span class="token parameter variable">-y</span> epel-release dnf-utils
+dnf <span class="token function">install</span> <span class="token parameter variable">-y</span> https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+dnf <span class="token function">install</span> <span class="token parameter variable">-y</span> https://rpms.remirepo.net/enterprise/remi-release-8.rpm
+
+dnf config-manager --set-enabled powertools
+dnf config-manager --set-enabled epel
+dnf makecache 
+dnf update <span class="token parameter variable">-y</span>
+
+<span class="token comment"># 安装依赖</span>
+dnf <span class="token function">install</span> <span class="token parameter variable">-y</span> cmake <span class="token function">make</span> autoconf gcc gcc-c++ <span class="token function">unzip</span> graphviz libzip-devel libzip-tools <span class="token function">curl</span>
+
+<span class="token comment"># 安装PHP7.4</span>
+dnf module reset <span class="token parameter variable">-y</span> php
+dnf module <span class="token builtin class-name">enable</span> <span class="token parameter variable">-y</span> php:remi-7.4
+
+dnf <span class="token function">install</span> <span class="token parameter variable">-y</span> php php-curl php-zip php-gd php-soap php-xml php-mbstring php-fpm php-ldap php-iconv php-json
+dnf <span class="token function">install</span> <span class="token parameter variable">-y</span> php-mysqlnd php-openssl php-pcre php-posix php-sockets php-spl php-tokenizer php-zlib
+dnf <span class="token function">install</span> <span class="token parameter variable">-y</span> php-xmlrpc php-opcache php-snmp php-intl php-pecl-apcu
+
+<span class="token function">sed</span> <span class="token parameter variable">-i</span> <span class="token string">'s@;date.timezone =@date.timezone = Asia/\Shanghai@g'</span> etc/php.ini
+<span class="token function">sed</span> <span class="token parameter variable">-i</span> <span class="token string">'s\zlib.output_compression = Off\zlib.output_compression = On\g'</span> /etc/php.ini
+
+systemctl <span class="token builtin class-name">enable</span> php-fpm <span class="token parameter variable">--now</span>
+
+<span class="token comment"># 安装MySQL8</span>
+dnf module <span class="token builtin class-name">enable</span> <span class="token parameter variable">-y</span> mysql:8.0
+dnf <span class="token function">install</span> <span class="token parameter variable">-y</span> mysql mysql-server
+<span class="token function">cat</span> <span class="token operator">></span>/etc/my.cnf.d/charset.cnf <span class="token operator">&lt;&lt;</span><span class="token string">EOF
+[mysqld]
+character-set-server = utf8mb4
+
+[client]
+default-character-set = utf8mb4
+EOF</span>
+systemctl <span class="token builtin class-name">enable</span> mysqld <span class="token parameter variable">--now</span>
+
+dnf <span class="token function">install</span> <span class="token parameter variable">-y</span> httpd
+systemctl <span class="token builtin class-name">enable</span> httpd <span class="token parameter variable">--now</span>
+
+firewall-cmd <span class="token parameter variable">--permanent</span> --add-service<span class="token operator">=</span><span class="token punctuation">&#123;</span>https,http<span class="token punctuation">&#125;</span>
+firewall-cmd <span class="token parameter variable">--reload</span>
+
+<span class="token comment"># 配置目录</span>
+<span class="token function">mkdir</span> <span class="token parameter variable">-p</span> /wwwroot/<span class="token punctuation">&#123;</span>itop,glpi<span class="token punctuation">&#125;</span>
+<span class="token function">chown</span> <span class="token parameter variable">-R</span> nginx:nginx /wwwroot/<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="OCSInventoryNG部署"><a href="#OCSInventoryNG部署" class="headerlink" title="OCSInventoryNG部署"></a>OCSInventoryNG部署</h3><h4 id="部署服务端"><a href="#部署服务端" class="headerlink" title="部署服务端"></a>部署服务端</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 依赖文件</span>
+dnf <span class="token function">install</span> <span class="token parameter variable">-y</span> perl-Archive-Zip perl-Compress-Zlib perl-DBD-MySQL perl-DBI perl-Mojolicious perl-Net-IP perl-Plack perl-SOAP-Lite perl-Switch perl-XML-Entities perl-XML-Simple perl-Apache-DBI perl-Digest-SHA1 perl-Apache2-SOAP
+
+<span class="token comment"># 配置数据库</span>
+mysql<span class="token operator">></span> create database ocsng<span class="token punctuation">;</span>
+mysql<span class="token operator">></span> create user ocsadmin@<span class="token string">'localhost'</span> identified by <span class="token string">'ocsadmin'</span><span class="token punctuation">;</span>
+mysql<span class="token operator">></span> grant all privileges on ocsng.* to ocsadmin@<span class="token string">'localhost'</span><span class="token punctuation">;</span>
+mysql<span class="token operator">></span> flush privileges<span class="token punctuation">;</span>
+mysql<span class="token operator">></span> <span class="token builtin class-name">exit</span><span class="token punctuation">;</span>
+
+<span class="token comment"># 下载和安装</span>
+<span class="token builtin class-name">cd</span> /opt
+<span class="token function">git</span> clone https://github.com/OCSInventory-NG/OCSInventory-Server.git
+<span class="token builtin class-name">cd</span> OCSInventory-Server
+<span class="token function">git</span> clone https://github.com/OCSInventory-NG/OCSInventory-ocsreports.git ocsreports
+<span class="token function">sh</span> setup.sh
+……
+<span class="token comment"># 默认回车，完成安装</span>
+……
++----------------------------------------------------------------------+
+<span class="token operator">|</span>        OK, Administration server installation finished <span class="token punctuation">;</span>-<span class="token punctuation">)</span>           <span class="token operator">|</span>
+<span class="token operator">|</span>                                                                      <span class="token operator">|</span>
+<span class="token operator">|</span> Please, review /etc/httpd/conf.d/ocsinventory-reports.conf
+<span class="token operator">|</span>          to ensure all is good and restart Apache daemon.            <span class="token operator">|</span>
+<span class="token operator">|</span>                                                                      <span class="token operator">|</span>
+<span class="token operator">|</span> Then, point your browser to http://server//ocsreports
+<span class="token operator">|</span>        to configure database server and create/update schema.        <span class="token operator">|</span>
++----------------------------------------------------------------------+
+
+Setup has created a log <span class="token function">file</span> /opt/OCSInventory-Server/ocs_server_setup.log. Please, save this file.
+If you encounter error <span class="token keyword">while</span> running OCS Inventory NG Management server,
+we can ask you to show us its content <span class="token operator">!</span>
+
+DON'T FORGET TO RESTART APACHE DAEMON <span class="token operator">!</span>
+
+Enjoy OCS Inventory NG <span class="token punctuation">;</span>-<span class="token punctuation">)</span>
+……
+
+<span class="token comment"># 修改站点文件</span>
+<span class="token function">vim</span> /usr/share/ocsinventory-reports/ocsreports/require/header.php
+<span class="token comment"># 对31行注释</span>
+require_once<span class="token punctuation">(</span>COMPOSER_AUTOLOAD<span class="token punctuation">)</span>
+
+<span class="token comment"># 500错误修改</span>
+<span class="token comment"># 因为用户名、数据库名和密码变更，会引起500内部错误</span>
+<span class="token comment"># 需要同步修改以下文件：</span>
+<span class="token comment"># z-ocsinventory-server.conf  </span>
+<span class="token comment"># zz-ocsinventory-restapi.conf</span>
+<span class="token comment"># 访问站点：http://</span>
+<span class="token comment"># 完成网页安装后删除install文件</span>
+<span class="token function">rm</span> <span class="token parameter variable">-f</span> /usr/share/ocsinventory-reports/ocsreports/install.php<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h4 id="部署客户端"><a href="#部署客户端" class="headerlink" title="部署客户端"></a>部署客户端</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 客户端需要开启epel源</span>
+dnf <span class="token function">install</span> <span class="token parameter variable">-y</span> perl-Net-SNMP
+<span class="token function">rpm</span> <span class="token parameter variable">-Uvh</span> https://rpm.ocsinventory-ng.org/ocsinventory-release-latest.el8.ocs.noarch.rpm
+dnf makecache
+dnf <span class="token function">install</span> ocsinventory-agent <span class="token parameter variable">-y</span>
+
+<span class="token comment"># 修改配置</span>
+<span class="token function">sed</span> <span class="token parameter variable">-i</span> <span class="token string">'s/local/# local/g'</span> /etc/ocsinventory/ocsinventory-agent.cfg
+<span class="token function">sed</span> <span class="token parameter variable">-i</span> <span class="token string">'s/# server/server/g'</span> /etc/ocsinventory/ocsinventory-agent.cfg
+<span class="token function">sed</span> <span class="token parameter variable">-i</span> <span class="token string">'s@your.ocsserver.name@192.168.79.8\/ocsinventory@g'</span> /etc/ocsinventory/ocsinventory-agent.cfg
+mpathconf <span class="token parameter variable">--enable</span>
+ocsinventory-agent
+<span class="token comment"># 查看日志</span>
+<span class="token function">tail</span> <span class="token parameter variable">-f</span> <span class="token parameter variable">-n</span> <span class="token number">30</span> /var/log/ocsinventory-agent/ocsinventory-agent.log
+<span class="token comment"># 定时上报</span>
+<span class="token comment"># 使用rpm安装会在/etc/cron.hourly建立上报文件，可按需配置或移动文件到cron.daily目录</span>
+<span class="token builtin class-name">echo</span> <span class="token string">'60 * * * * /usr/bin/perl /usr/sbin/ocsinventory-agent'</span><span class="token operator">>></span>/etc/crontab<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="GLPI部署"><a href="#GLPI部署" class="headerlink" title="GLPI部署"></a>GLPI部署</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 获取软件包</span>
+<span class="token function">wget</span> https://github.com/glpi-project/glpi/releases/download/9.5.6/glpi-9.5.6.tgz
+<span class="token function">wget</span> https://github.com/pluginsGLPI/ocsinventoryng/releases/download/1.7.3/glpi-ocsinventoryng-1.7.3.tar.gz
+<span class="token function">tar</span> <span class="token parameter variable">-zxvf</span> glpi-9.5.6.tgz <span class="token parameter variable">-C</span> /wwwroot/
+<span class="token function">tar</span> <span class="token parameter variable">-zxvf</span> glpi-ocsinventoryng-1.7.3.tar.gz <span class="token parameter variable">-C</span> /wwwroot/glpi/plugins
+<span class="token function">chown</span> <span class="token parameter variable">-R</span> apache:apache /wwwroot/glpi
+<span class="token function">chmod</span> <span class="token number">755</span> /wwwroot/glpi
+
+<span class="token comment"># 配置数据库</span>
+mysql<span class="token operator">></span> create database glpidb<span class="token punctuation">;</span>
+mysql<span class="token operator">></span> create  user glpiadmin@<span class="token string">'localhost'</span> identified by <span class="token string">'glpiadmin'</span><span class="token punctuation">;</span>
+mysql<span class="token operator">></span> grant all privileges on glpidb.* to glpiadmin@<span class="token string">'localhost'</span><span class="token punctuation">;</span>
+mysql<span class="token operator">></span> flush privileges<span class="token punctuation">;</span>
+mysql<span class="token operator">></span> <span class="token builtin class-name">exit</span>
+
+<span class="token comment"># 配置虚拟站点</span>
+<span class="token function">cat</span> <span class="token operator">></span> /etc/httpd/conf.d/glpi.conf <span class="token operator">&lt;&lt;</span><span class="token string">EOF
+&lt;VirtualHost *:80>
+    DocumentRoot /var/www/html
+    ServerName itsm.subwin.cn
+&lt;/VirtualHost>
+
+&lt;VirtualHost *:80>
+    DocumentRoot /wwwroot/glpi/
+    ServerName glpi.subwin.cn
+    ServerAdmin sujx@subwin.cn
+    ErrorLog logs/glpi.subin-error_log
+    CustomLog logs/glpi.subin-access_log combined
+&lt;/VirtualHost>
+
+&lt;Directory "/wwwroot/glpi">
+    Options Indexes FollowSymLinks
+    Require all granted
+    AllowOverride All
+&lt;/Directory>
+EOF</span>
+
+systemctl restart httpd<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<hr>
+<h2 id="应用部署"><a href="#应用部署" class="headerlink" title="应用部署"></a>应用部署</h2><h3 id="站点部署"><a href="#站点部署" class="headerlink" title="站点部署"></a>站点部署</h3><ol>
+<li>OCSInventoryNG<ol>
+<li>配置数据库<br><img src="https://cdn.sujx.net/ocsweb-000.PNG" alt="database"></li>
+<li>登录站点<br><img src="https://cdn.sujx.net/ocsweb-001.PNG" alt="website">	      </li>
+<li>查看客户端<br><img src="https://cdn.sujx.net/ocsweb-002.PNG" alt="website"></li>
+</ol>
+</li>
+<li>GLPI<ol>
+<li>开始部署<br><img src="https://cdn.sujx.net/glpi-000.PNG" alt="client"></li>
+<li>许可证<br><img src="https://cdn.sujx.net/glpi-001.PNG" alt="client"></li>
+<li>开始部署<br><img src="https://cdn.sujx.net/glpi-002.PNG" alt="client"></li>
+<li>配置数据库<br><img src="https://cdn.sujx.net/glpi-003.PNG" alt="client"></li>
+<li>连接数据库<br><img src="https://cdn.sujx.net/glpi-004.PNG" alt="client"></li>
+<li>安装完成<br><img src="https://cdn.sujx.net/glpi-005.PNG" alt="client"></li>
+<li>登陆首页<br><img src="https://cdn.sujx.net/glpi-006.PNG" alt="client"></li>
+</ol>
+</li>
+</ol>
+<h3 id="信息同步"><a href="#信息同步" class="headerlink" title="信息同步"></a>信息同步</h3><h4 id="安装插件"><a href="#安装插件" class="headerlink" title="安装插件"></a>安装插件</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 从github获取插件</span>
+<span class="token builtin class-name">cd</span> /usr/share/ocsinventory-reports/ocsreports/
+<span class="token function">git</span> clone https://github.com/pluginsGLPI/ocsinventoryng.git<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<h4 id="配置连接"><a href="#配置连接" class="headerlink" title="配置连接"></a>配置连接</h4><ol>
+<li>配置数据库连接<br><img src="https://cdn.sujx.net/glpi-ocs-001.PNG" alt="glpi-ocs"></li>
+<li>同步频率<br><img src="https://cdn.sujx.net/glpi-ocs-000.PNG" alt="glpi-ocs"></li>
+<li>导入资产信息<br><img src="https://cdn.sujx.net/glpi-ocs-004.PNG" alt="glpi-ocs"></li>
+</ol>
+<h3 id="导入资产"><a href="#导入资产" class="headerlink" title="导入资产"></a>导入资产</h3><ol>
+<li>同步资产信息<br><img src="https://cdn.sujx.net/glpi-ocs-006.PNG" alt="glpi-ocs"></li>
+<li>导入完成<br><img src="https://cdn.sujx.net/glpi-ocs-007.PNG" alt="Import"></li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="https://www.sujx.net">靖轩</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://www.sujx.net/2021/12/03/centos8-ocsng-glpi/">https://www.sujx.net/2021/12/03/centos8-ocsng-glpi/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/OCSInventroy/">OCSInventroy</a><a class="post-meta__tags" href="/tags/GLPI/">GLPI</a><a class="post-meta__tags" href="/tags/CMDB/">CMDB</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.sujx.net/about/avatar.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/12/13/wazuh-turning-elastic/" title="Wazuh应用之Elasticsearch的调优"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">Wazuh应用之Elasticsearch的调优</div></div></a></div><div class="next-post pull-right"><a href="/2021/11/29/centos7-discuzq/" title="CentOS7上使用yum部署Discuz!Q"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">CentOS7上使用yum部署Discuz!Q</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">靖轩</div><div class="author-info__description">逝者如斯夫,不舍昼夜</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">94</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">179</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">13</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/sujx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://gitee.com/grepsu" target="_blank" title="Gitee"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:sujx@live.cn" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS链接"><i class="fa  fa-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A6%82%E8%BF%B0"><span class="toc-number">1.</span> <span class="toc-text">概述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%8D%E8%AF%8D%E8%A7%A3%E9%87%8A"><span class="toc-number">1.1.</span> <span class="toc-text">名词解释</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#OCSInverntoryNG"><span class="toc-number">1.1.1.</span> <span class="toc-text">OCSInverntoryNG</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#GLPI"><span class="toc-number">1.1.2.</span> <span class="toc-text">GLPI</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E9%83%A8%E7%BD%B2"><span class="toc-number">2.</span> <span class="toc-text">系统部署</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD"><span class="toc-number">2.1.</span> <span class="toc-text">基础设施</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#OCSInventoryNG%E9%83%A8%E7%BD%B2"><span class="toc-number">2.2.</span> <span class="toc-text">OCSInventoryNG部署</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%83%A8%E7%BD%B2%E6%9C%8D%E5%8A%A1%E7%AB%AF"><span class="toc-number">2.2.1.</span> <span class="toc-text">部署服务端</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%83%A8%E7%BD%B2%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="toc-number">2.2.2.</span> <span class="toc-text">部署客户端</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#GLPI%E9%83%A8%E7%BD%B2"><span class="toc-number">2.3.</span> <span class="toc-text">GLPI部署</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E9%83%A8%E7%BD%B2"><span class="toc-number">3.</span> <span class="toc-text">应用部署</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AB%99%E7%82%B9%E9%83%A8%E7%BD%B2"><span class="toc-number">3.1.</span> <span class="toc-text">站点部署</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%A1%E6%81%AF%E5%90%8C%E6%AD%A5"><span class="toc-number">3.2.</span> <span class="toc-text">信息同步</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E6%8F%92%E4%BB%B6"><span class="toc-number">3.2.1.</span> <span class="toc-text">安装插件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E8%BF%9E%E6%8E%A5"><span class="toc-number">3.2.2.</span> <span class="toc-text">配置连接</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%BC%E5%85%A5%E8%B5%84%E4%BA%A7"><span class="toc-number">3.3.</span> <span class="toc-text">导入资产</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/21/magedu-week-3/" title="Linux系统基础知识·3">Linux系统基础知识·3</a><time datetime="2023-05-21T14:48:47.000Z" title="Created 2023-05-21 22:48:47">2023-05-21</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/14/magedu-week-2/" title="Linux系统基础知识·2">Linux系统基础知识·2</a><time datetime="2023-05-14T14:48:47.000Z" title="Created 2023-05-14 22:48:47">2023-05-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/04/10/magedu-week-1/" title="Linux系统基础知识·1">Linux系统基础知识·1</a><time datetime="2023-04-10T08:35:34.000Z" title="Created 2023-04-10 16:35:34">2023-04-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2022/11/03/How2UseKVM/" title="内核虚拟化KVM的使用">内核虚拟化KVM的使用</a><time datetime="2022-11-03T14:22:22.000Z" title="Created 2022-11-03 22:22:22">2022-11-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2022/10/19/clean-old-kernel/" title="CentOS主机清理旧内核">CentOS主机清理旧内核</a><time datetime="2022-10-19T06:48:47.000Z" title="Created 2022-10-19 14:48:47">2022-10-19</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://cdn.sujx.net/about/footimg.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By 靖轩</div><div class="footer_custom_text">京ICP备17034757号-1</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading the Database</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

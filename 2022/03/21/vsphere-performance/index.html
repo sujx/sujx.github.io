@@ -1,0 +1,585 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>《VMware vSphere 性能设计》笔记 | 靖</title><meta name="author" content="靖轩"><meta name="copyright" content="靖轩"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="本书从概念和操作两方面介绍了虚拟化基础设施的性能。  CPU虚拟化基础 CPU保护模式 CPU保护模式，也称为保护虚拟地址模式，是一种提供硬件级别内存保护的X86处理器操作模式。 实模式 为原始x86处理器设计 关闭内存保护功能 只有操作系统内核才可以无限制使用全部硬件资源   保护模式： 保护模"><link rel="shortcut icon" href="https://cdn.sujx.net/about/favicon.png"><link rel="canonical" href="https://www.sujx.net/2022/03/21/vsphere-performance/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin=""/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?417b20ac1984432f821159fac27d3bb5";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web&amp;display=swap" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":5,"unescape":false,"languages":{"hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"prismjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '《VMware vSphere 性能设计》笔记',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-05-06 18:58:04'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="靖" type="application/atom+xml">
+</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://cdn.sujx.net/about/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">94</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">179</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">13</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Posts</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fas fa-book-open"></i><span> Books</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fas fa-tv"></i><span> Movies</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="靖"><span class="site-name">靖</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Posts</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fas fa-book-open"></i><span> Books</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fas fa-tv"></i><span> Movies</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">《VMware vSphere 性能设计》笔记</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2022-03-21T02:35:34.000Z" title="Created 2022-03-21 10:35:34">2022-03-21</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2023-05-06T10:58:04.739Z" title="Updated 2023-05-06 18:58:04">2023-05-06</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Books/">Books</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word count:</span><span class="word-count">2.7k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading time:</span><span>8min</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="《VMware vSphere 性能设计》笔记"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="post-content" id="article-container"><blockquote>
+<p>本书从概念和操作两方面介绍了虚拟化基础设施的性能。</p>
+</blockquote>
+<h2 id="CPU"><a href="#CPU" class="headerlink" title="CPU"></a>CPU</h2><h3 id="虚拟化基础"><a href="#虚拟化基础" class="headerlink" title="虚拟化基础"></a>虚拟化基础</h3><ol>
+<li>CPU保护模式<ol>
+<li>CPU保护模式，也称为保护虚拟地址模式，是一种提供硬件级别内存保护的X86处理器操作模式。</li>
+<li>实模式<ol>
+<li>为原始x86处理器设计</li>
+<li>关闭内存保护功能</li>
+<li>只有操作系统内核才可以无限制使用全部硬件资源</li>
+</ol>
+</li>
+<li>保护模式：<ol>
+<li>保护模式的特权等级：Ring0 Ring1 Ring2 Ring3</li>
+<li>Ring 0 特权最多，Ring 3 特权做少</li>
+<li>Ring 0：Kernel ；Ring 1 设备驱动； Ring 2 设备驱动； Ring 3 应用</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>定义CPU虚拟化的类型：<ol>
+<li>基于软件的CPU虚拟化：<ol>
+<li>运行于Ring1级别</li>
+<li>需要VMM编译执行代码</li>
+</ol>
+</li>
+<li>基于硬件辅助的CPU虚拟化<ol>
+<li>运行于Ring0</li>
+<li>使用Intel VT 或者AMD-V硬件辅助功能，无需软件编译</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>物理CPU与虚拟CPU之间的区别<ol>
+<li>每一个物理处理器内核被检测为一个pCPU</li>
+<li>每个线程也可以被视为一个pCPU</li>
+</ol>
+</li>
+<li>vCPU状态<ol>
+<li>运行状态：在pCPU上被调度来运行指令</li>
+<li>准备状态：在pCPU上准备调度，但由于调度延迟不直接运行</li>
+<li>等待闲置状态：特殊状态（？）</li>
+<li>等待状态：等待I&#x2F;O操作在外部系统组件上完成</li>
+</ol>
+</li>
+</ol>
+<h3 id="CPU的调度程序"><a href="#CPU的调度程序" class="headerlink" title="CPU的调度程序"></a>CPU的调度程序</h3><p>VMware ESXi CPU调度程序的主要目标是调度“world”（VMM的进程或者线程）在pCPU上严格执行，并满足性能、吞吐率、处理器使用率上的要求。同时，调度程序也负责欺骗客户机操作系统，以使其相信自己有pCPU资源。</p>
+<ol>
+<li>比例分配算法<ol>
+<li>计算优先级：数值低的优先级被认为是高优先级，数值高的优先级为低优先级</li>
+<li>根据分配资源的消耗动态计算优先级</li>
+</ol>
+</li>
+<li>CPU联合调度<ol>
+<li>严格联合调度</li>
+<li>宽松联合调度</li>
+</ol>
+</li>
+<li>CPU调度单元<ol>
+<li>调度单元的分布式锁定<ol>
+<li>当全部vCPU在不同的处理器上协同调度时，虚拟机的性能表现最好</li>
+<li>限制同级vCPU在任意时刻只在一个单元中调度会更有效率</li>
+<li>调度单元在确保了CPU调度的扩展性的同时，又限制了CPU调度的扩展性</li>
+</ol>
+</li>
+<li>vSphere取消调度单元<ol>
+<li>单独使用等于物理CPU内核数的vCPU，会产生一个对全部调度程序调用进行序列化的全局锁定，并导致调度单元无效</li>
+<li>限制了缓存的总量以及共享缓存的多核处理器上的内存带宽</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>CPU拓扑感知负载均衡<ol>
+<li>拉迁移和推迁移</li>
+<li>world在物理CPU之间的迁移会有很高的成本<ol>
+<li>CPU亲和：不推荐人工配置CPU亲和；保证配置给虚拟机上的pCPU数量总比vCPU的数量多至少一个</li>
+</ol>
+</li>
+<li>NUMA 不统一的内存访问<ol>
+<li>目的：解决多核处理器上访问内存延迟问题。每个numa节点由一组处理器和指定给处理器的内存组成</li>
+<li>内存在相同节点中访问时，进行本地访问</li>
+<li>内存被其他节点访问时，进行远程访问</li>
+<li>NUMA系统的负载平衡</li>
+<li>NUMA系统宽虚拟机负载平衡（超线程 numa.vcpu.preferHT）</li>
+<li>虚拟NUMA</li>
+<li>每个插槽的内核</li>
+<li>超线程架构的负载均衡：通过保持处理器流水线的繁忙状态，超线程可以提高性能</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>多核感知负载均衡<ol>
+<li>基于CPU负载的迁移限流</li>
+<li>虚拟SMP整合（vSMP整合是的多处理器虚拟机上的同级vCPU被单个LLC调度）</li>
+<li>外部VM缓存亲和力（当同一主机上的两个虚机经常发生通信时，CPU调度程序会调度相同LLC上的虚机）</li>
+</ol>
+</li>
+</ol>
+<h3 id="适时调配CPU"><a href="#适时调配CPU" class="headerlink" title="适时调配CPU"></a>适时调配CPU</h3><ol>
+<li>vSMP的注意事项<ol>
+<li>客户机操作系统硬件抽象层</li>
+</ol>
+</li>
+<li>NUMA与vNUMA的注意事项</li>
+<li>CPU资源热插拔</li>
+</ol>
+<h3 id="CPU资源管理"><a href="#CPU资源管理" class="headerlink" title="CPU资源管理"></a>CPU资源管理</h3><ol>
+<li>CPU保留</li>
+<li>CPU限制</li>
+<li>配置CPU保留和限制</li>
+<li>资源池<ol>
+<li>资源池的CPU保留</li>
+<li>资源池的CPU限制</li>
+<li>资源池共享</li>
+</ol>
+</li>
+</ol>
+<h3 id="性能问题的故障排除"><a href="#性能问题的故障排除" class="headerlink" title="性能问题的故障排除"></a>性能问题的故障排除</h3><ol>
+<li>使用esxtop诊断CPU性能问题</li>
+<li>高CPU就绪时间</li>
+<li>ESXi主机的CPU使用率高</li>
+<li>用户的CPU使用率高</li>
+</ol>
+<h2 id="内存"><a href="#内存" class="headerlink" title="内存"></a>内存</h2><h3 id="内存管理"><a href="#内存管理" class="headerlink" title="内存管理"></a>内存管理</h3><ol>
+<li>内存虚拟化<ol>
+<li>三层内存：主机物理内存、客户机物理内存、客户机虚拟内存</li>
+</ol>
+</li>
+<li>内存管理<ol>
+<li>向虚机分配物理内存前，管理程序将主机物理内存置零</li>
+<li>客户机操作系统释放客户机物理内存时，管理程序不能从虚拟机回收主机物理内存</li>
+</ol>
+</li>
+<li>硬件辅助MMU虚拟化<ol>
+<li>AMD（RVI）和Intel（EPT）</li>
+</ol>
+</li>
+</ol>
+<h3 id="虚拟机的内存回收"><a href="#虚拟机的内存回收" class="headerlink" title="虚拟机的内存回收"></a>虚拟机的内存回收</h3><ol>
+<li>透明页共享<ol>
+<li>内存过量分配</li>
+<li>使用透明页共享、内存膨胀、内存压缩和管理程序内存交换来实现过量分配</li>
+<li>虚机使用相同版本的客户机操作系统，产生复制内存页</li>
+<li>ESXI不会对大内存页使用透明页内存共享</li>
+<li>建议开启大内存页</li>
+</ol>
+</li>
+<li>内存膨胀<ol>
+<li>需要VMTools驱动支持（vmmemctl）</li>
+<li>解决主机物理内存压力，回收主机物理内存页<ol>
+<li>配置内存膨胀</li>
+<li>禁用内存膨胀</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>内存压缩<ol>
+<li>如果可被压缩50%，则执行压缩</li>
+<li>否则交换到磁盘</li>
+<li>虚机压缩默认最大10%的压缩量</li>
+</ol>
+</li>
+<li>管理程序内存交换<ol>
+<li>.vswap 交换文件，与客户机物理内存相同</li>
+<li>会产生严重的性能问题</li>
+</ol>
+</li>
+<li>主机SSD缓存交换<ol>
+<li>配置两块SSD RAID-1 作为主机缓存</li>
+</ol>
+</li>
+<li>主机内存回收<ol>
+<li>内存状态：High、Soft、Hard、Low</li>
+</ol>
+</li>
+<li>空闲页回收<ol>
+<li>空闲内存税</li>
+</ol>
+</li>
+</ol>
+<h3 id="管理虚拟机内存分配"><a href="#管理虚拟机内存分配" class="headerlink" title="管理虚拟机内存分配"></a>管理虚拟机内存分配</h3><ol>
+<li>工作集大小</li>
+<li>比例分配算法<ol>
+<li>内存共享</li>
+<li>内存保留</li>
+<li>内存限制</li>
+<li>内存和资源池</li>
+</ol>
+</li>
+<li>改变虚拟机内存大小</li>
+<li>内存开销</li>
+<li>内存过量</li>
+</ol>
+<h3 id="解决内存性能问题"><a href="#解决内存性能问题" class="headerlink" title="解决内存性能问题"></a>解决内存性能问题</h3><ol>
+<li>使用 esxtop 来诊断内存性能问题</li>
+<li>高虚拟机已消耗内存</li>
+<li>高内存膨胀</li>
+<li>管理系统内存交换</li>
+<li>客户机操作系统内存交换</li>
+</ol>
+<h2 id="网络"><a href="#网络" class="headerlink" title="网络"></a>网络</h2><h3 id="创建网络设计"><a href="#创建网络设计" class="headerlink" title="创建网络设计"></a>创建网络设计</h3><ol>
+<li>物理网络的设计<ol>
+<li>确保有足够的带宽</li>
+<li>确保有足够的物理网络上行链路，以提供网络隔离和冗余</li>
+<li>检查网络瓶颈，以确保流量的传输速度</li>
+</ol>
+</li>
+<li>ESXi主机网卡需求<ol>
+<li>TCP校验和卸载</li>
+<li>TCP分段卸载（TSO）</li>
+<li>大型接收卸载</li>
+<li>支持巨型帧</li>
+<li>支持网络队列(NetQueue)</li>
+</ol>
+</li>
+</ol>
+<h3 id="选择虚拟交换机"><a href="#选择虚拟交换机" class="headerlink" title="选择虚拟交换机"></a>选择虚拟交换机</h3><ol>
+<li>标准vSwitch<ol>
+<li>批量标准化部署，保持vSwitch配置的一致性</li>
+<li>使用powercli脚本来保持一致性</li>
+</ol>
+</li>
+<li>vSphere分布式交换机（dvSwtich）<ol>
+<li>链路层发现协议(LLDP)</li>
+<li>NetFlow协议</li>
+<li>网络 I&#x2F;O 控制( NOIC)<ol>
+<li>共享 定义共享来控制那些虚机获得网络流量优先级</li>
+<li>限制 限制特定虚机可消耗网络资源的最大限度</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+<h3 id="选择主机硬件"><a href="#选择主机硬件" class="headerlink" title="选择主机硬件"></a>选择主机硬件</h3><ol>
+<li>主机服务器类型<ol>
+<li>刀片服务器</li>
+<li>机架服务器</li>
+</ol>
+</li>
+<li>网络适配器<ol>
+<li>虚机和vmkernel流量分离</li>
+<li>不同的vmkernel流量应当分离</li>
+<li>容错流量应当分离</li>
+<li>IP存储流量应当与其他类型流量隔离</li>
+<li>应当为客户机iSCSI流量提供专用的上行链路</li>
+</ol>
+</li>
+</ol>
+<h3 id="性能设计"><a href="#性能设计" class="headerlink" title="性能设计"></a>性能设计</h3><ol>
+<li>ESXi主机层性能<ol>
+<li>vSwitch 负载均衡<ol>
+<li>基于始发虚拟端口的路由策略</li>
+<li>基于源MAC哈希的路由策略</li>
+<li>基于IP哈希的路由策略</li>
+<li>基于物理NIC负载的路由策略</li>
+</ol>
+</li>
+<li>CPU使用率</li>
+<li>网络 I&#x2F;O 控制</li>
+<li>多网卡 vMotion</li>
+<li>DirectPath I&#x2F;O 和 单根 I&#x2F;O 虚拟化</li>
+</ol>
+</li>
+<li>虚拟机性能<ol>
+<li>准虚拟化网卡驱动程序<ol>
+<li>巨型帧</li>
+<li>接收端缩放（RSS）</li>
+<li>SplitRX模式</li>
+</ol>
+</li>
+<li>协同定位网络依赖虚拟机</li>
+<li>网络延迟敏感度</li>
+</ol>
+</li>
+<li>解决网络问题<ol>
+<li>虚拟机网络性能缓慢问题<ol>
+<li>虚拟机到物理网卡的映射</li>
+<li>使用高使用率的物理网卡</li>
+<li>检测高使用率的CPU</li>
+<li>检测配置不合理的物理网卡（双工）</li>
+<li>流量整形的不合理配置</li>
+<li>网络包丢失</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+<h2 id="存储"><a href="#存储" class="headerlink" title="存储"></a>存储</h2><h3 id="选择存储平台"><a href="#选择存储平台" class="headerlink" title="选择存储平台"></a>选择存储平台</h3><ol>
+<li>SAN<ol>
+<li>光纤信道(FC)</li>
+<li>以太网光纤信道协议（FCoE）</li>
+<li>iSCSI</li>
+</ol>
+</li>
+<li>NAS</li>
+<li>虚拟 SAN</li>
+</ol>
+<h3 id="设计物理存储"><a href="#设计物理存储" class="headerlink" title="设计物理存储"></a>设计物理存储</h3><ol>
+<li>确定需求<ol>
+<li>评估性能和容量</li>
+<li>与你的软件供应商合作</li>
+<li>与应用提供商合作</li>
+<li>信息整合</li>
+</ol>
+</li>
+<li>RAID 级别</li>
+<li>闪存基础设施层</li>
+<li>IP-SAN</li>
+</ol>
+<h3 id="设计vSphere存储"><a href="#设计vSphere存储" class="headerlink" title="设计vSphere存储"></a>设计vSphere存储</h3><ol>
+<li>存储的重要性</li>
+<li>VAAI</li>
+<li>存储 I&#x2F;O 控制</li>
+<li>存储分布式资源调度程序<ol>
+<li>不把不同类型的数据存储放在同一个数据存储集群中</li>
+<li>尽量使用大小相近的数据存储作为数据存储集群的构成</li>
+<li>为每种类型创建单独的数据存储集群</li>
+<li>使用相同物理磁盘支持的数据存储将不会使存储DRA平衡I&#x2F;O负载</li>
+</ol>
+</li>
+<li>配置驱动存储<ol>
+<li>存储感知的vSphere API</li>
+<li>用户定义的存储性能</li>
+<li>虚拟机存储策略</li>
+</ol>
+</li>
+<li>数据存储大小</li>
+<li>vFlash 读缓存</li>
+<li>虚拟SAN<ol>
+<li>分布式RAID</li>
+<li>固态硬盘</li>
+<li>存储策略<ol>
+<li>容许的失效数</li>
+<li>每个对象的磁盘条带数量</li>
+<li>闪存读缓存预留</li>
+<li>对象空间预留</li>
+</ol>
+</li>
+<li>为性能设计vSAN<ol>
+<li>10GB网络</li>
+<li>专用NIC</li>
+<li>高速SSD</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>IP存储巨型帧</li>
+</ol>
+<h3 id="优化虚拟机性能"><a href="#优化虚拟机性能" class="headerlink" title="优化虚拟机性能"></a>优化虚拟机性能</h3><ol>
+<li>裸映射与VMDK文件</li>
+<li>虚拟磁盘类型</li>
+<li>虚拟SCSI适配器</li>
+<li>客户操作系统磁盘对齐</li>
+</ol>
+<h3 id="故障排除"><a href="#故障排除" class="headerlink" title="故障排除"></a>故障排除</h3><ol>
+<li>存储延迟<ol>
+<li>理解和观察存储延迟</li>
+<li>解决方法<ol>
+<li>后端存储过载</li>
+<li>存储配置错误</li>
+<li>带宽饱和</li>
+<li>其他潜在因素</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>错误配置应用程序的存储</li>
+<li>存储队列<ol>
+<li>队列监控管理</li>
+<li>存储I&#x2F;O 控制的使用</li>
+</ol>
+</li>
+<li>端对端网络</li>
+</ol>
+<hr>
+<h2 id="性能设计-1"><a href="#性能设计-1" class="headerlink" title="性能设计"></a>性能设计</h2><h3 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h3><ol>
+<li>确定参数</li>
+<li>构建应用程序</li>
+<li>评估物理性能</li>
+<li>从默认值开始</li>
+</ol>
+<h3 id="建立基准"><a href="#建立基准" class="headerlink" title="建立基准"></a>建立基准</h3><ol>
+<li>CPU基础设施基准</li>
+<li>内存</li>
+<li>网络</li>
+<li>存储</li>
+</ol>
+<h2 id="建立你的工具箱"><a href="#建立你的工具箱" class="headerlink" title="建立你的工具箱"></a>建立你的工具箱</h2><h3 id="容量规划工具"><a href="#容量规划工具" class="headerlink" title="容量规划工具"></a>容量规划工具</h3><ol>
+<li>使用容量规划工具<ol>
+<li>VMware容量规划器</li>
+<li>微软评估和规划工具包</li>
+</ol>
+</li>
+<li>运行容量管理</li>
+</ol>
+<h3 id="性能分析工具"><a href="#性能分析工具" class="headerlink" title="性能分析工具"></a>性能分析工具</h3><ol>
+<li>esxtop</li>
+<li>vscsiStats</li>
+</ol>
+<h3 id="性能基准测试工具"><a href="#性能基准测试工具" class="headerlink" title="性能基准测试工具"></a>性能基准测试工具</h3><ol>
+<li>VMmark</li>
+<li>vBenchmark</li>
+</ol>
+<h3 id="性能仿真工具"><a href="#性能仿真工具" class="headerlink" title="性能仿真工具"></a>性能仿真工具</h3><ol>
+<li>CPU&#x2F;内存</li>
+<li>存储</li>
+<li>网络</li>
+</ol>
+<h2 id="构建测试LAB"><a href="#构建测试LAB" class="headerlink" title="构建测试LAB"></a>构建测试LAB</h2><h3 id="用途"><a href="#用途" class="headerlink" title="用途"></a>用途</h3><ol>
+<li>测试和复现生产环境的实施以及故障</li>
+<li>新的应用和补丁的测试</li>
+<li>新硬件的基准测试</li>
+<li>学习</li>
+</ol>
+<h3 id="成功策略"><a href="#成功策略" class="headerlink" title="成功策略"></a>成功策略</h3><ol>
+<li>建立真实的环境</li>
+<li>建立实验室</li>
+<li>使用合适的测量工具</li>
+</ol>
+<h3 id="建立Lab"><a href="#建立Lab" class="headerlink" title="建立Lab"></a>建立Lab</h3><ol>
+<li>测试目标</li>
+<li>实验小结</li>
+<li>供应实验室</li>
+<li>定义工作负载和配置</li>
+<li>实验室的事后分析</li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="https://www.sujx.net">靖轩</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://www.sujx.net/2022/03/21/vsphere-performance/">https://www.sujx.net/2022/03/21/vsphere-performance/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/vSphere/">vSphere</a><a class="post-meta__tags" href="/tags/performance/">performance</a><a class="post-meta__tags" href="/tags/VMware/">VMware</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.sujx.net/about/avatar.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2022/04/01/macmini-hd2ssd/" title="MacMini 主机更换SSD"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">MacMini 主机更换SSD</div></div></a></div><div class="next-post pull-right"><a href="/2022/03/11/centos8-covert-2-stream/" title="CentOS 8转换为CentOS Stream 8"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">CentOS 8转换为CentOS Stream 8</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">靖轩</div><div class="author-info__description">逝者如斯夫,不舍昼夜</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">94</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">179</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">13</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/sujx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://gitee.com/grepsu" target="_blank" title="Gitee"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:sujx@live.cn" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS链接"><i class="fa  fa-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#CPU"><span class="toc-number">1.</span> <span class="toc-text">CPU</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E5%8C%96%E5%9F%BA%E7%A1%80"><span class="toc-number">1.1.</span> <span class="toc-text">虚拟化基础</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CPU%E7%9A%84%E8%B0%83%E5%BA%A6%E7%A8%8B%E5%BA%8F"><span class="toc-number">1.2.</span> <span class="toc-text">CPU的调度程序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%82%E6%97%B6%E8%B0%83%E9%85%8DCPU"><span class="toc-number">1.3.</span> <span class="toc-text">适时调配CPU</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CPU%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86"><span class="toc-number">1.4.</span> <span class="toc-text">CPU资源管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%E7%9A%84%E6%95%85%E9%9A%9C%E6%8E%92%E9%99%A4"><span class="toc-number">1.5.</span> <span class="toc-text">性能问题的故障排除</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AD%98"><span class="toc-number">2.</span> <span class="toc-text">内存</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86"><span class="toc-number">2.1.</span> <span class="toc-text">内存管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%9A%84%E5%86%85%E5%AD%98%E5%9B%9E%E6%94%B6"><span class="toc-number">2.2.</span> <span class="toc-text">虚拟机的内存回收</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AE%A1%E7%90%86%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D"><span class="toc-number">2.3.</span> <span class="toc-text">管理虚拟机内存分配</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A3%E5%86%B3%E5%86%85%E5%AD%98%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98"><span class="toc-number">2.4.</span> <span class="toc-text">解决内存性能问题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C"><span class="toc-number">3.</span> <span class="toc-text">网络</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E7%BD%91%E7%BB%9C%E8%AE%BE%E8%AE%A1"><span class="toc-number">3.1.</span> <span class="toc-text">创建网络设计</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%89%E6%8B%A9%E8%99%9A%E6%8B%9F%E4%BA%A4%E6%8D%A2%E6%9C%BA"><span class="toc-number">3.2.</span> <span class="toc-text">选择虚拟交换机</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%89%E6%8B%A9%E4%B8%BB%E6%9C%BA%E7%A1%AC%E4%BB%B6"><span class="toc-number">3.3.</span> <span class="toc-text">选择主机硬件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E8%AE%BE%E8%AE%A1"><span class="toc-number">3.4.</span> <span class="toc-text">性能设计</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%98%E5%82%A8"><span class="toc-number">4.</span> <span class="toc-text">存储</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%89%E6%8B%A9%E5%AD%98%E5%82%A8%E5%B9%B3%E5%8F%B0"><span class="toc-number">4.1.</span> <span class="toc-text">选择存储平台</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E7%89%A9%E7%90%86%E5%AD%98%E5%82%A8"><span class="toc-number">4.2.</span> <span class="toc-text">设计物理存储</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1vSphere%E5%AD%98%E5%82%A8"><span class="toc-number">4.3.</span> <span class="toc-text">设计vSphere存储</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E5%8C%96%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%80%A7%E8%83%BD"><span class="toc-number">4.4.</span> <span class="toc-text">优化虚拟机性能</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%85%E9%9A%9C%E6%8E%92%E9%99%A4"><span class="toc-number">4.5.</span> <span class="toc-text">故障排除</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E8%AE%BE%E8%AE%A1-1"><span class="toc-number">5.</span> <span class="toc-text">性能设计</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C"><span class="toc-number">5.1.</span> <span class="toc-text">准备工作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BB%BA%E7%AB%8B%E5%9F%BA%E5%87%86"><span class="toc-number">5.2.</span> <span class="toc-text">建立基准</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BB%BA%E7%AB%8B%E4%BD%A0%E7%9A%84%E5%B7%A5%E5%85%B7%E7%AE%B1"><span class="toc-number">6.</span> <span class="toc-text">建立你的工具箱</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%B9%E9%87%8F%E8%A7%84%E5%88%92%E5%B7%A5%E5%85%B7"><span class="toc-number">6.1.</span> <span class="toc-text">容量规划工具</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%E5%B7%A5%E5%85%B7"><span class="toc-number">6.2.</span> <span class="toc-text">性能分析工具</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95%E5%B7%A5%E5%85%B7"><span class="toc-number">6.3.</span> <span class="toc-text">性能基准测试工具</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E4%BB%BF%E7%9C%9F%E5%B7%A5%E5%85%B7"><span class="toc-number">6.4.</span> <span class="toc-text">性能仿真工具</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9E%84%E5%BB%BA%E6%B5%8B%E8%AF%95LAB"><span class="toc-number">7.</span> <span class="toc-text">构建测试LAB</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%A8%E9%80%94"><span class="toc-number">7.1.</span> <span class="toc-text">用途</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%88%90%E5%8A%9F%E7%AD%96%E7%95%A5"><span class="toc-number">7.2.</span> <span class="toc-text">成功策略</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BB%BA%E7%AB%8BLab"><span class="toc-number">7.3.</span> <span class="toc-text">建立Lab</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/21/magedu-week-3/" title="Linux系统基础知识·3">Linux系统基础知识·3</a><time datetime="2023-05-21T14:48:47.000Z" title="Created 2023-05-21 22:48:47">2023-05-21</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/14/magedu-week-2/" title="Linux系统基础知识·2">Linux系统基础知识·2</a><time datetime="2023-05-14T14:48:47.000Z" title="Created 2023-05-14 22:48:47">2023-05-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/04/10/magedu-week-1/" title="Linux系统基础知识·1">Linux系统基础知识·1</a><time datetime="2023-04-10T08:35:34.000Z" title="Created 2023-04-10 16:35:34">2023-04-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2022/11/03/How2UseKVM/" title="内核虚拟化KVM的使用">内核虚拟化KVM的使用</a><time datetime="2022-11-03T14:22:22.000Z" title="Created 2022-11-03 22:22:22">2022-11-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2022/10/19/clean-old-kernel/" title="CentOS主机清理旧内核">CentOS主机清理旧内核</a><time datetime="2022-10-19T06:48:47.000Z" title="Created 2022-10-19 14:48:47">2022-10-19</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://cdn.sujx.net/about/footimg.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By 靖轩</div><div class="footer_custom_text">京ICP备17034757号-1</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading the Database</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

@@ -1,0 +1,1312 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Docker的基本使用 | 靖</title><meta name="author" content="靖轩"><meta name="copyright" content="靖轩"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="简介Docker是什么Docker是一个在2013年开源的使用go语言编写的PaaS服务。特点是交付速度快、资源消耗低。Docker采用客户端&amp;#x2F;服务端架构，使用远程API来管理和创建Docker容器。它的三大理念是build、ship、run，使用Namespace及cggroup等来提供"><link rel="shortcut icon" href="https://cdn.sujx.net/about/favicon.png"><link rel="canonical" href="https://www.sujx.net/2022/08/15/Docker-Pratice/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin=""/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?417b20ac1984432f821159fac27d3bb5";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web&amp;display=swap" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":5,"unescape":false,"languages":{"hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"prismjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Docker的基本使用',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-05-20 22:25:42'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="靖" type="application/atom+xml">
+</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://cdn.sujx.net/about/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">94</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">179</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">13</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Posts</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fas fa-book-open"></i><span> Books</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fas fa-tv"></i><span> Movies</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="靖"><span class="site-name">靖</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Posts</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fas fa-book-open"></i><span> Books</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fas fa-tv"></i><span> Movies</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">Docker的基本使用</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2022-08-15T01:35:34.000Z" title="Created 2022-08-15 09:35:34">2022-08-15</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2023-05-20T14:25:42.367Z" title="Updated 2023-05-20 22:25:42">2023-05-20</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word count:</span><span class="word-count">9.3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading time:</span><span>48min</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Docker的基本使用"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="post-content" id="article-container"><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><h3 id="Docker是什么"><a href="#Docker是什么" class="headerlink" title="Docker是什么"></a>Docker是什么</h3><p>Docker是一个在2013年开源的使用go语言编写的PaaS服务。特点是交付速度快、资源消耗低。Docker采用客户端&#x2F;服务端架构，使用远程API来管理和创建Docker容器。它的三大理念是build、ship、run，使用Namespace及cggroup等来提供容器的资源隔离与安全保障。</p>
+<h3 id="Docker的组成"><a href="#Docker的组成" class="headerlink" title="Docker的组成"></a>Docker的组成</h3><ul>
+<li>Docker主机(Host)：物理机或者虚机，用于运行Docker服务进程和容器；</li>
+<li>Docker服务端(Server)：Docker守护进程，运行Docker容器；</li>
+<li>Docker客户端(Client)：客户端使用docker命令或者其他工具调用相应API；</li>
+<li>Docker仓库(Registroy)：保存镜像的仓库，类似git这样的版本控制系统；</li>
+<li>Docker镜像(Images)：镜像可以理解为创建实例使用的模板；</li>
+<li>Docker容器(Container)：容器是从镜像生成对外提供服务的一个或者一组服务。</li>
+</ul>
+<h3 id="NameSpace技术"><a href="#NameSpace技术" class="headerlink" title="NameSpace技术"></a>NameSpace技术</h3><p>命名空间保证容器之间的运行环境互相隔离，可以使每个进程看起来都拥有自己的隔离的全局系统资源。</p>
+<ul>
+<li>MNT NameSpace：提供存储隔离能力</li>
+<li>IPC NameSpace：提供进程间通信隔离能力</li>
+<li>UTS NameSpace：提供主机名隔离能力</li>
+<li>PID NameSpace：提供进程隔离能力</li>
+<li>Net NameSpace：提供网络隔离能力</li>
+<li>User NameSpace：提供用户隔离能力</li>
+</ul>
+<h3 id="Control-Groups"><a href="#Control-Groups" class="headerlink" title="Control Groups"></a>Control Groups</h3><p>容器的本质就是进程，为了让容器中的进程可控，Docke使用Linux cgroups来限制容器能够使用资源的上限，包括CPU、内存、磁盘、网络带宽等等。此外，还能够对进程进行优先级配置，以及将进程挂起和恢复。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 验证CGROUP</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># cat /boot/config-3.10.0-1160.90.1.el7.x86_64 |grep CGROUP</span>
+<span class="token assign-left variable">CONFIG_CGROUPS</span><span class="token operator">=</span>y
+<span class="token comment"># CONFIG_CGROUP_DEBUG is not set</span>
+<span class="token assign-left variable">CONFIG_CGROUP_FREEZER</span><span class="token operator">=</span>y
+<span class="token assign-left variable">CONFIG_CGROUP_PIDS</span><span class="token operator">=</span>y
+<span class="token assign-left variable">CONFIG_CGROUP_DEVICE</span><span class="token operator">=</span>y
+<span class="token assign-left variable">CONFIG_CGROUP_CPUACCT</span><span class="token operator">=</span>y
+<span class="token assign-left variable">CONFIG_CGROUP_HUGETLB</span><span class="token operator">=</span>y
+<span class="token assign-left variable">CONFIG_CGROUP_PERF</span><span class="token operator">=</span>y
+<span class="token assign-left variable">CONFIG_CGROUP_SCHED</span><span class="token operator">=</span>y
+<span class="token assign-left variable">CONFIG_BLK_CGROUP</span><span class="token operator">=</span>y
+<span class="token comment"># CONFIG_DEBUG_BLK_CGROUP is not set</span>
+<span class="token assign-left variable">CONFIG_NETFILTER_XT_MATCH_CGROUP</span><span class="token operator">=</span>m
+<span class="token assign-left variable">CONFIG_NET_CLS_CGROUP</span><span class="token operator">=</span>y
+<span class="token assign-left variable">CONFIG_NETPRIO_CGROUP</span><span class="token operator">=</span>y
+
+<span class="token comment"># 查看系统cgroups</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># ll /sys/fs/cgroup/</span>
+total <span class="token number">0</span>
+drwxr-xr-x. <span class="token number">4</span> root root  <span class="token number">0</span> May  <span class="token number">9</span> 03:40 blkio
+lrwxrwxrwx. <span class="token number">1</span> root root <span class="token number">11</span> May  <span class="token number">9</span> 03:40 cpu -<span class="token operator">></span> cpu,cpuacct
+lrwxrwxrwx. <span class="token number">1</span> root root <span class="token number">11</span> May  <span class="token number">9</span> 03:40 cpuacct -<span class="token operator">></span> cpu,cpuacct
+drwxr-xr-x. <span class="token number">4</span> root root  <span class="token number">0</span> May  <span class="token number">9</span> 03:40 cpu,cpuacct
+drwxr-xr-x. <span class="token number">2</span> root root  <span class="token number">0</span> May  <span class="token number">9</span> 03:40 cpuset
+drwxr-xr-x. <span class="token number">4</span> root root  <span class="token number">0</span> May  <span class="token number">9</span> 03:40 devices
+drwxr-xr-x. <span class="token number">2</span> root root  <span class="token number">0</span> May  <span class="token number">9</span> 03:40 freezer
+drwxr-xr-x. <span class="token number">2</span> root root  <span class="token number">0</span> May  <span class="token number">9</span> 03:40 hugetlb
+drwxr-xr-x. <span class="token number">4</span> root root  <span class="token number">0</span> May  <span class="token number">9</span> 03:40 memory
+lrwxrwxrwx. <span class="token number">1</span> root root <span class="token number">16</span> May  <span class="token number">9</span> 03:40 net_cls -<span class="token operator">></span> net_cls,net_prio
+drwxr-xr-x. <span class="token number">2</span> root root  <span class="token number">0</span> May  <span class="token number">9</span> 03:40 net_cls,net_prio
+lrwxrwxrwx. <span class="token number">1</span> root root <span class="token number">16</span> May  <span class="token number">9</span> 03:40 net_prio -<span class="token operator">></span> net_cls,net_prio
+drwxr-xr-x. <span class="token number">2</span> root root  <span class="token number">0</span> May  <span class="token number">9</span> 03:40 perf_event
+drwxr-xr-x. <span class="token number">4</span> root root  <span class="token number">0</span> May  <span class="token number">9</span> 03:40 pids
+drwxr-xr-x. <span class="token number">4</span> root root  <span class="token number">0</span> May  <span class="token number">9</span> 03:40 systemd<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="cgroups的具体实现"><a href="#cgroups的具体实现" class="headerlink" title="cgroups的具体实现"></a>cgroups的具体实现</h3><ul>
+<li>blkio：块设备的IO限制</li>
+<li>cpu：使用调度程序为任务提供CPU的访问</li>
+<li>cpu.stat：产生任务的CPU资源报告</li>
+<li>cpuset：多核CPU的调度</li>
+<li>memory：设置任务的内存限制以及产生内存资源报告</li>
+<li>ns：命名空间子系统</li>
+<li>net_cls：标记每个网络包以供cgroups任务使用</li>
+</ul>
+<h2 id="核心技术"><a href="#核心技术" class="headerlink" title="核心技术"></a>核心技术</h2><h3 id="容器规范"><a href="#容器规范" class="headerlink" title="容器规范"></a>容器规范</h3><ul>
+<li>runtime spec</li>
+<li>image format spec</li>
+</ul>
+<h3 id="容器运行时"><a href="#容器运行时" class="headerlink" title="容器运行时"></a>容器运行时</h3><ul>
+<li>LXC</li>
+<li>runc</li>
+<li>rkt</li>
+</ul>
+<h3 id="容器管理工具"><a href="#容器管理工具" class="headerlink" title="容器管理工具"></a>容器管理工具</h3><ul>
+<li>RKT的管理工具是rkt cli</li>
+<li>Runc的管理工具是Docker engine</li>
+<li>LXC|LXD的管理工具就是lxc</li>
+</ul>
+<h3 id="容器定义工具"><a href="#容器定义工具" class="headerlink" title="容器定义工具"></a>容器定义工具</h3><ul>
+<li>Docker Image：Docker容器的模板</li>
+<li>DockerFile：包含N个命令的文本文件，通过定义Dockerfile来创建Docker Image</li>
+<li>ACI(App Container Image)：与DockerImage类似，是CoreOS开发的rkt容器镜像格式</li>
+</ul>
+<h3 id="镜像仓库（Registry）"><a href="#镜像仓库（Registry）" class="headerlink" title="镜像仓库（Registry）"></a>镜像仓库（Registry）</h3><p>统一保存镜像而且是多个不同镜像版本的地方，叫做镜像仓库。</p>
+<ul>
+<li>Image Registry：Docker官方提供的私有仓库部署工具</li>
+<li>Docker Hub：Docker官方的公共仓库</li>
+<li>Harbor：VMware提供的带WEB界面自带认证功能的镜像仓库</li>
+</ul>
+<h3 id="编排工具"><a href="#编排工具" class="headerlink" title="编排工具"></a>编排工具</h3><p>容器编排通常包括容器管理、调度、集群定义和服务发现等功能。</p>
+<ul>
+<li>Docker Swarm：Docker官方开发的容器编排引擎</li>
+<li>Kubernetes：Google领导开发的容器编排引擎，其内部项目为Borg，支持Docker和CoreOS</li>
+</ul>
+<h2 id="依赖技术"><a href="#依赖技术" class="headerlink" title="依赖技术"></a>依赖技术</h2><h3 id="容器网络"><a href="#容器网络" class="headerlink" title="容器网络"></a>容器网络</h3><p>Docker自带网络功能的docker network仅支持管理单机容器网络，多主机运行需要使用第三方开源网络插件，例如calico、flannel等。</p>
+<h3 id="服务发现"><a href="#服务发现" class="headerlink" title="服务发现"></a>服务发现</h3><p>容器的动态扩容特性决定了容器IP会动态变化，需要一种机制自动识别并将用户请求动态转发到新的容器上。k8s自带服务发现功能，需要结合kube-dns服务解析域名。</p>
+<h3 id="容器监控"><a href="#容器监控" class="headerlink" title="容器监控"></a>容器监控</h3><p>Docker原生命令Docker ps&#x2F;top&#x2F;stats可以查看容器运行状态，也可以使用Promeheus等第三方工具监控容器运行状态。</p>
+<h3 id="数据管理"><a href="#数据管理" class="headerlink" title="数据管理"></a>数据管理</h3><p>容器的在不同Host之间的动态迁移就需要相关数据也要随之迁移，需要使用解决其数据存储和挂载问题。</p>
+<h3 id="日志收集"><a href="#日志收集" class="headerlink" title="日志收集"></a>日志收集</h3><p>Docker原生日志查看工具是docker logs，但容器内部日志需要通过ELK等专门日志工具进行收集、分析和展示。</p>
+<h2 id="容器安装"><a href="#容器安装" class="headerlink" title="容器安装"></a>容器安装</h2><h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 以CentOS7为例,使用华为源</span>
+<span class="token comment"># 设置默认防火墙配置为信任区域</span>
+firewall-cmd --set-default-zone<span class="token operator">=</span>trusted
+<span class="token comment"># 配置软件安装源</span>
+<span class="token function">wget</span> <span class="token parameter variable">-O</span> /etc/yum.repos.d/docker-ce.repo https://repo.huaweicloud.com/docker-ce/linux/centos/docker-ce.repo
+<span class="token function">sed</span> <span class="token parameter variable">-i</span> <span class="token string">'s+download.docker.com+repo.huaweicloud.com/docker-ce+'</span> /etc/yum.repos.d/docker-ce.repo
+<span class="token comment"># 执行部署</span>
+yum makecache fast
+yum update
+yum remove <span class="token parameter variable">-y</span> <span class="token function">docker</span> docker-common docker-selinux docker-engine
+yum <span class="token function">install</span> <span class="token parameter variable">-y</span> yum-utils device-mapper-persistent-data lvm2 psmisc net-tools
+<span class="token comment"># 安装指定版本</span>
+yum <span class="token function">install</span> <span class="token parameter variable">-y</span> docker-ce
+<span class="token comment"># 配置加速源</span>
+<span class="token function">mkdir</span> <span class="token parameter variable">-p</span> /etc/docker
+<span class="token function">tee</span> /etc/docker/daemon.json <span class="token operator">&lt;&lt;-</span><span class="token string">'EOF'
+&#123;
+  "registry-mirrors": ["https://37y8py0j.mirror.aliyuncs.com"],
+  "exec-opts": ["native.cgroupdriver=systemd"]  
+&#125;
+EOF</span>
+systemctl daemon-reload
+systemctl restart <span class="token function">docker</span>
+<span class="token comment"># 启动</span>
+systemctl <span class="token builtin class-name">enable</span> <span class="token parameter variable">--now</span> <span class="token function">docker</span>
+
+<span class="token comment"># 修改内核参数</span>
+<span class="token function">cat</span> <span class="token operator">></span> /etc/sysctl.d/k8s.conf <span class="token operator">&lt;&lt;</span> <span class="token string">EOF
+net.bridge.bridge-nf-call-ip6tables = 1
+net.bridge.bridge-nf-call-iptables = 1
+net.ipv4.ip_forward = 1
+EOF</span>
+
+<span class="token function">sysctl</span> <span class="token parameter variable">--system</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="验证服务"><a href="#验证服务" class="headerlink" title="验证服务"></a>验证服务</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 查看版本信息</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker version</span>
+Client: Docker Engine - Community
+ Version:           <span class="token number">23.0</span>.5
+ API version:       <span class="token number">1.42</span>
+ Go version:        go1.19.8
+ Git commit:        bc4487a
+ Built:             Wed Apr <span class="token number">26</span> <span class="token number">16</span>:18:56 <span class="token number">2023</span>
+ OS/Arch:           linux/amd64
+ Context:           default
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          <span class="token number">23.0</span>.5
+  API version:      <span class="token number">1.42</span> <span class="token punctuation">(</span>minimum version <span class="token number">1.12</span><span class="token punctuation">)</span>
+  Go version:       go1.19.8
+  Git commit:       94d3ad6
+  Built:            Wed Apr <span class="token number">26</span> <span class="token number">16</span>:16:35 <span class="token number">2023</span>
+  OS/Arch:          linux/amd64
+  Experimental:     <span class="token boolean">false</span>
+ containerd:
+  Version:          <span class="token number">1.6</span>.20
+  GitCommit:        2806fc1057397dbaeefbea0e4e17bddfbd388f38
+ runc:
+  Version:          <span class="token number">1.1</span>.5
+  GitCommit:        v1.1.5-0-gf19387a
+ docker-init:
+  Version:          <span class="token number">0.19</span>.0
+  GitCommit:        de40ad0
+<span class="token comment"># 验证Docker0网卡</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># ifconfig</span>
+docker0: <span class="token assign-left variable">flags</span><span class="token operator">=</span><span class="token number">409</span><span class="token operator"><span class="token file-descriptor important">9</span>&lt;</span>UP,BROADCAST,MULTICAST<span class="token operator">></span>  mtu <span class="token number">1500</span>
+        inet <span class="token number">172.17</span>.0.1  netmask <span class="token number">255.255</span>.0.0  broadcast <span class="token number">172.17</span>.255.255
+        ether 02:42:e6:56:9d:47  txqueuelen <span class="token number">0</span>  <span class="token punctuation">(</span>Ethernet<span class="token punctuation">)</span>
+        RX packets <span class="token number">0</span>  bytes <span class="token number">0</span> <span class="token punctuation">(</span><span class="token number">0.0</span> B<span class="token punctuation">)</span>
+        RX errors <span class="token number">0</span>  dropped <span class="token number">0</span>  overruns <span class="token number">0</span>  frame <span class="token number">0</span>
+        TX packets <span class="token number">0</span>  bytes <span class="token number">0</span> <span class="token punctuation">(</span><span class="token number">0.0</span> B<span class="token punctuation">)</span>
+        TX errors <span class="token number">0</span>  dropped <span class="token number">0</span> overruns <span class="token number">0</span>  carrier <span class="token number">0</span>  collisions <span class="token number">0</span>
+<span class="token comment"># 查看系统信息</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker info</span>
+Client:
+ Context:    default
+ Debug Mode: <span class="token boolean">false</span>
+ Plugins:
+  buildx: Docker Buildx <span class="token punctuation">(</span>Docker Inc.<span class="token punctuation">)</span>
+    Version:  v0.10.4
+    Path:     /usr/libexec/docker/cli-plugins/docker-buildx
+  compose: Docker Compose <span class="token punctuation">(</span>Docker Inc.<span class="token punctuation">)</span>
+    Version:  v2.17.3
+    Path:     /usr/libexec/docker/cli-plugins/docker-compose
+
+Server:
+ Containers: <span class="token number">0</span>
+  Running: <span class="token number">0</span>
+  Paused: <span class="token number">0</span>
+  Stopped: <span class="token number">0</span>
+ Images: <span class="token number">1</span>
+ Server Version: <span class="token number">23.0</span>.5
+ Storage Driver: overlay2
+  Backing Filesystem: xfs
+  Supports d_type: <span class="token boolean">true</span>
+  Using metacopy: <span class="token boolean">false</span>
+  Native Overlay Diff: <span class="token boolean">true</span>
+  userxattr: <span class="token boolean">false</span>
+ Logging Driver: json-file
+ Cgroup Driver: cgroupfs
+ Cgroup Version: <span class="token number">1</span>
+ Plugins:
+  Volume: <span class="token builtin class-name">local</span>
+  Network: bridge <span class="token function">host</span> ipvlan macvlan null overlay
+  Log: awslogs fluentd gcplogs gelf journald json-file <span class="token builtin class-name">local</span> logentries splunk syslog
+ Swarm: inactive
+ Runtimes: io.containerd.runc.v2 runc
+ Default Runtime: runc
+ Init Binary: docker-init
+ containerd version: 2806fc1057397dbaeefbea0e4e17bddfbd388f38
+ runc version: v1.1.5-0-gf19387a
+ init version: de40ad0
+ Security Options:
+  seccomp
+   Profile: <span class="token builtin class-name">builtin</span>
+ Kernel Version: <span class="token number">3.10</span>.0-1160.90.1.el7.x86_64
+ Operating System: CentOS Linux <span class="token number">7</span> <span class="token punctuation">(</span>Core<span class="token punctuation">)</span>
+ OSType: linux
+ Architecture: x86_64
+ CPUs: <span class="token number">2</span>
+ Total Memory: <span class="token number">3</span>.839GiB
+ Name: vms101
+ ID: 589aba66-198e-4805-9ae2-518d17585521
+ Docker Root Dir: /var/lib/docker
+ Debug Mode: <span class="token boolean">false</span>
+ Registry: https://index.docker.io/v1/
+ Experimental: <span class="token boolean">false</span>
+ Insecure Registries:
+  <span class="token number">127.0</span>.0.0/8
+ Registry Mirrors:
+  https://37y8py0j.mirror.aliyuncs.com/
+ Live Restore Enabled: <span class="token boolean">false</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="服务进程"><a href="#服务进程" class="headerlink" title="服务进程"></a>服务进程</h3><ul>
+<li>dockerd：被Client直接访问，其父进程为Host的Systemd守护进程</li>
+<li>docker-proxy：实现容器通信，其父进程为dockerd</li>
+<li>containerd：被dockerd进程调用以实现与runc交互</li>
+<li>containerd-shim：真正运行容器的载体，其父进程为containerd</li>
+</ul>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 查看宿主机进程树</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># pstree -p 1</span>
+systemd<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>─┬─NetworkManager<span class="token punctuation">(</span><span class="token number">881</span><span class="token punctuation">)</span>─┬─<span class="token punctuation">&#123;</span>NetworkManager<span class="token punctuation">&#125;</span><span class="token punctuation">(</span><span class="token number">886</span><span class="token punctuation">)</span>
+           │                     └─<span class="token punctuation">&#123;</span>NetworkManager<span class="token punctuation">&#125;</span><span class="token punctuation">(</span><span class="token number">892</span><span class="token punctuation">)</span>
+           ├─containerd<span class="token punctuation">(</span><span class="token number">1191</span><span class="token punctuation">)</span>─┬─<span class="token punctuation">&#123;</span>containerd<span class="token punctuation">&#125;</span><span class="token punctuation">(</span><span class="token number">1208</span><span class="token punctuation">)</span>
+           │                  ├─<span class="token punctuation">&#123;</span>containerd<span class="token punctuation">&#125;</span><span class="token punctuation">(</span><span class="token number">1212</span><span class="token punctuation">)</span>
+           │                  ├─<span class="token punctuation">&#123;</span>containerd<span class="token punctuation">&#125;</span><span class="token punctuation">(</span><span class="token number">1213</span><span class="token punctuation">)</span>
+           │                  ├─<span class="token punctuation">&#123;</span>containerd<span class="token punctuation">&#125;</span><span class="token punctuation">(</span><span class="token number">1214</span><span class="token punctuation">)</span>
+           │                  ├─<span class="token punctuation">&#123;</span>containerd<span class="token punctuation">&#125;</span><span class="token punctuation">(</span><span class="token number">1242</span><span class="token punctuation">)</span>
+           │                  ├─<span class="token punctuation">&#123;</span>containerd<span class="token punctuation">&#125;</span><span class="token punctuation">(</span><span class="token number">1253</span><span class="token punctuation">)</span>
+           │                  ├─<span class="token punctuation">&#123;</span>containerd<span class="token punctuation">&#125;</span><span class="token punctuation">(</span><span class="token number">1254</span><span class="token punctuation">)</span>
+           │                  └─<span class="token punctuation">&#123;</span>containerd<span class="token punctuation">&#125;</span><span class="token punctuation">(</span><span class="token number">1285</span><span class="token punctuation">)</span>
+           ├─containerd-shim<span class="token punctuation">(</span><span class="token number">2030</span><span class="token punctuation">)</span>─┬─nginx<span class="token punctuation">(</span><span class="token number">2051</span><span class="token punctuation">)</span>─┬─nginx<span class="token punctuation">(</span><span class="token number">2101</span><span class="token punctuation">)</span>
+           │                       │             └─nginx<span class="token punctuation">(</span><span class="token number">2102</span><span class="token punctuation">)</span>
+           │                       ├─<span class="token punctuation">&#123;</span>containerd-shim<span class="token punctuation">&#125;</span><span class="token punctuation">(</span><span class="token number">2031</span><span class="token punctuation">)</span>
+           │                       ├─<span class="token punctuation">&#123;</span>containerd-shim<span class="token punctuation">&#125;</span><span class="token punctuation">(</span><span class="token number">2032</span><span class="token punctuation">)</span>
+           │                       ├─<span class="token punctuation">&#123;</span>containerd-shim<span class="token punctuation">&#125;</span><span class="token punctuation">(</span><span class="token number">2033</span><span class="token punctuation">)</span>
+           │                       ├─<span class="token punctuation">&#123;</span>containerd-shim<span class="token punctuation">&#125;</span><span class="token punctuation">(</span><span class="token number">2034</span><span class="token punctuation">)</span>
+           │                       ├─<span class="token punctuation">&#123;</span>containerd-shim<span class="token punctuation">&#125;</span><span class="token punctuation">(</span><span class="token number">2035</span><span class="token punctuation">)</span>
+           │                       ├─<span class="token punctuation">&#123;</span>containerd-shim<span class="token punctuation">&#125;</span><span class="token punctuation">(</span><span class="token number">2036</span><span class="token punctuation">)</span>
+           │                       ├─<span class="token punctuation">&#123;</span>containerd-shim<span class="token punctuation">&#125;</span><span class="token punctuation">(</span><span class="token number">2037</span><span class="token punctuation">)</span>
+           │                       ├─<span class="token punctuation">&#123;</span>containerd-shim<span class="token punctuation">&#125;</span><span class="token punctuation">(</span><span class="token number">2038</span><span class="token punctuation">)</span>
+           │                       ├─<span class="token punctuation">&#123;</span>containerd-shim<span class="token punctuation">&#125;</span><span class="token punctuation">(</span><span class="token number">2039</span><span class="token punctuation">)</span>
+           │                       └─<span class="token punctuation">&#123;</span>containerd-shim<span class="token punctuation">&#125;</span><span class="token punctuation">(</span><span class="token number">2040</span><span class="token punctuation">)</span>
+           ├─containerd-shim<span class="token punctuation">(</span><span class="token number">2139</span><span class="token punctuation">)</span>─┬─nginx<span class="token punctuation">(</span><span class="token number">2159</span><span class="token punctuation">)</span>─┬─nginx<span class="token punctuation">(</span><span class="token number">2212</span><span class="token punctuation">)</span>
+           │                       │             └─nginx<span class="token punctuation">(</span><span class="token number">2213</span><span class="token punctuation">)</span>
+           │                       ├─<span class="token punctuation">&#123;</span>containerd-shim<span class="token punctuation">&#125;</span><span class="token punctuation">(</span><span class="token number">2141</span><span class="token punctuation">)</span>
+           │                       ├─<span class="token punctuation">&#123;</span>containerd-shim<span class="token punctuation">&#125;</span><span class="token punctuation">(</span><span class="token number">2142</span><span class="token punctuation">)</span>
+           │                       ├─<span class="token punctuation">&#123;</span>containerd-shim<span class="token punctuation">&#125;</span><span class="token punctuation">(</span><span class="token number">2143</span><span class="token punctuation">)</span>
+           │                       ├─<span class="token punctuation">&#123;</span>containerd-shim<span class="token punctuation">&#125;</span><span class="token punctuation">(</span><span class="token number">2144</span><span class="token punctuation">)</span>
+           │                       ├─<span class="token punctuation">&#123;</span>containerd-shim<span class="token punctuation">&#125;</span><span class="token punctuation">(</span><span class="token number">2145</span><span class="token punctuation">)</span>
+           │                       ├─<span class="token punctuation">&#123;</span>containerd-shim<span class="token punctuation">&#125;</span><span class="token punctuation">(</span><span class="token number">2146</span><span class="token punctuation">)</span>
+           │                       ├─<span class="token punctuation">&#123;</span>containerd-shim<span class="token punctuation">&#125;</span><span class="token punctuation">(</span><span class="token number">2147</span><span class="token punctuation">)</span>
+           │                       ├─<span class="token punctuation">&#123;</span>containerd-shim<span class="token punctuation">&#125;</span><span class="token punctuation">(</span><span class="token number">2153</span><span class="token punctuation">)</span>
+           │                       ├─<span class="token punctuation">&#123;</span>containerd-shim<span class="token punctuation">&#125;</span><span class="token punctuation">(</span><span class="token number">2179</span><span class="token punctuation">)</span>
+           │                       ├─<span class="token punctuation">&#123;</span>containerd-shim<span class="token punctuation">&#125;</span><span class="token punctuation">(</span><span class="token number">2180</span><span class="token punctuation">)</span>
+           │                       └─<span class="token punctuation">&#123;</span>containerd-shim<span class="token punctuation">&#125;</span><span class="token punctuation">(</span><span class="token number">2181</span><span class="token punctuation">)</span>
+           ├─dockerd<span class="token punctuation">(</span><span class="token number">1290</span><span class="token punctuation">)</span>─┬─docker-proxy<span class="token punctuation">(</span><span class="token number">2011</span><span class="token punctuation">)</span>─┬─<span class="token punctuation">&#123;</span>docker-proxy<span class="token punctuation">&#125;</span><span class="token punctuation">(</span><span class="token number">2012</span><span class="token punctuation">)</span>
+           │               │                    ├─<span class="token punctuation">&#123;</span>docker-proxy<span class="token punctuation">&#125;</span><span class="token punctuation">(</span><span class="token number">2013</span><span class="token punctuation">)</span>
+           │               │                    ├─<span class="token punctuation">&#123;</span>docker-proxy<span class="token punctuation">&#125;</span><span class="token punctuation">(</span><span class="token number">2014</span><span class="token punctuation">)</span>
+           │               │                    ├─<span class="token punctuation">&#123;</span>docker-proxy<span class="token punctuation">&#125;</span><span class="token punctuation">(</span><span class="token number">2015</span><span class="token punctuation">)</span>
+           │               │                    └─<span class="token punctuation">&#123;</span>docker-proxy<span class="token punctuation">&#125;</span><span class="token punctuation">(</span><span class="token number">2016</span><span class="token punctuation">)</span>
+           │               ├─docker-proxy<span class="token punctuation">(</span><span class="token number">2017</span><span class="token punctuation">)</span>─┬─<span class="token punctuation">&#123;</span>docker-proxy<span class="token punctuation">&#125;</span><span class="token punctuation">(</span><span class="token number">2018</span><span class="token punctuation">)</span>
+           │               │                    ├─<span class="token punctuation">&#123;</span>docker-proxy<span class="token punctuation">&#125;</span><span class="token punctuation">(</span><span class="token number">2019</span><span class="token punctuation">)</span>
+           │               │                    ├─<span class="token punctuation">&#123;</span>docker-proxy<span class="token punctuation">&#125;</span><span class="token punctuation">(</span><span class="token number">2020</span><span class="token punctuation">)</span>
+           │               │                    ├─<span class="token punctuation">&#123;</span>docker-proxy<span class="token punctuation">&#125;</span><span class="token punctuation">(</span><span class="token number">2021</span><span class="token punctuation">)</span>
+           │               │                    └─<span class="token punctuation">&#123;</span>docker-proxy<span class="token punctuation">&#125;</span><span class="token punctuation">(</span><span class="token number">2022</span><span class="token punctuation">)</span>
+           │               ├─docker-proxy<span class="token punctuation">(</span><span class="token number">2121</span><span class="token punctuation">)</span>─┬─<span class="token punctuation">&#123;</span>docker-proxy<span class="token punctuation">&#125;</span><span class="token punctuation">(</span><span class="token number">2122</span><span class="token punctuation">)</span>
+           │               │                    ├─<span class="token punctuation">&#123;</span>docker-proxy<span class="token punctuation">&#125;</span><span class="token punctuation">(</span><span class="token number">2123</span><span class="token punctuation">)</span>
+           │               │                    ├─<span class="token punctuation">&#123;</span>docker-proxy<span class="token punctuation">&#125;</span><span class="token punctuation">(</span><span class="token number">2124</span><span class="token punctuation">)</span>
+           │               │                    ├─<span class="token punctuation">&#123;</span>docker-proxy<span class="token punctuation">&#125;</span><span class="token punctuation">(</span><span class="token number">2125</span><span class="token punctuation">)</span>
+           │               │                    └─<span class="token punctuation">&#123;</span>docker-proxy<span class="token punctuation">&#125;</span><span class="token punctuation">(</span><span class="token number">2126</span><span class="token punctuation">)</span>
+           │               ├─docker-proxy<span class="token punctuation">(</span><span class="token number">2127</span><span class="token punctuation">)</span>─┬─<span class="token punctuation">&#123;</span>docker-proxy<span class="token punctuation">&#125;</span><span class="token punctuation">(</span><span class="token number">2128</span><span class="token punctuation">)</span>
+           │               │                    ├─<span class="token punctuation">&#123;</span>docker-proxy<span class="token punctuation">&#125;</span><span class="token punctuation">(</span><span class="token number">2129</span><span class="token punctuation">)</span>
+           │               │                    ├─<span class="token punctuation">&#123;</span>docker-proxy<span class="token punctuation">&#125;</span><span class="token punctuation">(</span><span class="token number">2130</span><span class="token punctuation">)</span>
+           │               │                    ├─<span class="token punctuation">&#123;</span>docker-proxy<span class="token punctuation">&#125;</span><span class="token punctuation">(</span><span class="token number">2131</span><span class="token punctuation">)</span>
+           │               │                    └─<span class="token punctuation">&#123;</span>docker-proxy<span class="token punctuation">&#125;</span><span class="token punctuation">(</span><span class="token number">2132</span><span class="token punctuation">)</span>
+           │               ├─<span class="token punctuation">&#123;</span>dockerd<span class="token punctuation">&#125;</span><span class="token punctuation">(</span><span class="token number">1373</span><span class="token punctuation">)</span>
+           │               ├─<span class="token punctuation">&#123;</span>dockerd<span class="token punctuation">&#125;</span><span class="token punctuation">(</span><span class="token number">1374</span><span class="token punctuation">)</span>
+           │               ├─<span class="token punctuation">&#123;</span>dockerd<span class="token punctuation">&#125;</span><span class="token punctuation">(</span><span class="token number">1375</span><span class="token punctuation">)</span>
+           │               ├─<span class="token punctuation">&#123;</span>dockerd<span class="token punctuation">&#125;</span><span class="token punctuation">(</span><span class="token number">1376</span><span class="token punctuation">)</span>
+           │               ├─<span class="token punctuation">&#123;</span>dockerd<span class="token punctuation">&#125;</span><span class="token punctuation">(</span><span class="token number">1462</span><span class="token punctuation">)</span>
+           │               ├─<span class="token punctuation">&#123;</span>dockerd<span class="token punctuation">&#125;</span><span class="token punctuation">(</span><span class="token number">1463</span><span class="token punctuation">)</span>
+           │               ├─<span class="token punctuation">&#123;</span>dockerd<span class="token punctuation">&#125;</span><span class="token punctuation">(</span><span class="token number">1464</span><span class="token punctuation">)</span>
+           │               └─<span class="token punctuation">&#123;</span>dockerd<span class="token punctuation">&#125;</span><span class="token punctuation">(</span><span class="token number">1868</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="容器的创建与管理"><a href="#容器的创建与管理" class="headerlink" title="容器的创建与管理"></a>容器的创建与管理</h2><h3 id="通信流程"><a href="#通信流程" class="headerlink" title="通信流程"></a>通信流程</h3><ol>
+<li>dockerd通过grpc和containerd模块通信，dockerd由libcontainerd负责和contaiinerd进行交换，socket文件为：&#x2F;run&#x2F;containerd&#x2F;containerd.sock；</li>
+<li>containerd在dockerd启动时被启动，然后containerd启动grpc请求监听，containerd处理grpc请求；</li>
+<li>若是start或者exec容器，containerd拉起一个container-shim，并进行相关操作；</li>
+<li>container-shim拉起后，start&#x2F;exec&#x2F;create拉起runC进程，通过exit、control文件和containerd通信，通过父子进程关系和SIGCHLD监控容器中的进程状态；</li>
+<li>在整个容器生命周期中，containerd通过epoll监控容器文件，监控容器事件。</li>
+</ol>
+<h3 id="镜像管理"><a href="#镜像管理" class="headerlink" title="镜像管理"></a>镜像管理</h3><p>Docker镜像包含有启动容器所需要的文件系统及所需要的内容，因此镜像主要用于创建并启动Docker容器。Docker镜像包含多层文件系统，称为UnionFS联合文件系统，它将多层目录挂载到一起，形成一个虚拟文件系统，每一层叫做一层layer，每层文件系统有只读(readonly)、读写(readwrite)和写出(whiteout-able)三种权限，但每层文件系统都是只读的。构建镜像的时候，每个构建的操作都增加一层文件系统，一层层往上叠加，上层的修改会覆盖底层的可见性。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 搜索镜像</span>
+<span class="token comment"># 按最新版搜索</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker search centos</span>
+NAME                                         DESCRIPTION                                     STARS     OFFICIAL   AUTOMATED
+centos                                       DEPRECATED<span class="token punctuation">;</span> The official build of CentOS.       <span class="token number">7575</span>      <span class="token punctuation">[</span>OK<span class="token punctuation">]</span>       
+kasmweb/centos-7-desktop                     CentOS <span class="token number">7</span> desktop <span class="token keyword">for</span> Kasm Workspaces            <span class="token number">36</span>                   
+bitnami/centos-base-buildpack                Centos base compilation image                   <span class="token number">0</span>                    <span class="token punctuation">[</span>OK<span class="token punctuation">]</span>
+<span class="token comment"># 指定版本搜索</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker search centos:7.2</span>
+NAME                                        DESCRIPTION                                     STARS     OFFICIAL   AUTOMATED
+vikingco/python                             Python Stack Docker Base Image: Based on cen…   <span class="token number">1</span>                    
+alvintz/centos                              centos:7.2.1511                                 <span class="token number">0</span>                    <span class="token punctuation">[</span>OK<span class="token punctuation">]</span>
+morrowind/centos                            From centos:7.2                                 <span class="token number">0</span>                    
+<span class="token comment"># 下载镜像</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker pull alpine</span>
+Using default tag: latest
+latest: Pulling from library/alpine
+59bf1c3509f3: Pull complete 
+Digest: sha256:21a3deaa0d32a8057914f36584b5288d2e5ecc984380bc0118285c70fa8c9300
+Status: Downloaded newer image <span class="token keyword">for</span> alpine:latest
+docker.io/library/alpine:latest
+<span class="token comment"># 查看本地镜像</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker images</span>
+REPOSITORY   TAG       IMAGE ID       CREATED         SIZE
+nginx        latest    605c77e624dd   <span class="token number">16</span> months ago   141MB
+alpine       latest    c059bfaa849c   <span class="token number">17</span> months ago   <span class="token number">5</span>.59MB
+centos       latest    5d0da3dc9764   <span class="token number">20</span> months ago   231MB
+<span class="token comment"># 镜像导出</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker save centos -o /opt/centos.tar.gz</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># ll /opt/centos.tar.gz </span>
+-rw-------. <span class="token number">1</span> root root <span class="token number">238581248</span> May  <span class="token number">9</span> 04:26 /opt/centos.tar.gz
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># tar xvf /opt/centos.tar.gz </span>
+079bc5e75545bf45253ab44ce73fbd51d96fa52ee799031e60b65a82e89df662/
+079bc5e75545bf45253ab44ce73fbd51d96fa52ee799031e60b65a82e89df662/VERSION
+079bc5e75545bf45253ab44ce73fbd51d96fa52ee799031e60b65a82e89df662/json
+079bc5e75545bf45253ab44ce73fbd51d96fa52ee799031e60b65a82e89df662/layer.tar
+5d0da3dc976460b72c77d94c8a1ad043720b0416bfc16c52c45d4847e53fadb6.json
+manifest.json
+tar: manifest.json: implausibly old <span class="token function">time</span> stamp <span class="token number">1970</span>-01-01 08:00:00
+repositories
+tar: repositories: implausibly old <span class="token function">time</span> stamp <span class="token number">1970</span>-01-01 08:00:00
+<span class="token comment"># 镜像删除</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker rmi centos</span>
+Untagged: centos:latest
+Untagged: centos@sha256:a27fd8080b517143cbbbab9dfb7c8571c40d67d534bbdee55bd6c473f432b177
+Deleted: sha256:5d0da3dc976460b72c77d94c8a1ad043720b0416bfc16c52c45d4847e53fadb6
+Deleted: sha256:74ddd0ec08fa43d09f32636ba91a0a3053b02cb4627c35051aff89f853606b59
+<span class="token comment"># 镜像导入</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker load &lt; /opt/centos.tar.gz </span>
+74ddd0ec08fa: Loading layer <span class="token punctuation">[</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">></span><span class="token punctuation">]</span>  <span class="token number">238</span>.6MB/238.6MB
+Loaded image: centos:latest
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker images</span>
+REPOSITORY   TAG       IMAGE ID       CREATED         SIZE
+nginx        latest    605c77e624dd   <span class="token number">16</span> months ago   141MB
+alpine       latest    c059bfaa849c   <span class="token number">17</span> months ago   <span class="token number">5</span>.59MB
+centos       latest    5d0da3dc9764   <span class="token number">20</span> months ago   231MB
+<span class="token comment"># 镜像的重新打标签</span>
+<span class="token punctuation">[</span>root@vms101 nginx<span class="token punctuation">]</span><span class="token comment"># docker images</span>
+REPOSITORY            TAG        IMAGE ID       CREATED          SIZE
+sujx/nginx-yum-file   v1         97d106d963e7   <span class="token number">9</span> minutes ago    <span class="token number">2</span>.42GB
+centos                latest     5d0da3dc9764   <span class="token number">20</span> months ago    231MB
+<span class="token punctuation">[</span>root@vms101 nginx<span class="token punctuation">]</span><span class="token comment"># docker tag centos</span>
+centos:7.9.2009  centos:latest    centos-nginx:v1  
+<span class="token punctuation">[</span>root@vms101 nginx<span class="token punctuation">]</span><span class="token comment"># docker tag centos:latest centos8</span>
+<span class="token punctuation">[</span>root@vms101 nginx<span class="token punctuation">]</span><span class="token comment"># docker images</span>
+REPOSITORY            TAG        IMAGE ID       CREATED          SIZE
+centos8               latest     5d0da3dc9764   <span class="token number">20</span> months ago    231MB
+centos                latest     5d0da3dc9764   <span class="token number">20</span> months ago    231MB
+<span class="token comment"># 查看镜像的文件层次</span>
+<span class="token punctuation">[</span>root@vms101 nginx<span class="token punctuation">]</span><span class="token comment"># docker history centos8</span>
+IMAGE          CREATED         CREATED BY                                      SIZE      COMMENT
+5d0da3dc9764   <span class="token number">20</span> months ago   /bin/sh <span class="token parameter variable">-c</span> <span class="token comment">#(nop)  CMD ["/bin/bash"]            0B        </span>
+<span class="token operator">&lt;</span>missing<span class="token operator">></span>      <span class="token number">20</span> months ago   /bin/sh <span class="token parameter variable">-c</span> <span class="token comment">#(nop)  LABEL org.label-schema.sc…   0B        </span>
+<span class="token operator">&lt;</span>missing<span class="token operator">></span>      <span class="token number">20</span> months ago   /bin/sh <span class="token parameter variable">-c</span> <span class="token comment">#(nop) ADD file:805cb5e15fb6e0bb0…   231MB </span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="容器管理"><a href="#容器管理" class="headerlink" title="容器管理"></a>容器管理</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 显示所有容器</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker ps -a</span>
+CONTAINER ID   IMAGE     COMMAND                  CREATED             STATUS             PORTS                               NAMES
+6a36e33a02f0   nginx     <span class="token string">"/docker-entrypoint.…"</span>   About an hour ago   Up About an hour   <span class="token number">0.0</span>.0.0:83-<span class="token operator">></span><span class="token number">80</span>/tcp, :::83-<span class="token operator">></span><span class="token number">80</span>/tcp   ngingx-3
+1353d6b1c4f2   nginx     <span class="token string">"/docker-entrypoint.…"</span>   About an hour ago   Up About an hour   <span class="token number">0.0</span>.0.0:82-<span class="token operator">></span><span class="token number">80</span>/tcp, :::82-<span class="token operator">></span><span class="token number">80</span>/tcp   ngingx-2
+<span class="token comment"># 从镜像启动一个容器</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker run -it centos bash</span>
+<span class="token punctuation">[</span>root@c82b8168f173 /<span class="token punctuation">]</span><span class="token comment">#</span>
+<span class="token comment"># 使用crtl+p+q推出容器而不注销</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker ps</span>
+CONTAINER ID   IMAGE     COMMAND                  CREATED             STATUS             PORTS                               NAMES
+c82b8168f173   centos    <span class="token string">"bash"</span>                   <span class="token number">18</span> seconds ago      Up <span class="token number">17</span> seconds                                          eager_nash
+6a36e33a02f0   nginx     <span class="token string">"/docker-entrypoint.…"</span>   About an hour ago   Up About an hour   <span class="token number">0.0</span>.0.0:83-<span class="token operator">></span><span class="token number">80</span>/tcp, :::83-<span class="token operator">></span><span class="token number">80</span>/tcp   ngingx-3
+1353d6b1c4f2   nginx     <span class="token string">"/docker-entrypoint.…"</span>   About an hour ago   Up About an hour   <span class="token number">0.0</span>.0.0:82-<span class="token operator">></span><span class="token number">80</span>/tcp, :::82-<span class="token operator">></span><span class="token number">80</span>/tcp   ngingx-2
+<span class="token comment"># 进入容器</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker exec -it c82b8 bash</span>
+<span class="token punctuation">[</span>root@c82b8168f173 /<span class="token punctuation">]</span><span class="token comment"># top</span>
+<span class="token function">top</span> - <span class="token number">21</span>:28:03 up  <span class="token number">1</span>:47,  <span class="token number">0</span> users,  load average: <span class="token number">0.00</span>, <span class="token number">0.01</span>, <span class="token number">0.05</span>
+Tasks:   <span class="token number">3</span> total,   <span class="token number">1</span> running,   <span class="token number">2</span> sleeping,   <span class="token number">0</span> stopped,   <span class="token number">0</span> zombie
+%Cpu<span class="token punctuation">(</span>s<span class="token punctuation">)</span>:  <span class="token number">0.0</span> us,  <span class="token number">0.0</span> sy,  <span class="token number">0.0</span> ni,100.0 id,  <span class="token number">0.0</span> wa,  <span class="token number">0.0</span> hi,  <span class="token number">0.0</span> si,  <span class="token number">0.0</span> st
+MiB Mem <span class="token builtin class-name">:</span>   <span class="token number">3931.1</span> total,   <span class="token number">2082.2</span> free,    <span class="token number">476.3</span> used,   <span class="token number">1372.5</span> buff/cache
+MiB Swap:   <span class="token number">2048.0</span> total,   <span class="token number">2048.0</span> free,      <span class="token number">0.0</span> used.   <span class="token number">3199.2</span> avail Mem 
+PID <span class="token environment constant">USER</span>      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+<span class="token number">1</span>  root      <span class="token number">20</span>   <span class="token number">0</span>   <span class="token number">12036</span>   <span class="token number">2088</span>   <span class="token number">1572</span> S   <span class="token number">0.0</span>   <span class="token number">0.1</span>   <span class="token number">0</span>:00.03 <span class="token function">bash</span>
+<span class="token number">21</span> root      <span class="token number">20</span>   <span class="token number">0</span>   <span class="token number">12036</span>   <span class="token number">2088</span>   <span class="token number">1572</span> S   <span class="token number">0.0</span>   <span class="token number">0.1</span>   <span class="token number">0</span>:00.02 <span class="token function">bash</span>                                                                   <span class="token number">35</span> root      <span class="token number">20</span>   <span class="token number">0</span>   <span class="token number">49112</span>   <span class="token number">2164</span>   <span class="token number">1520</span> R   <span class="token number">0.0</span>   <span class="token number">0.1</span>   <span class="token number">0</span>:00.00 <span class="token function">top</span> 
+<span class="token comment"># 删除正在运行的容器</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker rm c82b</span>
+Error response from daemon: You cannot remove a running container c82b8168f173d8d4f0365c8d9672e99db68fd25f224a251b8ac31ef54996b5a1. Stop the container before attempting removal or force remove
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker rm -f c82b</span>
+c82b
+<span class="token comment"># 设定容器别名并指定端口、后台运行</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker run -d --name nginx-1 -p 81:80 nginx</span>
+b5b0c251e4e7458e1022722d6b19d287caba93b307636c54a60a0a28e7f4e30c
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker run -d --name nginx-2 -p 82:80 nginx</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker run -d --name nginx-3 -p 83:80 nginx</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># netstat -tlnp</span>
+Active Internet connections <span class="token punctuation">(</span>only servers<span class="token punctuation">)</span>
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name   
+tcp        <span class="token number">0</span>      <span class="token number">0</span> <span class="token number">0.0</span>.0.0:81              <span class="token number">0.0</span>.0.0:*               LISTEN      <span class="token number">3859</span>/docker-proxy   
+tcp        <span class="token number">0</span>      <span class="token number">0</span> <span class="token number">0.0</span>.0.0:82              <span class="token number">0.0</span>.0.0:*               LISTEN      <span class="token number">2011</span>/docker-proxy   
+tcp        <span class="token number">0</span>      <span class="token number">0</span> <span class="token number">0.0</span>.0.0:83              <span class="token number">0.0</span>.0.0:*               LISTEN      <span class="token number">2121</span>/docker-proxy   
+tcp6       <span class="token number">0</span>      <span class="token number">0</span> :::81                   :::*                    LISTEN      <span class="token number">3865</span>/docker-proxy   
+tcp6       <span class="token number">0</span>      <span class="token number">0</span> :::82                   :::*                    LISTEN      <span class="token number">2017</span>/docker-proxy   
+tcp6       <span class="token number">0</span>      <span class="token number">0</span> :::83                   :::*                    LISTEN      <span class="token number">2127</span>/docker-proxy 
+<span class="token comment"># 查看日志</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker logs nginx-1</span>
+/docker-entrypoint.sh: /docker-entrypoint.d/ is not empty, will attempt to perform configuration
+/docker-entrypoint.sh: Looking <span class="token keyword">for</span> shell scripts <span class="token keyword">in</span> /docker-entrypoint.d/
+/docker-entrypoint.sh: Launching /docker-entrypoint.d/10-listen-on-ipv6-by-default.sh
+<span class="token number">10</span>-listen-on-ipv6-by-default.sh: info: Getting the checksum of /etc/nginx/conf.d/default.conf
+<span class="token number">10</span>-listen-on-ipv6-by-default.sh: info: Enabled listen on IPv6 <span class="token keyword">in</span> /etc/nginx/conf.d/default.conf
+/docker-entrypoint.sh: Launching /docker-entrypoint.d/20-envsubst-on-templates.sh
+/docker-entrypoint.sh: Launching /docker-entrypoint.d/30-tune-worker-processes.sh
+/docker-entrypoint.sh: Configuration complete<span class="token punctuation">;</span> ready <span class="token keyword">for</span> start up
+<span class="token number">2023</span>/05/08 <span class="token number">21</span>:32:14 <span class="token punctuation">[</span>notice<span class="token punctuation">]</span> <span class="token number">1</span><span class="token comment">#1: using the "epoll" event method</span>
+<span class="token number">2023</span>/05/08 <span class="token number">21</span>:32:14 <span class="token punctuation">[</span>notice<span class="token punctuation">]</span> <span class="token number">1</span><span class="token comment">#1: nginx/1.21.5</span>
+<span class="token number">2023</span>/05/08 <span class="token number">21</span>:32:14 <span class="token punctuation">[</span>notice<span class="token punctuation">]</span> <span class="token number">1</span><span class="token comment">#1: built by gcc 10.2.1 20210110 (Debian 10.2.1-6) </span>
+<span class="token number">2023</span>/05/08 <span class="token number">21</span>:32:14 <span class="token punctuation">[</span>notice<span class="token punctuation">]</span> <span class="token number">1</span><span class="token comment">#1: OS: Linux 3.10.0-1160.90.1.el7.x86_64</span>
+<span class="token number">2023</span>/05/08 <span class="token number">21</span>:32:14 <span class="token punctuation">[</span>notice<span class="token punctuation">]</span> <span class="token number">1</span><span class="token comment">#1: getrlimit(RLIMIT_NOFILE): 1048576:1048576</span>
+<span class="token number">2023</span>/05/08 <span class="token number">21</span>:32:14 <span class="token punctuation">[</span>notice<span class="token punctuation">]</span> <span class="token number">1</span><span class="token comment">#1: start worker processes</span>
+<span class="token number">2023</span>/05/08 <span class="token number">21</span>:32:14 <span class="token punctuation">[</span>notice<span class="token punctuation">]</span> <span class="token number">1</span><span class="token comment">#1: start worker process 31</span>
+<span class="token number">2023</span>/05/08 <span class="token number">21</span>:32:14 <span class="token punctuation">[</span>notice<span class="token punctuation">]</span> <span class="token number">1</span><span class="token comment">#1: start worker process 32</span>
+<span class="token number">172.16</span>.10.1 - - <span class="token punctuation">[</span>08/May/2023:21:34:49 +0000<span class="token punctuation">]</span> <span class="token string">"GET / HTTP/1.1"</span> <span class="token number">200</span> <span class="token number">615</span> <span class="token string">"-"</span> <span class="token string">"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36 Edg/113.0.1774.35"</span> <span class="token string">"-"</span>
+<span class="token number">2023</span>/05/08 <span class="token number">21</span>:34:49 <span class="token punctuation">[</span>error<span class="token punctuation">]</span> <span class="token number">31</span><span class="token comment">#31: *2 open() "/usr/share/nginx/html/favicon.ico" failed (2: No such file or directory), client: 172.16.10.1, server: localhost, request: "GET /favicon.ico HTTP/1.1", host: "172.16.10.101:81", referrer: "http://172.16.10.101:81/"</span>
+<span class="token number">172.16</span>.10.1 - - <span class="token punctuation">[</span>08/May/2023:21:34:49 +0000<span class="token punctuation">]</span> <span class="token string">"GET /favicon.ico HTTP/1.1"</span> <span class="token number">404</span> <span class="token number">555</span> <span class="token string">"http://172.16.10.101:81/"</span> <span class="token string">"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36 Edg/113.0.1774.35"</span> <span class="token string">"-"</span>
+<span class="token comment"># 查看容器映射端口</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker port nginx-1</span>
+<span class="token number">80</span>/tcp -<span class="token operator">></span> <span class="token number">0.0</span>.0.0:81
+<span class="token number">80</span>/tcp -<span class="token operator">></span> <span class="token punctuation">[</span>::<span class="token punctuation">]</span>:81
+<span class="token comment"># 传递运行命令，以保持容器的运行</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker run -d centos /usr/bin/tail -f '/etc/hosts'</span>
+d43c0e0a418819c0638fb63831e0e7becfb2d9ceed408721b98e8b3013bfaa3a
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker ps </span>
+CONTAINER ID   IMAGE     COMMAND                  CREATED          STATUS          PORTS                               NAMES
+d43c0e0a4188   centos    <span class="token string">"/usr/bin/tail -f /e…"</span>   <span class="token number">24</span> seconds ago   Up <span class="token number">23</span> seconds                                       pedantic_mcclintock
+<span class="token comment"># 容器的停止和运行以及重启</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker stop nginx-1</span>
+nginx-1
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker start nginx-1</span>
+nginx-1
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker restart nginx-1</span>
+nginx-1
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker ps</span>
+CONTAINER ID   IMAGE     COMMAND                  CREATED         STATUS         PORTS                               NAMES
+b5b0c251e4e7   nginx     <span class="token string">"/docker-entrypoint.…"</span>   <span class="token number">9</span> minutes ago   Up <span class="token number">9</span> seconds   <span class="token number">0.0</span>.0.0:81-<span class="token operator">></span><span class="token number">80</span>/tcp, :::81-<span class="token operator">></span><span class="token number">80</span>/tcp   nginx-1
+<span class="token comment"># 使用inspect获取容器相关值</span>
+<span class="token comment"># 获取IP地址</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker inspect -f "&#123;&#123;.NetworkSettings.IPAddress&#125;&#125;" nginx-1</span>
+<span class="token number">172.17</span>.0.4
+<span class="token comment"># 获取容器PID</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker inspect -f "&#123;&#123;.State.Pid&#125;&#125;" nginx-1</span>
+<span class="token number">4216</span>
+<span class="token comment">#使用nsenter命令进入容器</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># yum install -y util-linux</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># nsenter -t 4216 -m -u -i -n -p</span>
+root@b5b0c251e4e7:/<span class="token comment"># </span>
+<span class="token comment"># 批量关闭正在运行的容器</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker stop $(docker ps -a -q)</span>
+d43c0e0a4188
+b5b0c251e4e7
+6a36e33a02f0
+1353d6b1c4f2
+<span class="token comment"># 批量强制删除已退出容器</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker rm -f `docker ps -aq -f status=exited`</span>
+d43c0e0a4188
+b5b0c251e4e7
+6a36e33a02f0
+1353d6b1c4f2
+<span class="token comment"># 执行容器的DNS地址</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker run -it --rm centos bash</span>
+<span class="token punctuation">[</span>root@a440c4ada42f /<span class="token punctuation">]</span><span class="token comment"># cat /etc/resolv.conf </span>
+<span class="token comment"># Generated by NetworkManager</span>
+nameserver <span class="token number">223.5</span>.5.5
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker run -it --rm --dns 114.114.114.114 centos bash</span>
+<span class="token punctuation">[</span>root@14689e61b122 /<span class="token punctuation">]</span><span class="token comment"># cat /etc/resolv.conf </span>
+nameserver <span class="token number">114.114</span>.114.114
+<span class="token comment"># 配置随Host拉起镜像 --restart=always</span>
+<span class="token punctuation">[</span>root@vms101 nginx<span class="token punctuation">]</span><span class="token comment"># docker run -d --restart=always --name AT-nginx -p 8080:80 nginx</span>
+2223df5da188178b7f53043f32387e2ad5c6813b63cfb6030a48960e7d340857<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="镜像与制作"><a href="#镜像与制作" class="headerlink" title="镜像与制作"></a>镜像与制作</h2><h3 id="手动制作YUM版Nginx镜像"><a href="#手动制作YUM版Nginx镜像" class="headerlink" title="手动制作YUM版Nginx镜像"></a>手动制作YUM版Nginx镜像</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 下载CentOS7.9.2009版本镜像</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker pull centos:7.9.2009</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker run -it centos:7.0.2009 /bin/bash</span>
+<span class="token comment"># 进入容器</span>
+<span class="token punctuation">[</span>root@76ea6d768009 /<span class="token punctuation">]</span><span class="token comment"># yum makecache</span>
+<span class="token punctuation">[</span>root@76ea6d768009 /<span class="token punctuation">]</span><span class="token comment"># yum install -y wget</span>
+<span class="token punctuation">[</span>root@76ea6d768009 /<span class="token punctuation">]</span><span class="token comment"># wget -O /etc/yum.repos.d/CentOS-Base.repo https://repo.huaweicloud.com/repository/conf/CentOS-7-reg.repo</span>
+<span class="token punctuation">[</span>root@76ea6d768009 /<span class="token punctuation">]</span><span class="token comment"># yum install -y epel-release</span>
+<span class="token punctuation">[</span>root@76ea6d768009 /<span class="token punctuation">]</span><span class="token comment"># sed -i "s/#baseurl/baseurl/g" /etc/yum.repos.d/epel.repo</span>
+<span class="token punctuation">[</span>root@76ea6d768009 /<span class="token punctuation">]</span><span class="token comment"># sed -i "s/metalink/#metalink/g" /etc/yum.repos.d/epel.repo</span>
+<span class="token punctuation">[</span>root@76ea6d768009 /<span class="token punctuation">]</span><span class="token comment"># sed -i "s@https\?://download.fedoraproject.org/pub@https://repo.huaweicloud.com@g" /etc/yum.repos.d/epel.repo</span>
+<span class="token punctuation">[</span>root@76ea6d768009 /<span class="token punctuation">]</span><span class="token comment"># yum makecache</span>
+<span class="token punctuation">[</span>root@76ea6d768009 /<span class="token punctuation">]</span><span class="token comment"># yum update -y</span>
+<span class="token punctuation">[</span>root@76ea6d768009 /<span class="token punctuation">]</span><span class="token comment"># yum install -y vim wget pcre pcre-devel zlib zlib-devel openssl openssl-devel iproute net-tools iotop</span>
+<span class="token punctuation">[</span>root@76ea6d768009 /<span class="token punctuation">]</span><span class="token comment"># yum install -y nginx</span>
+<span class="token comment"># 修改Nginx配置</span>
+<span class="token punctuation">[</span>root@76ea6d768009 /<span class="token punctuation">]</span><span class="token comment"># rm -f /usr/share/nginx/html/index.html</span>
+<span class="token punctuation">[</span>root@76ea6d768009 /<span class="token punctuation">]</span><span class="token comment"># echo "Docker YUM Nginx" >> /usr/share/nginx/html/index.html</span>
+<span class="token punctuation">[</span>root@76ea6d768009 /<span class="token punctuation">]</span><span class="token comment"># echo "daemon off;" >> /etc/nginx/nginx.conf</span>
+<span class="token comment"># 提交为镜像，-a 作者信息 -m</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker commit -a "sujx@live.cn" -m "nginx yum v1" --change="EXPOSE 80 443" 76ea centos-nginx:v1</span>
+sha256:10761eaac11cef2e72957c75e922b9d7a29bf481a4723664f9dc7caa54d4f132
+<span class="token comment"># 查看新生成的镜像</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker images</span>
+REPOSITORY     TAG        IMAGE ID       CREATED              SIZE
+centos-nginx   v1         10761eaac11c   About a minute ago   <span class="token number">1</span>.04GB
+nginx          latest     605c77e624dd   <span class="token number">16</span> months ago        141MB
+alpine         latest     c059bfaa849c   <span class="token number">17</span> months ago        <span class="token number">5</span>.59MB
+centos         <span class="token number">7.9</span>.2009   eeb6ee3f44bd   <span class="token number">20</span> months ago        204MB
+centos         latest     5d0da3dc9764   <span class="token number">20</span> months ago        231MB
+<span class="token comment"># 运行新生成的容器</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker run -d -p 80:80 --name my-centos-nginx centos-nginx:v1 /usr/sbin/nginx</span>
+4df01551e3778be4be619b5a0fe644e404fc92a527622f4bdeb7cad9005278f8
+<span class="token comment"># 测试</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># curl 127.0.0.1</span>
+Docker YUM Nginx<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="DockerFile制作Nginx镜像"><a href="#DockerFile制作Nginx镜像" class="headerlink" title="DockerFile制作Nginx镜像"></a>DockerFile制作Nginx镜像</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 创建文件目录</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># cd /opt</span>
+<span class="token punctuation">[</span>root@vms101 opt<span class="token punctuation">]</span><span class="token comment"># mkdir -pv dockerfile/&#123;web/&#123;nginx,tomcat,apache&#125;,system/&#123;centos,ubuntu,redhat&#125;&#125;</span>
+mkdir: created directory ‘dockerfile’
+mkdir: created directory ‘dockerfile/web’
+mkdir: created directory ‘dockerfile/web/nginx’
+mkdir: created directory ‘dockerfile/web/tomcat’
+mkdir: created directory ‘dockerfile/web/apache’
+mkdir: created directory ‘dockerfile/system’
+mkdir: created directory ‘dockerfile/system/centos’
+mkdir: created directory ‘dockerfile/system/ubuntu’
+mkdir: created directory ‘dockerfile/system/redhat’
+<span class="token punctuation">[</span>root@vms101 opt<span class="token punctuation">]</span><span class="token comment"># cd dockerfile/web/nginx/</span>
+<span class="token punctuation">[</span>root@vms101 nginx<span class="token punctuation">]</span><span class="token comment"># touch ./Dockerfile</span>
+<span class="token punctuation">[</span>root@vms101 nginx<span class="token punctuation">]</span><span class="token comment"># cat > Dockerfile&lt;&lt;EOF</span>
+<span class="token comment">#My Dockerfile</span>
+FROM centos:7.9.2009
+MAINTAINER sujingxuan <span class="token string">"sujx@live.cn"</span>
+RUN yum makecache <span class="token operator">&amp;&amp;</span> yum <span class="token function">install</span> <span class="token parameter variable">-y</span> <span class="token function">wget</span> <span class="token operator">&amp;&amp;</span> <span class="token function">rm</span> <span class="token parameter variable">-f</span> /var/yum.repos.d/* <span class="token operator">&amp;&amp;</span> <span class="token function">wget</span> <span class="token parameter variable">-O</span> /etc/yum.repos.d/CentOS-Base.repo https://repo.huaweicloud.com/repository/conf/CentOS-7-reg.repo <span class="token operator">&amp;&amp;</span>yum <span class="token function">install</span> <span class="token parameter variable">-y</span> epel-release <span class="token operator">&amp;&amp;</span> <span class="token function">sed</span> <span class="token parameter variable">-i</span> <span class="token string">"s/#baseurl/baseurl/g"</span> /etc/yum.repos.d/epel.repo <span class="token operator">&amp;&amp;</span> <span class="token function">sed</span> <span class="token parameter variable">-i</span> <span class="token string">"s/metalink/#metalink/g"</span> /etc/yum.repos.d/epel.repo <span class="token operator">&amp;&amp;</span> <span class="token function">sed</span> <span class="token parameter variable">-i</span> <span class="token string">"s@https\?://download.fedoraproject.org/pub@https://repo.huaweicloud.com@g"</span> /etc/yum.repos.d/epel.repo <span class="token operator">&amp;&amp;</span>yum makecache
+RUN yum <span class="token function">install</span> <span class="token parameter variable">-y</span> <span class="token function">vim</span> <span class="token function">wget</span> pcre pcre-devel zlib zlib-devel openssl openssl-devel iproute net-tools iotop nginx
+RUN <span class="token function">rm</span> <span class="token parameter variable">-f</span> /usr/share/nginx/html/index.html <span class="token operator">&amp;&amp;</span> RUN <span class="token builtin class-name">echo</span> <span class="token string">"Docker YUM Nginx"</span> <span class="token operator">>></span> /usr/share/nginx/html/index.html
+EXPOSE <span class="token number">80</span> <span class="token number">443</span>
+CMD <span class="token punctuation">[</span><span class="token string">"nginx"</span>,<span class="token string">"-g"</span>,<span class="token string">"daemon off;"</span><span class="token punctuation">]</span>
+EOF
+<span class="token punctuation">[</span>root@vms101 nginx<span class="token punctuation">]</span><span class="token comment"># docker build -t sujx/nginx-yum-file:v1 /opt/dockerfile/web/nginx</span>
+root@vms101 nginx<span class="token punctuation">]</span><span class="token comment"># docker build -t sujx/nginx-yum-file:v1 ./</span>
+<span class="token punctuation">[</span>+<span class="token punctuation">]</span> Building <span class="token number">160</span>.1s <span class="token punctuation">(</span><span class="token number">7</span>/7<span class="token punctuation">)</span> FINISHED                                                                                                       ………………  
+<span class="token punctuation">[</span>root@vms101 nginx<span class="token punctuation">]</span><span class="token comment"># docker run -d --name nginx-dfile -p 80:80 sujx/nginx-yum-file:v1</span>
+7b1f4629ff4a451d95c0a5284a06633bb6ae4c66a27ffb28433563045bde2a51
+<span class="token punctuation">[</span>root@vms101 nginx<span class="token punctuation">]</span><span class="token comment"># curl 127.0.0.1</span>
+Docker YUM Nginx<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="自定义Tomcat镜像"><a href="#自定义Tomcat镜像" class="headerlink" title="自定义Tomcat镜像"></a>自定义Tomcat镜像</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 基于CentOS 7.9.2009基础镜像构建JDK和Tomcat镜像。</span>
+<span class="token comment"># 下载基础镜像</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker pull centos:7.9.2009</span>
+<span class="token comment"># 构建JDK镜像</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># cd /opt/dockerfile/web/jdk</span>
+<span class="token punctuation">[</span>root@vms101 jdk<span class="token punctuation">]</span><span class="token comment"># wget https://repo.huaweicloud.com/java/jdk/8u202-b08/jdk-8u202-linux-x64.rpm</span>
+<span class="token punctuation">[</span>root@vms101 jdk<span class="token punctuation">]</span><span class="token comment"># cat ./Dockerfile </span>
+<span class="token comment"># JDK Base Image</span>
+FROM centos:7.9.2009
+MAINTAINER sujingxuan <span class="token string">"sujx@live.cn"</span>
+
+COPY jdk-8u202-linux-x64.rpm /tmp
+RUN <span class="token function">rpm</span> <span class="token parameter variable">-Uvh</span> /tmp/jdk-8u202-linux-x64.rpm
+
+ADD profile /etc/profile
+
+ENV <span class="token builtin class-name">export</span> <span class="token assign-left variable">JAVA_HOME</span><span class="token operator">=</span>/usr/java/default
+ENV <span class="token builtin class-name">export</span> <span class="token assign-left variable"><span class="token environment constant">PATH</span></span><span class="token operator">=</span><span class="token environment constant">$PATH</span><span class="token builtin class-name">:</span><span class="token variable">$JAVA_HOME</span>/bin
+ENV <span class="token builtin class-name">export</span> <span class="token assign-left variable">CLASSPATH</span><span class="token operator">=</span>.:<span class="token variable">$JAVA_HOME</span>/jre/lib:<span class="token variable">$JAVA_HOME</span>/lib:<span class="token variable">$JAVA_HOME</span>/lib/tools.jar
+
+RUN <span class="token function">rm</span> <span class="token parameter variable">-f</span> /etc/localtime <span class="token operator">&amp;&amp;</span> <span class="token function">ln</span> <span class="token parameter variable">-snf</span> /usr/share/zoneinfo/Asia/Shanghai /etc/localtime <span class="token operator">&amp;&amp;</span> <span class="token builtin class-name">echo</span> <span class="token string">"Asia/Shanghai"</span> <span class="token operator">></span> /etc/timezone <span class="token operator">&amp;&amp;</span> <span class="token function">rm</span> <span class="token parameter variable">-f</span> /tmp/*.rpm
+
+<span class="token punctuation">[</span>root@vms101 jdk<span class="token punctuation">]</span><span class="token comment"># docker build -t centos-jdk:v1 ./</span>
+<span class="token punctuation">[</span>+<span class="token punctuation">]</span> Building <span class="token number">11</span>.0s <span class="token punctuation">(</span><span class="token number">9</span>/9<span class="token punctuation">)</span> FINISHED                        
+ <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">[</span>internal<span class="token punctuation">]</span> load .dockerignore                                            <span class="token operator">=</span><span class="token operator">></span> <span class="token operator">=</span><span class="token operator">></span> naming to docker.io/library/centos-jdk:v1 
+<span class="token comment"># 验证结果</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker run -it --rm --name jdk-test centos-jdk:v1 /bin/bash</span>
+<span class="token punctuation">[</span>root@4115a47a2c49 /<span class="token punctuation">]</span><span class="token comment"># java -showversion</span>
+<span class="token function">java</span> version <span class="token string">"1.8.0_202"</span>
+Java<span class="token punctuation">(</span>TM<span class="token punctuation">)</span> SE Runtime Environment <span class="token punctuation">(</span>build <span class="token number">1.8</span>.0_202-b08<span class="token punctuation">)</span>
+Java HotSpot<span class="token punctuation">(</span>TM<span class="token punctuation">)</span> <span class="token number">64</span>-Bit Server VM <span class="token punctuation">(</span>build <span class="token number">25.202</span>-b08, mixed mode<span class="token punctuation">)</span>
+<span class="token punctuation">[</span>root@4115a47a2c49 /<span class="token punctuation">]</span><span class="token comment"># vi day.java</span>
+<span class="token function">import</span> java.util.Calendar<span class="token punctuation">;</span>
+
+class day <span class="token punctuation">&#123;</span>
+    public static void main<span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        Calendar <span class="token function">cal</span> <span class="token operator">=</span> Calendar.getInstance<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        int year <span class="token operator">=</span> cal.get<span class="token punctuation">(</span>Calendar.YEAR<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        int month <span class="token operator">=</span> cal.get<span class="token punctuation">(</span>Calendar.MONTH<span class="token punctuation">)</span> + <span class="token number">1</span><span class="token punctuation">;</span>
+        int day <span class="token operator">=</span> cal.get<span class="token punctuation">(</span>Calendar.DATE<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        int hour <span class="token operator">=</span> cal.get<span class="token punctuation">(</span>Calendar.HOUR_OF_DAY<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        int minute <span class="token operator">=</span> cal.get<span class="token punctuation">(</span>Calendar.MINUTE<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System.out.println<span class="token punctuation">(</span>year + <span class="token string">"/"</span> + month + <span class="token string">"/"</span> + day + <span class="token string">" "</span> + hour + <span class="token string">":"</span> + minute<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token punctuation">[</span>root@4115a47a2c49 /<span class="token punctuation">]</span><span class="token comment"># javac day.java </span>
+<span class="token punctuation">[</span>root@4115a47a2c49 /<span class="token punctuation">]</span><span class="token comment"># java day</span>
+<span class="token number">2023</span>/5/10 <span class="token number">23</span>:56
+<span class="token comment"># 构建Tomcat Base镜像</span>
+
+<span class="token comment"># CentOS7 JDK For Tomcat</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># cd /opt/dockerfile/web/tomcat</span>
+<span class="token punctuation">[</span>root@vms101 tomcat<span class="token punctuation">]</span><span class="token comment"># wget https://dlcdn.apache.org/tomcat/tomcat-8/v8.5.88/bin/apache-tomcat-8.5.88.tar.gz</span>
+<span class="token punctuation">[</span>root@vms101 tomcat<span class="token punctuation">]</span><span class="token comment"># vim Dockerfile </span>
+FROM centos-jdk:v1
+MAINTAINER sujingxuan <span class="token string">"sujx@live.cn"</span>
+
+ADD apache-tomcat-8.5.88.tar.gz /usr/local/src
+RUN <span class="token function">useradd</span> <span class="token parameter variable">-M</span> <span class="token parameter variable">-d</span> /usr/local/src/apache-tomcat-8.5.88 tomcat
+RUN <span class="token function">chown</span> <span class="token parameter variable">-R</span> tomcat:tomcat /usr/local/src/apache-tomcat-8.5.88
+
+ENV TOMCAT_MAJOR_VERSION <span class="token number">8</span>
+ENV TOMCAT_MINOR_VERSION <span class="token number">8.5</span>.88
+ENV <span class="token builtin class-name">export</span> <span class="token assign-left variable">CATALINA_HOME</span><span class="token operator">=</span>/usr/local/src/apache-tomcat-8.5.88
+ENV APP_DIR <span class="token variable"><span class="token variable">$(</span>CATALINA_HOME<span class="token variable">)</span></span>/webapps
+<span class="token punctuation">[</span>root@vms101 tomcat<span class="token punctuation">]</span><span class="token comment"># docker build -t tomcat-base:v1 .</span>
+<span class="token punctuation">[</span>root@vms101 tomcat<span class="token punctuation">]</span><span class="token comment"># docker images</span>
+REPOSITORY     TAG        IMAGE ID       CREATED          SIZE
+tomcat-base    v1         38e080bd23d4   <span class="token number">3</span> minutes ago    815MB
+centos-jdk     v1         ae6b4f8f0c29   <span class="token number">48</span> minutes ago   785MB
+<span class="token comment"># 构建业务镜像</span>
+<span class="token punctuation">[</span>root@vms101 tomcat-app1<span class="token punctuation">]</span><span class="token comment"># vim run_tomcat.sh </span>
+<span class="token comment">#!/bin/bash</span>
+<span class="token function">su</span> - tomcat <span class="token parameter variable">-c</span> <span class="token string">"/usr/local/src/apache-tomcat-8.5.88/bin/startup.sh start"</span>
+<span class="token function">tail</span> <span class="token parameter variable">-f</span> /etc/hosts
+<span class="token punctuation">[</span>root@vms101 tomcat-app1<span class="token punctuation">]</span><span class="token comment"># mkdir myapp &amp;&amp; echo "Tomcat Web Page1">>myapp/index.html</span>
+<span class="token punctuation">[</span>root@vms101 tomcat-app1<span class="token punctuation">]</span><span class="token comment"># vim Dockerfile </span>
+<span class="token comment"># Tomcat WEB APPS</span>
+FROM tomcat-base:v1
+MAINTAINER sujingxuan <span class="token string">"sujx@live.cn"</span>
+
+COPY run_tomcat.sh /usr/local/src/apache-tomcat-8.5.88/
+COPY myapp/* /usr/local/src/apache-tomcat-8.5.88/webapps/myapp/
+
+RUN <span class="token function">chown</span> <span class="token parameter variable">-R</span> tomcat:tomcat /usr/local/src/apache-tomcat-8.5.88/
+CMD <span class="token punctuation">[</span><span class="token string">"/usr/local/src/apache-tomcat-8.5.88/run_tomcat.sh"</span><span class="token punctuation">]</span>
+EXPOSE <span class="token number">8080</span> <span class="token number">8005</span>
+<span class="token punctuation">[</span>root@vms101 tomcat-app1<span class="token punctuation">]</span><span class="token comment"># docker build -t tomcat-app1:v1 .</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker run -it -d -p 80:8080 tomcat-app1:v1 </span>
+<span class="token comment"># 验证</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># curl http://172.16.10.101/myapp/</span>
+Tomcat Web Page1
+
+<span class="token comment"># 依据上述操作，准备tomcat-app2镜像</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker run -it -d -p 81:8080 tomcat-app1:v1 </span>
+246cdabbb8ed87ede039306870d4c61dddd27c50b3857b53b0d09efd79046f15
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker run -it -d -p 82:8080 tomcat-app2:v1 </span>
+22a0c67911dac716df2aaf4b24b5927bcd30f590e3b858f6d8bac5f329943fc2
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># curl 127.0.0.1:81/myapp/</span>
+Tomcat Web Page1
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># curl 127.0.0.1:82/myapp/</span>
+Tomcat Web Page2<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="构建Haproxy镜像"><a href="#构建Haproxy镜像" class="headerlink" title="构建Haproxy镜像"></a>构建Haproxy镜像</h3><p><img src="https://cdn.sujx.net/haproxy_haadmin.PNG" alt="haproxy_status"></p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 创建Haproxy启动脚本</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># mkdir /opt/dockerfile/haproxy/ &amp;&amp; cd /opt/dockerfile/haproxy/ &amp;&amp; touch Dockerfile run_haproxy.sh haproxy.cfg</span>
+<span class="token punctuation">[</span>root@vms101 haproxy<span class="token punctuation">]</span><span class="token comment"># cat run_haproxy.sh </span>
+<span class="token comment">#!/bin/bash</span>
+haproxy <span class="token parameter variable">-f</span> /etc/haproxy/haproxy.cfg 
+/bin/bash
+
+<span class="token comment"># 创建Haproxy配置文件</span>
+<span class="token punctuation">[</span>root@vms101 haproxy<span class="token punctuation">]</span><span class="token comment"># cat haproxy.cfg</span>
+global
+    log         <span class="token number">127.0</span>.0.1 local2 info
+    <span class="token function">chroot</span>      /var/lib/haproxy
+    pidfile     /var/run/haproxy.pid
+    maxconn     <span class="token number">256</span>
+    user        haproxy
+    group       haproxy
+    daemon
+
+defaults
+    mode               http
+    log                global
+    option             httplog
+    <span class="token function">timeout</span> connect    10s
+    <span class="token function">timeout</span> client     30s
+    <span class="token function">timeout</span> server     30s
+listen stats
+    mode	       http
+    <span class="token builtin class-name">bind</span>	       <span class="token number">0.0</span>.0.0:9999
+    stats              <span class="token builtin class-name">enable</span>
+    log                global
+    stats uri	       /haproxy-status
+    stats auth         haadmin:qwe123<span class="token operator">!</span><span class="token operator">!</span>
+
+frontend http-in
+    <span class="token builtin class-name">bind</span> *:80
+    default_backend    backend_servers
+    option             forwardfor
+
+backend backend_servers
+    mode	       http
+    balance            roundrobin
+    server             web1 <span class="token number">172.16</span>.10.101:81 check inter <span class="token number">3000</span> fall <span class="token number">2</span> rise <span class="token number">5</span>
+    server             web2 <span class="token number">172.16</span>.10.101:82 check inter <span class="token number">3000</span> fall <span class="token number">2</span> rise <span class="token number">5</span>
+<span class="token comment"># 创建Haproxy镜像</span>
+<span class="token punctuation">[</span>root@vms101 haproxy<span class="token punctuation">]</span><span class="token comment"># cat Dockerfile </span>
+<span class="token comment">#Haproxy Base Image</span>
+FROM centos:7.9.2009
+MAINTAINER sujingxuan <span class="token string">"sujx@live.cn"</span>
+RUN yum <span class="token function">install</span> <span class="token parameter variable">-y</span> haproxy
+RUN <span class="token function">mv</span> /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg.org
+COPY haproxy.cfg /etc/haproxy/
+COPY run_haproxy.sh /usr/bin/
+EXPOSE <span class="token number">80</span> <span class="token number">9999</span>
+CMD <span class="token punctuation">[</span><span class="token string">"/usr/bin/run_haproxy.sh"</span><span class="token punctuation">]</span>
+
+<span class="token punctuation">[</span>root@vms101 haproxy<span class="token punctuation">]</span><span class="token comment"># docker build -t haproxy-base:v1 .</span>
+<span class="token punctuation">[</span>+<span class="token punctuation">]</span> Building <span class="token number">0</span>.1s <span class="token punctuation">(</span><span class="token number">10</span>/10<span class="token punctuation">)</span> FINISHED                                                                           
+ <span class="token operator">=</span><span class="token operator">></span> <span class="token operator">=</span><span class="token operator">></span> naming to docker.io/library/haproxy-base:v1 
+<span class="token comment"># 拉起前端容器</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker run -itd --name haproxy -p 80:80 -p 9999:9999 haproxy-base:v1</span>
+91dfb0cb8d8fbf1c81b8804819eba4a308c57209da84ba526cb1bf15be1de2e6
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker ps </span>
+91dfb0cb8d8f   haproxy-base:v1 <span class="token number">0.0</span>.0.0:80-<span class="token operator">></span><span class="token number">80</span>/tcp, :::80-<span class="token operator">></span><span class="token number">80</span>/tcp, <span class="token number">0.0</span>.0.0:9999-<span class="token operator">></span><span class="token number">9999</span>/tcp, :::9999-<span class="token operator">></span><span class="token number">9999</span>/tcp   haproxy
+5ec41ac5f902   tomcat-app1:v1  <span class="token number">8005</span>/tcp, <span class="token number">0.0</span>.0.0:81-<span class="token operator">></span><span class="token number">8080</span>/tcp, :::81-<span class="token operator">></span><span class="token number">8080</span>/tcp
+d903c1419c9b   tomcat-app2:v1  <span class="token number">8005</span>/tcp, <span class="token number">0.0</span>.0.0:82-<span class="token operator">></span><span class="token number">8080</span>/tcp, :::82-<span class="token operator">></span><span class="token number">8080</span>/tcp                  
+<span class="token comment"># 验证结果</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># curl 127.0.0.1/myapp/</span>
+Tomcat Web Page2
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># curl 127.0.0.1/myapp/</span>
+Tomcat Web Page1
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># curl 127.0.0.1/myapp/</span>
+Tomcat Web Page2
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># curl 127.0.0.1/myapp/</span>
+Tomcat Web Page1<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="数据管理-1"><a href="#数据管理-1" class="headerlink" title="数据管理"></a>数据管理</h2><h3 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h3><p>Docker镜像是分层设计，底层只读，通过镜像添加可读写文件系统，用户写入的数据则保存在此层中。</p>
+<p>容器的数据分层目录：</p>
+<ul>
+<li>LowerDir: image 镜像层,即镜像本身，只读</li>
+<li>UpperDir: 容器的上层,可读写 ,容器变化的数据存放在此处</li>
+<li>MergedDir: 容器的文件系统，使用Union FS（联合文件系统）将lowerdir 和 upperdir 合并完成后给容器使用,最终呈现给用户的统一视图</li>
+<li>WorkDir: 容器在宿主机的工作目录,挂载后内容会被清空，且在使用过程中其内容用户不可见</li>
+</ul>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 拉起一个容器</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker run -it -d centos:7.9.2009 /bin/bash</span>
+c8dcc79d12a987f4e37c4e9747f37bfe9b4c9ae7eb3a41212ae38b58a0fc0ff4
+<span class="token comment"># 查看容器配置信息</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker inspect c8dcc</span>
+……
+<span class="token string">"GraphDriver"</span><span class="token builtin class-name">:</span> <span class="token punctuation">&#123;</span>
+            <span class="token string">"Data"</span><span class="token builtin class-name">:</span> <span class="token punctuation">&#123;</span>
+                <span class="token string">"LowerDir"</span><span class="token builtin class-name">:</span> <span class="token string">"/var/lib/docker/overlay2/1e520f13bb5e4cc2ba6776c164c59777f35d00ed7a489e061deeec140293c351-init/diff:/var/lib/docker/overlay2/e8b3f1e50e7ff6272e00ddf3aba286ea0729d65b54c57542970fc180fd350bc3/diff"</span>,
+                <span class="token string">"MergedDir"</span><span class="token builtin class-name">:</span> <span class="token string">"/var/lib/docker/overlay2/1e520f13bb5e4cc2ba6776c164c59777f35d00ed7a489e061deeec140293c351/merged"</span>,
+                <span class="token string">"UpperDir"</span><span class="token builtin class-name">:</span> <span class="token string">"/var/lib/docker/overlay2/1e520f13bb5e4cc2ba6776c164c59777f35d00ed7a489e061deeec140293c351/diff"</span>,
+                <span class="token string">"WorkDir"</span><span class="token builtin class-name">:</span> <span class="token string">"/var/lib/docker/overlay2/1e520f13bb5e4cc2ba6776c164c59777f35d00ed7a489e061deeec140293c351/work"</span>
+            <span class="token punctuation">&#125;</span>,
+            <span class="token string">"Name"</span><span class="token builtin class-name">:</span> <span class="token string">"overlay2"</span>
+        <span class="token punctuation">&#125;</span>,
+        <span class="token string">"Mounts"</span><span class="token builtin class-name">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>,
+……
+<span class="token comment"># 在容器中创建文件</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker exec -it c8dcc /bin/bash</span>
+<span class="token punctuation">[</span>root@c8dcc79d12a9 /<span class="token punctuation">]</span><span class="token comment"># dd if=/dev/zero of=file bs=1M count=100</span>
+<span class="token number">100</span>+0 records <span class="token keyword">in</span>
+<span class="token number">100</span>+0 records out
+<span class="token number">104857600</span> bytes <span class="token punctuation">(</span><span class="token number">105</span> MB<span class="token punctuation">)</span> copied, <span class="token number">0.276637</span> s, <span class="token number">379</span> MB/s
+<span class="token punctuation">[</span>root@c8dcc79d12a9 /<span class="token punctuation">]</span><span class="token comment"># md5sum file</span>
+2f282b84e7e608d5852449ed940bfc51  <span class="token function">file</span>
+<span class="token punctuation">[</span>root@c8dcc79d12a9 /<span class="token punctuation">]</span><span class="token comment"># cp anaconda-post.log /opt/anaconda-post.log</span>
+<span class="token punctuation">[</span>root@c8dcc79d12a9 /<span class="token punctuation">]</span><span class="token comment"># exit</span>
+<span class="token builtin class-name">exit</span>
+<span class="token comment"># 在Host中查看容器创建的文件</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># tree /var/lib/docker/overlay2/c</span>
+c18937983445d3e2d6c11c5bb3ce20a336f9024111c529bd7a99008c27bcf096/ c595c60cf63d162ae9493e112498b941cf8d40a6b7f3bdeb73fa39609383c1e4/ cxn3dw459jii5d9r5iseys6zx/
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># tree /var/lib/docker/overlay2/l</span>
+l/                         lmv5guk13yscu2hburzkmzyl7/ lwp6qtbel95861tstj3q5tqu5/ 
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># tree /var/lib/docker/overlay2/1e520f13bb5e4cc2ba6776c164c59777f35d00ed7a489e061deeec140293c351/diff/</span>
+/var/lib/docker/overlay2/1e520f13bb5e4cc2ba6776c164c59777f35d00ed7a489e061deeec140293c351/diff/
+├── <span class="token function">file</span>
+├── opt
+│   └── anaconda-post.log
+└── root
+<span class="token number">2</span> directories, <span class="token number">2</span> files
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># md5sum file</span>
+md5sum: file: No such <span class="token function">file</span> or directory
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># md5sum /var/lib/docker/overlay2/1e520f13bb5e4cc2ba6776c164c59777f35d00ed7a489e061deeec140293c351/diff/file </span>
+2f282b84e7e608d5852449ed940bfc51  /var/lib/docker/overlay2/1e520f13bb5e4cc2ba6776c164c59777f35d00ed7a489e061deeec140293c351/diff/file
+<span class="token comment"># 从宿主机复制文件到容器</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker cp testapp/index.html 4d7d:/data</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>数据卷的特点：</p>
+<ul>
+<li>数据卷是目录或者文件，并且可以在多个容器之间共享</li>
+<li>对数据卷的更改在所有容器内会立即更新</li>
+<li>数据卷的数据可以持久保存，即使删除使用该容器卷的容器也不影响</li>
+<li>在容器里面写入数据不会影响镜像本身</li>
+</ul>
+<p>数据卷使用场景：</p>
+<ul>
+<li>日志输出</li>
+<li>静态页面</li>
+<li>应用配置文件</li>
+<li>多容器间目录或文件共享</li>
+</ul>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 挂载随机目录,Host会自动创建一个随机名称的volume</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker run -d --name files -v /data centos:7.9.2009</span>
+4d7d7b6ebee8207a9b24964a76224c4be2853fbda9797d63dadfae5a0d89b374
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker inspect 4d7d |grep -A5 Mounts</span>
+        <span class="token string">"Mounts"</span><span class="token builtin class-name">:</span> <span class="token punctuation">[</span>
+            <span class="token punctuation">&#123;</span>
+                <span class="token string">"Type"</span><span class="token builtin class-name">:</span> <span class="token string">"volume"</span>,
+                <span class="token string">"Name"</span><span class="token builtin class-name">:</span> <span class="token string">"83c5ae40340c360db9cf11c79f7ccd363a981b18a2e664c22b1d9105cac370ba"</span>,
+                <span class="token string">"Source"</span><span class="token builtin class-name">:</span> <span class="token string">"/var/lib/docker/volumes/83c5ae40340c360db9cf11c79f7ccd363a981b18a2e664c22b1d9105cac370ba/_data"</span>,
+                <span class="token string">"Destination"</span><span class="token builtin class-name">:</span> <span class="token string">"/data"</span>,
+<span class="token comment"># 查看数据卷</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker volume ls</span>
+DRIVER    VOLUME NAME
+<span class="token builtin class-name">local</span>     83c5ae40340c360db9cf11c79f7ccd363a981b18a2e664c22b1d9105cac370ba
+<span class="token comment"># 创建数据卷</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker volume create httpd-vol</span>
+httpd-vol
+<span class="token comment"># 查看数据卷</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker volume ls</span>
+DRIVER    VOLUME NAME
+<span class="token builtin class-name">local</span>     83c5ae40340c360db9cf11c79f7ccd363a981b18a2e664c22b1d9105cac370ba
+<span class="token builtin class-name">local</span>     httpd-vol
+<span class="token comment"># 数据卷的信息</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker volume inspect httpd-vol </span>
+<span class="token punctuation">[</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token string">"CreatedAt"</span><span class="token builtin class-name">:</span> <span class="token string">"2023-05-11T23:47:10+08:00"</span>,
+        <span class="token string">"Driver"</span><span class="token builtin class-name">:</span> <span class="token string">"local"</span>,
+        <span class="token string">"Labels"</span><span class="token builtin class-name">:</span> null,
+        <span class="token string">"Mountpoint"</span><span class="token builtin class-name">:</span> <span class="token string">"/var/lib/docker/volumes/httpd-vol/_data"</span>,
+        <span class="token string">"Name"</span><span class="token builtin class-name">:</span> <span class="token string">"httpd-vol"</span>,
+        <span class="token string">"Options"</span><span class="token builtin class-name">:</span> null,
+        <span class="token string">"Scope"</span><span class="token builtin class-name">:</span> <span class="token string">"local"</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">]</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker volume inspect 83c5ae40340c360db9cf11c79f7ccd363a981b18a2e664c22b1d9105cac370ba </span>
+<span class="token punctuation">[</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token string">"CreatedAt"</span><span class="token builtin class-name">:</span> <span class="token string">"2023-05-11T23:28:03+08:00"</span>,
+        <span class="token string">"Driver"</span><span class="token builtin class-name">:</span> <span class="token string">"local"</span>,
+        <span class="token string">"Labels"</span><span class="token builtin class-name">:</span> <span class="token punctuation">&#123;</span>
+            <span class="token string">"com.docker.volume.anonymous"</span><span class="token builtin class-name">:</span> <span class="token string">""</span>
+        <span class="token punctuation">&#125;</span>,
+        <span class="token string">"Mountpoint"</span><span class="token builtin class-name">:</span> <span class="token string">"/var/lib/docker/volumes/83c5ae40340c360db9cf11c79f7ccd363a981b18a2e664c22b1d9105cac370ba/_data"</span>,
+        <span class="token string">"Name"</span><span class="token builtin class-name">:</span> <span class="token string">"83c5ae40340c360db9cf11c79f7ccd363a981b18a2e664c22b1d9105cac370ba"</span>,
+        <span class="token string">"Options"</span><span class="token builtin class-name">:</span> null,
+        <span class="token string">"Scope"</span><span class="token builtin class-name">:</span> <span class="token string">"local"</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">]</span>
+<span class="token comment"># 清理卷</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker ps -a</span>
+CONTAINER ID   IMAGE             COMMAND       CREATED          STATUS                      PORTS     NAMES
+4d7d7b6ebee8   centos:7.9.2009   <span class="token string">"/bin/bash"</span>   <span class="token number">44</span> minutes ago   Exited <span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span> <span class="token number">44</span> minutes ago             files
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker rm -f 4d7d</span>
+4d7d
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker volume rm 83c5ae40340c360db9cf11c79f7ccd363a981b18a2e664c22b1d9105cac370ba -f</span>
+83c5ae40340c360db9cf11c79f7ccd363a981b18a2e664c22b1d9105cac370ba<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="绑定挂载"><a href="#绑定挂载" class="headerlink" title="绑定挂载"></a>绑定挂载</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 创建访问文件</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># mkdir testapp</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># echo "&lt;p>&lt;h1>Test APP Page.&lt;/h1>&lt;/p>" > testapp/index.html</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker pull httpd</span>
+Using default tag: latest
+latest: Pulling from library/httpd
+a2abf6c4d29d: Already exists 
+dcc4698797c8: Pull complete 
+41c22baa66ec: Pull complete 
+67283bbdd4a0: Pull complete 
+d982c879c57e: Pull complete 
+Digest: sha256:0954cc1af252d824860b2c5dc0a10720af2b7a3d3435581ca788dff8480c7b32
+Status: Downloaded newer image <span class="token keyword">for</span> httpd:latest
+docker.io/library/httpd:latest
+<span class="token comment"># 使用-v参数将目标目录挂载给容器</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker run -d --name web -v /root/testapp/:/usr/local/apache2/htdocs/ -p 80:80 httpd</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># curl 127.0.0.1</span>
+<span class="token operator">&lt;</span>p<span class="token operator">></span><span class="token operator">&lt;</span>h<span class="token operator"><span class="token file-descriptor important">1</span>></span>Test APP Page.<span class="token operator">&lt;</span>/h<span class="token operator"><span class="token file-descriptor important">1</span>></span><span class="token operator">&lt;</span>/p<span class="token operator">></span>
+<span class="token comment"># 删除容器，数据仍然保留</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker rm -f 538</span>
+<span class="token number">538</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># ll testapp/</span>
+total <span class="token number">4</span>
+-rw-r--r--. <span class="token number">1</span> root root <span class="token number">51</span> May <span class="token number">11</span> <span class="token number">23</span>:10 index.html<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="容器管理卷"><a href="#容器管理卷" class="headerlink" title="容器管理卷"></a>容器管理卷</h3><p>数据卷容器可以让数据在多个容器之间共享，需要先创建一个后台运行的容器作为Server用于提供数据存储服务，其他使用此卷的容器作为Client。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 创建数据存储容器</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker run --name data -it -v /data --rm busybox</span>
+Unable to <span class="token function">find</span> image <span class="token string">'busybox:latest'</span> locally
+latest: Pulling from library/busybox
+5cc84ad355aa: Pull complete 
+Digest: sha256:5acba83a746c7608ed544dc1533b87c737a0b0fb730301639a0179f9344b1678
+Status: Downloaded newer image <span class="token keyword">for</span> busybox:latest
+/ <span class="token comment">#</span>
+<span class="token comment"># 新开一个终端来查看容器属性</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker inspect -f &#123;&#123;.Mounts&#125;&#125; data</span>
+<span class="token punctuation">[</span><span class="token punctuation">&#123;</span>volume dd641a30fbca54f88a6c8e7057e79a5af057cb3e6120b8d521bc3f52d6b743c7 /var/lib/docker/volumes/dd641a30fbca54f88a6c8e7057e79a5af057cb3e6120b8d521bc3f52d6b743c7/_data /data <span class="token builtin class-name">local</span>  <span class="token boolean">true</span> <span class="token punctuation">&#125;</span><span class="token punctuation">]</span>
+<span class="token comment"># 复制文件到存储容器</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker cp testapp/index.html data:/data</span>
+Successfully copied <span class="token number">2</span>.05kB to data:/data
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker exec data ls /data/testapp</span>
+index.html
+<span class="token comment"># 创建客户端容器，指定卷来自于上述的data容器</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker run --name client --volumes-from data -it --rm busybox</span>
+/ <span class="token comment"># ls</span>
+bin   data  dev   etc   home  proc  root  sys   tmp   usr   var
+/ <span class="token comment"># ls /data</span>
+testapp
+/ <span class="token comment"># ls /data/testapp/</span>
+index.html
+
+<span class="token comment"># 已关闭存储容器可以再创建客户端容器，已删除存储容器则不能再创建客户端容器，但已经存在的客户端容器不受影响，本质是卷的自动挂载。</span>
+<span class="token comment"># 自动删除容器卷</span>
+<span class="token function">docker</span> <span class="token function">rm</span> <span class="token parameter variable">-v</span> <span class="token parameter variable">-f</span> 容器ID<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="网络部分"><a href="#网络部分" class="headerlink" title="网络部分"></a>网络部分</h2><p>Docker服务安装完成之后，默认在宿主机会生成一个名称为docker0的网桥。Docker0是一个二层的网络设备，通过网桥可以将Linux支持的不同端口连接起来，其IP地址为172.17.0.1&#x2F;16,并生成三种类型的网络：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># ip a</span>
+<span class="token number">3</span>: docker0: <span class="token operator">&lt;</span>NO-CARRIER,BROADCAST,MULTICAST,UP<span class="token operator">></span> mtu <span class="token number">1500</span> qdisc noqueue state DOWN group default 
+    link/ether 02:42:5e:4e:37:81 brd ff:ff:ff:ff:ff:ff
+    inet <span class="token number">172.17</span>.0.1/16 brd <span class="token number">172.17</span>.255.255 scope global docker0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::42:5eff:fe4e:3781/64 scope <span class="token function">link</span> 
+       valid_lft forever preferred_lft forever
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker network ls</span>
+NETWORK ID     NAME      DRIVER    SCOPE
+4645c608490f   bridge    bridge    <span class="token builtin class-name">local</span>
+d24bbf5a7ca6   <span class="token function">host</span>      <span class="token function">host</span>      <span class="token builtin class-name">local</span>
+bbc3fc5e53b4   none      null      <span class="token builtin class-name">local</span>
+<span class="token comment"># 拉起一个容器之后的网络</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker run -d --name web -p 8080:80 nginx</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># ip a</span>
+<span class="token number">3</span>: docker0: <span class="token operator">&lt;</span>BROADCAST,MULTICAST,UP,LOWER_UP<span class="token operator">></span> mtu <span class="token number">1500</span> qdisc noqueue state UP group default 
+    link/ether 02:42:16:d2:ae:dc brd ff:ff:ff:ff:ff:ff
+    inet <span class="token number">172.17</span>.0.1/16 brd <span class="token number">172.17</span>.255.255 scope global docker0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::42:16ff:fed2:aedc/64 scope <span class="token function">link</span> 
+       valid_lft forever preferred_lft forever
+<span class="token number">5</span>: veth2344e4d@if4: <span class="token operator">&lt;</span>BROADCAST,MULTICAST,UP,LOWER_UP<span class="token operator">></span> mtu <span class="token number">1500</span> qdisc noqueue master docker0 state UP group default 
+    link/ether fe:a1:6c:51:73:87 brd ff:ff:ff:ff:ff:ff link-netnsid <span class="token number">0</span>
+    inet6 fe80::fca1:6cff:fe51:7387/64 scope <span class="token function">link</span> 
+       valid_lft forever preferred_lft forever
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># brctl show</span>
+bridge name	bridge <span class="token function">id</span>		STP enabled	interfaces
+docker0		<span class="token number">8000</span>.024216d2aedc	no		veth2344e4d
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker run -d --name web1 -p 81:80 nginx</span>
+ea153bf7bf6a95f58e46d902d0113c1ce21a1fd1cd8e7004cfdac3e6385523c0
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker run -d --name web2 -p 82:80 nginx</span>
+096113318c74e3a109451c938fd52f3f1dd48ba146760ce2f8c23de017feb390
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker inspect -f &#123;&#123;.NetworkSettings.IPAddress&#125;&#125; web1</span>
+<span class="token number">172.17</span>.0.3
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker inspect -f &#123;&#123;.NetworkSettings.IPAddress&#125;&#125; web2</span>
+<span class="token number">172.17</span>.0.4<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>每次新建容器，宿主机就会多一个虚拟网卡，和容器的网卡组成一个网卡，比如veth2344e4d@if4，而在容器内的网卡名为if4。容器会自动获取一个172.17.0.0、16的网段随机地址，默认从172.17.0.2开始。容器获取的地址并不固定，每次重启容器，可能会发生地址变化。该网络设备类型为veth pair，是种成对出现的虚拟网络设备，用于解决网络命名空间之间的隔离。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@5926763045b4 /<span class="token punctuation">]</span><span class="token comment"># ping 172.17.0.3</span>
+PING <span class="token number">172.17</span>.0.3 <span class="token punctuation">(</span><span class="token number">172.17</span>.0.3<span class="token punctuation">)</span> <span class="token number">56</span><span class="token punctuation">(</span><span class="token number">84</span><span class="token punctuation">)</span> bytes of data.
+<span class="token number">64</span> bytes from <span class="token number">172.17</span>.0.3: <span class="token assign-left variable">icmp_seq</span><span class="token operator">=</span><span class="token number">1</span> <span class="token assign-left variable">ttl</span><span class="token operator">=</span><span class="token number">64</span> <span class="token assign-left variable">time</span><span class="token operator">=</span><span class="token number">0.094</span> ms
+--- <span class="token number">172.17</span>.0.3 <span class="token function">ping</span> statistics ---
+<span class="token number">1</span> packets transmitted, <span class="token number">1</span> received, <span class="token number">0</span>% packet loss, <span class="token function">time</span> 0ms
+rtt min/avg/max/mdev <span class="token operator">=</span> <span class="token number">0.094</span>/0.094/0.094/0.000 ms
+<span class="token punctuation">[</span>root@5926763045b4 /<span class="token punctuation">]</span><span class="token comment"># ping 172.17.0.4</span>
+PING <span class="token number">172.17</span>.0.4 <span class="token punctuation">(</span><span class="token number">172.17</span>.0.4<span class="token punctuation">)</span> <span class="token number">56</span><span class="token punctuation">(</span><span class="token number">84</span><span class="token punctuation">)</span> bytes of data.
+<span class="token number">64</span> bytes from <span class="token number">172.17</span>.0.4: <span class="token assign-left variable">icmp_seq</span><span class="token operator">=</span><span class="token number">1</span> <span class="token assign-left variable">ttl</span><span class="token operator">=</span><span class="token number">64</span> <span class="token assign-left variable">time</span><span class="token operator">=</span><span class="token number">0.090</span> ms
+--- <span class="token number">172.17</span>.0.4 <span class="token function">ping</span> statistics ---
+<span class="token number">2</span> packets transmitted, <span class="token number">2</span> received, <span class="token number">0</span>% packet loss, <span class="token function">time</span> 1000ms
+rtt min/avg/max/mdev <span class="token operator">=</span> <span class="token number">0.070</span>/0.080/0.090/0.010 ms<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h4 id="修改网桥的网络配置"><a href="#修改网桥的网络配置" class="headerlink" title="修改网桥的网络配置"></a>修改网桥的网络配置</h4><ol>
+<li><p>通过配置Docker的daemon.json来修改</p>
+ <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># cat /etc/docker/daemon.json </span>
+<span class="token punctuation">&#123;</span>
+  <span class="token string">"bip"</span><span class="token builtin class-name">:</span> <span class="token string">"192.168.100.1/24"</span>
+  <span class="token string">"registry-mirrors"</span><span class="token builtin class-name">:</span> <span class="token punctuation">[</span><span class="token string">"https://37y8py0j.mirror.aliyuncs.com"</span><span class="token punctuation">]</span>
+<span class="token punctuation">&#125;</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># systemctl daemon-reload </span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># systemctl restart docker</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># ip a</span>
+<span class="token number">3</span>: docker0: <span class="token operator">&lt;</span>NO-CARRIER,BROADCAST,MULTICAST,UP<span class="token operator">></span> mtu <span class="token number">1500</span> qdisc noqueue state DOWN group default 
+    link/ether 02:42:16:d2:ae:dc brd ff:ff:ff:ff:ff:ff
+    inet <span class="token number">192.168</span>.100.1/24 brd <span class="token number">192.168</span>.100.255 scope global docker0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::42:16ff:fed2:aedc/64 scope <span class="token function">link</span> 
+       valid_lft forever preferred_lft forever<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li><p>修改docker服务的配置文件</p>
+ <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># vim /etc/systemd/system/multi-user.target.wants/docker.service </span>
+<span class="token punctuation">[</span>Service<span class="token punctuation">]</span>
+<span class="token assign-left variable">Type</span><span class="token operator">=</span>notify
+<span class="token assign-left variable">ExecStart</span><span class="token operator">=</span>/usr/bin/dockerd <span class="token parameter variable">-H</span> fd:// <span class="token parameter variable">--containerd</span><span class="token operator">=</span>/run/containerd/containerd.sock <span class="token parameter variable">--bip</span><span class="token operator">=</span><span class="token number">192.168</span>.100.2/24
+
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># systemctl daemon-reload</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># systemctl restart docker</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># ip a</span>
+<span class="token number">3</span>: docker0: <span class="token operator">&lt;</span>NO-CARRIER,BROADCAST,MULTICAST,UP<span class="token operator">></span> mtu <span class="token number">1500</span> qdisc noqueue state DOWN group default 
+    link/ether 02:42:16:d2:ae:dc brd ff:ff:ff:ff:ff:ff
+    inet <span class="token number">192.168</span>.100.2/24 brd <span class="token number">192.168</span>.100.255 scope global docker0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::42:16ff:fed2:aedc/64 scope <span class="token function">link</span> 
+       valid_lft forever preferred_lft forever<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+</ol>
+<h4 id="修改默认网桥"><a href="#修改默认网桥" class="headerlink" title="修改默认网桥"></a>修改默认网桥</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># yum install -y bridge-utils</span>
+Package bridge-utils-1.5-9.el7.x86_64 already installed and latest version
+Nothing to <span class="token keyword">do</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># brctl addbr br0</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># ip a a 192.168.100.1/24 dev br0</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># brctl show</span>
+bridge name	bridge <span class="token function">id</span>		STP enabled	interfaces
+br0		<span class="token number">8000.000000000000</span>	no		
+docker0		<span class="token number">8000</span>.024216d2aedc	no		
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># ip a</span>
+<span class="token number">3</span>: docker0: <span class="token operator">&lt;</span>NO-CARRIER,BROADCAST,MULTICAST,UP<span class="token operator">></span> mtu <span class="token number">1500</span> qdisc noqueue state DOWN group default 
+    link/ether 02:42:16:d2:ae:dc brd ff:ff:ff:ff:ff:ff
+    inet <span class="token number">172.17</span>.0.1/16 brd <span class="token number">172.17</span>.255.255 scope global docker0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::42:16ff:fed2:aedc/64 scope <span class="token function">link</span> 
+       valid_lft forever preferred_lft forever
+<span class="token number">14</span>: br0: <span class="token operator">&lt;</span>BROADCAST,MULTICAST<span class="token operator">></span> mtu <span class="token number">1500</span> qdisc noop state DOWN group default qlen <span class="token number">1000</span>
+    link/ether e2:73:fe:78:07:72 brd ff:ff:ff:ff:ff:ff
+    inet <span class="token number">192.168</span>.100.1/24 scope global br0
+       valid_lft forever preferred_lft forever
+<span class="token comment"># 修改docker配置文件</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># vim /etc/systemd/system/multi-user.target.wants/docker.service </span>
+<span class="token punctuation">[</span>Service<span class="token punctuation">]</span>
+<span class="token assign-left variable">Type</span><span class="token operator">=</span>notify
+<span class="token assign-left variable">ExecStart</span><span class="token operator">=</span>/usr/bin/dockerd <span class="token parameter variable">-H</span> fd:// <span class="token parameter variable">--containerd</span><span class="token operator">=</span>/run/containerd/containerd.sock <span class="token parameter variable">-b</span> br0
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># systemctl daemon-reload</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># systemctl restart docker</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker run --rm centos:7.9.2009 hostname -i</span>
+<span class="token number">192.168</span>.100.2<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h4 id="容器间网络连接"><a href="#容器间网络连接" class="headerlink" title="容器间网络连接"></a>容器间网络连接</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker run -d -it --name web0 -p 80:80 nginx </span>
+54cca62ffbe9fc59f4e7474d0a481136cdbfca68eb677e892c9b98673bc4842d
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker run -d -it --name web1 -p 81:80 --link web0 nginx </span>
+824595bdb5e4991a506f5b3cb87e4fe88c08696df1be0ab4988c50b89be53bae
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker exec -it web1 cat /etc/hosts</span>
+<span class="token number">172.17</span>.0.2	web0 54cca62ffbe9
+<span class="token number">172.17</span>.0.3	824595bdb5e4
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker run -d -it --name web2 -p 82:80 --link web0 --link web1 nginx </span>
+51a303ad5da9476dd1b878064ff927f3fd49511e32b27c10785799d2ecc82a60
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker exec -it web2 cat /etc/hosts</span>
+<span class="token number">172.17</span>.0.2	web0 54cca62ffbe9
+<span class="token number">172.17</span>.0.3	web1 824595bdb5e4
+<span class="token number">172.17</span>.0.4	51a303ad5da9
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker run -d -it --name web3 -p 83:80 --link web0 --link web1 --link web2 centos:7.9.2009 </span>
+277807e81bb92a66e1696af982467f66dda719b6e4a3ae2e0499aeabdcba16b5
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker exec -it web3 cat /etc/hosts</span>
+<span class="token number">172.17</span>.0.2	web0 54cca62ffbe9
+<span class="token number">172.17</span>.0.3	web1 824595bdb5e4
+<span class="token number">172.17</span>.0.4	web2 51a303ad5da9
+<span class="token number">172.17</span>.0.5	277807e81bb9
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker exec -it web3 /bin/bash</span>
+<span class="token punctuation">[</span>root@277807e81bb9 /<span class="token punctuation">]</span><span class="token comment"># ping web0</span>
+PING web0 <span class="token punctuation">(</span><span class="token number">172.17</span>.0.2<span class="token punctuation">)</span> <span class="token number">56</span><span class="token punctuation">(</span><span class="token number">84</span><span class="token punctuation">)</span> bytes of data.
+<span class="token number">64</span> bytes from web0 <span class="token punctuation">(</span><span class="token number">172.17</span>.0.2<span class="token punctuation">)</span>: <span class="token assign-left variable">icmp_seq</span><span class="token operator">=</span><span class="token number">1</span> <span class="token assign-left variable">ttl</span><span class="token operator">=</span><span class="token number">64</span> <span class="token assign-left variable">time</span><span class="token operator">=</span><span class="token number">0.105</span> ms
+--- web0 <span class="token function">ping</span> statistics ---
+<span class="token number">2</span> packets transmitted, <span class="token number">2</span> received, <span class="token number">0</span>% packet loss, <span class="token function">time</span> 999ms
+rtt min/avg/max/mdev <span class="token operator">=</span> <span class="token number">0.060</span>/0.082/0.105/0.024 ms
+<span class="token punctuation">[</span>root@277807e81bb9 /<span class="token punctuation">]</span><span class="token comment"># ping web2</span>
+PING web2 <span class="token punctuation">(</span><span class="token number">172.17</span>.0.4<span class="token punctuation">)</span> <span class="token number">56</span><span class="token punctuation">(</span><span class="token number">84</span><span class="token punctuation">)</span> bytes of data.
+<span class="token number">64</span> bytes from web2 <span class="token punctuation">(</span><span class="token number">172.17</span>.0.4<span class="token punctuation">)</span>: <span class="token assign-left variable">icmp_seq</span><span class="token operator">=</span><span class="token number">1</span> <span class="token assign-left variable">ttl</span><span class="token operator">=</span><span class="token number">64</span> <span class="token assign-left variable">time</span><span class="token operator">=</span><span class="token number">0.176</span> ms
+--- web2 <span class="token function">ping</span> statistics ---
+<span class="token number">2</span> packets transmitted, <span class="token number">2</span> received, <span class="token number">0</span>% packet loss, <span class="token function">time</span> 1000ms
+rtt min/avg/max/mdev <span class="token operator">=</span> <span class="token number">0.061</span>/0.118/0.176/0.058 ms<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h4 id="网络模式"><a href="#网络模式" class="headerlink" title="网络模式"></a>网络模式</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker run --network </span>
+bridge      container:  <span class="token function">host</span>        ipvlan      macvlan     none        null        overlay <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p>Docker容器一共有7种网络模式：</p>
+<ol>
+<li>bridge模式：默认模式，为每个容器创建自己的网络信息，并将容器连接到一个虚拟网桥与外界通信通过SNAT访问外网，也使用DNAT让容器被外部访问；<ol>
+<li>网络资源隔离</li>
+<li>无需手动配置</li>
+<li>可访问外网</li>
+<li>外部主机无法直接访问容器，需要配置DNAT</li>
+<li>性能较低</li>
+<li>端口管理繁琐</li>
+</ol>
+</li>
+<li>Host模式：容器直接使用宿主机Host的网卡和IP地址，网络性能最高，但各个容器内使用端口不能相同，适用于端口固定的模式，各个容器网络无隔离</li>
+<li>container模式：与已有容器共享一个网络，与宿主机网络隔离，适合频繁的容器间网络通信，容器进程通过lo网卡进行通信</li>
+<li>ipvlan模式:容器使用基于IP的VLAN模式</li>
+<li>macvlan模式：容器使用基于Mac的VLAN模式</li>
+<li>none&#x2F;null模式：容器不会进行任何网络配置，无法与外界通信</li>
+<li>overlay模式：基于多宿主机和多个容器之间构建分布式的加密网络</li>
+</ol>
+<h2 id="配置非HTTPS镜像库"><a href="#配置非HTTPS镜像库" class="headerlink" title="配置非HTTPS镜像库"></a>配置非HTTPS镜像库</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 下载仓库镜像</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># docker pull registry</span>
+<span class="token comment"># 配置docker服务，使用http而不是默认的https</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># cat /etc/docker/daemon.json </span>
+<span class="token punctuation">&#123;</span>
+  <span class="token string">"registry-mirrors"</span><span class="token builtin class-name">:</span> <span class="token punctuation">[</span><span class="token string">"https://37y8py0j.mirror.aliyuncs.com"</span><span class="token punctuation">]</span>,
+  <span class="token string">"insecure-registries"</span><span class="token builtin class-name">:</span> <span class="token punctuation">[</span><span class="token string">"172.16.10.101:5000"</span><span class="token punctuation">]</span>
+<span class="token punctuation">&#125;</span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># systemctl daemon-reload </span>
+<span class="token punctuation">[</span>root@vms101 ~<span class="token punctuation">]</span><span class="token comment"># systemctl restart docker</span>
+
+<span class="token comment"># 配置客户端</span>
+<span class="token punctuation">[</span>root@vms100 ~<span class="token punctuation">]</span><span class="token comment"># docker pull hello-world</span>
+<span class="token punctuation">[</span>root@vms100 ~<span class="token punctuation">]</span><span class="token comment"># docker tag hello-world:latest 172.16.10.101:5000/cka/helloworld:v1</span>
+<span class="token punctuation">[</span>root@vms100 ~<span class="token punctuation">]</span><span class="token comment"># docker push 172.16.10.101:5000/cka/helloworld:v1</span>
+The push refers to repository <span class="token punctuation">[</span><span class="token number">172.16</span>.10.101:5000/cka/helloworld<span class="token punctuation">]</span>
+e07ee1baac5f: Pushed 
+v1: digest: sha256:f54a58bc1aac5ea1a25d796ae155dc228b3f0e11d046ae276b39c4bf2f13d8c4 size: <span class="token number">525</span>
+<span class="token comment"># 编写查看registry已有镜像</span>
+<span class="token punctuation">[</span>root@vms100 ~<span class="token punctuation">]</span><span class="token comment"># cat list_img.sh </span>
+<span class="token comment">#!/bin/bash</span>
+<span class="token assign-left variable">file</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span>mktemp<span class="token variable">)</span></span>
+<span class="token function">curl</span> <span class="token parameter variable">-s</span> <span class="token variable">$1</span>:5000/v2/_catalog <span class="token operator">|</span> jq <span class="token operator">|</span> <span class="token function">egrep</span> <span class="token parameter variable">-v</span> <span class="token string">'\&#123;|\&#125;|\[|]'</span> <span class="token operator">|</span> <span class="token function">awk</span> -F<span class="token punctuation">\</span>" <span class="token string">'&#123;print $2&#125;'</span> <span class="token operator">></span> <span class="token variable">$file</span>
+<span class="token keyword">while</span> <span class="token builtin class-name">read</span> aa <span class="token punctuation">;</span> <span class="token keyword">do</span>
+<span class="token assign-left variable">tag</span><span class="token operator">=</span><span class="token punctuation">(</span><span class="token variable"><span class="token variable">$(</span><span class="token function">curl</span> <span class="token parameter variable">-s</span> $1:5000/v2/$aa/tags/list <span class="token operator">|</span> jq <span class="token operator">|</span> <span class="token function">egrep</span> <span class="token parameter variable">-v</span> <span class="token string">'\&#123;|\&#125;|\[|]|name'</span> <span class="token operator">|</span> <span class="token function">awk</span> -F<span class="token punctuation">\</span>" <span class="token string">'&#123;print $2&#125;'</span><span class="token variable">)</span></span><span class="token punctuation">)</span>
+ <span class="token keyword">for</span> <span class="token for-or-select variable">i</span> <span class="token keyword">in</span> <span class="token variable">$&#123;tag<span class="token punctuation">[</span>*<span class="token punctuation">]</span>&#125;</span> <span class="token punctuation">;</span> <span class="token keyword">do</span>
+ <span class="token builtin class-name">echo</span> <span class="token variable">$1</span>:5000/<span class="token variable">$&#123;aa&#125;</span><span class="token builtin class-name">:</span><span class="token variable">$i</span>
+ <span class="token keyword">done</span>
+<span class="token keyword">done</span> <span class="token operator">&lt;</span> <span class="token variable">$file</span>
+<span class="token function">rm</span> <span class="token parameter variable">-rf</span> <span class="token variable">$file</span>
+<span class="token punctuation">[</span>root@vms100 ~<span class="token punctuation">]</span><span class="token comment"># chmod +x list_img.sh </span>
+<span class="token punctuation">[</span>root@vms100 ~<span class="token punctuation">]</span><span class="token comment"># ./list_img.sh 172.16.10.101</span>
+<span class="token number">172.16</span>.10.101:5000/cka/centos7:v1
+<span class="token number">172.16</span>.10.101:5000/cka/helloworld:v1
+<span class="token number">172.16</span>.10.101:5000/rhce8/mysql:v1
+<span class="token number">172.16</span>.10.101:5000/rhce8/wordpress:v1<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="单机编排Compose"><a href="#单机编排Compose" class="headerlink" title="单机编排Compose"></a>单机编排Compose</h2><p>Docker-compose是容器的一种单机编排工具，用以解决容器的依赖关系，替代docker命令对容器进行创建、启动、停止等手工操作。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+
+
+
+
+
+
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="https://www.sujx.net">靖轩</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://www.sujx.net/2022/08/15/Docker-Pratice/">https://www.sujx.net/2022/08/15/Docker-Pratice/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Docker/">Docker</a><a class="post-meta__tags" href="/tags/Basic/">Basic</a><a class="post-meta__tags" href="/tags/Tech/">Tech</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.sujx.net/about/avatar.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2022/09/19/Kubernetes-Deploy/" title="Kubernetes的部署"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">Kubernetes的部署</div></div></a></div><div class="next-post pull-right"><a href="/2022/08/01/Large-Scale_Website_Architecture/" title="大型网站技术架构核心原理与案例分析"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">大型网站技术架构核心原理与案例分析</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">靖轩</div><div class="author-info__description">逝者如斯夫,不舍昼夜</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">94</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">179</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">13</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/sujx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://gitee.com/grepsu" target="_blank" title="Gitee"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:sujx@live.cn" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS链接"><i class="fa  fa-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Docker%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-number">1.1.</span> <span class="toc-text">Docker是什么</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Docker%E7%9A%84%E7%BB%84%E6%88%90"><span class="toc-number">1.2.</span> <span class="toc-text">Docker的组成</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#NameSpace%E6%8A%80%E6%9C%AF"><span class="toc-number">1.3.</span> <span class="toc-text">NameSpace技术</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Control-Groups"><span class="toc-number">1.4.</span> <span class="toc-text">Control Groups</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#cgroups%E7%9A%84%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0"><span class="toc-number">1.5.</span> <span class="toc-text">cgroups的具体实现</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF"><span class="toc-number">2.</span> <span class="toc-text">核心技术</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%B9%E5%99%A8%E8%A7%84%E8%8C%83"><span class="toc-number">2.1.</span> <span class="toc-text">容器规范</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%B9%E5%99%A8%E8%BF%90%E8%A1%8C%E6%97%B6"><span class="toc-number">2.2.</span> <span class="toc-text">容器运行时</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%B9%E5%99%A8%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7"><span class="toc-number">2.3.</span> <span class="toc-text">容器管理工具</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%B9%E5%99%A8%E5%AE%9A%E4%B9%89%E5%B7%A5%E5%85%B7"><span class="toc-number">2.4.</span> <span class="toc-text">容器定义工具</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%95%9C%E5%83%8F%E4%BB%93%E5%BA%93%EF%BC%88Registry%EF%BC%89"><span class="toc-number">2.5.</span> <span class="toc-text">镜像仓库（Registry）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%96%E6%8E%92%E5%B7%A5%E5%85%B7"><span class="toc-number">2.6.</span> <span class="toc-text">编排工具</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BE%9D%E8%B5%96%E6%8A%80%E6%9C%AF"><span class="toc-number">3.</span> <span class="toc-text">依赖技术</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%B9%E5%99%A8%E7%BD%91%E7%BB%9C"><span class="toc-number">3.1.</span> <span class="toc-text">容器网络</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E5%8F%91%E7%8E%B0"><span class="toc-number">3.2.</span> <span class="toc-text">服务发现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%B9%E5%99%A8%E7%9B%91%E6%8E%A7"><span class="toc-number">3.3.</span> <span class="toc-text">容器监控</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86"><span class="toc-number">3.4.</span> <span class="toc-text">数据管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%A5%E5%BF%97%E6%94%B6%E9%9B%86"><span class="toc-number">3.5.</span> <span class="toc-text">日志收集</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%B9%E5%99%A8%E5%AE%89%E8%A3%85"><span class="toc-number">4.</span> <span class="toc-text">容器安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85"><span class="toc-number">4.1.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%AA%8C%E8%AF%81%E6%9C%8D%E5%8A%A1"><span class="toc-number">4.2.</span> <span class="toc-text">验证服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E8%BF%9B%E7%A8%8B"><span class="toc-number">4.3.</span> <span class="toc-text">服务进程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%B9%E5%99%A8%E7%9A%84%E5%88%9B%E5%BB%BA%E4%B8%8E%E7%AE%A1%E7%90%86"><span class="toc-number">5.</span> <span class="toc-text">容器的创建与管理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E4%BF%A1%E6%B5%81%E7%A8%8B"><span class="toc-number">5.1.</span> <span class="toc-text">通信流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%95%9C%E5%83%8F%E7%AE%A1%E7%90%86"><span class="toc-number">5.2.</span> <span class="toc-text">镜像管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%B9%E5%99%A8%E7%AE%A1%E7%90%86"><span class="toc-number">5.3.</span> <span class="toc-text">容器管理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%95%9C%E5%83%8F%E4%B8%8E%E5%88%B6%E4%BD%9C"><span class="toc-number">6.</span> <span class="toc-text">镜像与制作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%8B%E5%8A%A8%E5%88%B6%E4%BD%9CYUM%E7%89%88Nginx%E9%95%9C%E5%83%8F"><span class="toc-number">6.1.</span> <span class="toc-text">手动制作YUM版Nginx镜像</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DockerFile%E5%88%B6%E4%BD%9CNginx%E9%95%9C%E5%83%8F"><span class="toc-number">6.2.</span> <span class="toc-text">DockerFile制作Nginx镜像</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89Tomcat%E9%95%9C%E5%83%8F"><span class="toc-number">6.3.</span> <span class="toc-text">自定义Tomcat镜像</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9E%84%E5%BB%BAHaproxy%E9%95%9C%E5%83%8F"><span class="toc-number">6.4.</span> <span class="toc-text">构建Haproxy镜像</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86-1"><span class="toc-number">7.</span> <span class="toc-text">数据管理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-number">7.1.</span> <span class="toc-text">数据类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%91%E5%AE%9A%E6%8C%82%E8%BD%BD"><span class="toc-number">7.2.</span> <span class="toc-text">绑定挂载</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%B9%E5%99%A8%E7%AE%A1%E7%90%86%E5%8D%B7"><span class="toc-number">7.3.</span> <span class="toc-text">容器管理卷</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E9%83%A8%E5%88%86"><span class="toc-number">8.</span> <span class="toc-text">网络部分</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9%E7%BD%91%E6%A1%A5%E7%9A%84%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE"><span class="toc-number">8.0.1.</span> <span class="toc-text">修改网桥的网络配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9%E9%BB%98%E8%AE%A4%E7%BD%91%E6%A1%A5"><span class="toc-number">8.0.2.</span> <span class="toc-text">修改默认网桥</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%B9%E5%99%A8%E9%97%B4%E7%BD%91%E7%BB%9C%E8%BF%9E%E6%8E%A5"><span class="toc-number">8.0.3.</span> <span class="toc-text">容器间网络连接</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%BC%8F"><span class="toc-number">8.0.4.</span> <span class="toc-text">网络模式</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E9%9D%9EHTTPS%E9%95%9C%E5%83%8F%E5%BA%93"><span class="toc-number">9.</span> <span class="toc-text">配置非HTTPS镜像库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%95%E6%9C%BA%E7%BC%96%E6%8E%92Compose"><span class="toc-number">10.</span> <span class="toc-text">单机编排Compose</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/21/magedu-week-3/" title="Linux系统基础知识·3">Linux系统基础知识·3</a><time datetime="2023-05-21T14:48:47.000Z" title="Created 2023-05-21 22:48:47">2023-05-21</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/14/magedu-week-2/" title="Linux系统基础知识·2">Linux系统基础知识·2</a><time datetime="2023-05-14T14:48:47.000Z" title="Created 2023-05-14 22:48:47">2023-05-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/04/10/magedu-week-1/" title="Linux系统基础知识·1">Linux系统基础知识·1</a><time datetime="2023-04-10T08:35:34.000Z" title="Created 2023-04-10 16:35:34">2023-04-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2022/11/03/How2UseKVM/" title="内核虚拟化KVM的使用">内核虚拟化KVM的使用</a><time datetime="2022-11-03T14:22:22.000Z" title="Created 2022-11-03 22:22:22">2022-11-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2022/10/19/clean-old-kernel/" title="CentOS主机清理旧内核">CentOS主机清理旧内核</a><time datetime="2022-10-19T06:48:47.000Z" title="Created 2022-10-19 14:48:47">2022-10-19</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://cdn.sujx.net/about/footimg.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By 靖轩</div><div class="footer_custom_text">京ICP备17034757号-1</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading the Database</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

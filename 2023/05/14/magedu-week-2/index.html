@@ -1,0 +1,446 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Linux系统基础知识·2 | 靖</title><meta name="author" content="靖轩"><meta name="copyright" content="靖轩"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="本文基于马哥教育就业班第二周课程总结  系统设计 请总结Linux的安全模型 Linux的安全模型基于许多不同的安全措施，包括访问控制、加密、审计和漏洞修补以下是Linux安全模型的主要要点： 1. 访问控制：Linux使用许多不同的访问控制机制来保护系统和数据其中最常见的是基于用户和组的访问控制"><link rel="shortcut icon" href="https://cdn.sujx.net/about/favicon.png"><link rel="canonical" href="https://www.sujx.net/2023/05/14/magedu-week-2/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin=""/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?417b20ac1984432f821159fac27d3bb5";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web&amp;display=swap" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":5,"unescape":false,"languages":{"hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"prismjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Linux系统基础知识·2',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-05-22 00:23:09'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="靖" type="application/atom+xml">
+</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://cdn.sujx.net/about/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">94</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">179</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">13</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Posts</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fas fa-book-open"></i><span> Books</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fas fa-tv"></i><span> Movies</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="靖"><span class="site-name">靖</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Posts</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fas fa-book-open"></i><span> Books</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fas fa-tv"></i><span> Movies</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">Linux系统基础知识·2</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2023-05-14T14:48:47.000Z" title="Created 2023-05-14 22:48:47">2023-05-14</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2023-05-21T16:23:09.604Z" title="Updated 2023-05-22 00:23:09">2023-05-22</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Education/">Education</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word count:</span><span class="word-count">4.6k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading time:</span><span>15min</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Linux系统基础知识·2"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="post-content" id="article-container"><blockquote>
+<p>本文基于马哥教育就业班第二周课程总结</p>
+</blockquote>
+<h2 id="系统设计"><a href="#系统设计" class="headerlink" title="系统设计"></a>系统设计</h2><ul>
+<li><p>请总结Linux的安全模型</p>
+<pre class="line-numbers language-sehll" data-language="sehll"><code class="language-sehll">Linux的安全模型基于许多不同的安全措施，包括访问控制、加密、审计和漏洞修补以下是Linux安全模型的主要要点：
+1. 访问控制：Linux使用许多不同的访问控制机制来保护系统和数据其中最常见的是基于用户和组的访问控制，它允许管理员为每个用户和组分配不同的权限此外，Linux还支持访问控制列表（ACL）和强制访问控制（MAC）等高级访问控制机制；
+2. 加密：Linux支持许多不同的加密技术，包括SSL &#x2F; TLS、SSH、IPSec和GPG等这些技术可以用于保护数据传输和存储，以及验证用户身份；
+3. 审计：Linux支持系统级别的审计，可以记录用户活动、系统事件和安全事件等这些日志可以用于监控系统安全性，并帮助管理员识别潜在的安全问题；
+4. 漏洞修补：Linux社区积极修补系统中发现的漏洞，并发布安全更新管理员应该定期更新系统以确保最新的安全补丁已安装；
+
+总之，Linux的安全模型是一个多层次的、综合的安全框架，它提供了许多不同的安全措施来保护系统和数据管理员应该了解这些措施，并采取适当的措施来保护他们的系统。<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li><p>总结学过的权限，属性及ACL相关命令及选项，示例</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">Linux系统的权限、属性和ACL相关命令及选项如下：
+
+<span class="token number">1</span>. 权限相关命令：
+chmod：修改文件或目录的权限选项包括：
+u：表示用户权限
+g：表示组权限
+o：表示其他用户权限
+a：表示所有用户权限
++：表示添加权限
+-：表示删除权限
+<span class="token operator">=</span>：表示设置权限
+示例：将文件file.txt的所有用户的读写权限设置为可读可写，命令为：chmod a+rw file.txt
+
+chown：修改文件或目录的所有者和所属组选项包括：
+R：递归修改子目录和文件的所有者和所属组
+示例：将文件file.txt的所有者和所属组修改为user1和group1，命令为：chown user1:group1 file.txt
+
+chgrp：修改文件或目录的所属组选项包括：
+R：递归修改子目录和文件的所属组
+示例：将文件file.txt的所属组修改为group1，命令为：chgrp group1 file.txt
+
+<span class="token number">2</span>. 属性相关命令：
+lsattr：显示文件或目录的扩展属性选项包括：
+R：递归显示子目录和文件的扩展属性
+示例：显示文件file.txt的扩展属性，命令为：lsattr file.txt
+
+chattr：修改文件或目录的扩展属性选项包括：
+R：递归修改子目录和文件的扩展属性
++：添加扩展属性
+-：删除扩展属性
+示例：将文件file.txt设置为只读，命令为：chattr +i file.txt
+
+<span class="token number">3</span>. ACL相关命令：
+getfacl：显示文件或目录的ACL信息选项包括：
+R：递归显示子目录和文件的ACL信息
+示例：显示文件file.txt的ACL信息，命令为：getfacl file.txt
+
+setfacl：设置文件或目录的ACL信息选项包括：
+R：递归设置子目录和文件的ACL信息
+m：修改ACL信息
+x：删除ACL信息
+示例：将文件file.txt的用户user1的读写权限设置为可读可写，命令为：setfacl <span class="token parameter variable">-m</span> u:user1:rw file.txt
+
+以上是Linux系统的权限、属性和ACL相关命令及选项的简要总结和示例。<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+<li><p>总结学过的文本处理工具，文件查找工具，文本处理三剑客, 文本格式化命令(printf)的相关命令及选项</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">Linux系统中的文本处理工具、文件查找工具、文本处理三剑客和文本格式化命令（printf）的相关命令及选项如下：
+
+<span class="token number">1</span>. 文本处理工具：
+grep：在文件中查找匹配的文本选项包括：
+i：忽略大小写
+v：反转匹配
+r：递归查找子目录
+示例：在文件file.txt中查找包含“hello”的行，命令为：grep “hello” file.txt
+
+sed：流编辑器，用于编辑文本流选项包括：
+i：直接修改文件
+s：替换匹配的文本
+示例：将文件file.txt中的“hello”替换为“world”，命令为：sed <span class="token parameter variable">-i</span> ‘s/hello/world/g’ file.txt
+
+awk：文本处理工具，用于处理结构化文本选项包括：
+F：指定分隔符
+NR：行号
+NF：字段数
+示例：在文件file.txt中查找第一列为“hello”的行，命令为：awk <span class="token parameter variable">-F</span> ‘,’ ‘<span class="token variable">$1</span><span class="token operator">==</span><span class="token string">"hello"</span><span class="token punctuation">&#123;</span>print<span class="token punctuation">&#125;</span>’ file.txt
+
+<span class="token number">2</span>. 文件查找工具：
+find：在文件系统中查找文件选项包括：
+name：按名称查找
+type：按类型查找
+size：按大小查找
+示例：在当前目录及其子目录中查找所有扩展名为.txt的文件，命令为：find <span class="token builtin class-name">.</span> <span class="token parameter variable">-name</span> “*.txt”
+
+文本处理三剑客：grep、sed和awk，是Linux系统中最常用的文本处理工具，被称为文本处理三剑客
+
+<span class="token number">3</span>. 文本格式化命令：
+printf：格式化输出文本选项包括：
+%s：字符串
+%d：十进制整数
+%f：浮点数
+示例：输出字符串“hello world”，命令为：printf <span class="token string">"%s "</span> “hello world”
+
+以上是Linux系统中的文本处理工具、文件查找工具、文本处理三剑客和文本格式化命令（printf）的相关命令及选项的简要总结和示例<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+<li><p>总结文本处理的grep命令相关的基本正则和扩展正则表达式</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">基本正则表达式：
+^：匹配行首
+$：匹配行尾
+.：匹配任意单个字符
+<span class="token punctuation">[</span><span class="token punctuation">]</span>：匹配括号内的任意一个字符
+<span class="token punctuation">[</span>^<span class="token punctuation">]</span>：匹配不在括号内的任意一个字符
+*：匹配前一个字符的零个或多个实例
+<span class="token punctuation">\</span>：转义字符
+示例：匹配以“hello”开头的行，命令为：grep “^hello” file.txt
+
+扩展正则表达式：
+?：匹配前一个字符的零个或一个实例
++：匹配前一个字符的一个或多个实例
+<span class="token punctuation">(</span><span class="token punctuation">)</span>：分组匹配
+<span class="token operator">|</span>：或匹配
+<span class="token punctuation">&#123;</span>n<span class="token punctuation">&#125;</span>：匹配前一个字符的n个实例
+<span class="token punctuation">&#123;</span>n,<span class="token punctuation">&#125;</span>：匹配前一个字符的至少n个实例
+<span class="token punctuation">&#123;</span>n,m<span class="token punctuation">&#125;</span>：匹配前一个字符的n到m个实例
+示例：匹配以“hello”开头或以“world”结尾的行，命令为：grep <span class="token parameter variable">-E</span> “^hello<span class="token operator">|</span>world$” file.txt
+
+以上是Linux文本处理中，grep命令相关的基本正则表达式和扩展正则表达式的简要总结和示例<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+<li><p>总结变量命名规则，不同类型变量（环境变量，位置变量，只读变量，局部变量，状态变量）如何使用</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">在shell编程中，变量命名规则如下：
+变量名只能包含字母、数字和下划线<span class="token punctuation">\</span><span class="token number">2</span>. 变量名不能以数字开头
+变量名区分大小写
+
+不同类型变量的使用如下：
+<span class="token number">1</span>. 环境变量：
+环境变量是在shell启动时设置的变量，可以在整个shell会话中使用
+使用export命令将变量设置为环境变量
+示例：设置环境变量MY_VAR为hello，命令为：export <span class="token assign-left variable">MY_VAR</span><span class="token operator">=</span>hello
+
+<span class="token number">2</span>. 位置变量：
+位置变量是在shell脚本中使用的特殊变量，用于存储命令行参数
+<span class="token number">0</span>表示脚本名称，
+<span class="token number">1</span>表示第一个参数，<span class="token variable">$2</span>表示第二个参数，以此类推
+示例：输出第一个参数，命令为：echo <span class="token variable">$1</span>
+
+<span class="token number">3</span>. 只读变量：
+只读变量是不能被修改的变量
+使用readonly命令将变量设置为只读变量
+示例：将变量MY_VAR设置为只读变量，命令为：readonly MY_VAR
+
+<span class="token number">4</span>. 局部变量：
+局部变量是在shell脚本中定义的变量，只能在当前脚本中使用
+使用local命令将变量设置为局部变量
+示例：在函数中定义局部变量MY_VAR，命令为：local <span class="token assign-left variable">MY_VAR</span><span class="token operator">=</span><span class="token string">"hello"</span>
+
+<span class="token number">5</span>. 状态变量：
+状态变量是用于存储shell的状态信息的特殊变量
+?表示上一个命令的退出状态码，
+<span class="token operator">!</span>表示上一个后台命令的进程ID，<span class="token comment">#表示命令行参数的数量，</span>
+*表示所有命令行参数的列表
+示例：输出上一个命令的退出状态码，命令为：echo <span class="token variable">$?</span>
+
+以上是shell编程中变量命名规则和不同类型变量的使用的简要总结和示例。<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+<li><p>通过shell编程完成，30鸡和兔的头，80鸡和兔的脚，分别有几只鸡，几只兔？</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">这是一个典型的数学问题，可以通过编写shell脚本来解决假设鸡的数量为x，兔的数量为y，则可以列出以下方程组：
+
+x + y <span class="token operator">=</span> <span class="token number">30</span> 2x + 4y <span class="token operator">=</span> <span class="token number">80</span>
+
+通过求解这个方程组，可以得到x和y的值，即鸡和兔的数量在shell脚本中，可以使用bc命令进行数学计算，代码如下：
+
+<span class="token comment">#!/bin/bash</span>
+
+<span class="token comment"># 计算鸡和兔的数量</span>
+<span class="token comment"># x为鸡的数量，y为兔的数量</span>
+
+<span class="token comment"># 定义方程组</span>
+<span class="token assign-left variable">eq1</span><span class="token operator">=</span><span class="token string">"x + y = 30"</span>
+<span class="token assign-left variable">eq2</span><span class="token operator">=</span><span class="token string">"2*x + 4*y = 80"</span>
+
+<span class="token comment"># 解方程组</span>
+<span class="token assign-left variable">x</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span><span class="token builtin class-name">echo</span> <span class="token string">"scale=0; (4*30-80)/2"</span> <span class="token operator">|</span> <span class="token function">bc</span><span class="token variable">)</span></span>
+<span class="token assign-left variable">y</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span><span class="token builtin class-name">echo</span> <span class="token string">"scale=0; (80-2*30)/2"</span> <span class="token operator">|</span> <span class="token function">bc</span><span class="token variable">)</span></span>
+
+<span class="token comment"># 输出结果</span>
+<span class="token builtin class-name">echo</span> <span class="token string">"鸡的数量为：<span class="token variable">$x</span>"</span>
+<span class="token builtin class-name">echo</span> <span class="token string">"兔的数量为：<span class="token variable">$y</span>"</span>
+在上面的代码中，首先定义了方程组eq1和eq2，然后使用bc命令求解方程组，最后输出鸡和兔的数量运行脚本后，输出结果如下：
+
+鸡的数量为：10
+兔的数量为：20
+因此，30鸡和兔的头，80鸡和兔的脚，分别有10只鸡和20只兔<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+<li><p>结合编程的for循环，条件测试，条件组合，完成批量创建100个用户，<br>  1）for遍历1..100<br>  2）先id判断是否存在<br>  3）用户存在则说明存在，用户不存在则添加用户并说明已添加</p>
+</li>
+</ul>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">可以使用以下的shell脚本来批量创建100个用户：
+
+<span class="token comment">#!/bin/bash</span>
+<span class="token comment"># 批量创建100个用户</span>
+<span class="token keyword">for</span> <span class="token for-or-select variable">i</span> <span class="token keyword">in</span> <span class="token punctuation">&#123;</span><span class="token number">1</span><span class="token punctuation">..</span><span class="token number">100</span><span class="token punctuation">&#125;</span>
+<span class="token keyword">do</span>
+    <span class="token comment"># 判断用户是否存在</span>
+    <span class="token keyword">if</span> <span class="token function">id</span> <span class="token string">"user<span class="token variable">$i</span>"</span> <span class="token operator">></span>/dev/null <span class="token operator"><span class="token file-descriptor important">2</span>></span><span class="token file-descriptor important">&amp;1</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+        <span class="token builtin class-name">echo</span> <span class="token string">"用户user<span class="token variable">$i</span>已存在"</span>
+    <span class="token keyword">else</span>
+        <span class="token comment"># 创建用户</span>
+        <span class="token function">useradd</span> <span class="token string">"user<span class="token variable">$i</span>"</span>
+        <span class="token builtin class-name">echo</span> <span class="token string">"用户user<span class="token variable">$i</span>已添加"</span>
+    <span class="token keyword">fi</span>
+<span class="token keyword">done</span>
+在上面的脚本中，使用for循环遍历1到100，对于每个用户，使用id命令判断用户是否存在如果用户存在，则输出提示信息；如果用户不存在，则使用useradd命令创建用户，并输出提示信息其中，<span class="token string">">/dev/null 2>&amp;1"</span>用于将id命令的输出重定向到/dev/null，以避免输出到终端
+
+运行脚本后，可以看到输出的提示信息，例如：
+用户user1已添加
+用户user2已添加
+……<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="存储相关"><a href="#存储相关" class="headerlink" title="存储相关"></a>存储相关</h2><ul>
+<li><p>磁盘存储术语总结: head, track, sector, sylinder</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">磁盘存储术语包括以下几个方面：
+<span class="token number">1</span>. 磁盘驱动器（Disk Drive）：磁盘驱动器是计算机中用于读写磁盘的设备，通常包括一个或多个磁盘盘片和一个读写磁头
+<span class="token number">2</span>. 磁盘盘片（Disk Platter）：磁盘盘片是磁盘驱动器中的一个圆形盘片，通常由铝或玻璃等材料制成，表面涂有磁性材料
+<span class="token number">3</span>. 磁头（Read/Write Head）：磁头是磁盘驱动器中的一个读写设备，用于读取和写入磁盘上的数据
+<span class="token number">4</span>. 磁道（Track）：磁道是磁盘盘片上的一个圆形轨道，用于存储数据一个磁盘盘片通常包含多个磁道，每个磁道被分成多个扇区
+<span class="token number">5</span>. 扇区（Sector）：扇区是磁盘磁道上的一个小块，用于存储数据每个扇区通常包含512个字节的数据
+<span class="token number">6</span>. 柱面（Cylinder）：柱面是磁盘驱动器中的一个逻辑概念，表示磁盘盘片上所有磁道的集合一个柱面包含多个磁道，每个磁道上包含多个扇区
+总的来说，磁盘存储术语中的head、track、sector和cylinder都是磁盘驱动器中的重要概念，用于描述磁盘上数据的存储和读写方式其中，head表示磁头，用于读取和写入数据；track表示磁道，用于存储数据；sector表示扇区，是磁道上的一个小块，用于存储数据；cylinder表示柱面，是磁盘盘片上所有磁道的集合，用于描述磁盘的物理结构<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+<li><p>总结MBR,GPT结构盛大开放接口</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">MBR和GPT都是磁盘分区表的结构，用于描述磁盘上的分区信息它们的主要区别如下：
+<span class="token number">1</span>. MBR（Master Boot Record）是一种旧的磁盘分区表结构，最多支持4个主分区或3个主分区和1个扩展分区MBR的分区表存储在磁盘的第一个扇区，占用512个字节
+<span class="token number">2</span>. GPT（GUID Partition Table）是一种新的磁盘分区表结构，支持最多128个分区GPT的分区表存储在磁盘的第一个和第二个扇区之间，占用至少34个扇区
+除了支持的分区数量不同之外，MBR和GPT还有以下区别：
+<span class="token number">1</span>. MBR使用32位的分区标识符（Partition ID），而GPT使用128位的GUID（Globally Unique Identifier）
+<span class="token number">2</span>. MBR的分区表存储在磁盘的第一个扇区，容易被破坏，而GPT的分区表存储在多个扇区中，具有更好的容错性
+<span class="token number">3</span>. GPT支持UEFI（Unified Extensible Firmware Interface）启动，而MBR不支持UEFI启动
+总的来说，GPT是一种更先进、更灵活、更可靠的磁盘分区表结构，逐渐取代了旧的MBR结构<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+<li><p>总结学过的分区，文件系统管理，SWAP管理相关的命令及选项，并以fdisk, parted, mkfs, tune2fs, xfs_info, fsck, mount, umount, swapon, swapoff举例</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token number">1</span>. 分区管理命令：
+fdisk：用于创建、删除和修改磁盘分区
+parted：用于创建、删除和修改磁盘分区，支持更多的分区类型和文件系统类型
+示例：
+使用fdisk命令创建一个新的分区：
+<span class="token function">fdisk</span> /dev/sda 
+使用parted命令创建一个新的分区，命令为：
+<span class="token function">parted</span> /dev/sda mkpart primary ext4 <span class="token number">0</span>% <span class="token number">100</span>%
+
+<span class="token number">2</span>. 文件系统管理命令：
+mkfs：用于创建文件系统
+tune2fs：用于调整文件系统的参数
+xfs_info：用于显示XFS文件系统的信息
+fsck：用于检查和修复文件系统
+mount：用于挂载文件系统
+umount：用于卸载文件系统
+示例：
+使用mkfs命令创建一个ext4文件系统：
+mkfs.ext4 /dev/sda1 
+使用tune2fs命令将ext4文件系统的最大挂载次数设置为10：
+tune2fs <span class="token parameter variable">-c</span> <span class="token number">10</span> /dev/sda1 
+使用xfs_info命令显示XFS文件系统的信息：
+xfs_info /dev/sda1 
+使用fsck命令检查并修复ext4文件系统：
+fsck.ext4 /dev/sda1 
+使用mount命令挂载ext4文件系统：
+<span class="token function">mount</span> /dev/sda1 /mnt 
+使用umount命令卸载ext4文件系统：
+<span class="token function">umount</span> /mnt
+
+<span class="token number">3</span>.交换分区管理命令：
+swapon：用于启用SWAP分区
+swapoff：用于禁用SWAP分区
+示例：
+使用swapon命令启用SWAP分区，命令为：swapon /dev/sda2 使用swapoff命令禁用SWAP分区，命令为：swapoff /dev/sda2
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li><p>总结raid 0, 1, 5, 10, 01的工作原理总结各自的利用率，冗余性，性能，至少几个硬盘实现</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">RAID（Redundant Array of Independent Disks）是一种通过将多个硬盘组合起来来提高数据存储性能和可靠性的技术常见的RAID级别包括RAID <span class="token number">0</span>、RAID <span class="token number">1</span>、RAID <span class="token number">5</span>、RAID <span class="token number">10</span>和RAID 01，它们的工作原理、利用率、冗余性和性能如下：
+RAID <span class="token number">0</span>：将多个硬盘组合成一个大的逻辑卷，数据被分散存储在各个硬盘上，从而提高了数据读写的速度RAID <span class="token number">0</span>没有冗余性，如果其中一个硬盘损坏，所有数据都将丢失RAID <span class="token number">0</span>的利用率为100%，性能较好，至少需要2个硬盘实现
+RAID <span class="token number">1</span>：将多个硬盘组合成一个镜像卷，数据被同时写入多个硬盘，从而提高了数据的可靠性RAID <span class="token number">1</span>的冗余性较好，如果其中一个硬盘损坏，数据仍然可以从其他硬盘中恢复RAID <span class="token number">1</span>的利用率为50%，性能较差，至少需要2个硬盘实现
+RAID <span class="token number">5</span>：将多个硬盘组合成一个逻辑卷，数据被分散存储在各个硬盘上，并使用奇偶校验码来保证数据的完整性RAID <span class="token number">5</span>的冗余性较好，如果其中一个硬盘损坏，数据仍然可以从其他硬盘中恢复RAID <span class="token number">5</span>的利用率为n-1/n，性能较好，至少需要3个硬盘实现
+RAID <span class="token number">10</span>：将多个硬盘组合成多个镜像卷，并将这些镜像卷组合成一个逻辑卷，数据被同时写入多个硬盘，从而提高了数据的可靠性和读写性能RAID <span class="token number">10</span>的冗余性和性能较好，如果其中一个硬盘损坏，数据仍然可以从其他硬盘中恢复RAID <span class="token number">10</span>的利用率为n/2，至少需要4个硬盘实现
+RAID 01：将多个硬盘组合成多个逻辑卷，并将这些逻辑卷组合成一个镜像卷，数据被同时写入多个硬盘，从而提高了数据的可靠性和读写性能RAID 01的冗余性和性能较好，如果其中一个硬盘损坏，数据仍然可以从其他硬盘中恢复RAID 01的利用率为n/2，至少需要4个硬盘实现
+
+总的来说，不同的RAID级别适用于不同的应用场景，需要根据实际需求选择合适的RAID级别RAID <span class="token number">0</span>适用于需要高速读写的场景，但不适用于需要数据冗余的场景；RAID <span class="token number">1</span>适用于需要数据冗余的场景，但性能较差；RAID <span class="token number">5</span>适用于需要数据冗余和高速读写的场景，但需要至少3个硬盘实现；RAID <span class="token number">10</span>和RAID 01适用于数据量大且对性能和冗余要求较高的场景<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+<li><p>完成不影响业务对LVM磁盘扩容及缩容示例</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token number">1</span>. 扩容LVM磁盘
+<span class="token comment"># 查看当前的逻辑卷和卷组信息</span>
+lvdisplay
+vgdisplay
+pvdisplay
+<span class="token comment"># 扩大逻辑卷的容量到20GB</span>
+lvextend <span class="token parameter variable">-L</span> 20G /dev/vg1/lv1
+<span class="token comment"># 扩大文件系统的容量到20GB</span>
+resize2fs /dev/vg1/lv1
+<span class="token number">2</span>. 缩容LVM磁盘
+<span class="token comment"># 缩小文件系统的容量到10GB</span>
+resize2fs /dev/vg1/lv1 10G
+<span class="token comment"># 缩小逻辑卷的容量到10GB</span>
+lvreduce <span class="token parameter variable">-L</span> 10G /dev/vg1/lv1<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="https://www.sujx.net">靖轩</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://www.sujx.net/2023/05/14/magedu-week-2/">https://www.sujx.net/2023/05/14/magedu-week-2/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Linux/">Linux</a><a class="post-meta__tags" href="/tags/%E9%9D%A2%E8%AF%95%E9%A2%98/">面试题</a><a class="post-meta__tags" href="/tags/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.sujx.net/about/avatar.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/05/21/magedu-week-3/" title="Linux系统基础知识·3"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">Linux系统基础知识·3</div></div></a></div><div class="next-post pull-right"><a href="/2023/04/10/magedu-week-1/" title="Linux系统基础知识·1"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">Linux系统基础知识·1</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">靖轩</div><div class="author-info__description">逝者如斯夫,不舍昼夜</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">94</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">179</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">13</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/sujx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://gitee.com/grepsu" target="_blank" title="Gitee"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:sujx@live.cn" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS链接"><i class="fa  fa-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1"><span class="toc-number">1.</span> <span class="toc-text">系统设计</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%98%E5%82%A8%E7%9B%B8%E5%85%B3"><span class="toc-number">2.</span> <span class="toc-text">存储相关</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/21/magedu-week-3/" title="Linux系统基础知识·3">Linux系统基础知识·3</a><time datetime="2023-05-21T14:48:47.000Z" title="Created 2023-05-21 22:48:47">2023-05-21</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/14/magedu-week-2/" title="Linux系统基础知识·2">Linux系统基础知识·2</a><time datetime="2023-05-14T14:48:47.000Z" title="Created 2023-05-14 22:48:47">2023-05-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/04/10/magedu-week-1/" title="Linux系统基础知识·1">Linux系统基础知识·1</a><time datetime="2023-04-10T08:35:34.000Z" title="Created 2023-04-10 16:35:34">2023-04-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2022/11/03/How2UseKVM/" title="内核虚拟化KVM的使用">内核虚拟化KVM的使用</a><time datetime="2022-11-03T14:22:22.000Z" title="Created 2022-11-03 22:22:22">2022-11-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2022/10/19/clean-old-kernel/" title="CentOS主机清理旧内核">CentOS主机清理旧内核</a><time datetime="2022-10-19T06:48:47.000Z" title="Created 2022-10-19 14:48:47">2022-10-19</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://cdn.sujx.net/about/footimg.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By 靖轩</div><div class="footer_custom_text">京ICP备17034757号-1</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading the Database</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

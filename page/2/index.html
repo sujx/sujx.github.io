@@ -1,25 +1,14 @@
-<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>灰黑化挥花悔黑</title><meta name="keywords" content="SystemAdmin"><meta name="author" content="靖轩"><meta name="copyright" content="靖轩"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="逝者如斯夫,不舍昼夜">
-<meta property="og:type" content="website">
-<meta property="og:title" content="灰黑化挥花悔黑">
-<meta property="og:url" content="https://sujx.net/page/2/index.html">
-<meta property="og:site_name" content="灰黑化挥花悔黑">
-<meta property="og:description" content="逝者如斯夫,不舍昼夜">
-<meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://sujx.net/img/avatar.png">
-<meta property="article:author" content="靖轩">
-<meta property="article:tag" content="SystemAdmin">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://sujx.net/img/avatar.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://sujx.net/page/2/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>var _hmt = _hmt || [];
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>靖</title><meta name="author" content="靖轩"><meta name="copyright" content="靖轩"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="逝者如斯夫,不舍昼夜"><link rel="shortcut icon" href="https://cdn.sujx.net/about/favicon.png"><link rel="canonical" href="https://www.sujx.net/page/2/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin=""/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>var _hmt = _hmt || [];
 (function() {
   var hm = document.createElement("script");
   hm.src = "https://hm.baidu.com/hm.js?417b20ac1984432f821159fac27d3bb5";
   var s = document.getElementsByTagName("script")[0]; 
   s.parentNode.insertBefore(hm, s);
 })();
-</script><script>const GLOBAL_CONFIG = { 
+</script><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web&amp;display=swap" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
   root: '/',
   algolia: undefined,
-  localSearch: {"path":"search.xml","languages":{"hits_empty":"We didn't find any results for the search: ${query}"}},
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":5,"unescape":false,"languages":{"hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found"}},
   translate: undefined,
   noticeOutdate: undefined,
   highlight: {"plugin":"prismjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
@@ -33,7 +22,7 @@
     post: false
   },
   runtime: '',
-  date_suffix: {
+  dateSuffix: {
     just: 'Just',
     min: 'minutes ago',
     hour: 'hours ago',
@@ -44,26 +33,25 @@
   lightbox: 'fancybox',
   Snackbar: undefined,
   source: {
-    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
     justifiedGallery: {
-      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
-      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
-    },
-    fancybox: {
-      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
-      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
     }
   },
   isPhotoFigcaption: false,
   islazyload: false,
-  isanchor: false
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
 }</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
-  title: '灰黑化挥花悔黑',
+  title: '靖',
   isPost: false,
   isHome: true,
   isHighlightShrink: false,
   isToc: false,
-  postUpdate: '2021-12-07 18:23:24'
+  postUpdate: '2023-06-02 22:52:53'
 }</script><noscript><style type="text/css">
   #nav {
     opacity: 1
@@ -120,6 +108,21 @@
       document.head.appendChild(script)
     })
   
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
       win.activateDarkMode = function () {
         document.documentElement.setAttribute('data-theme', 'dark')
         if (document.querySelector('meta[name="theme-color"]') !== null) {
@@ -147,230 +150,159 @@
       }
     
     const detectApple = () => {
-      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
         document.documentElement.classList.add('apple')
       }
     }
     detectApple()
-    })(window)</script><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="灰黑化挥花悔黑" type="application/atom+xml">
-</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">61</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">117</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">Categories</div><div class="length-num">13</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fas fa-book-open"></i><span> Books</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fas fa-tv"></i><span> Movies</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">灰黑化挥花悔黑</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fas fa-book-open"></i><span> Books</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fas fa-tv"></i><span> Movies</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div class="recent-posts" id="recent-posts"><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2021/09/15/sftp-chroot/" title="使用SFTP进行数据备份">使用SFTP进行数据备份</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2021-09-15T01:08:50.000Z" title="Created 2021-09-15 09:08:50">2021-09-15</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Technology/">Technology</a></span></div><div class="content">使用SFTP进行数据备份背景现有部分Windows Server上的SQL Server的数据库文件需要进行异地备份，然而备份中转机则为Linux主机，异地备份主机的防火墙设定为只接收该机的IP访问。在不修改原有的网络环境的前提下，原有的思路是在Windows上挂载NFS共享路径或者Linux远程挂载SMB共享，现利用Windows平台的开源软件FreefileSync的文件同步功能来通过SFTP服务进行文件的同步备份。
-实施服务端配置
-建立用户
-# 建立用户kingdee，但不建立用户群组，设定用户不能登录系统
-useradd -d /backups/misc/kingdee -n -s /sbin/nologin kingdee
-# 修改kindee用户密码
-passwd kingdee
-修改SSHD配置文件
-# 注释掉sftp-server进程
-#Subsystem      sftp    /usr/libexec/openssh/sftp-server
-# 使用internal-sftp替代sftp-server
-Subsystem sftp internal-sftp
-#  ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2021/09/05/rsyslog-ubuntu/" title="Ubuntu开启/var/log/messages">Ubuntu开启/var/log/messages</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2021-09-05T01:37:30.000Z" title="Created 2021-09-05 09:37:30">2021-09-05</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Technology/">Technology</a></span></div><div class="content">找回遗失的Message背景在CentOS7和之前的版本中，系统日志统一存储在/var/log/message 中,方便进行统一分析和整理。但在Ubuntu中，大量的日志信息按照类别和级别被分别导入到 /var/log目录下的不同文件中，提供了一些快捷功能的同时，却导致原有的日志收集和归档程序出问题了。所以，我们需要重新开启messages。
-方法安装rsyslogsudo apt install rsyslog
-sudo systemctl enable rsyslog --now
-修改配置文件vim /etc/rsyslog.d/50-default.conf
-----------------------------------
-# 编辑31行到34行，去掉注释
- 25 #
- 26 # Some "catch-all" log files.
- 27 #
- 28 #*.=debug;\
- 29 #       auth,authpriv.none;\
- 30 #       news.none;mail.none     -/var/log/debug
- 31 *.=info;*.= ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2021/08/31/dos-cmd-backup/" title="使用批处理进行数据备份">使用批处理进行数据备份</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2021-08-31T07:37:30.000Z" title="Created 2021-08-31 15:37:30">2021-08-31</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Technology/">Technology</a></span></div><div class="content">背景运维组内部有一个服务器日志的离线备份需求：
-
-Filebeat将日志打到一个WindowsServer的SMB共享上，然后要通过FTP的形式在办公环境进行离线备份；
-要在生产环境备份服务器上保留14天以防线下备份失效；
-
-方案
-生产环境备份服务器提供相应文件夹共享，并开放权限；
-建立计划任务，定时打包实现文件备份转储以及删除超过14天的备份文件；
-线下建立离线存储服务器，同步FTP数据到加密磁盘
-线下磁盘的定期轮转和永久存储
-
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="靖" type="application/atom+xml">
+</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://cdn.sujx.net/about/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">94</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">179</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">13</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Posts</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fas fa-book-open"></i><span> Books</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fas fa-tv"></i><span> Movies</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="靖"><span class="site-name">靖</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Posts</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fas fa-book-open"></i><span> Books</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fas fa-tv"></i><span> Movies</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div class="recent-posts" id="recent-posts"><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/07/20/wauzh-clean-log/" title="定时删除Wazuh日志索引">定时删除Wazuh日志索引</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2022-07-20T02:35:34.000Z" title="Created 2022-07-20 10:35:34">2022-07-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Security/">Security</a></span></div><div class="content">前情生产和办公环境部署的Wazuh系统，因为对接的大量的Agent，每日的数据量在1.2GB左右。为减少实际运行成本并根据实际使用情况，原始日志导入一份到日志服务器外，Wazuh的安全日志只保留一个自然月。
 脚本
-基于时间的命名备份方案@echo off
-::该脚本已被放弃，原因是备份源文件的日期和打包备份日期相差4天，导致题不对版
-::设置7z的命令行程序路径
-set zip7=C:\Program Files\7-Zip\7z.exe
+使用Shell脚本来实现定时删除Wazuh的ElasticSearch索引的功能：
 
-::设置压缩包保存路径
-set Save=D:\temp
+#!/bin/bash
+#本脚本用于按月份清理ES存储数据
+#获取本月份与索引中的日期进行比较，本月份前的索引数据将被删除。
+#删除前要确认
 
-::当天日期，备份文件名
-set curdate=%date:~0,4%-%date:~5,2%-%date:~8,2%
+ES_URL=http://127.0.0.1:9200
+NOW_Year=`date +%Y` 
+NOW_Mon=`date +%m`
+ALLLINES=`/usr/bin/curl -s -XGET $ES_URL/_cat/indices?v| grep wazuh-alerts-4.x-*`
+ 
+echo
+echo "THIS IS WHAT SHOULD BE DELETED FOR ES:"
+echo
+ 
+echo "$&#123;ALLLINES&#125;" | while read line
+do
+  # echo $&#123;l ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/07/01/powershell-vm-netacl/" title="使用PowerShell脚本管理Hyper-V宿主机上的虚机网卡访问ACL规则">使用PowerShell脚本管理Hyper-V宿主机上的虚机网卡访问ACL规则</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2022-07-01T02:35:34.000Z" title="Created 2022-07-01 10:35:34">2022-07-01</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Tips/">Tips</a></span></div><div class="content">使用PowerShell脚本管理Hyper-V宿主机上的虚机网卡访问ACL规则前情
+标题也太绕了
 
-::设置要打包压缩的文件夹
-set Backup=D:\AllLogsBackup\*
+The Add-VMNetworkAdapterExtendedAcl cmdlet creates an extended access control list (ACL) for a virtual network adapter. The ACL allows or denies access to a virtual machine network adapter for network packets based on source IP address, destination IP address, protocol, source port, and destination port.
+官方文档
+其实在单一Hyper-V宿主机上实现对其上运行的VM网络访问限制，主要是对非集群化部署有用，一旦涉及群集部署或者动态迁移，这个功能就没用了。这些规则是写到宿主机里面的，不会跟随VM而迁移。不过，对于边缘部署或者固定节点部署的VM还是有用的。
+脚本实现# 使用PowerShell ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/06/29/how-to-build-liveserver/" title="自己动手构建简易广播系统">自己动手构建简易广播系统</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2022-06-29T08:00:28.000Z" title="Created 2022-06-29 16:00:28">2022-06-29</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/System/">System</a></span></div><div class="content">综合概述XXX电视直播系统是用于XXX北京研发中心的广播和直播相结合的便宜视频推送系统，使用到了办公环境服务器、监控用电视大屏和监控用主机盒子。
+组织架构逻辑拓扑整体系统由开源直播系统SRS和开源视频播放器VLC构成，其逻辑拓扑如下：
+物理组件
+一个SRS服务器：VLNX101071（172.31.101.71）
+十三个视频接收端：172.29.153.165~177
+推流服务：使用安装OBS工具的公共笔记本电脑
 
-::备份命令 无压缩只存档，压缩完成后删除
-::备份 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2021/08/19/the_logic_of_write/" title="《写作的逻辑》读书笔记">《写作的逻辑》读书笔记</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2021-08-19T14:37:30.000Z" title="Created 2021-08-19 22:37:30">2021-08-19</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Reading/">Reading</a></span></div><div class="content">读书笔记·《写作的逻辑》
-书籍来源：京东自购
-购买链接：https://item.jd.com/13201886.html
-简评：一个需要画脑图才能看明白的写作书。本书其实该叫职场文本技法，不适用于中小学语文教学。
-
-
-基本结构清晰的传达
-是否明确的表达
-表达是否明确的被理解
-段落是什么以及为什么是写作标准
-文章易懂的基础
-心智模型
-巧用强调
-精简信息
-
-
-
-段落写作七大规则
-文章开头先写总论
-每段只阐述一个主题
-段落开头先写概要句
-补充信息强化主题
-衔接前后段落
-统一段落表达
-由已知写到未知
-
-商务写作实战
-通知
-技术报告
-对外文书
-
-基本内容为什么用段落去写作
-表意清晰的文章必须满足三个条件：
-30秒内传达要点；
-让人在短时间内读懂详细内容；
-逻辑清晰且具有说服力；
-
-
-写作者切勿将沟通的责任推卸给阅读者。
-我们要学习有学术理论依据的写作方法。
-
-什么是段落写作法
-定义
-在一个段落中只论述一个主题的文字布局，原则上段落由一个概要句和多个补充信息的句子构成
-每个段落限定一个主题，一定要有概要句
-段落不同于层次，文章由层次构成、层次由段落构成
-
-
-意义
-让逻辑模块和文字模块保持一致
-写 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2021/08/05/wazuh-cluster-update/" title="批量更新Wazuh主机配置文件和漏洞库">批量更新Wazuh主机配置文件和漏洞库</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2021-08-05T07:37:30.000Z" title="Created 2021-08-05 15:37:30">2021-08-05</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Security/">Security</a></span></div><div class="content">批量更新Wazuh主机配置文件和漏洞库综述相比较单机版本，群集化的Wazuh需要处理的第一个问题就是如何保证ossec.conf文件和漏洞库的统一配置、统一更新、统一下发。以下将使用简单的Ansible命令和Shell脚本实现前述功能。
-建立共享
-部署Nginx
-# 在wazuh-master上安装Nginx
-yum install -y nginx
-mkdir -p &#x2F;var&#x2F;www&#x2F;wazuh
-chown -R nginx:nginx &#x2F;var&#x2F;www&#x2F;wazuh
-下载更新
-# 下载离线文件
-cd &#x2F;var&#x2F;www&#x2F;wazuh&#x2F;
-
-# 下载Ubuntu 20.04的漏洞种子
-wget -N https:&#x2F;&#x2F;people.canonical.com&#x2F;~ubuntu-security&#x2F;oval&#x2F;com.ubuntu.focal.cve.oval.xml.bz2
-
-# 下载RHEL 7 8的漏洞种子文件
-wget https:&#x2F;& ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2021/08/01/wazuh_depoly_cluster/" title="Wazuh系统的群集化改造">Wazuh系统的群集化改造</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2021-08-01T07:37:30.000Z" title="Created 2021-08-01 15:37:30">2021-08-01</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Security/">Security</a></span></div><div class="content">综述在中大型网络环境中，单台Allinone的Wazuh系统或者单节点的分布式部署Wazuh系统从性能上已经无法满足日志分析和漏洞扫描的需求，因此应当采用高可用、多节点的分布式部署来满足Wazuh对CPU和存储的要求。
-
-
-
-序号
-系统描述
-配置
-网络地址
-系统角色
-
-
-
-1
-Lvsnode1
-1c/1g
-192.168.79.51
-LVS+KeepLived 提供VIP和负载均衡
-
-
-2
-Lvsnode2
-1c/1g
-192.168.79.52
-LVS+KeepLived 提供VIP和负载均衡
-
-
-3
-Wazuhnode0
-2c/2g
-192.168.79.60
-Wazuh主节点，提供认证以及cve库
-
-
-4
-Wazuhnode1
-1c/1g
-192.168.79.61
-WazuhWorker，工作节点，提供事件日志分析和漏洞扫描
-
-
-5
-Wazuhnode2
-1c/1g
-192.168.79.62
-WazuhWorker，工作节点，提供事件日志分析和漏洞扫描
-
-
-6
-KibanaNode
-2c/4g
-192.168.79.80
-Kibana展示节点
-
-
-7
-ElasticNode1 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2021/07/19/elasticsearch-common-cmd/" title="Elasticsearch常用查询语句">Elasticsearch常用查询语句</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2021-07-19T07:37:30.000Z" title="Created 2021-07-19 15:37:30">2021-07-19</time></span></div><div class="content">节点状态相关
-检查节点是否运行
-curl -XGET http://localhost:9200
-检查节点健康状态
-curl -XGET http://localhost:9200/_cluster/health\?pretty
-检查群集节点状态
-curl -XGET http://192.168.248.148:9200/_cat/nodes?v
-分片状态相关
-检查分片健康
-curl http://localhost:9200/_cat/indices
-检查所有分片
-curl -XGET http://localhost:9200/_cat/shards
-删除分片
-curl -XDELETE http://127.0.0.1:9200/wazuh-alerts-3.x-2021.05.16
-设置分片数
-curl -XPUT  "127.0.0.1:9200/_cluster/settings" -H 'Content-Type: application/json' -d '&#123;"transient":&#123;"cluster":&#123;"max_shards_per_ ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2021/07/13/sms2email/" title="手机短信转发电子邮件">手机短信转发电子邮件</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2021-07-13T07:37:30.000Z" title="Created 2021-07-13 15:37:30">2021-07-13</time></span></div><div class="content">在运维工作中，我们经常会用到公用手机不在手边的情况。比如，我们在休假或者外出期间紧急对公司注册的云资源进行变更的时候，相关验证码必须要使用短信接收，而手机却在半个城市之外的公司办公室。还有一种情况就是每天都有人来找公用手机翻检验证码，这样对当值运维人员不胜其烦。
-为了避免这种情况的蔓延，找到了使用旧安卓机进行SMS2Email改造的小程序。
-具体设置如下图：
-
-
-
-
-
-
-
-
-
-效果：
-
-该程序名称为 TranspondSMS
-官网地址为：http://tsms.allmything.com
-Github代码库：https://github.com/xiaoyuanhost/
-除了邮件之外，它还支持钉钉、微信机器人已经web页面等告警方式，以后会慢慢深入它的应用。
-</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2021/07/09/clamav-privte-depoly/" title="建立内网Linux防病毒系统">建立内网Linux防病毒系统</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2021-07-09T10:57:23.000Z" title="Created 2021-07-09 18:57:23">2021-07-09</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Security/">Security</a></span></div><div class="content">ClamAV本来是为了Postfix邮件网关而开发的防毒软件，主要目的是对邮件队列里面的邮件进行病毒查杀。然后，这个防毒模块独立出来成为一个提供病毒、恶意软件、蠕虫的查杀能力的开源软件，成为了Linux环境下实现文件安全的主要选择。�
-部署ClamAV
-添加EPEL源
-# ClamAV的RHEL/CentOS源是直接用epel来发布的
-yum cleanall
+构建软件视频网关安装# 系统准备
 yum makecache
-yum install -y git python3-pip
-yum install -y epel-release
+yum update -y
+yum install -y git make autoconf m4 gcc
+cd /opt
+# 从GITHUB拉取SRS
+git clone -b 4.0release https://gitee.com/ossrs/srs.git
+# 编译系统
+cd srs/trunk
+./configure
+make
+# 安装系统
+make install
+ln -sf /usr/local/srs/etc/init.d/srs /etc/init.d/srs
+cp -f /usr/local ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/06/01/powershell-remote-netadapter/" title="远程搜集主机网卡信息">远程搜集主机网卡信息</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2022-06-01T02:35:34.000Z" title="Created 2022-06-01 10:35:34">2022-06-01</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Tips/">Tips</a></span></div><div class="content">远程搜集主机网卡信息开启功能客户端默认情况下，在Windows 10或者11 首次执行powershell脚本会提示”系统禁止脚本运行“的错误。这是因为M$为了安全，把powershell的脚本执行策略设定为有数字证书的才允许执行。因此，需要执行脚本的方法一个是使用合法的数字证书对脚本进行签名：
+# 获取合法的PFX证书(IIS版本SSL证书)
+# 一般情况下都会为证书设置密码，所以这一步需要输入密码进行验证
+$cert = Get-PfxCertificate -FilePath "test.pfx"
 
-# 添加华为云源
-sed -i "s/#baseurl/baseurl/g" /etc/yum.repos.d/epel.repo
-sed -i "s/metalink/#metalink/g" /etc/yum.repos.d/epel.repo
-sed -i "s@https\?://download.example/pub@https://repo.huaweicloud.com@g" /etc/yum.repos.d/epel.repo
+# 然后为 demo.ps1 脚本文件签名：
+Set-AuthenticodeSignature -FilePath "demo.ps1" `
+    -Certificate $cert -IncludeChain "All" `
+    -TimeStampServer "http://timestamp.verisign.com/scripts/timstamp.dll"
 
-yum makecache
-yum  ...</div></div></div><nav id="pagination"><div class="pagination"><a class="extend prev" rel="prev" href="/"><i class="fas fa-chevron-left fa-fw"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/#content-inner">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/#content-inner">7</a><a class="extend next" rel="next" href="/page/3/#content-inner"><i class="fas fa-chevron-right fa-fw"></i></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">靖轩</div><div class="author-info__description">逝者如斯夫,不舍昼夜</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">61</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">117</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">Categories</div><div class="length-num">13</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/sujx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://gitee.com/grepsu" target="_blank" title="Gitee"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:sujx@live.cn" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS链接"><i class="fa  fa-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2021/12/06/centos7-discuzq/" title="CentOS7上使用yum部署Discuz!Q">CentOS7上使用yum部署Discuz!Q</a><time datetime="2021-12-06T09:35:28.000Z" title="Created 2021-12-06 17:35:28">2021-12-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2021/12/01/centos7-mcafee/" title="Linux上安装McAfee杀毒软件">Linux上安装McAfee杀毒软件</a><time datetime="2021-11-30T23:35:28.000Z" title="Created 2021-12-01 07:35:28">2021-12-01</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2021/11/09/centos8-allinone-itop-ocsng-glpi/" title="整合部署开源ITSM管理平台(1)">整合部署开源ITSM管理平台(1)</a><time datetime="2021-11-09T08:37:30.000Z" title="Created 2021-11-09 16:37:30">2021-11-09</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2021/11/01/vmdk2vhdx/" title="VMware磁盘文件转化为Hyper-V磁盘">VMware磁盘文件转化为Hyper-V磁盘</a><time datetime="2021-10-31T21:37:30.000Z" title="Created 2021-11-01 05:37:30">2021-11-01</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2021/10/29/fail2ban/" title="CentOS8与Fail2Ban的联合使用">CentOS8与Fail2Ban的联合使用</a><time datetime="2021-10-29T14:37:30.000Z" title="Created 2021-10-29 22:37:30">2021-10-29</time></div></div></div></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>Tags</span></div><div class="card-tag-cloud"><a href="/tags/7zip/" style="font-size: 1.1em; color: #999">7zip</a> <a href="/tags/AD-FS/" style="font-size: 1.1em; color: #999">AD-FS</a> <a href="/tags/ActiveDirctory/" style="font-size: 1.1em; color: #999">ActiveDirctory</a> <a href="/tags/Android/" style="font-size: 1.1em; color: #999">Android</a> <a href="/tags/Ansible/" style="font-size: 1.1em; color: #999">Ansible</a> <a href="/tags/Antivirus/" style="font-size: 1.1em; color: #999">Antivirus</a> <a href="/tags/CMDB/" style="font-size: 1.1em; color: #999">CMDB</a> <a href="/tags/CVE/" style="font-size: 1.1em; color: #999">CVE</a> <a href="/tags/CentOS/" style="font-size: 1.2em; color: #999da3">CentOS</a> <a href="/tags/ClamAV/" style="font-size: 1.1em; color: #999">ClamAV</a> <a href="/tags/DNS/" style="font-size: 1.2em; color: #999da3">DNS</a> <a href="/tags/E-mail/" style="font-size: 1.1em; color: #999">E-mail</a> <a href="/tags/EDR/" style="font-size: 1.3em; color: #99a1ac">EDR</a> <a href="/tags/ELK/" style="font-size: 1.1em; color: #999">ELK</a> <a href="/tags/Elasticsearch/" style="font-size: 1.2em; color: #999da3">Elasticsearch</a> <a href="/tags/Fail2Ban/" style="font-size: 1.1em; color: #999">Fail2Ban</a> <a href="/tags/Firewall/" style="font-size: 1.1em; color: #999">Firewall</a> <a href="/tags/GLPI/" style="font-size: 1.1em; color: #999">GLPI</a> <a href="/tags/HIDS/" style="font-size: 1.3em; color: #99a1ac">HIDS</a> <a href="/tags/Hyper-V-Powershell-Ubuntu-VM-Template/" style="font-size: 1.1em; color: #999">Hyper-V Powershell Ubuntu VM Template##</a> <a href="/tags/ITSM/" style="font-size: 1.1em; color: #999">ITSM</a> <a href="/tags/Linux/" style="font-size: 1.2em; color: #999da3">Linux</a> <a href="/tags/OCSInventroy/" style="font-size: 1.1em; color: #999">OCSInventroy</a> <a href="/tags/OCSinventory/" style="font-size: 1.1em; color: #999">OCSinventory</a> <a href="/tags/RPM/" style="font-size: 1.1em; color: #999">RPM</a> <a href="/tags/Router/" style="font-size: 1.1em; color: #999">Router</a> <a href="/tags/SMS/" style="font-size: 1.1em; color: #999">SMS</a> <a href="/tags/Security/" style="font-size: 1.4em; color: #99a5b6">Security</a> <a href="/tags/Sysadmin/" style="font-size: 1.1em; color: #999">Sysadmin</a> <a href="/tags/Sysstem/" style="font-size: 1.1em; color: #999">Sysstem</a> <a href="/tags/System/" style="font-size: 1.3em; color: #99a1ac">System</a> <a href="/tags/Technology-Roadmap/" style="font-size: 1.1em; color: #999">Technology Roadmap</a> <a href="/tags/Tmux/" style="font-size: 1.1em; color: #999">Tmux</a> <a href="/tags/Tools/" style="font-size: 1.3em; color: #99a1ac">Tools</a> <a href="/tags/Ubuntu/" style="font-size: 1.1em; color: #999">Ubuntu</a> <a href="/tags/VirtualMachine/" style="font-size: 1.1em; color: #999">VirtualMachine</a> <a href="/tags/Vulnerability/" style="font-size: 1.1em; color: #999">Vulnerability</a> <a href="/tags/WSUS/" style="font-size: 1.1em; color: #999">WSUS</a> <a href="/tags/Wazuh/" style="font-size: 1.3em; color: #99a1ac">Wazuh</a> <a href="/tags/Windows/" style="font-size: 1.5em; color: #99a9bf">Windows</a></div></div><div class="card-widget card-archives"><div class="item-headline"><i class="fas fa-archive"></i><span>Archives</span><a class="card-more-btn" href="/archives/" title="More">
-    <i class="fas fa-angle-right"></i></a></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2021/12/"><span class="card-archive-list-date">December 2021</span><span class="card-archive-list-count">2</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2021/11/"><span class="card-archive-list-date">November 2021</span><span class="card-archive-list-count">2</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2021/10/"><span class="card-archive-list-date">October 2021</span><span class="card-archive-list-count">4</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2021/09/"><span class="card-archive-list-date">September 2021</span><span class="card-archive-list-count">3</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2021/08/"><span class="card-archive-list-date">August 2021</span><span class="card-archive-list-count">4</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2021/07/"><span class="card-archive-list-date">July 2021</span><span class="card-archive-list-count">7</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2021/06/"><span class="card-archive-list-date">June 2021</span><span class="card-archive-list-count">2</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2021/05/"><span class="card-archive-list-date">May 2021</span><span class="card-archive-list-count">2</span></a></li></ul></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>Info</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">Article :</div><div class="item-count">61</div></div><div class="webinfo-item"><div class="item-name">Total Count :</div><div class="item-count">53.9k</div></div><div class="webinfo-item"><div class="item-name">UV :</div><div class="item-count" id="busuanzi_value_site_uv"></div></div><div class="webinfo-item"><div class="item-name">PV :</div><div class="item-count" id="busuanzi_value_site_pv"></div></div><div class="webinfo-item"><div class="item-name">Last Push :</div><div class="item-count" id="last-push-date" data-lastPushDate="2021-12-07T10:23:24.305Z"></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By 靖轩</div><div class="footer_custom_text">京ICP备17034757号-1</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">Local search</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
+或者我们干脆取消这一限制：
+# 设置执行策略无签名脚本执行
+set-executionpolicy re ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/05/05/iis-mime/" title="文件存在但IIS报404故障的解决">文件存在但IIS报404故障的解决</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2022-05-05T02:35:34.000Z" title="Created 2022-05-05 10:35:34">2022-05-05</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Tips/">Tips</a></span></div><div class="content">文件存在但IIS报404故障的解决起因公司内建有SMB的网络共享盘，同时为方便MacOS用户，也基于同样的文件夹位置，建立的共享文件的HTTP站点。这个文件夹中有很多的打印机和扫描仪的驱动文件。由于原先使用打印服务器的模式，所以客户端无需单独安装驱动。后来，有了直连打印机的需求，就要上传MacOS的打印机驱动。在上传DMG格式的驱动之后，SMB共享可以正常下载，但WEB共享发现无法下载，点击文件回显404.
+解决在IIS服务器中添加对.dmg文件的描述。
+
+打开IIS控制台
+添加DMG文件的描述信息
+
+原因MIME (Multipurpose Internet Mail Extensions) 是描述消息内容类型的标准，用来表示文档、文件或字节流的性质和格式。MIME 消息能包含文本、图像、音频、视频以及其他应用程序专用的数据。浏览器通常使用 MIME 类型（而不是文件扩展名）来确定如何处理URL，因此 We b服务器在响应头中添加正确的 MIME 类型非常重要。如果配置不正确，浏览器可能会无法解析文件内容，网站将无法正常工作，并且下载的文件也会被错误处理。MIME 的组成结构非常简单 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/04/11/macOS-join-ad/" title="macOS的部署、重命名与加域">macOS的部署、重命名与加域</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2022-04-11T02:35:34.000Z" title="Created 2022-04-11 10:35:34">2022-04-11</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/System/">System</a></span></div><div class="content">缘起公司现有一堆14年末的Mac mini主机需要清理、更换SSD、系统升级和资产归纳。因为是库存主机且数据已经可以清空的情况下，对这些老家伙进行格式化重装和重命名主机并加入现有AD域。
+部署制作USB启动器
+下载 balenaEtcher  工具，来刻录USB安装镜像（需科学上网才能正常下载）
+下载可引导ISO镜像，我们使用最新的12.3.1
+
+系统安装
+开机部署（ 开机按 alt 键，进入引导界面）
+打开系统工具，点击“Disk Utility”
+清除磁盘，并新建磁盘
+返回系统工具，点击“Install macOS”，开始安装
+
+更名原有主机配置根据用户名创建主机名，为方便后续资产管理，现需要变更主机名。
+
+打开系统偏好设置
+选择 “共享” ，并点击“编辑”
+勾选“使用动态全局主机名”
+修改默认“电脑名称”
+
+加域
+使用管理员权限打开“用户与群组”
+点击“登录选项”，并点击锁按钮
+使用管理员权限解锁按钮
+点击下方“网络账户服务器：加入”
+输入可加域管理员账号、密码、加域主机名(默认小写)
+输入本地管理员密码确认变更
+
+</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/04/01/macmini-hd2ssd/" title="MacMini 主机更换SSD">MacMini 主机更换SSD</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2022-04-01T02:35:34.000Z" title="Created 2022-04-01 10:35:34">2022-04-01</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Tips/">Tips</a></span></div><div class="content">部门库存里面有几台硬盘为1TB机械盘的2014年版本Mac Mini。为了资源利用，现将这些主机的硬盘更换为拆机的256GB SSD磁盘。
+主要操作流程如下：
+
+拆除主机外壳( 要注意wifi的连接线)
+拆除主机风扇（注意使用镊子或者小的一字螺丝刀把风扇电源、硬盘数据线、主板电源小心的拆掉，这个接口很脆）
+从机壳中拉出主板（有两颗固定长螺丝需要拆除）
+拆除主机电源（拔掉电源接口下方的金属销，然后将电源接口向主板位置方向旋转90度即可拉出电源）；
+拆除主机硬盘
+更换硬盘（硬盘位使用普通十字螺丝固定，接口有贴纸，贴纸很容易失去粘性，可小心贴到塑料表面，不要沾染指纹或灰尘）
+最后依次还原主机
+
+</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/03/21/vsphere-performance/" title="《VMware vSphere 性能设计》笔记">《VMware vSphere 性能设计》笔记</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2022-03-21T02:35:34.000Z" title="Created 2022-03-21 10:35:34">2022-03-21</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Books/">Books</a></span></div><div class="content">
+本书从概念和操作两方面介绍了虚拟化基础设施的性能。
+
+CPU虚拟化基础
+CPU保护模式
+CPU保护模式，也称为保护虚拟地址模式，是一种提供硬件级别内存保护的X86处理器操作模式。
+实模式
+为原始x86处理器设计
+关闭内存保护功能
+只有操作系统内核才可以无限制使用全部硬件资源
+
+
+保护模式：
+保护模式的特权等级：Ring0 Ring1 Ring2 Ring3
+Ring 0 特权最多，Ring 3 特权做少
+Ring 0：Kernel ；Ring 1 设备驱动； Ring 2 设备驱动； Ring 3 应用
+
+
+
+
+定义CPU虚拟化的类型：
+基于软件的CPU虚拟化：
+运行于Ring1级别
+需要VMM编译执行代码
+
+
+基于硬件辅助的CPU虚拟化
+运行于Ring0
+使用Intel VT 或者AMD-V硬件辅助功能，无需软件编译
+
+
+
+
+物理CPU与虚拟CPU之间的区别
+每一个物理处理器内核被检测为一个pCPU
+每个线程也可以被视为一个pCPU
+
+
+vCPU状态
+运行状态：在pCPU上被调度来运行指令
+准备状态：在pCPU上准备调度，但由于调度延迟不直接运行
+等待闲置状态：特殊状态（？）
+等待 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/03/11/centos8-covert-2-stream/" title="CentOS 8转换为CentOS Stream 8">CentOS 8转换为CentOS Stream 8</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2022-03-11T04:35:34.000Z" title="Created 2022-03-11 12:35:34">2022-03-11</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Tips/">Tips</a></span></div><div class="content">由于CentOS 8的源已经不可用，所以需要将原有 CentOS 8 升级为CentOS Steam 8：
+dnf --disablerepo '*' --enablerepo extras swap centos-linux-repos centos-stream-repos
+dnf distro-sync
+
+</div></div></div><nav id="pagination"><div class="pagination"><a class="extend prev" rel="prev" href="/"><i class="fas fa-chevron-left fa-fw"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/#content-inner">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/#content-inner">11</a><a class="extend next" rel="next" href="/page/3/#content-inner"><i class="fas fa-chevron-right fa-fw"></i></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">靖轩</div><div class="author-info__description">逝者如斯夫,不舍昼夜</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">94</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">179</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">13</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/sujx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://gitee.com/grepsu" target="_blank" title="Gitee"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:sujx@live.cn" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS链接"><i class="fa  fa-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/21/magedu-week-3/" title="Linux系统基础知识·3">Linux系统基础知识·3</a><time datetime="2023-05-21T14:48:47.000Z" title="Created 2023-05-21 22:48:47">2023-05-21</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/14/magedu-week-2/" title="Linux系统基础知识·2">Linux系统基础知识·2</a><time datetime="2023-05-14T14:48:47.000Z" title="Created 2023-05-14 22:48:47">2023-05-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/04/10/magedu-week-1/" title="Linux系统基础知识·1">Linux系统基础知识·1</a><time datetime="2023-04-10T08:35:34.000Z" title="Created 2023-04-10 16:35:34">2023-04-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2022/11/03/How2UseKVM/" title="内核虚拟化KVM的使用">内核虚拟化KVM的使用</a><time datetime="2022-11-03T14:22:22.000Z" title="Created 2022-11-03 22:22:22">2022-11-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2022/10/19/clean-old-kernel/" title="CentOS主机清理旧内核">CentOS主机清理旧内核</a><time datetime="2022-10-19T06:48:47.000Z" title="Created 2022-10-19 14:48:47">2022-10-19</time></div></div></div></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>Tags</span></div><div class="card-tag-cloud"><a href="/tags/github/" style="font-size: 1.1em; color: #999">github</a> <a href="/tags/logic/" style="font-size: 1.1em; color: #999">logic</a> <a href="/tags/disk/" style="font-size: 1.1em; color: #999">disk</a> <a href="/tags/kms/" style="font-size: 1.1em; color: #999">kms</a> <a href="/tags/receipt/" style="font-size: 1.1em; color: #999">receipt</a> <a href="/tags/s3/" style="font-size: 1.1em; color: #999">s3</a> <a href="/tags/VLC/" style="font-size: 1.1em; color: #999">VLC</a> <a href="/tags/wordpress/" style="font-size: 1.1em; color: #999">wordpress</a> <a href="/tags/hexo/" style="font-size: 1.1em; color: #999">hexo</a> <a href="/tags/LVM/" style="font-size: 1.1em; color: #999">LVM</a> <a href="/tags/tips/" style="font-size: 1.23em; color: #999ea6">tips</a> <a href="/tags/Kubernetes/" style="font-size: 1.1em; color: #999">Kubernetes</a> <a href="/tags/mapreduce/" style="font-size: 1.1em; color: #999">mapreduce</a> <a href="/tags/CMDB/" style="font-size: 1.1em; color: #999">CMDB</a> <a href="/tags/Virtual/" style="font-size: 1.1em; color: #999">Virtual</a> <a href="/tags/english/" style="font-size: 1.1em; color: #999">english</a> <a href="/tags/7zip/" style="font-size: 1.23em; color: #999ea6">7zip</a> <a href="/tags/CentOS/" style="font-size: 1.5em; color: #99a9bf">CentOS</a> <a href="/tags/share/" style="font-size: 1.1em; color: #999">share</a> <a href="/tags/zoom/" style="font-size: 1.1em; color: #999">zoom</a> <a href="/tags/offline/" style="font-size: 1.23em; color: #999ea6">offline</a> <a href="/tags/fedora/" style="font-size: 1.1em; color: #999">fedora</a> <a href="/tags/x11/" style="font-size: 1.1em; color: #999">x11</a> <a href="/tags/livestream/" style="font-size: 1.1em; color: #999">livestream</a> <a href="/tags/vSphere/" style="font-size: 1.1em; color: #999">vSphere</a> <a href="/tags/MyLife/" style="font-size: 1.1em; color: #999">MyLife</a> <a href="/tags/tsinghua/" style="font-size: 1.1em; color: #999">tsinghua</a> <a href="/tags/CRM/" style="font-size: 1.1em; color: #999">CRM</a> <a href="/tags/Firewall/" style="font-size: 1.1em; color: #999">Firewall</a> <a href="/tags/backup/" style="font-size: 1.1em; color: #999">backup</a> <a href="/tags/java/" style="font-size: 1.1em; color: #999">java</a> <a href="/tags/steam/" style="font-size: 1.1em; color: #999">steam</a> <a href="/tags/minio/" style="font-size: 1.1em; color: #999">minio</a> <a href="/tags/Virtualization/" style="font-size: 1.1em; color: #999">Virtualization</a> <a href="/tags/Vulnerability/" style="font-size: 1.1em; color: #999">Vulnerability</a> <a href="/tags/performance/" style="font-size: 1.1em; color: #999">performance</a> <a href="/tags/MacMini/" style="font-size: 1.1em; color: #999">MacMini</a> <a href="/tags/system/" style="font-size: 1.37em; color: #99a4b2">system</a> <a href="/tags/Antivirus/" style="font-size: 1.1em; color: #999">Antivirus</a> <a href="/tags/Fail2Ban/" style="font-size: 1.1em; color: #999">Fail2Ban</a></div></div><div class="card-widget card-archives"><div class="item-headline"><i class="fas fa-archive"></i><span>Archives</span><a class="card-more-btn" href="/archives/" title="More">
+    <i class="fas fa-angle-right"></i></a></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/05/"><span class="card-archive-list-date">May 2023</span><span class="card-archive-list-count">2</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/04/"><span class="card-archive-list-date">April 2023</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/11/"><span class="card-archive-list-date">November 2022</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/10/"><span class="card-archive-list-date">October 2022</span><span class="card-archive-list-count">2</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/09/"><span class="card-archive-list-date">September 2022</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/08/"><span class="card-archive-list-date">August 2022</span><span class="card-archive-list-count">2</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/07/"><span class="card-archive-list-date">July 2022</span><span class="card-archive-list-count">2</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/06/"><span class="card-archive-list-date">June 2022</span><span class="card-archive-list-count">2</span></a></li></ul></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>Info</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">Article :</div><div class="item-count">94</div></div><div class="webinfo-item"><div class="item-name">Total Count :</div><div class="item-count">127.8k</div></div><div class="webinfo-item"><div class="item-name">UV :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">PV :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">Last Push :</div><div class="item-count" id="last-push-date" data-lastPushDate="2023-06-02T14:52:52.702Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://cdn.sujx.net/about/footimg.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By 靖轩</div><div class="footer_custom_text">京ICP备17034757号-1</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading the Database</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
