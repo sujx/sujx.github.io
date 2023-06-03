@@ -1,30 +1,14 @@
-<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>离线部署CDH6.3 | 灰黑化挥花悔黑</title><meta name="keywords" content="cdh,centos,deploy,hadoop"><meta name="author" content="靖轩"><meta name="copyright" content="靖轩"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="部署练习的环境有六台主机，主机的配置是4核心4G内存(内存还是低了，建议8G起步)： 主机名 IP地址 Elephant 192.168.174.184 Lion 192.168.174.185 Horse 192.168.174.186 Monkey 192.168.174.187 Tiger 192.168.174.188 环境准备  主机环境配置  按照各个主机配置修改相应值，下面以elep">
-<meta property="og:type" content="article">
-<meta property="og:title" content="离线部署CDH6.3">
-<meta property="og:url" content="https://sujx.net/2020/02/14/cdh6-3-deploy/index.html">
-<meta property="og:site_name" content="灰黑化挥花悔黑">
-<meta property="og:description" content="部署练习的环境有六台主机，主机的配置是4核心4G内存(内存还是低了，建议8G起步)： 主机名 IP地址 Elephant 192.168.174.184 Lion 192.168.174.185 Horse 192.168.174.186 Monkey 192.168.174.187 Tiger 192.168.174.188 环境准备  主机环境配置  按照各个主机配置修改相应值，下面以elep">
-<meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://cdn.sujx.net/wallhaven-g8d9dd.jpg">
-<meta property="article:published_time" content="2020-02-14T03:08:50.000Z">
-<meta property="article:modified_time" content="2021-12-07T07:31:59.994Z">
-<meta property="article:author" content="靖轩">
-<meta property="article:tag" content="cdh">
-<meta property="article:tag" content="centos">
-<meta property="article:tag" content="deploy">
-<meta property="article:tag" content="hadoop">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://cdn.sujx.net/wallhaven-g8d9dd.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://sujx.net/2020/02/14/cdh6-3-deploy/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>var _hmt = _hmt || [];
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>离线部署CDH6.3 | 靖</title><meta name="author" content="靖轩"><meta name="copyright" content="靖轩"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="部署练习的环境有六台主机，主机的配置是4核心4G内存(内存还是低了，建议8G起步)： 主机名 IP地址 Elephant 192.168.174.184 Lion 192.168.174.185 Horse 192.168.174.186 Monkey 192.168.174.187 Tiger 1"><link rel="shortcut icon" href="https://cdn.sujx.net/about/favicon.png"><link rel="canonical" href="https://www.sujx.net/2020/02/14/cdh6-3-deploy/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin=""/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>var _hmt = _hmt || [];
 (function() {
   var hm = document.createElement("script");
   hm.src = "https://hm.baidu.com/hm.js?417b20ac1984432f821159fac27d3bb5";
   var s = document.getElementsByTagName("script")[0]; 
   s.parentNode.insertBefore(hm, s);
 })();
-</script><script>const GLOBAL_CONFIG = { 
+</script><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web&amp;display=swap" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
   root: '/',
   algolia: undefined,
-  localSearch: {"path":"search.xml","languages":{"hits_empty":"We didn't find any results for the search: ${query}"}},
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":5,"unescape":false,"languages":{"hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found"}},
   translate: undefined,
   noticeOutdate: undefined,
   highlight: {"plugin":"prismjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
@@ -38,7 +22,7 @@
     post: false
   },
   runtime: '',
-  date_suffix: {
+  dateSuffix: {
     just: 'Just',
     min: 'minutes ago',
     hour: 'hours ago',
@@ -49,26 +33,25 @@
   lightbox: 'fancybox',
   Snackbar: undefined,
   source: {
-    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
     justifiedGallery: {
-      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
-      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
-    },
-    fancybox: {
-      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
-      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
     }
   },
   isPhotoFigcaption: false,
   islazyload: false,
-  isanchor: false
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
 }</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
   title: '离线部署CDH6.3',
   isPost: true,
   isHome: false,
   isHighlightShrink: false,
   isToc: true,
-  postUpdate: '2021-12-07 15:31:59'
+  postUpdate: '2023-05-06 18:58:01'
 }</script><noscript><style type="text/css">
   #nav {
     opacity: 1
@@ -125,6 +108,21 @@
       document.head.appendChild(script)
     })
   
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
       win.activateDarkMode = function () {
         document.documentElement.setAttribute('data-theme', 'dark')
         if (document.querySelector('meta[name="theme-color"]') !== null) {
@@ -152,13 +150,13 @@
       }
     
     const detectApple = () => {
-      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
         document.documentElement.classList.add('apple')
       }
     }
     detectApple()
-    })(window)</script><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="灰黑化挥花悔黑" type="application/atom+xml">
-</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">61</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">117</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">Categories</div><div class="length-num">13</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fas fa-book-open"></i><span> Books</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fas fa-tv"></i><span> Movies</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">灰黑化挥花悔黑</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fas fa-book-open"></i><span> Books</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fas fa-tv"></i><span> Movies</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">离线部署CDH6.3</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2020-02-14T03:08:50.000Z" title="Created 2020-02-14 11:08:50">2020-02-14</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2021-12-07T07:31:59.994Z" title="Updated 2021-12-07 15:31:59">2021-12-07</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Something/">Something</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/System/">System</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word count:</span><span class="word-count">1.4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading time:</span><span>7min</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="离线部署CDH6.3"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div><article class="post-content" id="article-container"><p>部署练习的环境有六台主机，主机的配置是4核心4G内存(内存还是低了，建议8G起步)：</p>
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="靖" type="application/atom+xml">
+</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://cdn.sujx.net/about/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">94</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">179</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">13</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Posts</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fas fa-book-open"></i><span> Books</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fas fa-tv"></i><span> Movies</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="靖"><span class="site-name">靖</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Posts</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fas fa-book-open"></i><span> Books</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fas fa-tv"></i><span> Movies</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">离线部署CDH6.3</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2020-02-14T03:08:50.000Z" title="Created 2020-02-14 11:08:50">2020-02-14</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2023-05-06T10:58:01.463Z" title="Updated 2023-05-06 18:58:01">2023-05-06</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Something/">Something</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/System/">System</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word count:</span><span class="word-count">1.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading time:</span><span>6min</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="离线部署CDH6.3"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="post-content" id="article-container"><p>部署练习的环境有六台主机，主机的配置是4核心4G内存(内存还是低了，建议8G起步)：</p>
 <p>主机名</p>
 <p>IP地址</p>
 <p>Elephant</p>
@@ -172,17 +170,17 @@
 <p>Tiger</p>
 <p>192.168.174.188</p>
 <h3 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h3><ol>
-<li> 主机环境配置</li>
+<li>主机环境配置</li>
 </ol>
 <p>按照各个主机配置修改相应值，下面以elephant为例：</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">[root@localhost ~]# nmcli c m ens33 ipv4.method manual ipv4.addresses 192.168.174.184&#x2F;24 ipv4.gateway 192.168.174.2 ipv4.dns 192.168.174.2
-[root@localhost ~]# nmcli c d ens33 &amp;&amp; nmcli c u ens33
-[root@localhost ~]# hostnamectl set-hostname elephant<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@localhost ~<span class="token punctuation">]</span><span class="token comment"># nmcli c m ens33 ipv4.method manual ipv4.addresses 192.168.174.184/24 ipv4.gateway 192.168.174.2 ipv4.dns 192.168.174.2</span>
+<span class="token punctuation">[</span>root@localhost ~<span class="token punctuation">]</span><span class="token comment"># nmcli c d ens33 &amp;&amp; nmcli c u ens33</span>
+<span class="token punctuation">[</span>root@localhost ~<span class="token punctuation">]</span><span class="token comment"># hostnamectl set-hostname elephant</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
 <ol start="2">
-<li> 文件复制 将离线部署CDH6.3.1的文件复制到每一台主机上。其中包括：</li>
+<li>文件复制 将离线部署CDH6.3.1的文件复制到每一台主机上。其中包括：</li>
 </ol>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">sujx@legion7000:&#x2F;mnt&#x2F;d&#x2F;$ ls Cloudera
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">sujx@legion7000:/mnt/d/$ <span class="token function">ls</span> Cloudera
 CDH-6.3.2-1.cdh6.3.2.p0.1605554-el7.parcel
 cloudera-manager-agent-6.3.1-1466458.el7.x86_64.rpm
 cloudera-manager-daemons-6.3.1-1466458.el7.x86_64.rpm
@@ -193,159 +191,159 @@ jdk-8u202-linux-x64.rpm
 manifest.json
 mysql-connector-java-5.1.39-bin.jar
 
-sujx@legion7000:&#x2F;mnt&#x2F;d&#x2F;$ tar zcvf Cloudera cloudera.tar.gz
-sujx@legion7000:&#x2F;mnt&#x2F;d&#x2F;$ scp cloudera.tar.gz root@lion:&#x2F;root&#x2F;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+sujx@legion7000:/mnt/d/$ <span class="token function">tar</span> zcvf Cloudera cloudera.tar.gz
+sujx@legion7000:/mnt/d/$ <span class="token function">scp</span> cloudera.tar.gz root@lion:/root/<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <ol start="3">
-<li> 免密登录设置</li>
+<li>免密登录设置</li>
 </ol>
 <p>在lion主机上设置免密：</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">ssh-keygen -t rsa
-ssh-copy-id &#123;elephant\lion\horse\monkey\tiger&#125;
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">ssh-keygen <span class="token parameter variable">-t</span> rsa
+ssh-copy-id <span class="token punctuation">&#123;</span>elephant<span class="token punctuation">\</span>lion<span class="token punctuation">\</span>horse<span class="token punctuation">\</span>monkey<span class="token punctuation">\</span>tiger<span class="token punctuation">&#125;</span>
 
-# 使用ansible分发和管理文件，省略配置文件的建立
-yum install -y ansible
+<span class="token comment"># 使用ansible分发和管理文件，省略配置文件的建立</span>
+yum <span class="token function">install</span> <span class="token parameter variable">-y</span> ansible
 
-ansible -m copy -a &#39;src&#x3D;&#x2F;root&#x2F;cloudera.tar.gz dest&#x3D;&#x2F;root&#39;
+ansible <span class="token parameter variable">-m</span> copy <span class="token parameter variable">-a</span> <span class="token string">'src=/root/cloudera.tar.gz dest=/root'</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <ol start="4">
-<li> 主机配置 建立主机执行文件进行相关配置。</li>
+<li>主机配置 建立主机执行文件进行相关配置。</li>
 </ol>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">#!&#x2F;bin&#x2F;bash
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token shebang important">#!/bin/bash</span>
 
-# 安装必要组件
-yum update -y
-yum install -y mutt net-tools mlocate telnet curl wget ping vim open-vm-tools
+<span class="token comment"># 安装必要组件</span>
+yum update <span class="token parameter variable">-y</span>
+yum <span class="token function">install</span> <span class="token parameter variable">-y</span> <span class="token function">mutt</span> net-tools mlocate telnet <span class="token function">curl</span> <span class="token function">wget</span> <span class="token function">ping</span> <span class="token function">vim</span> open-vm-tools
 
-systemctl disable firewalld.service --now
-sed -i &#39;:s&#x2F;SELINUX&#x3D;enforcing&#x2F;SELINUX&#x3D;disabled&#x2F;g&#39; &#x2F;etc&#x2F;sysconfig&#x2F;selinux
-updatedb &amp;&amp; sync &amp;&amp; ldconfig
+systemctl disable firewalld.service <span class="token parameter variable">--now</span>
+<span class="token function">sed</span> <span class="token parameter variable">-i</span> <span class="token string">':s/SELINUX=enforcing/SELINUX=disabled/g'</span> /etc/sysconfig/selinux
+updatedb <span class="token operator">&amp;&amp;</span> <span class="token function">sync</span> <span class="token operator">&amp;&amp;</span> ldconfig
 
-# 配置时间服务器
-cat &gt;&#x2F;etc&#x2F;chrony.conf&lt;&lt;EOF
+<span class="token comment"># 配置时间服务器</span>
+<span class="token function">cat</span> <span class="token operator">></span>/etc/chrony.conf<span class="token operator">&lt;&lt;</span><span class="token string">EOF
 server ntp.aliyun.com iburst
 
-driftfile &#x2F;var&#x2F;lib&#x2F;chrony&#x2F;drift
+driftfile /var/lib/chrony/drift
 makestep 1.0 3
 rtcsync
-logdir &#x2F;var&#x2F;log&#x2F;chrony
+logdir /var/log/chrony
 
-EOF
+EOF</span>
 
-systemctl enable chronyd --now
+systemctl <span class="token builtin class-name">enable</span> chronyd <span class="token parameter variable">--now</span>
 timedatectl 
 
-# 优化
-# 修改swap配置
-echo &quot;vm.swappiness &#x3D; 10&quot; &gt;&gt; &#x2F;etc&#x2F;sysctl.conf
-sysctl -p
+<span class="token comment"># 优化</span>
+<span class="token comment"># 修改swap配置</span>
+<span class="token builtin class-name">echo</span> <span class="token string">"vm.swappiness = 10"</span> <span class="token operator">>></span> /etc/sysctl.conf
+<span class="token function">sysctl</span> <span class="token parameter variable">-p</span>
 
-# 修改大页内存的使用
-echo never &gt; &#x2F;sys&#x2F;kernel&#x2F;mm&#x2F;transparent_hugepage&#x2F;defrag
-echo never &gt; &#x2F;sys&#x2F;kernel&#x2F;mm&#x2F;transparent_hugepage&#x2F;enabled
-echo &#39;echo never &gt; &#x2F;sys&#x2F;kernel&#x2F;mm&#x2F;transparent_hugepage&#x2F;defrag&#39; &gt;&gt; &#x2F;etc&#x2F;rc.local
-echo &#39;echo never &gt; &#x2F;sys&#x2F;kernel&#x2F;mm&#x2F;transparent_hugepage&#x2F;enabled&#39; &gt;&gt; &#x2F;etc&#x2F;rc.local
+<span class="token comment"># 修改大页内存的使用</span>
+<span class="token builtin class-name">echo</span> never <span class="token operator">></span> /sys/kernel/mm/transparent_hugepage/defrag
+<span class="token builtin class-name">echo</span> never <span class="token operator">></span> /sys/kernel/mm/transparent_hugepage/enabled
+<span class="token builtin class-name">echo</span> <span class="token string">'echo never > /sys/kernel/mm/transparent_hugepage/defrag'</span> <span class="token operator">>></span> /etc/rc.local
+<span class="token builtin class-name">echo</span> <span class="token string">'echo never > /sys/kernel/mm/transparent_hugepage/enabled'</span> <span class="token operator">>></span> /etc/rc.local
 
-# 安装JAVA
-tar zxvf cloudera.tar.gz
-yum localinstall -y Cloudera&#x2F;jdk-8u202-linux-x64.rpm
+<span class="token comment"># 安装JAVA</span>
+<span class="token function">tar</span> zxvf cloudera.tar.gz
+yum localinstall <span class="token parameter variable">-y</span> Cloudera/jdk-8u202-linux-x64.rpm
 
-java -version
-echo $JAVA_HOME
+<span class="token function">java</span> <span class="token parameter variable">-version</span>
+<span class="token builtin class-name">echo</span> <span class="token variable">$JAVA_HOME</span>
 
-# 建立安装文件源
-wget https:&#x2F;&#x2F;archive.cloudera.com&#x2F;cm6&#x2F;6.3.1&#x2F;redhat7&#x2F;yum&#x2F;RPM-GPG-KEY-cloudera
-rpm --import RPM-GPG-KEY-cloudera
-wget https:&#x2F;&#x2F;archive.cloudera.com&#x2F;cm6&#x2F;6.3.1&#x2F;redhat7&#x2F;yum&#x2F;cloudera-manager.repo -O &#x2F;etc&#x2F;pki&#x2F;rpm-gpg&#x2F;RPM-GPG-KEY-cloudera
-yum update -y
+<span class="token comment"># 建立安装文件源</span>
+<span class="token function">wget</span> https://archive.cloudera.com/cm6/6.3.1/redhat7/yum/RPM-GPG-KEY-cloudera
+<span class="token function">rpm</span> <span class="token parameter variable">--import</span> RPM-GPG-KEY-cloudera
+<span class="token function">wget</span> https://archive.cloudera.com/cm6/6.3.1/redhat7/yum/cloudera-manager.repo <span class="token parameter variable">-O</span> /etc/pki/rpm-gpg/RPM-GPG-KEY-cloudera
+yum update <span class="token parameter variable">-y</span>
 
-mkdir &#x2F;usr&#x2F;share&#x2F;java&#x2F;
-cp Cloudera&#x2F;mysql-connector-java-5.1.39-bin.jar  &#x2F;usr&#x2F;share&#x2F;java&#x2F;mysql-connector-java.jar
+<span class="token function">mkdir</span> /usr/share/java/
+<span class="token function">cp</span> Cloudera/mysql-connector-java-5.1.39-bin.jar  /usr/share/java/mysql-connector-java.jar
 
-yum localinstall -y Cloudera&#x2F;cloudera-manager-daemons* 
-yum localinstall -y Cloudera&#x2F;cloudera-manager-agent*
+yum localinstall <span class="token parameter variable">-y</span> Cloudera/cloudera-manager-daemons* 
+yum localinstall <span class="token parameter variable">-y</span> Cloudera/cloudera-manager-agent*
 
-# 修改cloudera-scm客户端的服务器目标地址
-sed -i &#39;:s&#x2F;localhost&#x2F;lion&#x2F;g&#39; &#x2F;etc&#x2F;cloudera-scm-agent&#x2F;config.ini
-systemctl enable cloudera-scm-agent
+<span class="token comment"># 修改cloudera-scm客户端的服务器目标地址</span>
+<span class="token function">sed</span> <span class="token parameter variable">-i</span> <span class="token string">':s/localhost/lion/g'</span> /etc/cloudera-scm-agent/config.ini
+systemctl <span class="token builtin class-name">enable</span> cloudera-scm-agent
 systemctl restart cloudera-scm-agent
 
-# 客户端配置完成<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token comment"># 客户端配置完成</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <h3 id="数据库安装"><a href="#数据库安装" class="headerlink" title="数据库安装"></a>数据库安装</h3><p>数据库将部署在Lion主机之上。 1. 数据库安装</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">yum install -y mariadb mariadb-server
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">yum <span class="token function">install</span> <span class="token parameter variable">-y</span> mariadb mariadb-server
 
-# 增加MySQL配置文件
-vim &#x2F;etc&#x2F;my.cnf.d&#x2F;server.cnf
-[mysqld]
-key_buffer &#x3D; 16M
-key_buffer_size &#x3D; 32M
-max_allowed_packet &#x3D; 32M
-thread_stack &#x3D; 256K
-thread_cache_size &#x3D; 64
-query_cache_limit &#x3D; 8M
-query_cache_size &#x3D; 64M
-query_cache_type &#x3D; 1
+<span class="token comment"># 增加MySQL配置文件</span>
+<span class="token function">vim</span> /etc/my.cnf.d/server.cnf
+<span class="token punctuation">[</span>mysqld<span class="token punctuation">]</span>
+key_buffer <span class="token operator">=</span> 16M
+key_buffer_size <span class="token operator">=</span> 32M
+max_allowed_packet <span class="token operator">=</span> 32M
+thread_stack <span class="token operator">=</span> 256K
+thread_cache_size <span class="token operator">=</span> <span class="token number">64</span>
+query_cache_limit <span class="token operator">=</span> 8M
+query_cache_size <span class="token operator">=</span> 64M
+query_cache_type <span class="token operator">=</span> <span class="token number">1</span>
 
-max_connections &#x3D; 550
-server_id&#x3D;1
+max_connections <span class="token operator">=</span> <span class="token number">550</span>
+<span class="token assign-left variable">server_id</span><span class="token operator">=</span><span class="token number">1</span>
 
-binlog_format &#x3D; mixed
+binlog_format <span class="token operator">=</span> mixed
 
-read_buffer_size &#x3D; 2M
-read_rnd_buffer_size &#x3D; 16M
-sort_buffer_size &#x3D; 8M
-join_buffer_size &#x3D; 8M
+read_buffer_size <span class="token operator">=</span> 2M
+read_rnd_buffer_size <span class="token operator">=</span> 16M
+sort_buffer_size <span class="token operator">=</span> 8M
+join_buffer_size <span class="token operator">=</span> 8M
 
-# InnoDB settings
-innodb_file_per_table &#x3D; 1
-innodb_flush_log_at_trx_commit  &#x3D; 2
-innodb_log_buffer_size &#x3D; 64M
-innodb_buffer_pool_size &#x3D; 4G
-innodb_thread_concurrency &#x3D; 8
-innodb_flush_method &#x3D; O_DIRECT
-innodb_log_file_size &#x3D; 512M
+<span class="token comment"># InnoDB settings</span>
+innodb_file_per_table <span class="token operator">=</span> <span class="token number">1</span>
+innodb_flush_log_at_trx_commit  <span class="token operator">=</span> <span class="token number">2</span>
+innodb_log_buffer_size <span class="token operator">=</span> 64M
+innodb_buffer_pool_size <span class="token operator">=</span> 4G
+innodb_thread_concurrency <span class="token operator">=</span> <span class="token number">8</span>
+innodb_flush_method <span class="token operator">=</span> O_DIRECT
+innodb_log_file_size <span class="token operator">=</span> 512M
 
-# 启动数据库服务
-systemctl enable mariadb --now
+<span class="token comment"># 启动数据库服务</span>
+systemctl <span class="token builtin class-name">enable</span> mariadb <span class="token parameter variable">--now</span>
 
-2. 建立数据库配置文件
-vim &#x2F;root&#x2F;cdh.sql
-CREATE DATABASE scm DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
-GRANT ALL ON scm.* TO &#39;scm&#39;@&#39;%&#39; IDENTIFIED BY &#39;passwd&#39;;
-CREATE DATABASE amon DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
-GRANT ALL ON amon.* TO &#39;amon&#39;@&#39;%&#39; IDENTIFIED BY &#39;passwd&#39;;
-CREATE DATABASE rman DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
-GRANT ALL ON rman.* TO &#39;rman&#39;@&#39;%&#39; IDENTIFIED BY &#39;passwd&#39;;
-CREATE DATABASE hue DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
-GRANT ALL ON hue.* TO &#39;hue&#39;@&#39;%&#39; IDENTIFIED BY &#39;passwd&#39;;
-CREATE DATABASE metastore DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
-GRANT ALL ON metastore.* TO &#39;hive&#39;@&#39;%&#39; IDENTIFIED BY &#39;passwd&#39;;
-CREATE DATABASE sentry DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
-GRANT ALL ON sentry.* TO &#39;sentry&#39;@&#39;%&#39; IDENTIFIED BY &#39;passwd&#39;;
-CREATE DATABASE nav DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
-GRANT ALL ON nav.* TO &#39;nav&#39;@&#39;%&#39; IDENTIFIED BY &#39;passwd&#39;;
-CREATE DATABASE navms DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
-GRANT ALL ON navms.* TO &#39;navms&#39;@&#39;%&#39; IDENTIFIED BY &#39;passwd&#39;;
-CREATE DATABASE oozie DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
-GRANT ALL ON oozie.* TO &#39;oozie&#39;@&#39;%&#39; IDENTIFIED BY &#39;passwd&#39;;
+<span class="token number">2</span>. 建立数据库配置文件
+<span class="token function">vim</span> /root/cdh.sql
+CREATE DATABASE scm DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci<span class="token punctuation">;</span>
+GRANT ALL ON scm.* TO <span class="token string">'scm'</span>@<span class="token string">'%'</span> IDENTIFIED BY <span class="token string">'passwd'</span><span class="token punctuation">;</span>
+CREATE DATABASE amon DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci<span class="token punctuation">;</span>
+GRANT ALL ON amon.* TO <span class="token string">'amon'</span>@<span class="token string">'%'</span> IDENTIFIED BY <span class="token string">'passwd'</span><span class="token punctuation">;</span>
+CREATE DATABASE rman DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci<span class="token punctuation">;</span>
+GRANT ALL ON rman.* TO <span class="token string">'rman'</span>@<span class="token string">'%'</span> IDENTIFIED BY <span class="token string">'passwd'</span><span class="token punctuation">;</span>
+CREATE DATABASE hue DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci<span class="token punctuation">;</span>
+GRANT ALL ON hue.* TO <span class="token string">'hue'</span>@<span class="token string">'%'</span> IDENTIFIED BY <span class="token string">'passwd'</span><span class="token punctuation">;</span>
+CREATE DATABASE metastore DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci<span class="token punctuation">;</span>
+GRANT ALL ON metastore.* TO <span class="token string">'hive'</span>@<span class="token string">'%'</span> IDENTIFIED BY <span class="token string">'passwd'</span><span class="token punctuation">;</span>
+CREATE DATABASE sentry DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci<span class="token punctuation">;</span>
+GRANT ALL ON sentry.* TO <span class="token string">'sentry'</span>@<span class="token string">'%'</span> IDENTIFIED BY <span class="token string">'passwd'</span><span class="token punctuation">;</span>
+CREATE DATABASE nav DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci<span class="token punctuation">;</span>
+GRANT ALL ON nav.* TO <span class="token string">'nav'</span>@<span class="token string">'%'</span> IDENTIFIED BY <span class="token string">'passwd'</span><span class="token punctuation">;</span>
+CREATE DATABASE navms DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci<span class="token punctuation">;</span>
+GRANT ALL ON navms.* TO <span class="token string">'navms'</span>@<span class="token string">'%'</span> IDENTIFIED BY <span class="token string">'passwd'</span><span class="token punctuation">;</span>
+CREATE DATABASE oozie DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci<span class="token punctuation">;</span>
+GRANT ALL ON oozie.* TO <span class="token string">'oozie'</span>@<span class="token string">'%'</span> IDENTIFIED BY <span class="token string">'passwd'</span><span class="token punctuation">;</span>
 
-mysql -uroot -p &lt; &#x2F;root&#x2F;cdh.sql
-&#x2F;opt&#x2F;cloudera&#x2F;cm&#x2F;schema&#x2F;scm_prepare_database.sh mysql scm scm
+mysql <span class="token parameter variable">-uroot</span> <span class="token parameter variable">-p</span> <span class="token operator">&lt;</span> /root/cdh.sql
+/opt/cloudera/cm/schema/scm_prepare_database.sh mysql scm scm
 
-### 管理节点安装
-&#96;&#96;&#96;shell
-yum localinstall -y Clouder&#x2F;cloudera-manager-server.6*
-cp Cloudera&#x2F;CDH* &#x2F;opt&#x2F;cloudera&#x2F;parcel-repo
-cp Cloudera&#x2F;main* &#x2F;opt&#x2F;cloudera&#x2F;parcel-repo
-cd &#x2F;opt&#x2F;cloudera&#x2F;parcel-repo
-# wget https:&#x2F;&#x2F;archive.cloudera.com&#x2F;cdh6&#x2F;6.3.2&#x2F;parcels&#x2F;CDH-6.3.2-1.cdh6.3.2.p0.1605554-el6.parcel -P &#x2F;opt&#x2F;cloudera&#x2F;parcel-repo
-# wget https:&#x2F;&#x2F;archive.cloudera.com&#x2F;cdh6&#x2F;6.3.2&#x2F;parcels&#x2F;manifest.json -P &#x2F;opt&#x2F;cloudera&#x2F;parcel-repo
-sha1sum CDH-6.3.2-1.cdh6.3.2.p0.1605554-el7.parcel  awk &#39;&#123; print $1 &#125;&#39; &gt; CDH-6.3.2-1.cdh6.3.2.p0.1605554-el7.parcel.sha
-chown -R cloudera-scm:cloudera-scm &#x2F;opt&#x2F;cloudera&#x2F;parcel-repo&#x2F;*
-systemctl enable cloudera-scm-server --now
-cd<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token comment">### 管理节点安装</span>
+```shell
+yum localinstall <span class="token parameter variable">-y</span> Clouder/cloudera-manager-server.6*
+<span class="token function">cp</span> Cloudera/CDH* /opt/cloudera/parcel-repo
+<span class="token function">cp</span> Cloudera/main* /opt/cloudera/parcel-repo
+<span class="token builtin class-name">cd</span> /opt/cloudera/parcel-repo
+<span class="token comment"># wget https://archive.cloudera.com/cdh6/6.3.2/parcels/CDH-6.3.2-1.cdh6.3.2.p0.1605554-el6.parcel -P /opt/cloudera/parcel-repo</span>
+<span class="token comment"># wget https://archive.cloudera.com/cdh6/6.3.2/parcels/manifest.json -P /opt/cloudera/parcel-repo</span>
+sha1sum CDH-6.3.2-1.cdh6.3.2.p0.1605554-el7.parcel  <span class="token function">awk</span> <span class="token string">'&#123; print $1 &#125;'</span> <span class="token operator">></span> CDH-6.3.2-1.cdh6.3.2.p0.1605554-el7.parcel.sha
+<span class="token function">chown</span> <span class="token parameter variable">-R</span> cloudera-scm:cloudera-scm /opt/cloudera/parcel-repo/*
+systemctl <span class="token builtin class-name">enable</span> cloudera-scm-server <span class="token parameter variable">--now</span>
+<span class="token builtin class-name">cd</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <h3 id="群集配置"><a href="#群集配置" class="headerlink" title="群集配置"></a>群集配置</h3><p>访问Lion主机的7180端口，然后使用web-gui界面进行配置。 <img src="https://cdn.sujx.net/cdh-001.png" alt="start" title="start"> <img src="https://cdn.sujx.net/cdh-002.png" alt="start" title="start"> <img src="https://cdn.sujx.net/cdh-003.png" alt="start" title="start"> <img src="https://cdn.sujx.net/cdh-004.png" alt="start" title="start"> <img src="https://cdn.sujx.net/cdh-005.png" alt="start" title="start"> <img src="https://cdn.sujx.net/cdh-006.png" alt="start" title="start"> <img src="https://cdn.sujx.net/cdh-007.png" alt="start" title="start"> <img src="https://cdn.sujx.net/cdh-008.png" alt="start" title="start"> <img src="https://cdn.sujx.net/cdh-009.png" alt="start" title="start"> <img src="https://cdn.sujx.net/cdh-010.png" alt="start" title="start"> <img src="https://cdn.sujx.net/cdh-011.png" alt="start" title="start"> <img src="https://cdn.sujx.net/cdh-012.png" alt="start" title="start"> <img src="https://cdn.sujx.net/cdh-013.png" alt="start" title="start"> <img src="https://cdn.sujx.net/cdh-014.png" alt="start" title="start"> <img src="https://cdn.sujx.net/cdh-015.png" alt="start" title="start"> <img src="https://cdn.sujx.net/cdh-016.png" alt="start" title="start"> <img src="https://cdn.sujx.net/cdh-017.png" alt="start" title="start"> <img src="https://cdn.sujx.net/cdh-018.png" alt="start" title="start"> <img src="https://cdn.sujx.net/cdh-019.png" alt="start" title="start"> <img src="https://cdn.sujx.net/cdh-020.png" alt="start" title="start"> <img src="https://cdn.sujx.net/cdh-021.png" alt="start" title="start"></p>
-</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">靖轩</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://sujx.net/2020/02/14/cdh6-3-deploy/">https://sujx.net/2020/02/14/cdh6-3-deploy/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/cdh/">cdh</a><a class="post-meta__tags" href="/tags/centos/">centos</a><a class="post-meta__tags" href="/tags/deploy/">deploy</a><a class="post-meta__tags" href="/tags/hadoop/">hadoop</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.sujx.net/wallhaven-g8d9dd.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2020/02/23/what-is-hdfs/"><img class="prev-cover" src="https://cdn.sujx.net/wallhaven-g8d9dd.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">wHAT is HDFS?</div></div></a></div><div class="next-post pull-right"><a href="/2020/02/05/docker-practice/"><img class="next-cover" src="https://cdn.sujx.net/wallhaven-g8d9dd.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">Docker实践</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">靖轩</div><div class="author-info__description">逝者如斯夫,不舍昼夜</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">61</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">117</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">Categories</div><div class="length-num">13</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/sujx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://gitee.com/grepsu" target="_blank" title="Gitee"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:sujx@live.cn" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS链接"><i class="fa  fa-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87"><span class="toc-number">1.</span> <span class="toc-text">环境准备</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AE%89%E8%A3%85"><span class="toc-number">2.</span> <span class="toc-text">数据库安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BE%A4%E9%9B%86%E9%85%8D%E7%BD%AE"><span class="toc-number">3.</span> <span class="toc-text">群集配置</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2021/12/06/centos7-discuzq/" title="CentOS7上使用yum部署Discuz!Q">CentOS7上使用yum部署Discuz!Q</a><time datetime="2021-12-06T09:35:28.000Z" title="Created 2021-12-06 17:35:28">2021-12-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2021/12/01/centos7-mcafee/" title="Linux上安装McAfee杀毒软件">Linux上安装McAfee杀毒软件</a><time datetime="2021-11-30T23:35:28.000Z" title="Created 2021-12-01 07:35:28">2021-12-01</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2021/11/09/centos8-allinone-itop-ocsng-glpi/" title="整合部署开源ITSM管理平台(1)">整合部署开源ITSM管理平台(1)</a><time datetime="2021-11-09T08:37:30.000Z" title="Created 2021-11-09 16:37:30">2021-11-09</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2021/11/01/vmdk2vhdx/" title="VMware磁盘文件转化为Hyper-V磁盘">VMware磁盘文件转化为Hyper-V磁盘</a><time datetime="2021-10-31T21:37:30.000Z" title="Created 2021-11-01 05:37:30">2021-11-01</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2021/10/29/fail2ban/" title="CentOS8与Fail2Ban的联合使用">CentOS8与Fail2Ban的联合使用</a><time datetime="2021-10-29T14:37:30.000Z" title="Created 2021-10-29 22:37:30">2021-10-29</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By 靖轩</div><div class="footer_custom_text">京ICP备17034757号-1</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">Local search</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="https://www.sujx.net">靖轩</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://www.sujx.net/2020/02/14/cdh6-3-deploy/">https://www.sujx.net/2020/02/14/cdh6-3-deploy/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/cdh/">cdh</a><a class="post-meta__tags" href="/tags/centos/">centos</a><a class="post-meta__tags" href="/tags/deploy/">deploy</a><a class="post-meta__tags" href="/tags/hadoop/">hadoop</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.sujx.net/about/avatar.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2020/02/23/what-is-hdfs/" title="wHAT is HDFS?"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">wHAT is HDFS?</div></div></a></div><div class="next-post pull-right"><a href="/2020/01/31/centos8-mirrors/" title="CentOS8的软件库"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">CentOS8的软件库</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">靖轩</div><div class="author-info__description">逝者如斯夫,不舍昼夜</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">94</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">179</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">13</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/sujx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://gitee.com/grepsu" target="_blank" title="Gitee"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:sujx@live.cn" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS链接"><i class="fa  fa-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87"><span class="toc-number">1.</span> <span class="toc-text">环境准备</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AE%89%E8%A3%85"><span class="toc-number">2.</span> <span class="toc-text">数据库安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BE%A4%E9%9B%86%E9%85%8D%E7%BD%AE"><span class="toc-number">3.</span> <span class="toc-text">群集配置</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/21/magedu-week-3/" title="Linux系统基础知识·3">Linux系统基础知识·3</a><time datetime="2023-05-21T14:48:47.000Z" title="Created 2023-05-21 22:48:47">2023-05-21</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/14/magedu-week-2/" title="Linux系统基础知识·2">Linux系统基础知识·2</a><time datetime="2023-05-14T14:48:47.000Z" title="Created 2023-05-14 22:48:47">2023-05-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/04/10/magedu-week-1/" title="Linux系统基础知识·1">Linux系统基础知识·1</a><time datetime="2023-04-10T08:35:34.000Z" title="Created 2023-04-10 16:35:34">2023-04-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2022/11/03/How2UseKVM/" title="内核虚拟化KVM的使用">内核虚拟化KVM的使用</a><time datetime="2022-11-03T14:22:22.000Z" title="Created 2022-11-03 22:22:22">2022-11-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2022/10/19/clean-old-kernel/" title="CentOS主机清理旧内核">CentOS主机清理旧内核</a><time datetime="2022-10-19T06:48:47.000Z" title="Created 2022-10-19 14:48:47">2022-10-19</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://cdn.sujx.net/about/footimg.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By 靖轩</div><div class="footer_custom_text">京ICP备17034757号-1</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading the Database</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

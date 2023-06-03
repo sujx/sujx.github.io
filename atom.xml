@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>灰黑化挥花悔黑</title>
-  <icon>https://sujx.net/icon.png</icon>
+  <title>靖</title>
+  <icon>https://www.sujx.net/icon.png</icon>
   
-  <link href="https://sujx.net/atom.xml" rel="self"/>
+  <link href="https://www.sujx.net/atom.xml" rel="self"/>
   
-  <link href="https://sujx.net/"/>
-  <updated>2021-12-07T07:42:55.520Z</updated>
-  <id>https://sujx.net/</id>
+  <link href="https://www.sujx.net/"/>
+  <updated>2023-05-21T16:23:09.604Z</updated>
+  <id>https://www.sujx.net/</id>
   
   <author>
     <name>靖轩</name>
@@ -17,584 +17,585 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>CentOS7上使用yum部署Discuz!Q</title>
-    <link href="https://sujx.net/2021/12/06/centos7-discuzq/"/>
-    <id>https://sujx.net/2021/12/06/centos7-discuzq/</id>
-    <published>2021-12-06T09:35:28.000Z</published>
-    <updated>2021-12-07T07:42:55.520Z</updated>
+    <title>Linux系统基础知识·3</title>
+    <link href="https://www.sujx.net/2023/05/21/magedu-week-3/"/>
+    <id>https://www.sujx.net/2023/05/21/magedu-week-3/</id>
+    <published>2023-05-21T14:48:47.000Z</published>
+    <updated>2023-05-21T16:23:09.604Z</updated>
     
     
       
       
         
         
-    <summary type="html">&lt;h2 id=&quot;文档资料&quot;&gt;&lt;a href=&quot;#文档资料&quot; class=&quot;headerlink&quot; title=&quot;文档资料&quot;&gt;&lt;/a&gt;文档资料&lt;/h2&gt;&lt;h3 id=&quot;官方指引&quot;&gt;&lt;a href=&quot;#官方指引&quot; class=&quot;headerlink&quot;</summary>
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;本文基于马哥教育就业班第三周课程总结&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;软件管理&quot;&gt;&lt;a href=&quot;#软件管理&quot; class=&quot;headerlink&quot;</summary>
         
       
     
     
     
+    <category term="Education" scheme="https://www.sujx.net/categories/Education/"/>
     
-    <category term="centos" scheme="https://sujx.net/tags/centos/"/>
     
-    <category term="yum" scheme="https://sujx.net/tags/yum/"/>
+    <category term="Linux" scheme="https://www.sujx.net/tags/Linux/"/>
     
-    <category term="discuz" scheme="https://sujx.net/tags/discuz/"/>
+    <category term="面试题" scheme="https://www.sujx.net/tags/%E9%9D%A2%E8%AF%95%E9%A2%98/"/>
+    
+    <category term="基础知识" scheme="https://www.sujx.net/tags/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/"/>
     
   </entry>
   
   <entry>
-    <title>Linux上安装McAfee杀毒软件</title>
-    <link href="https://sujx.net/2021/12/01/centos7-mcafee/"/>
-    <id>https://sujx.net/2021/12/01/centos7-mcafee/</id>
-    <published>2021-11-30T23:35:28.000Z</published>
-    <updated>2021-12-07T07:32:00.158Z</updated>
+    <title>Linux系统基础知识·2</title>
+    <link href="https://www.sujx.net/2023/05/14/magedu-week-2/"/>
+    <id>https://www.sujx.net/2023/05/14/magedu-week-2/</id>
+    <published>2023-05-14T14:48:47.000Z</published>
+    <updated>2023-05-21T16:23:09.604Z</updated>
     
     
       
       
         
         
-    <summary type="html">&lt;h2 id=&quot;背景&quot;&gt;&lt;a href=&quot;#背景&quot; class=&quot;headerlink&quot;</summary>
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;本文基于马哥教育就业班第二周课程总结&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;系统设计&quot;&gt;&lt;a href=&quot;#系统设计&quot; class=&quot;headerlink&quot;</summary>
         
       
     
     
     
+    <category term="Education" scheme="https://www.sujx.net/categories/Education/"/>
     
-    <category term="centos" scheme="https://sujx.net/tags/centos/"/>
     
-    <category term="antivirus" scheme="https://sujx.net/tags/antivirus/"/>
+    <category term="Linux" scheme="https://www.sujx.net/tags/Linux/"/>
     
-    <category term="security" scheme="https://sujx.net/tags/security/"/>
+    <category term="面试题" scheme="https://www.sujx.net/tags/%E9%9D%A2%E8%AF%95%E9%A2%98/"/>
+    
+    <category term="基础知识" scheme="https://www.sujx.net/tags/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/"/>
     
   </entry>
   
   <entry>
-    <title>整合部署开源ITSM管理平台(1)</title>
-    <link href="https://sujx.net/2021/11/09/centos8-allinone-itop-ocsng-glpi/"/>
-    <id>https://sujx.net/2021/11/09/centos8-allinone-itop-ocsng-glpi/</id>
-    <published>2021-11-09T08:37:30.000Z</published>
-    <updated>2021-12-07T07:32:00.334Z</updated>
+    <title>Linux系统基础知识·1</title>
+    <link href="https://www.sujx.net/2023/04/10/magedu-week-1/"/>
+    <id>https://www.sujx.net/2023/04/10/magedu-week-1/</id>
+    <published>2023-04-10T08:35:34.000Z</published>
+    <updated>2023-05-21T16:23:09.436Z</updated>
     
     
       
       
         
         
-    <summary type="html">&lt;h2 id=&quot;概述&quot;&gt;&lt;a href=&quot;#概述&quot; class=&quot;headerlink&quot; title=&quot;概述&quot;&gt;&lt;/a&gt;概述&lt;/h2&gt;&lt;h3 id=&quot;iTop&quot;&gt;&lt;a href=&quot;#iTop&quot; class=&quot;headerlink&quot;</summary>
+    <summary type="html">&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;一个完整计算系统的简要介绍&lt;/p&gt;
+&lt;pre class=&quot;line-numbers language-bash&quot; data-language=&quot;bash&quot;&gt;&lt;code</summary>
         
       
     
     
     
-    <category term="Technology" scheme="https://sujx.net/categories/Technology/"/>
+    <category term="Education" scheme="https://www.sujx.net/categories/Education/"/>
     
     
-    <category term="iTop" scheme="https://sujx.net/tags/iTop/"/>
+    <category term="Linux" scheme="https://www.sujx.net/tags/Linux/"/>
     
-    <category term="OCSInventroy" scheme="https://sujx.net/tags/OCSInventroy/"/>
+    <category term="面试题" scheme="https://www.sujx.net/tags/%E9%9D%A2%E8%AF%95%E9%A2%98/"/>
     
-    <category term="GLPI" scheme="https://sujx.net/tags/GLPI/"/>
-    
-    <category term="CMDB" scheme="https://sujx.net/tags/CMDB/"/>
-    
-    <category term="ITSM" scheme="https://sujx.net/tags/ITSM/"/>
+    <category term="基础知识" scheme="https://www.sujx.net/tags/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/"/>
     
   </entry>
   
   <entry>
-    <title>VMware磁盘文件转化为Hyper-V磁盘</title>
-    <link href="https://sujx.net/2021/11/01/vmdk2vhdx/"/>
-    <id>https://sujx.net/2021/11/01/vmdk2vhdx/</id>
-    <published>2021-10-31T21:37:30.000Z</published>
-    <updated>2021-12-07T07:32:05.268Z</updated>
+    <title>内核虚拟化KVM的使用</title>
+    <link href="https://www.sujx.net/2022/11/03/How2UseKVM/"/>
+    <id>https://www.sujx.net/2022/11/03/How2UseKVM/</id>
+    <published>2022-11-03T14:22:22.000Z</published>
+    <updated>2023-05-30T08:30:00.011Z</updated>
     
     
       
       
         
         
-    <summary type="html">&lt;h1 id=&quot;VMware磁盘文件转化为Hyper-V磁盘&quot;&gt;&lt;a href=&quot;#VMware磁盘文件转化为Hyper-V磁盘&quot; class=&quot;headerlink&quot;</summary>
+    <summary type="html">&lt;h2 id=&quot;概念&quot;&gt;&lt;a href=&quot;#概念&quot; class=&quot;headerlink&quot; title=&quot;概念&quot;&gt;&lt;/a&gt;概念&lt;/h2&gt;&lt;p&gt;&lt;a href=&quot;https://www.linux-kvm.org/&quot;&gt;KVM&lt;/a&gt;全称为Kernel Virtual</summary>
         
       
     
     
     
-    <category term="Technology" scheme="https://sujx.net/categories/Technology/"/>
+    <category term="Technology" scheme="https://www.sujx.net/categories/Technology/"/>
     
     
-    <category term="vmdk" scheme="https://sujx.net/tags/vmdk/"/>
+    <category term="Virtual" scheme="https://www.sujx.net/tags/Virtual/"/>
     
-    <category term="vhdx" scheme="https://sujx.net/tags/vhdx/"/>
+    <category term="KVM" scheme="https://www.sujx.net/tags/KVM/"/>
+    
+    <category term="Linux" scheme="https://www.sujx.net/tags/Linux/"/>
     
   </entry>
   
   <entry>
-    <title>CentOS8与Fail2Ban的联合使用</title>
-    <link href="https://sujx.net/2021/10/29/fail2ban/"/>
-    <id>https://sujx.net/2021/10/29/fail2ban/</id>
-    <published>2021-10-29T14:37:30.000Z</published>
-    <updated>2021-12-07T07:32:01.469Z</updated>
+    <title>CentOS主机清理旧内核</title>
+    <link href="https://www.sujx.net/2022/10/19/clean-old-kernel/"/>
+    <id>https://www.sujx.net/2022/10/19/clean-old-kernel/</id>
+    <published>2022-10-19T06:48:47.000Z</published>
+    <updated>2023-06-02T14:52:32.511Z</updated>
     
     
       
       
         
         
-    <summary type="html">&lt;h1 id=&quot;CentOS8与Fail2Ban的联合使用&quot;&gt;&lt;a href=&quot;#CentOS8与Fail2Ban的联合使用&quot; class=&quot;headerlink&quot;</summary>
+    <summary type="html">&lt;h3 id=&quot;CentOS7上删除旧内核&quot;&gt;&lt;a href=&quot;#CentOS7上删除旧内核&quot; class=&quot;headerlink&quot; title=&quot;CentOS7上删除旧内核&quot;&gt;&lt;/a&gt;CentOS7上删除旧内核&lt;/h3&gt;&lt;p&gt;centos7</summary>
         
       
     
     
     
-    <category term="Technology" scheme="https://sujx.net/categories/Technology/"/>
+    <category term="Technology" scheme="https://www.sujx.net/categories/Technology/"/>
     
     
-    <category term="CentOS" scheme="https://sujx.net/tags/CentOS/"/>
+    <category term="CentOS7" scheme="https://www.sujx.net/tags/CentOS7/"/>
     
-    <category term="Fail2Ban" scheme="https://sujx.net/tags/Fail2Ban/"/>
+    <category term="CentOS8" scheme="https://www.sujx.net/tags/CentOS8/"/>
     
-    <category term="Firewall" scheme="https://sujx.net/tags/Firewall/"/>
+    <category term="Kernel" scheme="https://www.sujx.net/tags/Kernel/"/>
     
   </entry>
   
   <entry>
-    <title>使用Tmux进行对Linux主机的管理</title>
-    <link href="https://sujx.net/2021/10/19/tmux/"/>
-    <id>https://sujx.net/2021/10/19/tmux/</id>
-    <published>2021-10-19T04:37:30.000Z</published>
-    <updated>2021-12-07T07:32:04.629Z</updated>
+    <title>CCSK思维导图</title>
+    <link href="https://www.sujx.net/2022/10/01/CCSK-MindMap/"/>
+    <id>https://www.sujx.net/2022/10/01/CCSK-MindMap/</id>
+    <published>2022-10-01T14:48:47.000Z</published>
+    <updated>2023-05-23T04:30:52.686Z</updated>
     
     
       
       
         
         
-    <summary type="html">&lt;h1 id=&quot;使用Tmux进行对Linux主机的管理&quot;&gt;&lt;a href=&quot;#使用Tmux进行对Linux主机的管理&quot; class=&quot;headerlink&quot;</summary>
+    <summary type="html">&lt;p&gt;&lt;a href=&quot;https://www.c-csa.cn/u_file/photo/20200827/825c545c82.pdf&quot;&gt;CCSK前导知识&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://cdn.sujx.net/CCSK-Mindmap.png&quot;</summary>
         
       
     
     
     
-    <category term="Technology" scheme="https://sujx.net/categories/Technology/"/>
+    <category term="Security" scheme="https://www.sujx.net/categories/Security/"/>
     
     
-    <category term="Tools" scheme="https://sujx.net/tags/Tools/"/>
+    <category term="CCSK" scheme="https://www.sujx.net/tags/CCSK/"/>
     
-    <category term="Tmux" scheme="https://sujx.net/tags/Tmux/"/>
+    <category term="MindMap" scheme="https://www.sujx.net/tags/MindMap/"/>
     
   </entry>
   
   <entry>
-    <title>建立基于Windows活动目录的联合认证服务</title>
-    <link href="https://sujx.net/2021/10/15/windowsad-fs/"/>
-    <id>https://sujx.net/2021/10/15/windowsad-fs/</id>
-    <published>2021-10-15T07:37:30.000Z</published>
-    <updated>2021-12-07T07:32:06.189Z</updated>
+    <title>Kubernetes的部署</title>
+    <link href="https://www.sujx.net/2022/09/19/Kubernetes-Deploy/"/>
+    <id>https://www.sujx.net/2022/09/19/Kubernetes-Deploy/</id>
+    <published>2022-09-19T06:48:47.000Z</published>
+    <updated>2023-05-30T08:06:16.014Z</updated>
     
     
       
       
         
         
-    <summary type="html">&lt;h1 id=&quot;建立基于Windows活动目录的联合认证服务&quot;&gt;&lt;a href=&quot;#建立基于Windows活动目录的联合认证服务&quot; class=&quot;headerlink&quot;</summary>
+    <summary type="html">&lt;h2 id=&quot;概要&quot;&gt;&lt;a href=&quot;#概要&quot; class=&quot;headerlink&quot; title=&quot;概要&quot;&gt;&lt;/a&gt;概要&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;Kubernetes&lt;/strong&gt; 这个名字源于希腊语，意为“舵手”或“飞行员”。k8s 这个缩写是因为 k 和 s</summary>
         
       
     
     
     
-    <category term="Technology" scheme="https://sujx.net/categories/Technology/"/>
+    <category term="Technology" scheme="https://www.sujx.net/categories/Technology/"/>
     
     
-    <category term="Windows Server" scheme="https://sujx.net/tags/Windows-Server/"/>
+    <category term="Docker" scheme="https://www.sujx.net/tags/Docker/"/>
     
-    <category term="AD-FS" scheme="https://sujx.net/tags/AD-FS/"/>
+    <category term="Kubernetes" scheme="https://www.sujx.net/tags/Kubernetes/"/>
     
   </entry>
   
   <entry>
-    <title>配置DNSMasq缓存系统</title>
-    <link href="https://sujx.net/2021/10/09/dnsmasq/"/>
-    <id>https://sujx.net/2021/10/09/dnsmasq/</id>
-    <published>2021-10-09T07:37:30.000Z</published>
-    <updated>2021-12-07T07:32:01.064Z</updated>
+    <title>Docker的基本使用</title>
+    <link href="https://www.sujx.net/2022/08/15/Docker-Pratice/"/>
+    <id>https://www.sujx.net/2022/08/15/Docker-Pratice/</id>
+    <published>2022-08-15T01:35:34.000Z</published>
+    <updated>2023-05-20T14:25:42.367Z</updated>
     
     
       
       
         
         
-    <summary type="html">&lt;h1 id=&quot;部署DNSMasq实现解析缓存服务&quot;&gt;&lt;a href=&quot;#部署DNSMasq实现解析缓存服务&quot; class=&quot;headerlink&quot;</summary>
+    <summary type="html">&lt;h2 id=&quot;简介&quot;&gt;&lt;a href=&quot;#简介&quot; class=&quot;headerlink&quot; title=&quot;简介&quot;&gt;&lt;/a&gt;简介&lt;/h2&gt;&lt;h3 id=&quot;Docker是什么&quot;&gt;&lt;a href=&quot;#Docker是什么&quot; class=&quot;headerlink&quot;</summary>
         
       
     
     
     
-    <category term="Technology" scheme="https://sujx.net/categories/Technology/"/>
     
+    <category term="Docker" scheme="https://www.sujx.net/tags/Docker/"/>
     
-    <category term="DNS" scheme="https://sujx.net/tags/DNS/"/>
+    <category term="Basic" scheme="https://www.sujx.net/tags/Basic/"/>
     
-    <category term="dnsmasq" scheme="https://sujx.net/tags/dnsmasq/"/>
+    <category term="Tech" scheme="https://www.sujx.net/tags/Tech/"/>
     
   </entry>
   
   <entry>
-    <title>技术服务代开发票</title>
-    <link href="https://sujx.net/2021/09/23/fapiao/"/>
-    <id>https://sujx.net/2021/09/23/fapiao/</id>
-    <published>2021-09-23T02:37:30.000Z</published>
-    <updated>2021-12-07T07:32:01.512Z</updated>
+    <title>大型网站技术架构核心原理与案例分析</title>
+    <link href="https://www.sujx.net/2022/08/01/Large-Scale_Website_Architecture/"/>
+    <id>https://www.sujx.net/2022/08/01/Large-Scale_Website_Architecture/</id>
+    <published>2022-07-31T23:35:34.000Z</published>
+    <updated>2023-05-20T14:25:42.479Z</updated>
     
     
       
       
         
         
-    <summary type="html">&lt;h1 id=&quot;如何办理个人技术服务代开发票&quot;&gt;&lt;a href=&quot;#如何办理个人技术服务代开发票&quot; class=&quot;headerlink&quot;</summary>
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;此为《大型网站技术架构核心原理与案例分析》的记录&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;概述&quot;&gt;&lt;a href=&quot;#概述&quot; class=&quot;headerlink&quot; title=&quot;概述&quot;&gt;&lt;/a&gt;概述&lt;/h2&gt;&lt;h3</summary>
         
       
     
     
     
-    <category term="life" scheme="https://sujx.net/categories/life/"/>
     
+    <category term="Architecture" scheme="https://www.sujx.net/tags/Architecture/"/>
     
-    <category term="fapiao" scheme="https://sujx.net/tags/fapiao/"/>
+    <category term="Website" scheme="https://www.sujx.net/tags/Website/"/>
+    
+    <category term="Books" scheme="https://www.sujx.net/tags/Books/"/>
     
   </entry>
   
   <entry>
-    <title>使用SFTP进行数据备份</title>
-    <link href="https://sujx.net/2021/09/15/sftp-chroot/"/>
-    <id>https://sujx.net/2021/09/15/sftp-chroot/</id>
-    <published>2021-09-15T01:08:50.000Z</published>
-    <updated>2021-12-07T07:32:04.185Z</updated>
+    <title>定时删除Wazuh日志索引</title>
+    <link href="https://www.sujx.net/2022/07/20/wauzh-clean-log/"/>
+    <id>https://www.sujx.net/2022/07/20/wauzh-clean-log/</id>
+    <published>2022-07-20T02:35:34.000Z</published>
+    <updated>2023-05-06T10:58:04.779Z</updated>
     
     
       
       
         
         
-    <summary type="html">&lt;h1 id=&quot;使用SFTP进行数据备份&quot;&gt;&lt;a href=&quot;#使用SFTP进行数据备份&quot; class=&quot;headerlink&quot; title=&quot;使用SFTP进行数据备份&quot;&gt;&lt;/a&gt;使用SFTP进行数据备份&lt;/h1&gt;&lt;h2 id=&quot;背景&quot;&gt;&lt;a href=&quot;#背景&quot;</summary>
+    <summary type="html">&lt;h2 id=&quot;前情&quot;&gt;&lt;a href=&quot;#前情&quot; class=&quot;headerlink&quot;</summary>
         
       
     
     
     
-    <category term="Technology" scheme="https://sujx.net/categories/Technology/"/>
+    <category term="Security" scheme="https://www.sujx.net/categories/Security/"/>
     
     
-    <category term="sshd" scheme="https://sujx.net/tags/sshd/"/>
+    <category term="Wazuh" scheme="https://www.sujx.net/tags/Wazuh/"/>
     
-    <category term="sftp" scheme="https://sujx.net/tags/sftp/"/>
+    <category term="ElasticSearch" scheme="https://www.sujx.net/tags/ElasticSearch/"/>
     
-    <category term="freefilesync" scheme="https://sujx.net/tags/freefilesync/"/>
+    <category term="crontab - Shell" scheme="https://www.sujx.net/tags/crontab-Shell/"/>
     
   </entry>
   
   <entry>
-    <title>Ubuntu开启/var/log/messages</title>
-    <link href="https://sujx.net/2021/09/05/rsyslog-ubuntu/"/>
-    <id>https://sujx.net/2021/09/05/rsyslog-ubuntu/</id>
-    <published>2021-09-05T01:37:30.000Z</published>
-    <updated>2021-12-07T07:32:03.929Z</updated>
+    <title>使用PowerShell脚本管理Hyper-V宿主机上的虚机网卡访问ACL规则</title>
+    <link href="https://www.sujx.net/2022/07/01/powershell-vm-netacl/"/>
+    <id>https://www.sujx.net/2022/07/01/powershell-vm-netacl/</id>
+    <published>2022-07-01T02:35:34.000Z</published>
+    <updated>2023-05-06T10:58:03.739Z</updated>
     
     
       
       
         
         
-    <summary type="html">&lt;h1 id=&quot;找回遗失的Message&quot;&gt;&lt;a href=&quot;#找回遗失的Message&quot; class=&quot;headerlink&quot; title=&quot;找回遗失的Message&quot;&gt;&lt;/a&gt;找回遗失的Message&lt;/h1&gt;&lt;h2 id=&quot;背景&quot;&gt;&lt;a href=&quot;#背景&quot;</summary>
+    <summary type="html">&lt;h1 id=&quot;使用PowerShell脚本管理Hyper-V宿主机上的虚机网卡访问ACL规则&quot;&gt;&lt;a href=&quot;#使用PowerShell脚本管理Hyper-V宿主机上的虚机网卡访问ACL规则&quot; class=&quot;headerlink&quot;</summary>
         
       
     
     
     
-    <category term="Technology" scheme="https://sujx.net/categories/Technology/"/>
+    <category term="Tips" scheme="https://www.sujx.net/categories/Tips/"/>
     
     
-    <category term="rsyslog" scheme="https://sujx.net/tags/rsyslog/"/>
+    <category term="Windows" scheme="https://www.sujx.net/tags/Windows/"/>
     
-    <category term="messages" scheme="https://sujx.net/tags/messages/"/>
+    <category term="powershell" scheme="https://www.sujx.net/tags/powershell/"/>
     
-    <category term="Ubuntu" scheme="https://sujx.net/tags/Ubuntu/"/>
+    <category term="troubleshooting" scheme="https://www.sujx.net/tags/troubleshooting/"/>
     
   </entry>
   
   <entry>
-    <title>使用批处理进行数据备份</title>
-    <link href="https://sujx.net/2021/08/31/dos-cmd-backup/"/>
-    <id>https://sujx.net/2021/08/31/dos-cmd-backup/</id>
-    <published>2021-08-31T07:37:30.000Z</published>
-    <updated>2021-12-07T07:32:01.266Z</updated>
+    <title>自己动手构建简易广播系统</title>
+    <link href="https://www.sujx.net/2022/06/29/how-to-build-liveserver/"/>
+    <id>https://www.sujx.net/2022/06/29/how-to-build-liveserver/</id>
+    <published>2022-06-29T08:00:28.000Z</published>
+    <updated>2023-05-06T10:58:02.707Z</updated>
     
     
       
       
         
         
-    <summary type="html">&lt;h2 id=&quot;背景&quot;&gt;&lt;a href=&quot;#背景&quot; class=&quot;headerlink&quot;</summary>
+    <summary type="html">&lt;h2 id=&quot;综合概述&quot;&gt;&lt;a href=&quot;#综合概述&quot; class=&quot;headerlink&quot;</summary>
         
       
     
     
     
-    <category term="Technology" scheme="https://sujx.net/categories/Technology/"/>
+    <category term="System" scheme="https://www.sujx.net/categories/System/"/>
     
     
-    <category term="7zip" scheme="https://sujx.net/tags/7zip/"/>
-    
-    <category term="dos" scheme="https://sujx.net/tags/dos/"/>
-    
-    <category term="backup" scheme="https://sujx.net/tags/backup/"/>
+    <category term="SRS" scheme="https://www.sujx.net/tags/SRS/"/>
     
   </entry>
   
   <entry>
-    <title>《写作的逻辑》读书笔记</title>
-    <link href="https://sujx.net/2021/08/19/the_logic_of_write/"/>
-    <id>https://sujx.net/2021/08/19/the_logic_of_write/</id>
-    <published>2021-08-19T14:37:30.000Z</published>
-    <updated>2021-12-07T07:32:04.580Z</updated>
+    <title>远程搜集主机网卡信息</title>
+    <link href="https://www.sujx.net/2022/06/01/powershell-remote-netadapter/"/>
+    <id>https://www.sujx.net/2022/06/01/powershell-remote-netadapter/</id>
+    <published>2022-06-01T02:35:34.000Z</published>
+    <updated>2023-05-06T10:58:03.615Z</updated>
     
     
       
       
         
         
-    <summary type="html">&lt;h1 id=&quot;读书笔记·《写作的逻辑》&quot;&gt;&lt;a href=&quot;#读书笔记·《写作的逻辑》&quot; class=&quot;headerlink&quot;</summary>
+    <summary type="html">&lt;h1 id=&quot;远程搜集主机网卡信息&quot;&gt;&lt;a href=&quot;#远程搜集主机网卡信息&quot; class=&quot;headerlink&quot; title=&quot;远程搜集主机网卡信息&quot;&gt;&lt;/a&gt;远程搜集主机网卡信息&lt;/h1&gt;&lt;h2 id=&quot;开启功能&quot;&gt;&lt;a href=&quot;#开启功能&quot;</summary>
         
       
     
     
     
-    <category term="Reading" scheme="https://sujx.net/categories/Reading/"/>
+    <category term="Tips" scheme="https://www.sujx.net/categories/Tips/"/>
     
     
-    <category term="book" scheme="https://sujx.net/tags/book/"/>
+    <category term="Windows" scheme="https://www.sujx.net/tags/Windows/"/>
     
-    <category term="write" scheme="https://sujx.net/tags/write/"/>
+    <category term="powershell" scheme="https://www.sujx.net/tags/powershell/"/>
+    
+    <category term="troubleshooting" scheme="https://www.sujx.net/tags/troubleshooting/"/>
     
   </entry>
   
   <entry>
-    <title>批量更新Wazuh主机配置文件和漏洞库</title>
-    <link href="https://sujx.net/2021/08/05/wazuh-cluster-update/"/>
-    <id>https://sujx.net/2021/08/05/wazuh-cluster-update/</id>
-    <published>2021-08-05T07:37:30.000Z</published>
-    <updated>2021-12-07T07:32:05.293Z</updated>
+    <title>文件存在但IIS报404故障的解决</title>
+    <link href="https://www.sujx.net/2022/05/05/iis-mime/"/>
+    <id>https://www.sujx.net/2022/05/05/iis-mime/</id>
+    <published>2022-05-05T02:35:34.000Z</published>
+    <updated>2023-05-06T10:58:02.911Z</updated>
     
     
       
       
         
         
-    <summary type="html">&lt;h1 id=&quot;批量更新Wazuh主机配置文件和漏洞库&quot;&gt;&lt;a href=&quot;#批量更新Wazuh主机配置文件和漏洞库&quot; class=&quot;headerlink&quot; title=&quot;批量更新Wazuh主机配置文件和漏洞库&quot;&gt;&lt;/a&gt;批量更新Wazuh主机配置文件和漏洞库&lt;/h1&gt;&lt;h3</summary>
+    <summary type="html">&lt;h1 id=&quot;文件存在但IIS报404故障的解决&quot;&gt;&lt;a href=&quot;#文件存在但IIS报404故障的解决&quot; class=&quot;headerlink&quot; title=&quot;文件存在但IIS报404故障的解决&quot;&gt;&lt;/a&gt;文件存在但IIS报404故障的解决&lt;/h1&gt;&lt;h2</summary>
         
       
     
     
     
-    <category term="Security" scheme="https://sujx.net/categories/Security/"/>
+    <category term="Tips" scheme="https://www.sujx.net/categories/Tips/"/>
     
     
-    <category term="Wazuh" scheme="https://sujx.net/tags/Wazuh/"/>
+    <category term="Windows" scheme="https://www.sujx.net/tags/Windows/"/>
     
-    <category term="Ansible" scheme="https://sujx.net/tags/Ansible/"/>
+    <category term="IIS" scheme="https://www.sujx.net/tags/IIS/"/>
     
-    <category term="CVE" scheme="https://sujx.net/tags/CVE/"/>
+    <category term="troubleshooting" scheme="https://www.sujx.net/tags/troubleshooting/"/>
     
   </entry>
   
   <entry>
-    <title>Wazuh系统的群集化改造</title>
-    <link href="https://sujx.net/2021/08/01/wazuh_depoly_cluster/"/>
-    <id>https://sujx.net/2021/08/01/wazuh_depoly_cluster/</id>
-    <published>2021-08-01T07:37:30.000Z</published>
-    <updated>2021-12-07T07:32:05.957Z</updated>
+    <title>macOS的部署、重命名与加域</title>
+    <link href="https://www.sujx.net/2022/04/11/macOS-join-ad/"/>
+    <id>https://www.sujx.net/2022/04/11/macOS-join-ad/</id>
+    <published>2022-04-11T02:35:34.000Z</published>
+    <updated>2023-05-06T10:58:03.259Z</updated>
     
     
       
       
         
         
-    <summary type="html">&lt;h3 id=&quot;综述&quot;&gt;&lt;a href=&quot;#综述&quot; class=&quot;headerlink&quot;</summary>
+    <summary type="html">&lt;h2 id=&quot;缘起&quot;&gt;&lt;a href=&quot;#缘起&quot; class=&quot;headerlink&quot; title=&quot;缘起&quot;&gt;&lt;/a&gt;缘起&lt;/h2&gt;&lt;p&gt;公司现有一堆14年末的Mac</summary>
         
       
     
     
     
-    <category term="Security" scheme="https://sujx.net/categories/Security/"/>
+    <category term="System" scheme="https://www.sujx.net/categories/System/"/>
     
     
-    <category term="System" scheme="https://sujx.net/tags/System/"/>
+    <category term="macOS" scheme="https://www.sujx.net/tags/macOS/"/>
     
-    <category term="Elasticsearch" scheme="https://sujx.net/tags/Elasticsearch/"/>
+    <category term="ActiveDirectory" scheme="https://www.sujx.net/tags/ActiveDirectory/"/>
     
-    <category term="Wazuh" scheme="https://sujx.net/tags/Wazuh/"/>
-    
-    <category term="Security" scheme="https://sujx.net/tags/Security/"/>
-    
-    <category term="HIDS" scheme="https://sujx.net/tags/HIDS/"/>
-    
-    <category term="keeplived" scheme="https://sujx.net/tags/keeplived/"/>
-    
-    <category term="lvs" scheme="https://sujx.net/tags/lvs/"/>
+    <category term="MacMini" scheme="https://www.sujx.net/tags/MacMini/"/>
     
   </entry>
   
   <entry>
-    <title>Elasticsearch常用查询语句</title>
-    <link href="https://sujx.net/2021/07/19/elasticsearch-common-cmd/"/>
-    <id>https://sujx.net/2021/07/19/elasticsearch-common-cmd/</id>
-    <published>2021-07-19T07:37:30.000Z</published>
-    <updated>2021-12-07T07:32:01.286Z</updated>
+    <title>MacMini 主机更换SSD</title>
+    <link href="https://www.sujx.net/2022/04/01/macmini-hd2ssd/"/>
+    <id>https://www.sujx.net/2022/04/01/macmini-hd2ssd/</id>
+    <published>2022-04-01T02:35:34.000Z</published>
+    <updated>2023-05-06T10:58:03.207Z</updated>
     
     
       
       
         
         
-    <summary type="html">&lt;h3 id=&quot;节点状态相关&quot;&gt;&lt;a href=&quot;#节点状态相关&quot; class=&quot;headerlink&quot; title=&quot;节点状态相关&quot;&gt;&lt;/a&gt;节点状态相关&lt;/h3&gt;&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;检查节点是否运行&lt;/p&gt;
-&lt;pre class=&quot;line-numbers</summary>
+    <summary type="html">&lt;p&gt;部门库存里面有几台硬盘为1TB机械盘的2014年版本Mac Mini。为了资源利用，现将这些主机的硬盘更换为拆机的256GB SSD磁盘。&lt;/p&gt;
+&lt;p&gt;主要操作流程如下：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;拆除主机外壳( 要注意wifi的连接线)&lt;br&gt;&lt;img</summary>
         
       
     
     
     
+    <category term="Tips" scheme="https://www.sujx.net/categories/Tips/"/>
     
-    <category term="Elasticsearch" scheme="https://sujx.net/tags/Elasticsearch/"/>
     
-    <category term="ELK" scheme="https://sujx.net/tags/ELK/"/>
+    <category term="mac" scheme="https://www.sujx.net/tags/mac/"/>
+    
+    <category term="hardware" scheme="https://www.sujx.net/tags/hardware/"/>
     
   </entry>
   
   <entry>
-    <title>手机短信转发电子邮件</title>
-    <link href="https://sujx.net/2021/07/13/sms2email/"/>
-    <id>https://sujx.net/2021/07/13/sms2email/</id>
-    <published>2021-07-13T07:37:30.000Z</published>
-    <updated>2021-12-07T07:32:04.365Z</updated>
+    <title>《VMware vSphere 性能设计》笔记</title>
+    <link href="https://www.sujx.net/2022/03/21/vsphere-performance/"/>
+    <id>https://www.sujx.net/2022/03/21/vsphere-performance/</id>
+    <published>2022-03-21T02:35:34.000Z</published>
+    <updated>2023-05-06T10:58:04.739Z</updated>
     
     
       
       
         
         
-    <summary type="html">&lt;p&gt;在运维工作中，我们经常会用到公用手机不在手边的情况。比如，我们在休假或者外出期间紧急对公司注册的云资源进行变更的时候，相关验证码必须要使用短信接收，而手机却在半个城市之外的公司办公室。还有一种情况就是每天都有人来找公用手机翻检验证码，这样对当值运维人员不胜其烦。&lt;/p&gt;
-&lt;</summary>
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;本书从概念和操作两方面介绍了虚拟化基础设施的性能。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;CPU&quot;&gt;&lt;a href=&quot;#CPU&quot; class=&quot;headerlink&quot; title=&quot;CPU&quot;&gt;&lt;/a&gt;CPU&lt;/h2&gt;&lt;h3</summary>
         
       
     
     
     
+    <category term="Books" scheme="https://www.sujx.net/categories/Books/"/>
     
-    <category term="Android" scheme="https://sujx.net/tags/Android/"/>
     
-    <category term="SMS" scheme="https://sujx.net/tags/SMS/"/>
+    <category term="vSphere" scheme="https://www.sujx.net/tags/vSphere/"/>
     
-    <category term="E-mail" scheme="https://sujx.net/tags/E-mail/"/>
+    <category term="performance" scheme="https://www.sujx.net/tags/performance/"/>
     
-    <category term="Tools" scheme="https://sujx.net/tags/Tools/"/>
+    <category term="VMware" scheme="https://www.sujx.net/tags/VMware/"/>
     
   </entry>
   
   <entry>
-    <title>建立内网Linux防病毒系统</title>
-    <link href="https://sujx.net/2021/07/09/clamav-privte-depoly/"/>
-    <id>https://sujx.net/2021/07/09/clamav-privte-depoly/</id>
-    <published>2021-07-09T10:57:23.000Z</published>
-    <updated>2021-12-07T07:32:00.723Z</updated>
+    <title>CentOS 8转换为CentOS Stream 8</title>
+    <link href="https://www.sujx.net/2022/03/11/centos8-covert-2-stream/"/>
+    <id>https://www.sujx.net/2022/03/11/centos8-covert-2-stream/</id>
+    <published>2022-03-11T04:35:34.000Z</published>
+    <updated>2023-05-06T10:58:01.687Z</updated>
     
     
       
       
         
         
-    <summary type="html">&lt;p&gt;ClamAV本来是为了Postfix邮件网关而开发的防毒软件，主要目的是对邮件队列里面的邮件进行病毒查杀。然后，这个防毒模块独立出来成为一个提供病毒、恶意软件、蠕虫的查杀能力的开源软件，成为了Linux环境下实现文件安全的主要选择。�&lt;/p&gt;
-&lt;h3</summary>
+    <summary type="html">&lt;p&gt;由于CentOS 8的源已经不可用，所以需要将原有 CentOS 8 升级为CentOS Steam 8：&lt;/p&gt;
+&lt;pre class=&quot;line-numbers language-bash&quot; data-language=&quot;bash&quot;&gt;&lt;code</summary>
         
       
     
     
     
-    <category term="Security" scheme="https://sujx.net/categories/Security/"/>
+    <category term="Tips" scheme="https://www.sujx.net/categories/Tips/"/>
     
     
-    <category term="Linux" scheme="https://sujx.net/tags/Linux/"/>
+    <category term="CentOS" scheme="https://www.sujx.net/tags/CentOS/"/>
     
-    <category term="Sysstem" scheme="https://sujx.net/tags/Sysstem/"/>
-    
-    <category term="Antivirus" scheme="https://sujx.net/tags/Antivirus/"/>
-    
-    <category term="ClamAV" scheme="https://sujx.net/tags/ClamAV/"/>
+    <category term="system" scheme="https://www.sujx.net/tags/system/"/>
     
   </entry>
   
   <entry>
-    <title>使用Wazuh检测PostgreSQL漏洞</title>
-    <link href="https://sujx.net/2021/07/09/wazuh-vulner-detec-postgresql/"/>
-    <id>https://sujx.net/2021/07/09/wazuh-vulner-detec-postgresql/</id>
-    <published>2021-07-09T08:08:15.000Z</published>
-    <updated>2021-12-07T07:32:05.492Z</updated>
+    <title>SSSD服务主机脱域的处理</title>
+    <link href="https://www.sujx.net/2022/03/01/sssd-realm/"/>
+    <id>https://www.sujx.net/2022/03/01/sssd-realm/</id>
+    <published>2022-03-01T02:35:34.000Z</published>
+    <updated>2023-05-06T10:58:04.187Z</updated>
     
     
       
       
         
         
-    <summary type="html">&lt;p&gt;本文的源于领导的一句问句，Wazuh能监控PG数据库的漏洞么？然后结合实际环境搭建了一套环境进行了测试。&lt;br&gt;结论是：能，然而并不能。&lt;/p&gt;
-&lt;!--以下使用centos8.4系统进行测试--&gt;
-
-&lt;h3 id=&quot;使用操作系统官方软件库&quot;&gt;&lt;a</summary>
+    <summary type="html">&lt;h2 id=&quot;缘起&quot;&gt;&lt;a href=&quot;#缘起&quot; class=&quot;headerlink&quot; title=&quot;缘起&quot;&gt;&lt;/a&gt;缘起&lt;/h2&gt;&lt;p&gt;近期，DBA报错多台CentOS7的主机无法使用域账号登陆，出现“Permission</summary>
         
       
     
     
     
-    <category term="Security" scheme="https://sujx.net/categories/Security/"/>
+    <category term="Tips" scheme="https://www.sujx.net/categories/Tips/"/>
     
     
-    <category term="centos" scheme="https://sujx.net/tags/centos/"/>
+    <category term="ActiveDirectory" scheme="https://www.sujx.net/tags/ActiveDirectory/"/>
     
-    <category term="wazuh" scheme="https://sujx.net/tags/wazuh/"/>
+    <category term="sssd" scheme="https://www.sujx.net/tags/sssd/"/>
     
-    <category term="postgresql" scheme="https://sujx.net/tags/postgresql/"/>
-    
-    <category term="vulnerability" scheme="https://sujx.net/tags/vulnerability/"/>
+    <category term="realm" scheme="https://www.sujx.net/tags/realm/"/>
     
   </entry>
   
   <entry>
-    <title>通过Wazuh实现漏洞扫描</title>
-    <link href="https://sujx.net/2021/07/07/wazuh-vulnerabilities/"/>
-    <id>https://sujx.net/2021/07/07/wazuh-vulnerabilities/</id>
-    <published>2021-07-07T03:21:23.000Z</published>
-    <updated>2021-12-07T07:32:05.541Z</updated>
+    <title>Windows Server上开启SSH服务</title>
+    <link href="https://www.sujx.net/2022/02/28/windows-ssh-server/"/>
+    <id>https://www.sujx.net/2022/02/28/windows-ssh-server/</id>
+    <published>2022-02-28T02:35:34.000Z</published>
+    <updated>2023-05-06T10:58:05.419Z</updated>
     
     
       
       
         
         
-    <summary type="html">&lt;p&gt;Wazuh是个复杂的积木式系统，由ossec、ElasticStack和wazuh插件以及第三方的漏扫、病毒查杀、文件监控等等安全工具组合而成。本文将简述Wazuh的漏洞扫描模块的使用。&lt;/p&gt;
-&lt;h3 id=&quot;应用原理&quot;&gt;&lt;a href=&quot;#应用原理&quot;</summary>
+    <summary type="html">&lt;h2 id=&quot;背景&quot;&gt;&lt;a href=&quot;#背景&quot; class=&quot;headerlink&quot; title=&quot;背景&quot;&gt;&lt;/a&gt;背景&lt;/h2&gt;&lt;p&gt;由于微信小工具的SDK是部署到Windows</summary>
         
       
     
     
     
+    <category term="System" scheme="https://www.sujx.net/categories/System/"/>
     
-    <category term="Wazuh" scheme="https://sujx.net/tags/Wazuh/"/>
     
-    <category term="EDR" scheme="https://sujx.net/tags/EDR/"/>
+    <category term="ssh" scheme="https://www.sujx.net/tags/ssh/"/>
     
-    <category term="Security" scheme="https://sujx.net/tags/Security/"/>
+    <category term="windows" scheme="https://www.sujx.net/tags/windows/"/>
     
-    <category term="Vulnerability" scheme="https://sujx.net/tags/Vulnerability/"/>
+    <category term="Service" scheme="https://www.sujx.net/tags/Service/"/>
     
   </entry>
   

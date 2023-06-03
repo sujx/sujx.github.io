@@ -1,0 +1,263 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>CentOS7上使用yum部署Discuz!Q | 靖</title><meta name="author" content="靖轩"><meta name="copyright" content="靖轩"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="文档资料官方指引 官方站点: https:&amp;#x2F;&amp;#x2F;discuz.com&amp;#x2F;  示例站点：https:&amp;#x2F;&amp;#x2F;discuz.chat&amp;#x2F;  安装指引: https:&amp;#x2F;&amp;#x2F;discuz.com&amp;#x2F;docs&amp;#x2F;Linux%20%E4%B8%BB%E6%9C%BA.html#nginx  后台使用：https:&amp;#x2F;&amp;#x2F;discu"><link rel="shortcut icon" href="https://cdn.sujx.net/about/favicon.png"><link rel="canonical" href="https://www.sujx.net/2021/11/29/centos7-discuzq/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin=""/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?417b20ac1984432f821159fac27d3bb5";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web&amp;display=swap" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":5,"unescape":false,"languages":{"hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"prismjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'CentOS7上使用yum部署Discuz!Q',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-05-06 18:58:01'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="靖" type="application/atom+xml">
+</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://cdn.sujx.net/about/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">94</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">179</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">13</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Posts</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fas fa-book-open"></i><span> Books</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fas fa-tv"></i><span> Movies</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="靖"><span class="site-name">靖</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Posts</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fas fa-book-open"></i><span> Books</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fas fa-tv"></i><span> Movies</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">CentOS7上使用yum部署Discuz!Q</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2021-11-29T09:35:28.000Z" title="Created 2021-11-29 17:35:28">2021-11-29</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2023-05-06T10:58:01.523Z" title="Updated 2023-05-06 18:58:01">2023-05-06</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word count:</span><span class="word-count">592</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading time:</span><span>3min</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="CentOS7上使用yum部署Discuz!Q"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="post-content" id="article-container"><h2 id="文档资料"><a href="#文档资料" class="headerlink" title="文档资料"></a>文档资料</h2><h3 id="官方指引"><a href="#官方指引" class="headerlink" title="官方指引"></a>官方指引</h3><ol>
+<li><p>官方站点: <a target="_blank" rel="noopener" href="https://discuz.com/">https://discuz.com/</a></p>
+</li>
+<li><p>示例站点：<a target="_blank" rel="noopener" href="https://discuz.chat/">https://discuz.chat/</a></p>
+</li>
+<li><p>安装指引: <a target="_blank" rel="noopener" href="https://discuz.com/docs/Linux%20%E4%B8%BB%E6%9C%BA.html#nginx">https://discuz.com/docs/Linux%20%E4%B8%BB%E6%9C%BA.html#nginx</a></p>
+</li>
+<li><p>后台使用：<a target="_blank" rel="noopener" href="https://discuz.com/manual-admin/">https://discuz.com/manual-admin/</a></p>
+</li>
+<li><p>程序下载: <a target="_blank" rel="noopener" href="https://dl.discuz.chat/dzq_latest_install.zip">https://dl.discuz.chat/dzq_latest_install.zip</a></p>
+</li>
+</ol>
+<h3 id="社区使用"><a href="#社区使用" class="headerlink" title="社区使用"></a>社区使用</h3><p>站点：<a target="_blank" rel="noopener" href="http://forum.fxiaoke.com/">纷享社区 (fxiaoke.com)</a></p>
+<p>后台登录：<a target="_blank" rel="noopener" href="http://forum.fxiaoke.com/admin">管理中心首页 (fxiaoke.com)</a></p>
+<h2 id="程序部署"><a href="#程序部署" class="headerlink" title="程序部署"></a>程序部署</h2><h3 id="系统准备"><a href="#系统准备" class="headerlink" title="系统准备"></a>系统准备</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token shebang important">#!/bin/bash</span>
+yum makecache
+yum update <span class="token parameter variable">-y</span>
+
+<span class="token comment"># 创建本地软件源</span>
+<span class="token comment"># 因为是在内网环境部署，所以采用yumdownload下载软件后，使用本机源的形式部署。</span>
+<span class="token comment"># 使用remi源</span>
+<span class="token comment"># 需要开启epel源</span>
+
+<span class="token function">tar</span> zxvf php74.tar.gz <span class="token parameter variable">-C</span> /opt/
+yum <span class="token function">install</span> <span class="token parameter variable">-y</span> createrepo
+createrepo /opt/php74/
+yum-config-manager --add-repo file:/opt/php74
+
+<span class="token comment"># 安装软件包打包证书</span>
+<span class="token comment"># wget https://rpms.remirepo.net/RPM-GPG-KEY-remi</span>
+
+<span class="token comment">#导入证书</span>
+<span class="token function">rpm</span> <span class="token parameter variable">--import</span> RPM-GPG-KEY-remi
+<span class="token comment"># 安装nginx和PHP</span>
+yum <span class="token function">install</span> <span class="token parameter variable">-y</span> nginx
+yum <span class="token function">install</span> <span class="token parameter variable">-y</span> php php-cli php-fpm php-gd php-mysqlnd php-odbc php-bcmath php-curl php-fileinfo php-nette-tokenizer php-xmlrpc php-date php-soap php-ldap php-mbstring libmcrypt libmcrypt-devel php-pecl-apcu mhash php-dom php-xmlreader php-date php-exif php-filter  php-hash php-iconv php-json php-libxml php-mysqlnd php-openssl php-pcre php-posix hp-tokenizer php-zlib php-opcache php-zip
+<span class="token comment"># 拉起服务</span>
+systemctl daemon-reload
+systemctl <span class="token builtin class-name">enable</span> <span class="token parameter variable">--now</span> nginx php-fpm
+<span class="token comment"># 开放80端口</span>
+firewall-cmd <span class="token parameter variable">--permanent</span> --add-service<span class="token operator">=</span>http
+firewall-cmd <span class="token parameter variable">--reload</span>
+<span class="token comment">#论坛程序部署</span>
+<span class="token function">mkdir</span> <span class="token parameter variable">-p</span> /wwwroot/discuz/public
+<span class="token function">unzip</span> dzq_latest_install.zip <span class="token parameter variable">-d</span> /wwwroot/discuz/
+<span class="token function">chown</span> <span class="token parameter variable">-R</span> nginx:nginx /wwwroot/
+
+<span class="token comment"># 配置PHP-fpm</span>
+<span class="token function">sed</span> <span class="token parameter variable">-i</span> <span class="token string">'s\;exif.\exif.\g'</span> /etc/php.ini
+<span class="token function">sed</span> <span class="token parameter variable">-i</span> <span class="token string">'s@date.timezone =@date.timezone = Asia\Shanghai@g'</span> /etc/php.ini
+<span class="token function">sed</span> <span class="token parameter variable">-i</span> <span class="token string">'s\zlib.output_compression = Off\zlib.output_compression = On\g'</span> /etc/php.ini
+<span class="token function">sed</span> <span class="token parameter variable">-i</span> <span class="token string">'s\user = apache\ user = nginx\g'</span> /etc/php-fpm.d/www.conf
+<span class="token function">sed</span> <span class="token parameter variable">-i</span> <span class="token string">'s\group = apache\ group = nginx\g'</span> /etc/php-fpm.d/www.conf
+
+systemctl restart php-fpm.service
+
+<span class="token function">netstat</span> <span class="token parameter variable">-tlnp</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>配置Nginx</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">server <span class="token punctuation">&#123;</span>
+    listen       <span class="token number">80</span><span class="token punctuation">;</span>
+    listen       <span class="token punctuation">[</span>::<span class="token punctuation">]</span>:80<span class="token punctuation">;</span>
+    server_name  forum.sujx.net<span class="token punctuation">;</span>
+    <span class="token comment"># 修改root目录</span>
+    root         /wwwroot/discuz/public/<span class="token punctuation">;</span>
+
+    <span class="token comment"># Load configuration files for the default server block.</span>
+    include /etc/nginx/default.d/*.conf<span class="token punctuation">;</span>
+    <span class="token comment"># 添加配置参数</span>
+    index index.php<span class="token punctuation">;</span>
+    <span class="token function">gzip</span> on<span class="token punctuation">;</span>
+    gzip_min_length <span class="token number">1024</span><span class="token punctuation">;</span>
+    gzip_types application/json text/css application/x-javascript application/javascript application/vnd.api+json<span class="token punctuation">;</span>
+    gzip_disable <span class="token string">"MSIE [1-6]\."</span><span class="token punctuation">;</span>
+    gzip_comp_level <span class="token number">2</span><span class="token punctuation">;</span>
+   <span class="token comment"># 配置rewrite模块 </span>
+    location / <span class="token punctuation">&#123;</span>
+            try_files <span class="token variable">$uri</span> <span class="token variable">$uri</span>/ /index.php?<span class="token variable">$query_string</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+   <span class="token comment"># 添加PHP支持</span>
+    location ~ <span class="token punctuation">\</span>.php$ <span class="token punctuation">&#123;</span>
+        fastcgi_pass   <span class="token number">127.0</span>.0.1:9000<span class="token punctuation">;</span>
+        fastcgi_param  SCRIPT_FILENAME <span class="token variable">$document_root</span><span class="token variable">$fastcgi_script_name</span><span class="token punctuation">;</span>
+        fastcgi_param  PATH_INFO <span class="token variable">$fastcgi_path_info</span><span class="token punctuation">;</span>
+        include        fastcgi_params<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+            error_page <span class="token number">404</span> /404.html<span class="token punctuation">;</span>
+    location <span class="token operator">=</span> /404.html <span class="token punctuation">&#123;</span>
+    <span class="token punctuation">&#125;</span>
+
+    error_page <span class="token number">500</span> <span class="token number">502</span> <span class="token number">503</span> <span class="token number">504</span> /50x.html<span class="token punctuation">;</span>
+    location <span class="token operator">=</span> /50x.html <span class="token punctuation">&#123;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="配置数据库"><a href="#配置数据库" class="headerlink" title="配置数据库"></a>配置数据库</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># Mariadb需要10.0.5以上，MySQL需要8.5以上</span>
+mysql<span class="token operator">></span> create database forumdb<span class="token punctuation">;</span>
+mysql<span class="token operator">></span> create user forumdbadmin@<span class="token string">'localhost'</span> identified by <span class="token string">'forumdbadmin'</span><span class="token punctuation">;</span>
+mysql<span class="token operator">></span> grant all privileges on ocsng.* to forumdbadmin@<span class="token string">'localhost'</span><span class="token punctuation">;</span>
+mysql<span class="token operator">></span> flush privileges<span class="token punctuation">;</span>
+mysql<span class="token operator">></span> <span class="token builtin class-name">exit</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>访问站点IP或者域名来进行安装</p>
+<p>以下略</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="https://www.sujx.net">靖轩</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://www.sujx.net/2021/11/29/centos7-discuzq/">https://www.sujx.net/2021/11/29/centos7-discuzq/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/CentOS/">CentOS</a><a class="post-meta__tags" href="/tags/discuz/">discuz</a><a class="post-meta__tags" href="/tags/forum/">forum</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.sujx.net/about/avatar.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/12/03/centos8-ocsng-glpi/" title="资产管理软件GLPI的部署以及与OCSInverntoryNG的整合"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">资产管理软件GLPI的部署以及与OCSInverntoryNG的整合</div></div></a></div><div class="next-post pull-right"><a href="/2021/11/19/centos7-mcafee/" title="Linux上安装McAfee杀毒软件"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">Linux上安装McAfee杀毒软件</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">靖轩</div><div class="author-info__description">逝者如斯夫,不舍昼夜</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">94</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">179</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">13</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/sujx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://gitee.com/grepsu" target="_blank" title="Gitee"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:sujx@live.cn" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS链接"><i class="fa  fa-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E6%A1%A3%E8%B5%84%E6%96%99"><span class="toc-number">1.</span> <span class="toc-text">文档资料</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%98%E6%96%B9%E6%8C%87%E5%BC%95"><span class="toc-number">1.1.</span> <span class="toc-text">官方指引</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BE%E5%8C%BA%E4%BD%BF%E7%94%A8"><span class="toc-number">1.2.</span> <span class="toc-text">社区使用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A8%8B%E5%BA%8F%E9%83%A8%E7%BD%B2"><span class="toc-number">2.</span> <span class="toc-text">程序部署</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E5%87%86%E5%A4%87"><span class="toc-number">2.1.</span> <span class="toc-text">系统准备</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="toc-number">2.2.</span> <span class="toc-text">配置数据库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85"><span class="toc-number">2.3.</span> <span class="toc-text">安装</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/21/magedu-week-3/" title="Linux系统基础知识·3">Linux系统基础知识·3</a><time datetime="2023-05-21T14:48:47.000Z" title="Created 2023-05-21 22:48:47">2023-05-21</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/14/magedu-week-2/" title="Linux系统基础知识·2">Linux系统基础知识·2</a><time datetime="2023-05-14T14:48:47.000Z" title="Created 2023-05-14 22:48:47">2023-05-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/04/10/magedu-week-1/" title="Linux系统基础知识·1">Linux系统基础知识·1</a><time datetime="2023-04-10T08:35:34.000Z" title="Created 2023-04-10 16:35:34">2023-04-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2022/11/03/How2UseKVM/" title="内核虚拟化KVM的使用">内核虚拟化KVM的使用</a><time datetime="2022-11-03T14:22:22.000Z" title="Created 2022-11-03 22:22:22">2022-11-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2022/10/19/clean-old-kernel/" title="CentOS主机清理旧内核">CentOS主机清理旧内核</a><time datetime="2022-10-19T06:48:47.000Z" title="Created 2022-10-19 14:48:47">2022-10-19</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://cdn.sujx.net/about/footimg.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By 靖轩</div><div class="footer_custom_text">京ICP备17034757号-1</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading the Database</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

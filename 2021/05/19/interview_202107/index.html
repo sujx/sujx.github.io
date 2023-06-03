@@ -1,29 +1,14 @@
-<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>近期技术面试题目 | 灰黑化挥花悔黑</title><meta name="keywords" content="interview,exam,Sysadmin"><meta name="author" content="靖轩"><meta name="copyright" content="靖轩"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Windows相关 域的角色有哪几个，谈谈你的理解 林级别： Schema Master（架构主机） 作用是修改活动目录的原数据。我们知道在活动目录里存在着各种各样的对象，比如用户、计算机、打印机等，这些对象有一系列的属性，活动目录本省就是一个数据库，对象和属性之间就好像表格一样存在着对应关系，那么这些对象和属性之间的关系是有谁来定义的，就是Schema Master. Domain Naming">
-<meta property="og:type" content="article">
-<meta property="og:title" content="近期技术面试题目">
-<meta property="og:url" content="https://sujx.net/2021/05/19/interview_202107/index.html">
-<meta property="og:site_name" content="灰黑化挥花悔黑">
-<meta property="og:description" content="Windows相关 域的角色有哪几个，谈谈你的理解 林级别： Schema Master（架构主机） 作用是修改活动目录的原数据。我们知道在活动目录里存在着各种各样的对象，比如用户、计算机、打印机等，这些对象有一系列的属性，活动目录本省就是一个数据库，对象和属性之间就好像表格一样存在着对应关系，那么这些对象和属性之间的关系是有谁来定义的，就是Schema Master. Domain Naming">
-<meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://cdn.sujx.net/wallhaven-g8d9dd.jpg">
-<meta property="article:published_time" content="2021-05-19T07:37:30.000Z">
-<meta property="article:modified_time" content="2021-12-07T07:32:02.385Z">
-<meta property="article:author" content="靖轩">
-<meta property="article:tag" content="interview">
-<meta property="article:tag" content="exam">
-<meta property="article:tag" content="Sysadmin">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://cdn.sujx.net/wallhaven-g8d9dd.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://sujx.net/2021/05/19/interview_202107/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>var _hmt = _hmt || [];
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>近期技术面试题目 | 靖</title><meta name="author" content="靖轩"><meta name="copyright" content="靖轩"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Windows相关 域的角色有哪几个，谈谈你的理解 林级别： Schema Master（架构主机） 作用是修改活动目录的原数据。我们知道在活动目录里存在着各种各样的对象，比如用户、计算机、打印机等，这些对象有一系列的属性，活动目录本省就是一个数据库，对象和属性之间就好像表格一样存在着对应关系，那么"><link rel="shortcut icon" href="https://cdn.sujx.net/about/favicon.png"><link rel="canonical" href="https://www.sujx.net/2021/05/19/interview_202107/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin=""/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>var _hmt = _hmt || [];
 (function() {
   var hm = document.createElement("script");
   hm.src = "https://hm.baidu.com/hm.js?417b20ac1984432f821159fac27d3bb5";
   var s = document.getElementsByTagName("script")[0]; 
   s.parentNode.insertBefore(hm, s);
 })();
-</script><script>const GLOBAL_CONFIG = { 
+</script><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web&amp;display=swap" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
   root: '/',
   algolia: undefined,
-  localSearch: {"path":"search.xml","languages":{"hits_empty":"We didn't find any results for the search: ${query}"}},
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":5,"unescape":false,"languages":{"hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found"}},
   translate: undefined,
   noticeOutdate: undefined,
   highlight: {"plugin":"prismjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
@@ -37,7 +22,7 @@
     post: false
   },
   runtime: '',
-  date_suffix: {
+  dateSuffix: {
     just: 'Just',
     min: 'minutes ago',
     hour: 'hours ago',
@@ -48,26 +33,25 @@
   lightbox: 'fancybox',
   Snackbar: undefined,
   source: {
-    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
     justifiedGallery: {
-      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
-      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
-    },
-    fancybox: {
-      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
-      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
     }
   },
   isPhotoFigcaption: false,
   islazyload: false,
-  isanchor: false
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
 }</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
   title: '近期技术面试题目',
   isPost: true,
   isHome: false,
   isHighlightShrink: false,
   isToc: true,
-  postUpdate: '2021-12-07 15:32:02'
+  postUpdate: '2023-05-22 00:38:42'
 }</script><noscript><style type="text/css">
   #nav {
     opacity: 1
@@ -124,6 +108,21 @@
       document.head.appendChild(script)
     })
   
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
       win.activateDarkMode = function () {
         document.documentElement.setAttribute('data-theme', 'dark')
         if (document.querySelector('meta[name="theme-color"]') !== null) {
@@ -151,13 +150,13 @@
       }
     
     const detectApple = () => {
-      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
         document.documentElement.classList.add('apple')
       }
     }
     detectApple()
-    })(window)</script><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="灰黑化挥花悔黑" type="application/atom+xml">
-</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">61</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">117</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">Categories</div><div class="length-num">13</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fas fa-book-open"></i><span> Books</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fas fa-tv"></i><span> Movies</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">灰黑化挥花悔黑</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fas fa-book-open"></i><span> Books</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fas fa-tv"></i><span> Movies</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">近期技术面试题目</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2021-05-19T07:37:30.000Z" title="Created 2021-05-19 15:37:30">2021-05-19</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2021-12-07T07:32:02.385Z" title="Updated 2021-12-07 15:32:02">2021-12-07</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Technology/">Technology</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word count:</span><span class="word-count">5.4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading time:</span><span>17min</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="近期技术面试题目"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div><article class="post-content" id="article-container"><h3 id="Windows相关"><a href="#Windows相关" class="headerlink" title="Windows相关"></a>Windows相关</h3><ol>
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="靖" type="application/atom+xml">
+</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://cdn.sujx.net/about/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">94</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">179</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">13</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Posts</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fas fa-book-open"></i><span> Books</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fas fa-tv"></i><span> Movies</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="靖"><span class="site-name">靖</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Posts</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fas fa-book-open"></i><span> Books</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fas fa-tv"></i><span> Movies</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">近期技术面试题目</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2021-05-19T07:37:30.000Z" title="Created 2021-05-19 15:37:30">2021-05-19</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2023-05-21T16:38:42.204Z" title="Updated 2023-05-22 00:38:42">2023-05-22</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Tips/">Tips</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word count:</span><span class="word-count">5.4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading time:</span><span>17min</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="近期技术面试题目"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="post-content" id="article-container"><h3 id="Windows相关"><a href="#Windows相关" class="headerlink" title="Windows相关"></a>Windows相关</h3><ol>
 <li><p>域的角色有哪几个，谈谈你的理解</p>
 <pre class="line-numbers language-none"><code class="language-none">林级别：
 Schema Master（架构主机）
@@ -226,8 +225,9 @@ USMT 脱机用户状态迁移。 支持在部署的 Windows PE 阶段内，脱�
 <li><p>如何确认域用户登录失败的具体IP、用户名和登录时间？</p>
 <pre class="line-numbers language-none"><code class="language-none">可以通过开启审核日志的方法来查看域用户登陆、注销的具体信息
 在PDC服务器上打开&quot;本地安全策略&quot;，确保审核登录事件和审核账户管理策略开启
-检查 账户解锁事件ID4767，用户凭据验证，事件ID4776<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-<h3 id="Linux相关"><a href="#Linux相关" class="headerlink" title="Linux相关"></a>Linux相关</h3></li>
+检查 账户解锁事件ID4767，用户凭据验证，事件ID4776<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></li>
+</ol>
+<h3 id="Linux相关"><a href="#Linux相关" class="headerlink" title="Linux相关"></a>Linux相关</h3><ol>
 <li><p>如何查看存储设备的UUID</p>
 <pre class="line-numbers language-none"><code class="language-none">使用blkid<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
 <li><p>如何将现有进程切换到后台，并切换回前台</p>
@@ -254,7 +254,8 @@ CPU利用率高，并不意味着负载就一定大。举例来说：如果我�
 使用fdisk建立Linux分区
 格式化分区，并挂载临时分区；
 使用dd if&#x3D;&#x2F;home of&#x3D;&#x2F;mnt 复制文件；
-修改fstab文件，重新挂载home分区<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+修改fstab文件，重新挂载home分区<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
 <li><p>简单说说ARM服务器和x86服务器的不同</p>
 <pre class="line-numbers language-none"><code class="language-none">ARM架构使用精简指令集，效率高、功耗低，需要专用数据接口
 x86架构性能高、扩展能力强，效率低、软件开发方便<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
@@ -268,14 +269,16 @@ x86架构性能高、扩展能力强，效率低、软件开发方便<span aria-
 <pre class="line-numbers language-none"><code class="language-none">nmcli c reload eth0
 nmcli d reapply eth0<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
 <li><p>简述你最近实施的一个技术项目的内容和流程</p>
-<pre class="line-numbers language-none"><code class="language-none">    <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h3 id="网络相关"><a href="#网络相关" class="headerlink" title="网络相关"></a>网络相关</h3></li>
+<pre class="line-numbers language-none"><code class="language-none">    <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+</ol>
+<h3 id="网络相关"><a href="#网络相关" class="headerlink" title="网络相关"></a>网络相关</h3><ol>
 <li><p>IPSEC VPN和SSL VPN的区别是什么？</p>
 <pre class="line-numbers language-none"><code class="language-none">1、IPSEC VPN使用ipsec协议，基于网络层；
 2、SSL VPN使用ssl协议，使用HTTP协议，基于应用层
 3、IPSECVPN容易管理，价格贵
 4、SSL VPN只适用于HTTP流量
-5、IPSECVPN用于网对网的环境，SSLVPN用于用户对网的环境<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+5、IPSECVPN用于网对网的环境，SSLVPN用于用户对网的环境<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
 <li><p>OSI的七层有那些？HTTP协议在哪层？IP协议在那层？</p>
 <pre class="line-numbers language-none"><code class="language-none">物理层:电信号
 数据链路层:Mac地址
@@ -283,18 +286,22 @@ nmcli d reapply eth0<span aria-hidden="true" class="line-numbers-rows"><span></s
 传输层:流控和校验
 会话层:建立、管理、终止会话
 表示层:文件格式PNG、ZIP
-应用层:HTTP\DNS\SNMP<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+应用层:HTTP\DNS\SNMP<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
 <li><p>TCP如何处理拥塞？</p>
 <pre class="line-numbers language-none"><code class="language-none">1、发送方维持拥塞窗口
 2、使用慢开始算法，由小到大逐步发送
 3、改用拥塞避免算法
 4、快速重传；
-5、快速恢复<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+5、快速恢复<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
 <li><p>TCP的滑动窗口是多少？如何计算？</p>
-<pre class="line-numbers language-none"><code class="language-none">TCP包头中只保留了16bit用来标识窗口大小，允许的最大缓存大小不超过64KB<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+<pre class="line-numbers language-none"><code class="language-none">TCP包头中只保留了16bit用来标识窗口大小，允许的最大缓存大小不超过64KB<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
 <li><p>华为5700交换机如何创建VLAN</p>
-<pre class="line-numbers language-none"><code class="language-none">   <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h3 id="监控相关"><a href="#监控相关" class="headerlink" title="监控相关"></a>监控相关</h3></li>
+<pre class="line-numbers language-none"><code class="language-none">   <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+</ol>
+<h3 id="监控相关"><a href="#监控相关" class="headerlink" title="监控相关"></a>监控相关</h3><ol>
 <li><p>Zabbix是如何实施的？</p>
 <pre class="line-numbers language-none"><code class="language-none">部署数据库
 部署zabbix server
@@ -305,8 +312,9 @@ nmcli d reapply eth0<span aria-hidden="true" class="line-numbers-rows"><span></s
 <pre class="line-numbers language-none"><code class="language-none">使用模板，创建对进程名称或者进程数量进行监控<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
 <li><p>zabbix和Prometheus的区别？</p>
 <pre class="line-numbers language-none"><code class="language-none">Prometheus的基本原理是通过HTTP周期性抓取被监控组件的状态，使用go语言，多用于容器和K8S
-zabbix是使用cs模式，通过agent采集数据发送到server，使用C语言，传统监控场景丰富，技术稳定<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-<h3 id="虚拟化相关"><a href="#虚拟化相关" class="headerlink" title="虚拟化相关"></a>虚拟化相关</h3></li>
+zabbix是使用cs模式，通过agent采集数据发送到server，使用C语言，传统监控场景丰富，技术稳定<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
+</ol>
+<h3 id="虚拟化相关"><a href="#虚拟化相关" class="headerlink" title="虚拟化相关"></a>虚拟化相关</h3><ol>
 <li><p>虚拟化磁盘的类型有那些？差异什么？</p>
 <pre class="line-numbers language-none"><code class="language-none">精简置备、厚置备置零、厚置备延迟置零<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
 <li><p>虚机磁盘的克隆有哪几种形式，分别是什么?</p>
@@ -317,8 +325,9 @@ zabbix是使用cs模式，通过agent采集数据发送到server，使用C语言
 <li><p>虚拟化主机的群集部署实践（FusionCompute和VMware的对比）</p>
 <pre class="line-numbers language-none"><code class="language-none">   <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
 <li><p>常见的VDI产品有那些</p>
-<pre class="line-numbers language-none"><code class="language-none">华为的FusionAccess、微软虚拟桌面、VMware Horizon、Citrix <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h3 id="ELK相关"><a href="#ELK相关" class="headerlink" title="ELK相关"></a>ELK相关</h3></li>
+<pre class="line-numbers language-none"><code class="language-none">华为的FusionAccess、微软虚拟桌面、VMware Horizon、Citrix <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+</ol>
+<h3 id="ELK相关"><a href="#ELK相关" class="headerlink" title="ELK相关"></a>ELK相关</h3><ol>
 <li><p>ELK的底层文件是如何存储的</p>
 <pre class="line-numbers language-none"><code class="language-none">面向文档
 使用JSON格式<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
@@ -329,8 +338,9 @@ zabbix是使用cs模式，通过agent采集数据发送到server，使用C语言
 <li><p>Windows日志如何传输到Elasticsearch；</p>
 <pre class="line-numbers language-none"><code class="language-none">windows版本的filebeat<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
 <li><p>Elasticsearch通过什么来进行查询</p>
-<pre class="line-numbers language-none"><code class="language-none">Restfu API<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h3 id="硬件相关"><a href="#硬件相关" class="headerlink" title="硬件相关"></a>硬件相关</h3></li>
+<pre class="line-numbers language-none"><code class="language-none">Restfu API<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+</ol>
+<h3 id="硬件相关"><a href="#硬件相关" class="headerlink" title="硬件相关"></a>硬件相关</h3><ol>
 <li><p>服务器如何部署系统</p>
 <pre class="line-numbers language-none"><code class="language-none">华为使用BMC部署
 戴尔使用iDRAC部署
@@ -362,8 +372,9 @@ Raid 6的写惩罚为6<span aria-hidden="true" class="line-numbers-rows"><span><
 2、网络侧：交换网络
 3、存储侧：存储前端-&gt;存储cache-&gt;RAID组-&gt;磁盘<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></li>
 <li><p>如何确定主机CPU和虚机CPU的部署比例</p>
-<pre class="line-numbers language-none"><code class="language-none">系统可用的vCPU总数(逻辑处理器) &#x3D; Socket数（CPU个数）x Core数（内核）x Thread数（超线程）<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h3 id="OpenStack相关"><a href="#OpenStack相关" class="headerlink" title="OpenStack相关"></a>OpenStack相关</h3></li>
+<pre class="line-numbers language-none"><code class="language-none">系统可用的vCPU总数(逻辑处理器) &#x3D; Socket数（CPU个数）x Core数（内核）x Thread数（超线程）<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+</ol>
+<h3 id="OpenStack相关"><a href="#OpenStack相关" class="headerlink" title="OpenStack相关"></a>OpenStack相关</h3><ol>
 <li><p>OpenStack的核心组件有那些？</p>
 <pre class="line-numbers language-none"><code class="language-none">Nova – 用于在计算级别管理虚拟机，并在计算或管理程序级别执行其他计算任务。
 Neutron – 为虚拟机、计算和控制节点提供网络功能。
@@ -375,7 +386,8 @@ Glance – 用于提供镜像服务。使用 Glance 的管理平台来上传和�
 Heat – 用于提供编排服务或功能。使用 Heat 管理平台可以轻松地将虚拟机作为堆栈，并且根据需要可以将虚拟机扩展或收缩。
 Ceilometer – 用于提供计量与监控功能<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
 <li><p>如何在OpenStack中创建虚机；</p>
-<pre class="line-numbers language-none"><code class="language-none">openstack server create --flavor &#123;flavor-name&#125; --image &#123;Image-Name-Or-Image-ID&#125; --nic net-id&#x3D;&#123;Network-ID&#125; --security-group &#123;Security_Group_ID&#125; –key-name &#123;Keypair-Name&#125; &lt;VM_Name&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+<pre class="line-numbers language-none"><code class="language-none">openstack server create --flavor &#123;flavor-name&#125; --image &#123;Image-Name-Or-Image-ID&#125; --nic net-id&#x3D;&#123;Network-ID&#125; --security-group &#123;Security_Group_ID&#125; –key-name &#123;Keypair-Name&#125; &lt;VM_Name&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
 <li><p>你用过那些OpenStack部署方式，他们各有什么长短？</p>
 <pre class="line-numbers language-none"><code class="language-none">DevStack
 TripleO
@@ -424,8 +436,9 @@ MySQL Cluster 多主多从，高可用、负载均衡，维护复杂<span aria-h
 <pre class="line-numbers language-none"><code class="language-none">git clone ****
 edit
 git -a
-git commit<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-<h3 id="安全相关"><a href="#安全相关" class="headerlink" title="安全相关"></a>安全相关</h3></li>
+git commit<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></li>
+</ol>
+<h3 id="安全相关"><a href="#安全相关" class="headerlink" title="安全相关"></a>安全相关</h3><ol>
 <li><p>如何获取当前网络中的主机漏洞情况以及如何进行漏洞的处理；你用过那些漏洞扫描工具？</p>
 <pre class="line-numbers language-none"><code class="language-none">使用Nessus、openVas、Wazuh<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
 <li><p>常见加密算法有那些？</p>
@@ -459,8 +472,9 @@ cat &#x2F;var&#x2F;log&#x2F;secure<span aria-hidden="true" class="line-numbers-r
 执行权限管理，网络访问权限和文件访问权限
 安装终端安全管理工具<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></li>
 <li><p>堡垒机的作用是什么?</p>
-<pre class="line-numbers language-none"><code class="language-none">身份验证、账号管理、授权控制、安全审计<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h3 id="容器相关"><a href="#容器相关" class="headerlink" title="容器相关"></a>容器相关</h3></li>
+<pre class="line-numbers language-none"><code class="language-none">身份验证、账号管理、授权控制、安全审计<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+</ol>
+<h3 id="容器相关"><a href="#容器相关" class="headerlink" title="容器相关"></a>容器相关</h3><ol>
 <li><p>虚拟机和容器的区别是什么？</p>
 <pre class="line-numbers language-none"><code class="language-none">1. 虚机是对底层计算机的模拟，容器是操作系统的模拟；
 2. 虚机的隔离性好，管理工具齐全
@@ -474,8 +488,9 @@ docker run --name&#x3D;mariadb -p 3306:3306 -e MYSQL_ROOT_PASSWORD&#x3D;输入�
 <pre class="line-numbers language-none"><code class="language-none">master（api、schedular、contorller）
 node(kubelet、kubeproxy、container_runtime）<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
 <li><p>ETCD是做什么的？</p>
-<pre class="line-numbers language-none"><code class="language-none">etcd是Kubernetes提供默认的存储系统，保存所有集群数据，使用时需要为etcd数据提供备份计划。<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h3 id="IT服务相关"><a href="#IT服务相关" class="headerlink" title="IT服务相关"></a>IT服务相关</h3></li>
+<pre class="line-numbers language-none"><code class="language-none">etcd是Kubernetes提供默认的存储系统，保存所有集群数据，使用时需要为etcd数据提供备份计划。<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+</ol>
+<h3 id="IT服务相关"><a href="#IT服务相关" class="headerlink" title="IT服务相关"></a>IT服务相关</h3><ol>
 <li><p>ITIL中问题和事件的区别是什么？</p>
 <pre class="line-numbers language-none"><code class="language-none">与事件管理的根本区别就在于，事件管理目的在于恢复企业生产，而问题管理在于找出IT故障的根本原因，制定解决方案，防止类似故障的再次发生。<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
 <li><p>ITIL的流程有那些？</p>
@@ -501,8 +516,9 @@ node(kubelet、kubeproxy、container_runtime）<span aria-hidden="true" class="l
 <li><p>项目管理包含那些内容？</p>
 <pre class="line-numbers language-none"><code class="language-none">项目管理总体有五个过程：启动过程、计划过程、实施过程、执行过程、收尾过程等，包含了九大领域的知识：范围管理、时间管理、成本管理、质量管理、风险管理、人力资源管理、沟通管理、采购管理及系统管理的方法与工具<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
 <li><p>简述一个你做过的项目经历（不需要描述技术细节）</p>
-<pre class="line-numbers language-none"><code class="language-none">   <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h3 id="开放题目"><a href="#开放题目" class="headerlink" title="开放题目"></a>开放题目</h3></li>
+<pre class="line-numbers language-none"><code class="language-none">   <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+</ol>
+<h3 id="开放题目"><a href="#开放题目" class="headerlink" title="开放题目"></a>开放题目</h3><ol>
 <li><p>谈谈你处理过的复杂故障事件，并讲述你在其中的作用；</p>
 <pre class="line-numbers language-none"><code class="language-none">   <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
 <li><p>使用英语讲述一个你经常处理的IT事件</p>
@@ -514,4 +530,4 @@ node(kubelet、kubeproxy、container_runtime）<span aria-hidden="true" class="l
 <li><p>你对我们公司和这个岗位有什么要问的？</p>
 <pre class="line-numbers language-none"><code class="language-none">   <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
 </ol>
-</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">靖轩</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://sujx.net/2021/05/19/interview_202107/">https://sujx.net/2021/05/19/interview_202107/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/interview/">interview</a><a class="post-meta__tags" href="/tags/exam/">exam</a><a class="post-meta__tags" href="/tags/Sysadmin/">Sysadmin</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.sujx.net/wallhaven-g8d9dd.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/06/28/ubuntu-template-on-HyperV/"><img class="prev-cover" src="https://cdn.sujx.net/wallhaven-g8d9dd.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">制作Hyper-V的Ubuntu虚机模板</div></div></a></div><div class="next-post pull-right"><a href="/2021/05/08/centos8-make-template/"><img class="next-cover" src="https://cdn.sujx.net/wallhaven-g8d9dd.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">制作CentOS 8的黄金模板</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">靖轩</div><div class="author-info__description">逝者如斯夫,不舍昼夜</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">61</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">117</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">Categories</div><div class="length-num">13</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/sujx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://gitee.com/grepsu" target="_blank" title="Gitee"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:sujx@live.cn" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS链接"><i class="fa  fa-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Windows%E7%9B%B8%E5%85%B3"><span class="toc-number">1.</span> <span class="toc-text">Windows相关</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Linux%E7%9B%B8%E5%85%B3"><span class="toc-number">2.</span> <span class="toc-text">Linux相关</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E7%9B%B8%E5%85%B3"><span class="toc-number">3.</span> <span class="toc-text">网络相关</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%91%E6%8E%A7%E7%9B%B8%E5%85%B3"><span class="toc-number">4.</span> <span class="toc-text">监控相关</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E5%8C%96%E7%9B%B8%E5%85%B3"><span class="toc-number">5.</span> <span class="toc-text">虚拟化相关</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ELK%E7%9B%B8%E5%85%B3"><span class="toc-number">6.</span> <span class="toc-text">ELK相关</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A1%AC%E4%BB%B6%E7%9B%B8%E5%85%B3"><span class="toc-number">7.</span> <span class="toc-text">硬件相关</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#OpenStack%E7%9B%B8%E5%85%B3"><span class="toc-number">8.</span> <span class="toc-text">OpenStack相关</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E6%9C%8D%E5%8A%A1%E7%9B%B8%E5%85%B3"><span class="toc-number">9.</span> <span class="toc-text">应用服务相关</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E7%9B%B8%E5%85%B3"><span class="toc-number">10.</span> <span class="toc-text">安全相关</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%B9%E5%99%A8%E7%9B%B8%E5%85%B3"><span class="toc-number">11.</span> <span class="toc-text">容器相关</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IT%E6%9C%8D%E5%8A%A1%E7%9B%B8%E5%85%B3"><span class="toc-number">12.</span> <span class="toc-text">IT服务相关</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%80%E6%94%BE%E9%A2%98%E7%9B%AE"><span class="toc-number">13.</span> <span class="toc-text">开放题目</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2021/12/06/centos7-discuzq/" title="CentOS7上使用yum部署Discuz!Q">CentOS7上使用yum部署Discuz!Q</a><time datetime="2021-12-06T09:35:28.000Z" title="Created 2021-12-06 17:35:28">2021-12-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2021/12/01/centos7-mcafee/" title="Linux上安装McAfee杀毒软件">Linux上安装McAfee杀毒软件</a><time datetime="2021-11-30T23:35:28.000Z" title="Created 2021-12-01 07:35:28">2021-12-01</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2021/11/09/centos8-allinone-itop-ocsng-glpi/" title="整合部署开源ITSM管理平台(1)">整合部署开源ITSM管理平台(1)</a><time datetime="2021-11-09T08:37:30.000Z" title="Created 2021-11-09 16:37:30">2021-11-09</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2021/11/01/vmdk2vhdx/" title="VMware磁盘文件转化为Hyper-V磁盘">VMware磁盘文件转化为Hyper-V磁盘</a><time datetime="2021-10-31T21:37:30.000Z" title="Created 2021-11-01 05:37:30">2021-11-01</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2021/10/29/fail2ban/" title="CentOS8与Fail2Ban的联合使用">CentOS8与Fail2Ban的联合使用</a><time datetime="2021-10-29T14:37:30.000Z" title="Created 2021-10-29 22:37:30">2021-10-29</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By 靖轩</div><div class="footer_custom_text">京ICP备17034757号-1</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">Local search</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="https://www.sujx.net">靖轩</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://www.sujx.net/2021/05/19/interview_202107/">https://www.sujx.net/2021/05/19/interview_202107/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/interview/">interview</a><a class="post-meta__tags" href="/tags/%E9%9D%A2%E8%AF%95%E9%A2%98/">面试题</a><a class="post-meta__tags" href="/tags/Sysadmin/">Sysadmin</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.sujx.net/about/avatar.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/06/06/pptp-internet/" title="在PPTP网络中访问互联网"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">在PPTP网络中访问互联网</div></div></a></div><div class="next-post pull-right"><a href="/2021/05/08/centos8-make-template/" title="制作CentOS 8的黄金模板"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">制作CentOS 8的黄金模板</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">靖轩</div><div class="author-info__description">逝者如斯夫,不舍昼夜</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">94</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">179</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">13</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/sujx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://gitee.com/grepsu" target="_blank" title="Gitee"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:sujx@live.cn" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS链接"><i class="fa  fa-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Windows%E7%9B%B8%E5%85%B3"><span class="toc-number">1.</span> <span class="toc-text">Windows相关</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Linux%E7%9B%B8%E5%85%B3"><span class="toc-number">2.</span> <span class="toc-text">Linux相关</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E7%9B%B8%E5%85%B3"><span class="toc-number">3.</span> <span class="toc-text">网络相关</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%91%E6%8E%A7%E7%9B%B8%E5%85%B3"><span class="toc-number">4.</span> <span class="toc-text">监控相关</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E5%8C%96%E7%9B%B8%E5%85%B3"><span class="toc-number">5.</span> <span class="toc-text">虚拟化相关</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ELK%E7%9B%B8%E5%85%B3"><span class="toc-number">6.</span> <span class="toc-text">ELK相关</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A1%AC%E4%BB%B6%E7%9B%B8%E5%85%B3"><span class="toc-number">7.</span> <span class="toc-text">硬件相关</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#OpenStack%E7%9B%B8%E5%85%B3"><span class="toc-number">8.</span> <span class="toc-text">OpenStack相关</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E6%9C%8D%E5%8A%A1%E7%9B%B8%E5%85%B3"><span class="toc-number">9.</span> <span class="toc-text">应用服务相关</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E7%9B%B8%E5%85%B3"><span class="toc-number">10.</span> <span class="toc-text">安全相关</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%B9%E5%99%A8%E7%9B%B8%E5%85%B3"><span class="toc-number">11.</span> <span class="toc-text">容器相关</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IT%E6%9C%8D%E5%8A%A1%E7%9B%B8%E5%85%B3"><span class="toc-number">12.</span> <span class="toc-text">IT服务相关</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%80%E6%94%BE%E9%A2%98%E7%9B%AE"><span class="toc-number">13.</span> <span class="toc-text">开放题目</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/21/magedu-week-3/" title="Linux系统基础知识·3">Linux系统基础知识·3</a><time datetime="2023-05-21T14:48:47.000Z" title="Created 2023-05-21 22:48:47">2023-05-21</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/14/magedu-week-2/" title="Linux系统基础知识·2">Linux系统基础知识·2</a><time datetime="2023-05-14T14:48:47.000Z" title="Created 2023-05-14 22:48:47">2023-05-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/04/10/magedu-week-1/" title="Linux系统基础知识·1">Linux系统基础知识·1</a><time datetime="2023-04-10T08:35:34.000Z" title="Created 2023-04-10 16:35:34">2023-04-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2022/11/03/How2UseKVM/" title="内核虚拟化KVM的使用">内核虚拟化KVM的使用</a><time datetime="2022-11-03T14:22:22.000Z" title="Created 2022-11-03 22:22:22">2022-11-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2022/10/19/clean-old-kernel/" title="CentOS主机清理旧内核">CentOS主机清理旧内核</a><time datetime="2022-10-19T06:48:47.000Z" title="Created 2022-10-19 14:48:47">2022-10-19</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://cdn.sujx.net/about/footimg.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By 靖轩</div><div class="footer_custom_text">京ICP备17034757号-1</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading the Database</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
