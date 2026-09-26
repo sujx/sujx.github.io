@@ -1,0 +1,509 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>「IT售前工程师修炼之道」 | 靖轩</title><meta name="author" content="靖轩"><meta name="copyright" content="靖轩"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="不想做CEO的项目经理不是好售前 只有成为某个行业的业务专家，再发挥自己的信息化特长，两者结合起来才能真正帮助客户解决信息化问题，成为客户可信赖的信息化专家。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="「IT售前工程师修炼之道」">
+<meta property="og:url" content="https://www.sujx.net/2024/02/17/Startup-IT-PreSales/index.html">
+<meta property="og:site_name" content="靖轩">
+<meta property="og:description" content="不想做CEO的项目经理不是好售前 只有成为某个行业的业务专家，再发挥自己的信息化特长，两者结合起来才能真正帮助客户解决信息化问题，成为客户可信赖的信息化专家。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.sujx.net/2024/05/wallhaven-vmpxll.jpg">
+<meta property="article:published_time" content="2024-02-17T01:04:07.000Z">
+<meta property="article:modified_time" content="2026-09-26T02:25:04.205Z">
+<meta property="article:author" content="靖轩">
+<meta property="article:tag" content="IT售前">
+<meta property="article:tag" content="售前工程师">
+<meta property="article:tag" content="读书笔记">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.sujx.net/2024/05/wallhaven-vmpxll.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "「IT售前工程师修炼之道」",
+  "url": "https://www.sujx.net/2024/02/17/Startup-IT-PreSales/",
+  "image": "https://cdn.sujx.net/2024/05/wallhaven-vmpxll.jpg",
+  "datePublished": "2024-02-17T01:04:07.000Z",
+  "dateModified": "2026-09-26T02:25:04.205Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "靖轩",
+      "url": "https://www.sujx.net"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://cdn.sujx.net/about/favicon.png"><link rel="canonical" href="https://www.sujx.net/2024/02/17/Startup-IT-PreSales/index.html"><link rel="preconnect" href="//cdnjs.cloudflare.com"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css?v=5.5.5"><link rel="stylesheet" href="/fonts/css/all.min.css"><link rel="stylesheet" href="/libs/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?417b20ac1984432f821159fac27d3bb5";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><link rel="stylesheet" href="/fonts/titillium-web.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: '/libs/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: true,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '「IT售前工程师修炼之道」',
+  isHighlightShrink: false,
+  isToc: false,
+  pageType: 'post'
+}</script><link rel="alternate" href="/atom.xml" title="靖轩" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">靖轩</span></a><a class="nav-page-title" href="/"><span class="site-name">「IT售前工程师修炼之道」</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">「IT售前工程师修炼之道」</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-02-17T01:04:07.000Z" title="发表于 2024-02-17 09:04:07">2024-02-17</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-09-26T02:25:04.205Z" title="更新于 2026-09-26 10:25:04">2026-09-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">72</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>1分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><blockquote>
+<p>不想做CEO的项目经理不是好售前</p>
+<p>只有成为某个行业的业务专家，再发挥自己的信息化特长，两者结合起来才能真正帮助客户解决信息化问题，成为客户可信赖的信息化专家。</p>
+</blockquote>
+
+
+	<div class="row">
+    <embed src="https://cdn.sujx.net/2024/01/IT%E5%94%AE%E5%89%8D%E5%B7%A5%E7%A8%8B%E5%B8%88%E4%BF%AE%E7%82%BC%E4%B9%8B%E9%81%93.pdf" width="100%" height="550" type="application/pdf">
+	</div>
+
+
+
+
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</a><a class="post-meta__tags" href="/tags/IT%E5%94%AE%E5%89%8D/">IT售前</a><a class="post-meta__tags" href="/tags/%E5%94%AE%E5%89%8D%E5%B7%A5%E7%A8%8B%E5%B8%88/">售前工程师</a></div><div class="post-share"><div class="social-share" data-image="https://cdn.sujx.net/2024/05/wallhaven-vmpxll.jpg" data-sites="facebook,twitter,weibo,qq"></div><link rel="stylesheet" href="/libs/sharejs/css/share.min.css" media="print" onload="this.media='all'"><script src="/libs/sharejs/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>能否请我喝一杯咖啡？</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.jpg" target="_blank"><img class="post-qr-code-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/wechat.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2024/02/27/Aliyun-ACE-Medals/" title="阿里云ACE奖牌"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/03/24/aliyun-ace-medals.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">阿里云ACE奖牌</div></div><div class="info-2"><div class="info-item-1">终于拿到阿里云ACE的奖牌了，一堆小零碎，比HCIE的奖牌要精致一些。  </div></div></div></a><a class="pagination-related" href="/2024/02/06/Winter-in-wutai/" title="冬日旅行"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/1/20240301224034.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">冬日旅行</div></div><div class="info-2"><div class="info-item-1">春节之前，去了一趟五台山和平遥。作为一个山西人，山西境内的景点还真是去的少，上一次去五台山还是我小学四年级时候的事情了。几十年过去了，物是人非，菩萨顶、黛螺顶、塔院寺都和小时候的印象不一样了。 五台 这张远眺北台的照片自认为拍的还算有点意思。不过还是要吐槽山上的饭菜价格实在离谱，一碗普普通通的刀削面28块，太夸张了。  平遥节前的平遥，街面上虽然不至于冷清，但逛起来舒服多了，可以安安静静的看看各个票号大院了。我们参观雷履泰的宅子的时候候已经要到下午五点了，瞄了眼门口闸机，我们是全天第76个游客。  上次来平遥的时候候，我还是初一的学生。记得当时是住在平遥宾馆，当时还是热闹非凡，今日今时却是废弃的状态，不知道发生了什么。平遥的旅游其实是有点不进反退的。当年还是挺惊艳的古城旅游，在现在各种古镇和古城抢夺市场的背景下，有点发展乏力。 </div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2024/03/01/IT-PreSales-Exaplained-In-Just-One-Book/" title="「一本书讲透IT售前」"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/1/wallhaven-oxry1p.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-03-01</div><div class="info-item-2">「一本书讲透IT售前」</div></div><div class="info-2"><div class="info-item-1">售前工作售前是什么为什么需要售前 IT行业已经复杂到必须要依靠售前才能卖出产品和服务 市场营销导向阶段要求售前的参与，去洞悉客户的深层次需求，才能打动客户  售前分类 产品型售前 解决方案型售前 行业资讯顾问  售前的要义 为客户创造价值 洞察客户的需求 为客户提供能解决客户需求的产品和解决方案 持续地为客户创造价值  售前的工作 技术交流 需求挖掘 方案编写 PoC测试 参与投标 学习公司的产品和行业知识 项目复盘  售前的定位 销售的军师、老师和刹车 公司与客户之间的桥梁 技术型的营销  售前的特征值得信任的专家  值得公司领导的信任 销售的信任 最重要是获得客户的信任  售前最重要的能力 准确性：准确理解和把握客户的需求、准确判断竞争对手的动向、编写准确的方案 力度：真正地站在客户的立场上去思考问题 后劲：持续努力，超出客户预期  如何成为售前冰山模型 知识和技能 通用能力 底层的特质  Π型人才技术能力 熟悉自己公司的产品 通用技术储备  业务能力 行业知识 理解客户的业务 项目管理知识  通用能力 学习能力 逻辑思维能力 表达能力 倾听能力 写作能力 先写大纲 文章要观...</div></div></div></a><a class="pagination-related" href="/2024/06/26/Small-Projects/" title="「小型项目管理」"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover51.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-06-26</div><div class="info-item-2">「小型项目管理」</div></div><div class="info-2"><div class="info-item-1"> 生活中没有什么可怕的事情，只有需要理解的东西。							—— 居里夫人     08 摄于天津北安桥   项目管理知识领域项目管理概论最佳实践 使用能捕获项目商业论证意图的项目管理方法 制定项目章程 记录项目需求 确定项目范围 使用项目进度表来规划和监测项目活动 通过制定项目预算来控制项目成本 管理项目风险 与项目干系人沟通 使用项目管理工具、技术和模板 依据小型项目的具体需求来定制方法，以应对范围、进度、成本、资源、质量和风险等竞争环境下的制约因素  项目的定义项目的特征  项目是临时的 项目是独特的 项目是渐进明细的  小型项目的定义 项目周期短，时间不超过6个月，项目团队成员为非全职投入 团队成员不超过10人 涉及的技能领域少； 拥有单一的目标和易于实现的解决方案 具有狭窄的范围和定义 影响单个业务部门，并且只有一个决策者 能够获得项目信息，不需要从外部项目获得自动化解决方案 项目经理是首要的领导者和决策者 不涉及政治问题 产生直观的可交付成果，技能领域之间的相互依赖小 有可用资金  项目管理定义 项目管理是指通过应用知识、技能、工具和技术来满足项目的需求，包括澄清项...</div></div></div></a><a class="pagination-related" href="/2024/04/03/Kanban-Whatis/" title="「看板实战」"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/04/fa8cfd9eb20d93321ca4531190587f65-scaled.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-04-03</div><div class="info-item-2">「看板实战」</div></div><div class="info-2"><div class="info-item-1"> 看板，即时一种可视化流程管理系统，也是一种在组织中创建渐进变革的方法。   学习看板开始看板之旅白板通过一张大白板进行可视化，可以称为信息辐射源。这种信息呈现是明显的，并且当人们经过时就可以清楚的看到。而电子工具更像是信息冰箱，你必须要打开它到处寻找想要的信息。   让隐藏的工作无所遁形 为每个工作项建立一个即时贴   帮你理清 谁在干什么 你正在处理的工作 进行中的工作数量   工作可视化之后，将信息散播给看到的每个人  工作流映射把你们的工作流程映射到白板上，然后把即时贴放到正确的位置。起点是开始着手进行记录，终点是生产系统上线。  识别所有阶段，从工作进入到工作离开团队 不要奢求完美 检视合并进行调整   工作直到对客户产生价值才算是完成 通过可视化工作流，可以看到 工作状态 潜在的问题       待办 分析 开发 测试 验收 等待运维发布 发布到生产环境    X          X          X       工作项 你不能看到，你就不能改进。   从卡片上你可以 看到工作项的进展状态 能够决定下一步如何处理   常见属性： 工作项描述 电子系统中的唯一标识...</div></div></div></a><a class="pagination-related" href="/2024/08/20/Linux-Performance/" title="「Linux性能优化大师」"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover41.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-08-20</div><div class="info-item-2">「Linux性能优化大师」</div></div><div class="info-2"><div class="info-item-1">我其实是买了这本书好多年了，都是拿起来翻了两页就看不动了，最近下决心还是把它看完吧，毕竟这书真的有点老了。该书是基于LInux 2。 6内核和RHEL6的版本为例进行的Linux性能解析，即便在15年成书的时候候，都已经算老了。这本书的内容的确有很大问题，个人感觉更像红帽EX442考试的参考教程，很多语句就像英文硬翻的，只能说有一定的科普的作用。 说起来，该书作者赵永刚还是我素未谋面的同事，他是我在纷享工作岗位的前前任，我曾经蹲的工位也曾是他的工位。  性能调优是一项艰巨的任务，需要深入了解硬件、操作系统和应用程序的工作原理。     07 摄于北京朝阳区·众秀大厦   深入理解Linux操作系统Linux进程管理进程进程管理在任何操作系统中都是最重要的任务之一。进程是在处理器上执行的一个实例，进程可以使用任意资源以便内核可以处理完成任务。在Linux操作系统上运行的进程多是通过task_struct结构来管理的，也被称为进程描述符。一个进程描述符包含了单个进程在运行期间所有必要的信息，比如进程表示、属性、构建进程的资源等。 每个进程都有自己的生命周期，比如创建、执行、终止、删除...</div></div></div></a><a class="pagination-related" href="/2024/09/28/Classified-Protection-of-Cyber-Security/" title="网络安全等级保护定级、测评、实施与运维"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover61.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-09-28</div><div class="info-item-2">网络安全等级保护定级、测评、实施与运维</div></div><div class="info-2"><div class="info-item-1">等级保护制度是适用于中国当前实际的一种有效的网络安全管理方法。开展信息安全等级保护工作是保护信息化发展、维护国家信息安全的根本保障，是信息安全保障工作中国家意志的体现。    09 山西大同 云岗石窟   信息安全法律法规及标准规范网络安全法律政策体系法律 中华人民共和国宪法 中华人民共和国刑法 中华人民共和国国家安全法 中华人民共和国网络安全法 中华人民共和国密码法 中华人民共和国保守国家秘密法 中华人民共和国电子签名法  行政法规 中华人民共和国计算机信息系统安全保护条例 中华人民共和国计算机信息网络国籍联网暂行规定 商用密码管理条例 计算机软件保护条例  规章、地方性法规以及规范文件 计算机病毒防治管理办法 计算机信息系统保密管理暂行规定 计算机信息系统安全专用产品检测和销售许可证管理办法  网络安全标准系统基础标准 计算机信息系统安全保护等级划分准则 GB17859-1999 信息安全技术 网络安全等级保护实施指南 GB&#x2F;T 25058-2019  系统定级标准 信息安全技术 网络安全等级保护定级指南 GB&#x2F;T 22240-2020 信息安全技术 网络...</div></div></div></a><a class="pagination-related" href="/2026/05/07/How-to-develop-analytical-skills/" title="分析能力的培养"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover153.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-07</div><div class="info-item-2">分析能力的培养</div></div><div class="info-2"><div class="info-item-1"> 本文来自于一本近五十年前的老书《如何培训分析能力》，其中就已经有了现代项目管理的思维。其文本内容是由MinerFu实现的OCR将原有扫描图片形式的PDF转化为Markdown格式的文件。     05 辽宁·锦州·辽沈战役纪念馆&#x2F;   第一章 不可或缺的分析力1. 面临以分析力决定胜负的时候代情报就是力量俗云”知识就是力量”， 意思就是说，知识丰富的人为强者。此处所说的知识，即是指情报而言。换句话说，”情报就是力量”这句话已成为决定胜负之关键。 确实，在昔日的社会中，情报量若多于他人，所掌握之情势亦较为有利。如印第安人中的长老，由于岁数较大，阅历丰富，情报量亦多，因此能够受到族人的拥戴。又如巫师，对医学及药品方面的知识较一般人丰富，以致备受族人尊敬。当然，在战场上能充分掌握敌人之情报时，往往也能够得到最后胜利。 例如，战后的日本，因经济迅速起飞，故其国内各大企业，争相取得美国的商业情报，哪家公司捷足先登，就容易占尽便宜。因此，为了情报竞争，广告企业亦出现此种情形，有了丰富资料的公司，就能计划出更好的广告，因而在企划竞争上独占鳌头。至于如何及早得到正确的情报，就得要靠分...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">靖轩</div><div class="author-info-description">逝者如斯夫,不舍昼夜</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/grepsu"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://gitee.com/grepsu" target="_blank" title="Gitee"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:sujx@live.cn" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS链接"><i class="fa  fa-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/07/03/AIGC_FoxHole/" title="海鹰">海鹰</a><time datetime="2026-07-03T01:04:07.000Z" title="发表于 2026-07-03 09:04:07">2026-07-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/11/fristVibeCoding/" title="鹊随金印：我的第一个完整的AI编程项目">鹊随金印：我的第一个完整的AI编程项目</a><time datetime="2026-06-11T01:04:07.000Z" title="发表于 2026-06-11 09:04:07">2026-06-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/03/VI_Howto/" title="VI编辑器简介">VI编辑器简介</a><time datetime="2026-06-03T01:04:07.000Z" title="发表于 2026-06-03 09:04:07">2026-06-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/28/HNCitic_2605/" title="我要上头条">我要上头条</a><time datetime="2026-05-28T01:04:07.000Z" title="发表于 2026-05-28 09:04:07">2026-05-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/12/TS-Domain-Controller-Sync-Failure/" title="记一次Windows AD域控制器同步故障排错">记一次Windows AD域控制器同步故障排错</a><time datetime="2026-05-12T03:04:07.000Z" title="发表于 2026-05-12 11:04:07">2026-05-12</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2008 - 2026 By 靖轩</span></div><div class="footer_custom_text">京ICP备17034757号</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.5"></script><script src="/js/main.js?v=5.5.5"></script><script src="/libs/fancybox/fancybox.umd.js"></script><script src="/js/instantpage.js" type="module"></script><script src="/libs/lazyload/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const parseViewBox = viewBox => {
+    if (!viewBox) return null
+    const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
+    if (parts.length !== 4 || parts.some(n => Number.isNaN(n))) return null
+    return parts
+  }
+
+  const getSvgViewBox = svg => {
+    const attr = parseViewBox(svg.getAttribute('viewBox'))
+    if (attr) return attr
+
+    // Fallback: use bbox to build a viewBox
+    try {
+      const bbox = svg.getBBox()
+      if (bbox && bbox.width && bbox.height) return [bbox.x, bbox.y, bbox.width, bbox.height]
+    } catch (e) {
+      // getBBox may fail on some edge cases; ignore
+    }
+
+    const w = Number(svg.getAttribute('width')) || 0
+    const h = Number(svg.getAttribute('height')) || 0
+    if (w > 0 && h > 0) return [0, 0, w, h]
+    return [0, 0, 100, 100]
+  }
+
+  const setSvgViewBox = (svg, vb) => {
+    svg.setAttribute('viewBox', `${vb[0]} ${vb[1]} ${vb[2]} ${vb[3]}`)
+  }
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v))
+
+  const openSvgInNewTab = ({ source, initViewBox }) => {
+    const getClonedSvg = () => {
+      if (typeof source === 'string') {
+        const template = document.createElement('template')
+        template.innerHTML = source.trim()
+        const svg = template.content.querySelector('svg')
+        return svg ? svg.cloneNode(true) : null
+      }
+      if (source && typeof source.cloneNode === 'function') {
+        return source.cloneNode(true)
+      }
+      return null
+    }
+
+    const clone = getClonedSvg()
+    if (!clone) return
+    if (initViewBox && initViewBox.length === 4) {
+      clone.setAttribute('viewBox', initViewBox.join(' '))
+    }
+    if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+    if (!clone.getAttribute('xmlns:xlink') && clone.outerHTML.includes('xlink:')) {
+      clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+    }
+    // inject background to match current theme
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    const bg = getComputedStyle(document.body).backgroundColor || (isDark ? '#1e1e1e' : '#ffffff')
+    if (!clone.style.background) clone.style.background = bg
+
+    const serializer = new XMLSerializer()
+    const svgSource = serializer.serializeToString(clone)
+    const htmlSource = `<!doctype html><html><head><meta charset="utf-8" />
+      <style>
+        html, body { width: 100%; height: 100%; margin: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; }
+        svg { max-width: 100%; max-height: 100%; height: auto; width: auto; }
+      </style>
+      </head><body>${svgSource}</body></html>`
+    const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank', 'noopener')
+    setTimeout(() => URL.revokeObjectURL(url), 30000)
+  }
+
+  const attachMermaidViewerButton = wrap => {
+    let btn = wrap.querySelector('.mermaid-open-btn')
+    if (!btn) {
+      btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'mermaid-open-btn'
+      wrap.appendChild(btn)
+    }
+
+    btn.innerHTML = '<i class="fa fa-search fa-fw" aria-hidden="true"></i>'
+
+    if (!btn.__mermaidViewerBound) {
+      btn.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        const svg = wrap.__mermaidOriginalSvg || wrap.querySelector('svg')
+        if (!svg) return
+        const initViewBox = wrap.__mermaidInitViewBox
+        if (typeof svg === 'string') {
+          openSvgInNewTab({ source: svg, initViewBox })
+          return
+        }
+        openSvgInNewTab({ source: svg, initViewBox })
+      })
+      btn.__mermaidViewerBound = true
+    }
+  }
+
+  // Zoom around a point (px, py) in the SVG viewport (in viewBox coordinates)
+  const zoomAtPoint = (vb, factor, px, py) => {
+    const w = vb[2] * factor
+    const h = vb[3] * factor
+    const nx = px - (px - vb[0]) * factor
+    const ny = py - (py - vb[1]) * factor
+    return [nx, ny, w, h]
+  }
+
+  const initMermaidGestures = wrap => {
+    const svg = wrap.querySelector('svg')
+    if (!svg) return
+
+    // Ensure viewBox exists so gestures always work
+    const initVb = getSvgViewBox(svg)
+    wrap.__mermaidInitViewBox = initVb
+    wrap.__mermaidCurViewBox = initVb.slice()
+    setSvgViewBox(svg, initVb)
+
+    // Avoid binding multiple times on themeChange/pjax
+    if (wrap.__mermaidGestureBound) return
+    wrap.__mermaidGestureBound = true
+
+    // Helper: map client (viewport) coordinate -> viewBox coordinate
+    const clientToViewBox = (clientX, clientY) => {
+      const rect = svg.getBoundingClientRect()
+      const vb = wrap.__mermaidCurViewBox || getSvgViewBox(svg)
+      const x = vb[0] + (clientX - rect.left) * (vb[2] / rect.width)
+      const y = vb[1] + (clientY - rect.top) * (vb[3] / rect.height)
+      return { x, y, rect, vb }
+    }
+
+    const state = {
+      pointers: new Map(),
+      startVb: null,
+      startDist: 0,
+      startCenter: null
+    }
+
+    const clampVb = vb => {
+      const init = wrap.__mermaidInitViewBox || vb
+      const minW = init[2] * 0.1
+      const maxW = init[2] * 10
+      const minH = init[3] * 0.1
+      const maxH = init[3] * 10
+      vb[2] = clamp(vb[2], minW, maxW)
+      vb[3] = clamp(vb[3], minH, maxH)
+      return vb
+    }
+
+    const setCurVb = vb => {
+      vb = clampVb(vb)
+      wrap.__mermaidCurViewBox = vb
+      setSvgViewBox(svg, vb)
+    }
+
+    const onPointerDown = e => {
+      // Allow only primary button for mouse
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      svg.setPointerCapture(e.pointerId)
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      if (state.pointers.size === 1) {
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      } else if (state.pointers.size === 2) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        state.startDist = Math.hypot(dx, dy)
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        state.startCenter = { x: (pts[0].x + pts[1].x) / 2, y: (pts[0].y + pts[1].y) / 2 }
+      }
+    }
+
+    const onPointerMove = e => {
+      if (!state.pointers.has(e.pointerId)) return
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      // Pan with 1 pointer
+      if (state.pointers.size === 1 && state.startVb) {
+        const p = [...state.pointers.values()][0]
+        const prev = { x: e.clientX - e.movementX, y: e.clientY - e.movementY }
+        // movementX/Y unreliable on touch, compute from stored last position
+        const last = wrap.__mermaidLastSinglePointer || p
+        const dxClient = p.x - last.x
+        const dyClient = p.y - last.y
+        wrap.__mermaidLastSinglePointer = p
+
+        const { rect } = clientToViewBox(p.x, p.y)
+        const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        const dx = dxClient * (vb[2] / rect.width)
+        const dy = dyClient * (vb[3] / rect.height)
+        setCurVb([vb[0] - dx, vb[1] - dy, vb[2], vb[3]])
+        return
+      }
+
+      // Pinch zoom with 2 pointers
+      if (state.pointers.size === 2 && state.startVb && state.startDist > 0) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        const dist = Math.hypot(dx, dy)
+        if (!dist) return
+        const factor = state.startDist / dist // dist bigger => zoom in (viewBox smaller)
+
+        const cx = (pts[0].x + pts[1].x) / 2
+        const cy = (pts[0].y + pts[1].y) / 2
+        const centerClient = { x: cx, y: cy }
+
+        const pxy = clientToViewBox(centerClient.x, centerClient.y)
+        const cpx = pxy.x
+        const cpy = pxy.y
+
+        const vb = zoomAtPoint(state.startVb, factor, cpx, cpy)
+        setCurVb(vb)
+      }
+    }
+
+    const onPointerUpOrCancel = e => {
+      state.pointers.delete(e.pointerId)
+      if (state.pointers.size === 0) {
+        state.startVb = null
+        state.startDist = 0
+        state.startCenter = null
+        wrap.__mermaidLastSinglePointer = null
+      } else if (state.pointers.size === 1) {
+        // reset single pointer baseline to avoid jump
+        wrap.__mermaidLastSinglePointer = [...state.pointers.values()][0]
+      }
+    }
+
+    // Wheel zoom (mouse/trackpad)
+    const onWheel = e => {
+      // ctrlKey on mac trackpad pinch; we treat both as zoom
+      e.preventDefault()
+      const delta = e.deltaY
+      const zoomFactor = delta > 0 ? 1.1 : 0.9
+      const { x, y } = clientToViewBox(e.clientX, e.clientY)
+      const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      setCurVb(zoomAtPoint(vb, zoomFactor, x, y))
+    }
+
+    const onDblClick = () => {
+      const init = wrap.__mermaidInitViewBox
+      if (!init) return
+      wrap.__mermaidCurViewBox = init.slice()
+      setSvgViewBox(svg, init)
+    }
+
+    svg.addEventListener('pointerdown', onPointerDown)
+    svg.addEventListener('pointermove', onPointerMove)
+    svg.addEventListener('pointerup', onPointerUpOrCancel)
+    svg.addEventListener('pointercancel', onPointerUpOrCancel)
+    svg.addEventListener('wheel', onWheel, { passive: false })
+    svg.addEventListener('dblclick', onDblClick)
+  }
+
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+
+      // Clear old render (themeChange/pjax will rerun)
+      const oldSvg = item.querySelector('svg')
+      if (oldSvg) oldSvg.remove()
+      item.__mermaidGestureBound = false
+
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+        if (true) initMermaidGestures(item)
+        item.__mermaidOriginalSvg = svg
+        if (true) attachMermaidViewerButton(item)
+      }
+
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('/libs/mermaid/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.5"></script></div></div></body></html>

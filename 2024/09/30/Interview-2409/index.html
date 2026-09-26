@@ -1,0 +1,1433 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>面试题目 | 靖轩</title><meta name="author" content="靖轩"><meta name="copyright" content="靖轩"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="如何防止数据丢失在数据存储管理中，防止数据丢失和最小化故障损失需要从预防措施、实时监控、快速响应机制和容灾备份多个维度构建完整的数据保护体系。以下是结合华为存储设备的详细策略：  一、预防措施：从源头降低数据丢失风险1. 冗余架构设计 RAID级别优化   避免使用RAID 0（无冗余），优先选择RAID 6（允许双盘故障）或RAID 10（高性能+冗余）。   华为存储支持智能RAID 2。 0">
+<meta property="og:type" content="article">
+<meta property="og:title" content="面试题目">
+<meta property="og:url" content="https://www.sujx.net/2024/09/30/Interview-2409/index.html">
+<meta property="og:site_name" content="靖轩">
+<meta property="og:description" content="如何防止数据丢失在数据存储管理中，防止数据丢失和最小化故障损失需要从预防措施、实时监控、快速响应机制和容灾备份多个维度构建完整的数据保护体系。以下是结合华为存储设备的详细策略：  一、预防措施：从源头降低数据丢失风险1. 冗余架构设计 RAID级别优化   避免使用RAID 0（无冗余），优先选择RAID 6（允许双盘故障）或RAID 10（高性能+冗余）。   华为存储支持智能RAID 2。 0">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.sujx.net/covers/cover91.jpg">
+<meta property="article:published_time" content="2024-09-30T15:04:07.000Z">
+<meta property="article:modified_time" content="2026-09-26T02:25:04.151Z">
+<meta property="article:author" content="靖轩">
+<meta property="article:tag" content="Interview">
+<meta property="article:tag" content="KVM">
+<meta property="article:tag" content="Kubernetes">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="Storage">
+<meta property="article:tag" content="VirtualMachine">
+<meta property="article:tag" content="vSphere">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.sujx.net/covers/cover91.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "面试题目",
+  "url": "https://www.sujx.net/2024/09/30/Interview-2409/",
+  "image": "https://cdn.sujx.net/covers/cover91.jpg",
+  "datePublished": "2024-09-30T15:04:07.000Z",
+  "dateModified": "2026-09-26T02:25:04.151Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "靖轩",
+      "url": "https://www.sujx.net"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://cdn.sujx.net/about/favicon.png"><link rel="canonical" href="https://www.sujx.net/2024/09/30/Interview-2409/index.html"><link rel="preconnect" href="//cdnjs.cloudflare.com"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css?v=5.5.5"><link rel="stylesheet" href="/fonts/css/all.min.css"><link rel="stylesheet" href="/libs/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?417b20ac1984432f821159fac27d3bb5";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><link rel="stylesheet" href="/fonts/titillium-web.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: '/libs/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: true,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '面试题目',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="alternate" href="/atom.xml" title="靖轩" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">靖轩</span></a><a class="nav-page-title" href="/"><span class="site-name">面试题目</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">面试题目</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-09-30T15:04:07.000Z" title="发表于 2024-09-30 23:04:07">2024-09-30</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-09-26T02:25:04.151Z" title="更新于 2026-09-26 10:25:04">2026-09-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%93%8D%E4%BD%9C%E7%AC%94%E8%AE%B0/">操作笔记</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">8.4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>27分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><h2 id="如何防止数据丢失"><a href="#如何防止数据丢失" class="headerlink" title="如何防止数据丢失"></a>如何防止数据丢失</h2><p>在数据存储管理中，<strong>防止数据丢失</strong>和<strong>最小化故障损失</strong>需要从<strong>预防措施</strong>、<strong>实时监控</strong>、<strong>快速响应机制</strong>和<strong>容灾备份</strong>多个维度构建完整的数据保护体系。以下是结合华为存储设备的详细策略：</p>
+<hr>
+<h3 id="一、预防措施：从源头降低数据丢失风险"><a href="#一、预防措施：从源头降低数据丢失风险" class="headerlink" title="一、预防措施：从源头降低数据丢失风险"></a><strong>一、预防措施：从源头降低数据丢失风险</strong></h3><h4 id="1-冗余架构设计"><a href="#1-冗余架构设计" class="headerlink" title="1. 冗余架构设计"></a><strong>1. 冗余架构设计</strong></h4><ul>
+<li><strong>RAID级别优化</strong>  <ul>
+<li>避免使用RAID 0（无冗余），优先选择RAID 6（允许双盘故障）或RAID 10（高性能+冗余）。  </li>
+<li>华为存储支持智能RAID 2。 0+技术，可将物理硬盘划分为更细粒度的块（CK），提升重建效率。</li>
+</ul>
+</li>
+<li><strong>多副本与纠删码（EC）</strong>  <ul>
+<li>针对分布式存储（如OceanStor Pacific），启用多副本（如3副本）或EC（如8+4），容忍节点级故障。</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-数据保护技术"><a href="#2-数据保护技术" class="headerlink" title="2. 数据保护技术"></a><strong>2. 数据保护技术</strong></h4><ul>
+<li><strong>快照（Snapshot）</strong>  <ul>
+<li>定期为关键业务LUN&#x2F;文件系统创建快照（如每小时一次），保留最近24小时快照。  </li>
+<li>华为存储支持<strong>秒级快照</strong>，通过“差分位图”技术减少性能影响。</li>
+</ul>
+</li>
+<li><strong>克隆与远程复制</strong>  <ul>
+<li>使用<strong>HyperClone</strong>创建完整数据副本，用于开发测试或应急恢复。  </li>
+<li>配置<strong>HyperReplication</strong>（异步&#x2F;同步）将数据复制到异地容灾中心。</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-硬件可靠性保障"><a href="#3-硬件可靠性保障" class="headerlink" title="3. 硬件可靠性保障"></a><strong>3. 硬件可靠性保障</strong></h4><ul>
+<li><strong>硬盘健康预测</strong>  <ul>
+<li>启用华为<strong>SmartErase</strong>和<strong>硬盘预失效检测</strong>功能，提前隔离潜在故障盘。</li>
+</ul>
+</li>
+<li><strong>多路径与双活架构</strong>  <ul>
+<li>部署<strong>双活存储（HyperMetro）</strong>，实现跨数据中心业务无缝切换（RPO&#x3D;0，RTO≈0）。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="二、实时监控与预警：提前发现风险"><a href="#二、实时监控与预警：提前发现风险" class="headerlink" title="二、实时监控与预警：提前发现风险"></a><strong>二、实时监控与预警：提前发现风险</strong></h3><h4 id="1-智能化监控工具"><a href="#1-智能化监控工具" class="headerlink" title="1. 智能化监控工具"></a><strong>1. 智能化监控工具</strong></h4><ul>
+<li><strong>DeviceManager&#x2F;ISM</strong>  <ul>
+<li>配置自动告警阈值（如硬盘SMART错误计数、存储池容量&gt;80%）。  </li>
+<li>通过邮件&#x2F;短信通知管理员，并集成至运维平台（如eSight）。</li>
+</ul>
+</li>
+<li><strong>华为DME</strong>（数据中心管理引擎）  <ul>
+<li>利用AI预测存储性能瓶颈和硬件故障，生成修复建议。</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-定期健康检查"><a href="#2-定期健康检查" class="headerlink" title="2. 定期健康检查"></a><strong>2. 定期健康检查</strong></h4><ul>
+<li>每月执行<strong>存储健康诊断</strong>（“维护 &gt; 一键巡检”），生成报告并修复异常项。  </li>
+<li>使用命令检查数据一致性：  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">check storage_pool pool_id=XX  <span class="comment"># 验证存储池完整性</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h3 id="三、数据备份：最后一道防线"><a href="#三、数据备份：最后一道防线" class="headerlink" title="三、数据备份：最后一道防线"></a><strong>三、数据备份：最后一道防线</strong></h3><h4 id="1-3-2-1备份原则"><a href="#1-3-2-1备份原则" class="headerlink" title="1. 3-2-1备份原则"></a><strong>1. 3-2-1备份原则</strong></h4><ul>
+<li><strong>3份数据</strong>（生产数据+2备份）  </li>
+<li><strong>2种介质</strong>（华为存储+磁带&#x2F;光盘）  </li>
+<li><strong>1份异地</strong>（如华为云OBS或异地备份中心）</li>
+</ul>
+<h4 id="2-华为备份方案"><a href="#2-华为备份方案" class="headerlink" title="2. 华为备份方案"></a><strong>2. 华为备份方案</strong></h4><ul>
+<li><strong>OceanProtect备份一体机</strong>  <ul>
+<li>支持与OceanStor存储无缝对接，实现<strong>CDM</strong>（副本数据管理）和瞬时恢复。</li>
+</ul>
+</li>
+<li><strong>华为云备份服务（CBR）</strong>  <ul>
+<li>将本地数据备份至云端，支持<strong>整机&#x2F;文件&#x2F;数据库</strong>级保护。</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-备份验证"><a href="#3-备份验证" class="headerlink" title="3. 备份验证"></a><strong>3. 备份验证</strong></h4><ul>
+<li>每季度执行<strong>恢复演练</strong>，确保备份数据可用性（如恢复虚拟机或关键数据库）。</li>
+</ul>
+<hr>
+<h3 id="四、故障发生时的应急响应"><a href="#四、故障发生时的应急响应" class="headerlink" title="四、故障发生时的应急响应"></a><strong>四、故障发生时的应急响应</strong></h3><h4 id="1-立即行动"><a href="#1-立即行动" class="headerlink" title="1. 立即行动"></a><strong>1. 立即行动</strong></h4><ul>
+<li><strong>停止写入操作</strong>：防止覆盖或损坏数据（尤其文件系统损坏时）。  </li>
+<li><strong>隔离故障点</strong>：拔出故障硬盘或断开异常节点，避免故障扩散。</li>
+</ul>
+<h4 id="2-数据恢复优先级"><a href="#2-数据恢复优先级" class="headerlink" title="2. 数据恢复优先级"></a><strong>2. 数据恢复优先级</strong></h4><ul>
+<li><strong>从快照恢复</strong>（最快）：  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">rollback snapshot snapshot_id=XX  <span class="comment"># 回滚至最近健康快照点</span></span><br></pre></td></tr></table></figure></li>
+<li><strong>从克隆&#x2F;副本恢复</strong>：适用于逻辑错误（如误删除）。  </li>
+<li><strong>从备份恢复</strong>：作为兜底方案，但耗时较长。</li>
+</ul>
+<h4 id="3-华为技术支持"><a href="#3-华为技术支持" class="headerlink" title="3. 华为技术支持"></a><strong>3. 华为技术支持</strong></h4><ul>
+<li>收集诊断信息并联系华为工程师：  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">diagdata create  <span class="comment"># 生成日志包</span></span><br></pre></td></tr></table></figure></li>
+<li>紧急热线：400-822-9999（中国区），提供设备SN和故障描述。</li>
+</ul>
+<hr>
+<h3 id="五、长期优化：构建容灾体系"><a href="#五、长期优化：构建容灾体系" class="headerlink" title="五、长期优化：构建容灾体系"></a><strong>五、长期优化：构建容灾体系</strong></h3><h4 id="1-容灾方案设计"><a href="#1-容灾方案设计" class="headerlink" title="1. 容灾方案设计"></a><strong>1. 容灾方案设计</strong></h4><ul>
+<li><strong>两地三中心</strong>：生产中心+同城容灾+异地容灾。  </li>
+<li><strong>华为HyperMetro双活</strong>：跨站点存储集群实时同步，业务自动切换。</li>
+</ul>
+<h4 id="2-数据生命周期管理"><a href="#2-数据生命周期管理" class="headerlink" title="2. 数据生命周期管理"></a><strong>2. 数据生命周期管理</strong></h4><ul>
+<li><strong>冷热数据分层</strong>：将不活跃数据迁移至低速存储（如OceanStor Arctic），降低主存储负载。  </li>
+<li><strong>自动归档策略</strong>：通过<strong>InfoEqualizer</strong>功能按策略归档旧数据。</li>
+</ul>
+<hr>
+<h3 id="六、关键注意事项"><a href="#六、关键注意事项" class="headerlink" title="六、关键注意事项"></a><strong>六、关键注意事项</strong></h3><ol>
+<li><strong>避免单点故障</strong>  <ul>
+<li>确保电源、控制器、网络链路均冗余（如双控存储配置Power模块冗余）。</li>
+</ul>
+</li>
+<li><strong>固件与驱动更新</strong>  <ul>
+<li>定期升级存储系统固件，修复已知漏洞（需在维护窗口操作）。</li>
+</ul>
+</li>
+<li><strong>人员培训</strong>  <ul>
+<li>运维团队需熟悉华为<strong>HCIE-Storage</strong>认证知识，掌握故障处理流程。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a><strong>总结</strong></h3><p>华为存储数据保护的核心理念是：**“预防 &gt; 监控 &gt; 备份 &gt; 容灾”**四层防御。通过硬件冗余、实时快照、异地备份和双活架构，可最大限度降低数据丢失风险。即使发生故障，也能通过秒级快照回滚或容灾切换实现业务无损恢复。</p>
+<h2 id="如何更换故障硬盘"><a href="#如何更换故障硬盘" class="headerlink" title="如何更换故障硬盘"></a>如何更换故障硬盘</h2><p>更换华为存储设备中的故障硬盘需要遵循标准流程以确保数据安全和系统稳定。以下是详细步骤及注意事项：</p>
+<hr>
+<h3 id="一、更换前准备"><a href="#一、更换前准备" class="headerlink" title="一、更换前准备"></a><strong>一、更换前准备</strong></h3><ol>
+<li><p><strong>确认故障信息</strong>  </p>
+<ul>
+<li>通过DeviceManager管理界面或命令行（<code>alarmhistory list</code>）查看告警，确认硬盘状态为“Fault”或“Offline”。</li>
+<li>记录故障盘的槽位号、型号（如SAS HDD 10TB）、SN号。</li>
+</ul>
+</li>
+<li><p><strong>检查冗余状态</strong>  </p>
+<ul>
+<li>确认存储池&#x2F;RAID组是否有冗余（如RAID 5&#x2F;6），确保数据可重建。</li>
+<li>若为双控存储，检查另一控制器是否正常。</li>
+</ul>
+</li>
+<li><p><strong>备份配置与数据</strong>  </p>
+<ul>
+<li>通过DeviceManager导出系统配置（“维护 &gt; 配置备份”）。</li>
+<li>若存储池处于降级状态，优先暂停高I&#x2F;O业务以减少风险。</li>
+</ul>
+</li>
+<li><p><strong>准备备件</strong>  </p>
+<ul>
+<li>确认备件硬盘与故障盘型号、容量、接口（SAS&#x2F;NL-SAS&#x2F;SSD）完全一致。  </li>
+<li>检查固件版本是否匹配（可通过华为兼容性列表验证）。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="二、更换操作步骤"><a href="#二、更换操作步骤" class="headerlink" title="二、更换操作步骤"></a><strong>二、更换操作步骤</strong></h3><ol>
+<li><p><strong>安全移除故障盘</strong>  </p>
+<ul>
+<li><strong>热插拔支持</strong>：确保存储设备支持热插拔（多数华为OceanStor系列支持）。</li>
+<li><strong>定位硬盘</strong>：通过管理界面或硬盘指示灯（故障盘通常亮红色&#x2F;黄色）确认物理位置。</li>
+<li><strong>卸载硬盘</strong>（可选）：对于非自动卸载的型号，在DeviceManager中手动卸载（“硬盘 &gt; 选择故障盘 &gt; 卸载”）。</li>
+</ul>
+</li>
+<li><p><strong>更换物理硬盘</strong>  </p>
+<ul>
+<li>佩戴防静电手环，按下硬盘托架按钮，缓慢拔出故障盘。</li>
+<li>插入新硬盘至相同槽位，确保完全插入且锁定。  </li>
+<li><strong>等待识别</strong>：系统自动检测新盘（通常1-3分钟），硬盘状态变为“Online”。</li>
+</ul>
+</li>
+<li><p><strong>触发数据重建</strong>  </p>
+<ul>
+<li>系统通常自动启动重建（通过“存储池 &gt; 查看重建进度”）。</li>
+<li>若未自动重建，手动触发：  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">change storage_pool reconstruction_rate=high pool_id=XX  <span class="comment"># 提高重建速度  </span></span><br><span class="line">start storage_pool pool_id=XX reconstruct  <span class="comment"># 手动启动  </span></span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="三、更换后验证"><a href="#三、更换后验证" class="headerlink" title="三、更换后验证"></a><strong>三、更换后验证</strong></h3><ol>
+<li><p><strong>检查重建状态</strong>  </p>
+<ul>
+<li>在DeviceManager中监控存储池状态，重建进度显示为百分比。</li>
+<li>使用命令：<code>show storage_pool detail pool_id=XX</code>  </li>
+<li><strong>注意</strong>：重建时间取决于数据量（如10TB硬盘可能需数小时），期间避免断电。</li>
+</ul>
+</li>
+<li><p><strong>验证系统健康</strong>  </p>
+<ul>
+<li>确认告警列表中无新告警（<code>alarmhistory list</code>）。</li>
+<li>检查新硬盘状态是否为“Normal”。</li>
+</ul>
+</li>
+<li><p><strong>性能观察</strong>  </p>
+<ul>
+<li>重建期间存储性能可能下降，需监控业务影响（如通过iBMC或Performance Manager）。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="四、关键注意事项"><a href="#四、关键注意事项" class="headerlink" title="四、关键注意事项"></a><strong>四、关键注意事项</strong></h3><ol>
+<li><p><strong>兼容性严格匹配</strong>  </p>
+<ul>
+<li><strong>禁止混用不同型号&#x2F;容量&#x2F;固件版本硬盘</strong>，否则可能导致存储池异常。</li>
+</ul>
+</li>
+<li><p><strong>槽位准确性</strong>  </p>
+<ul>
+<li>新盘必须插入原故障盘槽位，错误槽位可能导致系统无法识别。</li>
+</ul>
+</li>
+<li><p><strong>防静电与操作规范</strong>  </p>
+<ul>
+<li>操作前接触设备金属外壳释放静电，避免直接触碰硬盘电路板。</li>
+</ul>
+</li>
+<li><p><strong>重建优先级设置</strong>  </p>
+<ul>
+<li>业务高峰期可降低重建速率（<code>reconstruction_rate=low</code>），减少性能影响。</li>
+</ul>
+</li>
+<li><p><strong>日志收集</strong>  </p>
+<ul>
+<li>更换完成后收集诊断信息（<code>diagdata create</code>）并留存，便于后续问题追溯。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="五、紧急情况处理"><a href="#五、紧急情况处理" class="headerlink" title="五、紧急情况处理"></a><strong>五、紧急情况处理</strong></h3><ul>
+<li><strong>重建失败</strong>：若新盘无法识别，尝试重新插拔或更换另一备件。</li>
+<li><strong>多盘故障</strong>：若同一RAID组中多盘故障，立即联系华为技术支持（400-822-9999），禁止强制操作。</li>
+</ul>
+<hr>
+<p>通过以上步骤可安全更换故障硬盘，确保业务连续性。对于高端存储（如OceanStor 18000系列），建议在华为工程师远程指导下操作。</p>
+<h2 id="磁盘阵列Raid的级别有那些，其应用场景是什么？"><a href="#磁盘阵列Raid的级别有那些，其应用场景是什么？" class="headerlink" title="磁盘阵列Raid的级别有那些，其应用场景是什么？"></a>磁盘阵列Raid的级别有那些，其应用场景是什么？</h2><p>以下是常见RAID级别（RAID 0&#x2F;1&#x2F;5&#x2F;6&#x2F;10）的核心特性、区别及其典型应用场景的详细说明：</p>
+<hr>
+<h3 id="一、RAID级别特性对比"><a href="#一、RAID级别特性对比" class="headerlink" title="一、RAID级别特性对比"></a><strong>一、RAID级别特性对比</strong></h3><table>
+<thead>
+<tr>
+<th><strong>RAID级别</strong></th>
+<th><strong>容错能力</strong></th>
+<th><strong>最少硬盘数</strong></th>
+<th><strong>容量利用率</strong></th>
+<th><strong>读写性能</strong></th>
+<th><strong>典型场景</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>RAID 0</strong></td>
+<td>无</td>
+<td>2</td>
+<td>100%</td>
+<td><strong>最高读写性能</strong></td>
+<td>高性能计算、临时数据处理</td>
+</tr>
+<tr>
+<td><strong>RAID 1</strong></td>
+<td>1块硬盘故障</td>
+<td>2</td>
+<td>50%</td>
+<td>读性能高，写性能中等</td>
+<td>关键系统镜像（如操作系统盘）</td>
+</tr>
+<tr>
+<td><strong>RAID 5</strong></td>
+<td>1块硬盘故障</td>
+<td>3</td>
+<td>( N-1 )&#x2F;N</td>
+<td>读性能高，写性能较低</td>
+<td>文件服务器、中小型数据库</td>
+</tr>
+<tr>
+<td><strong>RAID 6</strong></td>
+<td>2块硬盘故障</td>
+<td>4</td>
+<td>( N-2 )&#x2F;N</td>
+<td>读性能高，写性能最低</td>
+<td>大容量归档存储、视频监控</td>
+</tr>
+<tr>
+<td><strong>RAID 10</strong></td>
+<td>每组镜像允许1块故障</td>
+<td>4</td>
+<td>50%</td>
+<td><strong>高读写性能</strong></td>
+<td>高并发事务型数据库、虚拟化</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="二、详细特性与场景解析"><a href="#二、详细特性与场景解析" class="headerlink" title="二、详细特性与场景解析"></a><strong>二、详细特性与场景解析</strong></h3><h4 id="1-RAID-0（条带化）"><a href="#1-RAID-0（条带化）" class="headerlink" title="1. RAID 0（条带化）"></a><strong>1. RAID 0（条带化）</strong></h4><ul>
+<li><strong>特性</strong>：  <ul>
+<li><strong>无冗余</strong>：数据分块（条带化）写入多块硬盘，任一硬盘故障将导致全部数据丢失。  </li>
+<li><strong>性能极致</strong>：通过并行读写大幅提升吞吐量（适合IO密集型任务）。</li>
+</ul>
+</li>
+<li><strong>应用场景</strong>：  <ul>
+<li><strong>临时数据处理</strong>：视频编辑缓存、科学计算中间结果。  </li>
+<li><strong>高性能需求</strong>：需快速读写但允许数据丢失的场景（如游戏服务器临时日志）。</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-RAID-1（镜像）"><a href="#2-RAID-1（镜像）" class="headerlink" title="2. RAID 1（镜像）"></a><strong>2. RAID 1（镜像）</strong></h4><ul>
+<li><strong>特性</strong>：  <ul>
+<li><strong>完全冗余</strong>：数据完全复制到镜像硬盘，任一硬盘故障不影响运行。  </li>
+<li><strong>容量牺牲</strong>：总容量为单盘容量（利用率50%）。</li>
+</ul>
+</li>
+<li><strong>应用场景</strong>：  <ul>
+<li><strong>关键系统盘</strong>：操作系统、数据库事务日志（如Oracle Redo Log）。  </li>
+<li><strong>高可用性要求</strong>：小型数据库或应用服务器的主存储。</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-RAID-5（分布式奇偶校验）"><a href="#3-RAID-5（分布式奇偶校验）" class="headerlink" title="3. RAID 5（分布式奇偶校验）"></a><strong>3. RAID 5（分布式奇偶校验）</strong></h4><ul>
+<li><strong>特性</strong>：  <ul>
+<li><strong>单盘容错</strong>：校验信息（Parity）分散存储在所有硬盘，允许1块硬盘故障。  </li>
+<li><strong>平衡性能与容量</strong>：容量利用率为（ N-1 ）&#x2F;N（如4块硬盘利用率为75%）。  </li>
+<li><strong>写惩罚</strong>：每次写操作需读取旧数据和校验位，计算新校验位（性能下降）。</li>
+</ul>
+</li>
+<li><strong>应用场景</strong>：  <ul>
+<li><strong>文件共享服务器</strong>：NAS存储、企业文档库（读多写少）。  </li>
+<li><strong>中小型数据库</strong>：MySQL&#x2F;PostgreSQL的温数据存储。</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-RAID-6（双重分布式校验）"><a href="#4-RAID-6（双重分布式校验）" class="headerlink" title="4. RAID 6（双重分布式校验）"></a><strong>4. RAID 6（双重分布式校验）</strong></h4><ul>
+<li><strong>特性</strong>：  <ul>
+<li><strong>双盘容错</strong>：使用两种独立校验算法（如P+Q），允许同时2块硬盘故障。  </li>
+<li><strong>更高安全性</strong>：适合大容量硬盘（如12TB+），降低重建失败风险。  </li>
+<li><strong>写性能更低</strong>：需计算双重校验，写入延迟显著增加。</li>
+</ul>
+</li>
+<li><strong>应用场景</strong>：  <ul>
+<li><strong>大容量归档存储</strong>：医疗影像、视频监控（低频率写入）。  </li>
+<li><strong>云存储后端</strong>：对象存储（如兼容S3的存储池）。</li>
+</ul>
+</li>
+</ul>
+<h4 id="5-RAID-10（镜像-条带化）"><a href="#5-RAID-10（镜像-条带化）" class="headerlink" title="5. RAID 10（镜像+条带化）"></a><strong>5. RAID 10（镜像+条带化）</strong></h4><ul>
+<li><strong>特性</strong>：  <ul>
+<li><strong>混合架构</strong>：先镜像（RAID 1）再条带化（RAID 0），每组镜像允许1块硬盘故障。  </li>
+<li><strong>高性能高可靠</strong>：读写在多块硬盘并行，且冗余度高。  </li>
+<li><strong>容量利用率低</strong>：总容量为总硬盘数的50%。</li>
+</ul>
+</li>
+<li><strong>应用场景</strong>：  <ul>
+<li><strong>核心数据库</strong>：Oracle RAC、SQL Server事务库（高并发OLTP）。  </li>
+<li><strong>虚拟化平台</strong>：VMware vSAN、Hyper-V集群的存储池。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="三、关键区别总结"><a href="#三、关键区别总结" class="headerlink" title="三、关键区别总结"></a><strong>三、关键区别总结</strong></h3><ol>
+<li><strong>冗余能力</strong>：  <ul>
+<li>RAID 0无冗余，RAID 1&#x2F;10提供镜像冗余，RAID 5&#x2F;6通过校验实现冗余。</li>
+</ul>
+</li>
+<li><strong>性能对比</strong>：  <ul>
+<li><strong>读性能</strong>：RAID 5&#x2F;6接近RAID 0（多盘并行读）。  </li>
+<li><strong>写性能</strong>：RAID 0 &gt; RAID 1 ≈ RAID 10 &gt; RAID 5 &gt; RAID 6。</li>
+</ul>
+</li>
+<li><strong>容量利用率</strong>：  <ul>
+<li>RAID 0（100%）&gt; RAID 5（≈67-94%）&gt; RAID 6（≈50-88%）&gt; RAID 1&#x2F;10（50%）。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="四、选型建议"><a href="#四、选型建议" class="headerlink" title="四、选型建议"></a><strong>四、选型建议</strong></h3><ul>
+<li><strong>追求性能且容忍风险</strong>：选择<strong>RAID 0</strong>（如缓存层）。  </li>
+<li><strong>高可用+中等预算</strong>：选择<strong>RAID 10</strong>（关键业务数据库）。  </li>
+<li><strong>容量优先+有限冗余</strong>：选择<strong>RAID 5</strong>（文件服务器）。  </li>
+<li><strong>大容量+高可靠性</strong>：选择<strong>RAID 6</strong>（归档存储）。</li>
+</ul>
+<hr>
+<h3 id="五、注意事项"><a href="#五、注意事项" class="headerlink" title="五、注意事项"></a><strong>五、注意事项</strong></h3><ul>
+<li><strong>重建时间</strong>：RAID 5&#x2F;6在大容量硬盘（如10TB+）重建可能需数天，期间存在二次故障风险。  </li>
+<li><strong>SSD的影响</strong>：SSD的低延迟可缓解RAID 5&#x2F;6的写惩罚，但需注意磨损均衡。  </li>
+<li><strong>硬件RAID卡</strong>：建议使用带缓存和电池保护的RAID卡以提升性能和数据安全。</li>
+</ul>
+<p>通过合理选择RAID级别，可在性能、可靠性和成本之间实现最佳平衡。</p>
+<h2 id="如何对一台鲲鹏服务器进行初始化"><a href="#如何对一台鲲鹏服务器进行初始化" class="headerlink" title="如何对一台鲲鹏服务器进行初始化"></a>如何对一台鲲鹏服务器进行初始化</h2><h3 id="一、准备工作"><a href="#一、准备工作" class="headerlink" title="一、准备工作"></a><strong>一、准备工作</strong></h3><ol>
+<li><p><strong>确认硬件信息</strong>  </p>
+<ul>
+<li>检查服务器型号（如 TaiShan 2280&#x2F;5280 等）、CPU（鲲鹏920）、内存、硬盘（NVMe&#x2F;SATA）和网卡配置。</li>
+<li>通过 BMC&#x2F;iBMC 管理界面检查硬件状态（IPMI 或 Web 登录）。</li>
+</ul>
+</li>
+<li><p><strong>准备操作系统镜像</strong>  </p>
+<ul>
+<li>鲲鹏服务器支持多种操作系统，推荐使用适配 ARM64 架构的发行版：<ul>
+<li><strong>华为 EulerOS</strong>（针对鲲鹏优化）</li>
+<li><strong>CentOS&#x2F;OpenEuler</strong></li>
+<li><strong>Ubuntu Server</strong></li>
+<li><strong>统信UOS&#x2F;KylinOS</strong>（国产系统）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="二、操作系统安装"><a href="#二、操作系统安装" class="headerlink" title="二、操作系统安装"></a><strong>二、操作系统安装</strong></h3><ol>
+<li><p><strong>通过光盘或ISO镜像安装</strong>  </p>
+<ul>
+<li>使用虚拟控制台（如华为 iBMC）挂载 ISO 镜像，启动系统安装。</li>
+<li>分区建议：<ul>
+<li><code>/boot</code>: 1-2GB（EFI 分区）</li>
+<li><code>/swap</code>: 根据内存大小（建议内存的 1-2 倍）</li>
+<li><code>/</code>: 剩余空间（或根据需求分配 <code>/home</code>、<code>/var</code> 等独立分区）。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>安装后基础配置</strong>  </p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 更新系统</span></span><br><span class="line">yum update -y  <span class="comment"># EulerOS/CentOS</span></span><br><span class="line">apt update &amp;&amp; apt upgrade -y  <span class="comment"># Ubuntu</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装常用工具</span></span><br><span class="line">yum install -y vim net-tools wget curl tar sshpass</span><br></pre></td></tr></table></figure></li>
+</ol>
+<hr>
+<h3 id="三、网络与安全配置"><a href="#三、网络与安全配置" class="headerlink" title="三、网络与安全配置"></a><strong>三、网络与安全配置</strong></h3><ol>
+<li><p><strong>网络设置</strong>  </p>
+<ul>
+<li>配置静态 IP（示例）：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">nmcli con mod <span class="string">&quot;eth0&quot;</span> ipv4. addresses 192. 168. 1. 100/24</span><br><span class="line">nmcli con mod <span class="string">&quot;eth0&quot;</span> ipv4. gateway 192. 168. 1. 1</span><br><span class="line">nmcli con mod <span class="string">&quot;eth0&quot;</span> ipv4. dns <span class="string">&quot;8. 8. 8. 8&quot;</span></span><br><span class="line">nmcli con up <span class="string">&quot;eth0&quot;</span></span><br></pre></td></tr></table></figure></li>
+<li>修改主机名：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hostnamectl set-hostname kp-server-01</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p><strong>安全加固</strong>  </p>
+<ul>
+<li>修改 SSH 端口并禁用 root 远程登录：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vim /etc/ssh/sshd_config</span><br><span class="line"><span class="comment"># 修改以下参数：</span></span><br><span class="line">Port 2222</span><br><span class="line">PermitRootLogin no</span><br><span class="line">PasswordAuthentication no  <span class="comment"># 推荐使用密钥登录</span></span><br><span class="line">systemctl restart sshd</span><br></pre></td></tr></table></figure></li>
+<li>配置防火墙（firewalld&#x2F;iptables）：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">firewall-cmd --permanent --add-port=2222/tcp</span><br><span class="line">firewall-cmd --reload</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="四、驱动与性能优化"><a href="#四、驱动与性能优化" class="headerlink" title="四、驱动与性能优化"></a><strong>四、驱动与性能优化</strong></h3><ol>
+<li><p><strong>安装鲲鹏加速引擎（KAE）</strong>  </p>
+<ul>
+<li>KAE 提供硬件加速功能（如加解密、压缩），需安装驱动：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget https://repo.huaweicloud.com/kunpeng/archive/KAEdriver/xxx.tar.gz</span><br><span class="line">tar -zxvf xxx.tar.gz &amp;&amp; <span class="built_in">cd</span> kae-driver</span><br><span class="line">make &amp;&amp; make install</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p><strong>内核参数优化</strong>  </p>
+<ul>
+<li>修改 <code>/etc/sysctl.conf</code>（根据业务场景调整）：<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">net.core.somaxconn = 65535</span><br><span class="line">net.ipv4. tcp_max_syn_backlog = 65535</span><br><span class="line">vm.swappiness = 10</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p><strong>NUMA 绑定</strong>  </p>
+<ul>
+<li>鲲鹏920支持多NUMA节点，绑定进程到特定CPU核心提升性能：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">numactl --cpubind=0 --membind=0 &lt;<span class="built_in">command</span>&gt;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="五、存储与文件系统"><a href="#五、存储与文件系统" class="headerlink" title="五、存储与文件系统"></a><strong>五、存储与文件系统</strong></h3><ol>
+<li><p><strong>磁盘格式化与挂载</strong>  </p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看磁盘列表</span></span><br><span class="line">fdisk -l</span><br><span class="line"><span class="comment"># 格式化（示例：ext4）</span></span><br><span class="line">mkfs.ext4 /dev/sdb</span><br><span class="line"><span class="comment"># 创建挂载点并挂载</span></span><br><span class="line"><span class="built_in">mkdir</span> /data</span><br><span class="line">mount /dev/sdb /data</span><br><span class="line"><span class="comment"># 开机自动挂载</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;/dev/sdb /data ext4 defaults 0 0&quot;</span> &gt;&gt; /etc/fstab</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>LVM&#x2F;RAID配置（可选）</strong>  </p>
+<ul>
+<li>使用 <code>mdadm</code> 配置 RAID 或 <code>lvm2</code> 管理逻辑卷。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="六、监控与维护"><a href="#六、监控与维护" class="headerlink" title="六、监控与维护"></a><strong>六、监控与维护</strong></h3><ol>
+<li><p><strong>安装监控工具</strong>  </p>
+<ul>
+<li>部署 Prometheus + Node Exporter 或华为的 <strong>Telemetry</strong> 服务。</li>
+<li>日志集中化管理（ELK&#x2F;华为 LogTank）。</li>
+</ul>
+</li>
+<li><p><strong>定期维护脚本</strong>  </p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 示例：清理日志</span></span><br><span class="line">find /var/log -name <span class="string">&quot;*. log&quot;</span> -<span class="built_in">type</span> f -mtime +7 -<span class="built_in">exec</span> <span class="built_in">rm</span> -f &#123;&#125; \;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<hr>
+<h3 id="七、备份与恢复"><a href="#七、备份与恢复" class="headerlink" title="七、备份与恢复"></a><strong>七、备份与恢复</strong></h3><ol>
+<li><strong>系统全量备份</strong>  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 使用 dd 或工具（如 Clonezilla）</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/sda of=/backup/kp-server.img bs=4M</span><br></pre></td></tr></table></figure></li>
+</ol>
+<hr>
+<h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a><strong>注意事项</strong></h3><ul>
+<li><strong>兼容性验证</strong>：确保所有软件支持 ARM64 架构（可使用 <code>arch</code> 命令检查）。</li>
+<li><strong>华为生态支持</strong>：优先使用华为提供的工具链（如毕昇编译器、Kunpeng BoostKit）。</li>
+</ul>
+<p>通过以上步骤，鲲鹏服务器将完成初始化并进入稳定运行状态。根据实际业务需求，可进一步部署数据库、中间件或分布式计算框架（如 Hadoop、Spark）。</p>
+<h2 id="如何使用LVM管理磁盘"><a href="#如何使用LVM管理磁盘" class="headerlink" title="如何使用LVM管理磁盘"></a>如何使用LVM管理磁盘</h2><p>使用 <strong>LVM（Logical Volume Manager）</strong> 管理磁盘可以灵活地分配、扩展和调整存储空间。以下是详细的步骤和操作示例：</p>
+<hr>
+<h3 id="一、LVM-核心概念"><a href="#一、LVM-核心概念" class="headerlink" title="一、LVM 核心概念"></a><strong>一、LVM 核心概念</strong></h3><ul>
+<li><strong>物理卷（PV, Physical Volume）</strong>：实际的磁盘或分区（如 <code>/dev/sdb</code>）。</li>
+<li><strong>卷组（VG, Volume Group）</strong>：由多个物理卷组成的存储池。</li>
+<li><strong>逻辑卷（LV， Logical Volume）</strong>：从卷组中划分出的逻辑存储单元，可格式化为文件系统。</li>
+</ul>
+<hr>
+<h3 id="二、安装-LVM-工具"><a href="#二、安装-LVM-工具" class="headerlink" title="二、安装 LVM 工具"></a><strong>二、安装 LVM 工具</strong></h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Ubuntu/Debian</span></span><br><span class="line"><span class="built_in">sudo</span> apt-get install lvm2</span><br><span class="line"></span><br><span class="line"><span class="comment"># CentOS/RHEL</span></span><br><span class="line"><span class="built_in">sudo</span> yum install lvm2</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="三、创建和管理-LVM"><a href="#三、创建和管理-LVM" class="headerlink" title="三、创建和管理 LVM"></a><strong>三、创建和管理 LVM</strong></h3><h4 id="1-创建物理卷（PV）"><a href="#1-创建物理卷（PV）" class="headerlink" title="1. 创建物理卷（PV）"></a><strong>1. 创建物理卷（PV）</strong></h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 将磁盘或分区初始化为物理卷</span></span><br><span class="line"><span class="built_in">sudo</span> pvcreate /dev/sdb /dev/sdc</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看物理卷信息</span></span><br><span class="line"><span class="built_in">sudo</span> pvs</span><br><span class="line"><span class="built_in">sudo</span> pvdisplay</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-创建卷组（VG）"><a href="#2-创建卷组（VG）" class="headerlink" title="2. 创建卷组（VG）"></a><strong>2. 创建卷组（VG）</strong></h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 创建名为 vg_data 的卷组，包含 /dev/sdb 和 /dev/sdc</span></span><br><span class="line"><span class="built_in">sudo</span> vgcreate vg_data /dev/sdb /dev/sdc</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看卷组信息</span></span><br><span class="line"><span class="built_in">sudo</span> vgs</span><br><span class="line"><span class="built_in">sudo</span> vgdisplay</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-创建逻辑卷（LV）"><a href="#3-创建逻辑卷（LV）" class="headerlink" title="3. 创建逻辑卷（LV）"></a><strong>3. 创建逻辑卷（LV）</strong></h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 创建名为 lv_storage 的逻辑卷，大小为 50G</span></span><br><span class="line"><span class="built_in">sudo</span> lvcreate -n lv_storage -L 50G vg_data</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看逻辑卷信息</span></span><br><span class="line"><span class="built_in">sudo</span> lvs</span><br><span class="line"><span class="built_in">sudo</span> lvdisplay</span><br></pre></td></tr></table></figure>
+
+<h4 id="4-格式化并挂载逻辑卷"><a href="#4-格式化并挂载逻辑卷" class="headerlink" title="4. 格式化并挂载逻辑卷"></a><strong>4. 格式化并挂载逻辑卷</strong></h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 格式化为 ext4 文件系统</span></span><br><span class="line"><span class="built_in">sudo</span> mkfs.ext4 /dev/vg_data/lv_storage</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建挂载点并挂载</span></span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">mkdir</span> /mnt/storage</span><br><span class="line"><span class="built_in">sudo</span> mount /dev/vg_data/lv_storage /mnt/storage</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置开机自动挂载</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;/dev/vg_data/lv_storage /mnt/storage ext4 defaults 0 0&quot;</span> | <span class="built_in">sudo</span> <span class="built_in">tee</span> -a /etc/fstab</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="四、扩展逻辑卷（LV）"><a href="#四、扩展逻辑卷（LV）" class="headerlink" title="四、扩展逻辑卷（LV）"></a><strong>四、扩展逻辑卷（LV）</strong></h3><h4 id="1-扩展卷组（VG）容量"><a href="#1-扩展卷组（VG）容量" class="headerlink" title="1. 扩展卷组（VG）容量"></a><strong>1. 扩展卷组（VG）容量</strong></h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 添加新物理卷到现有卷组</span></span><br><span class="line"><span class="built_in">sudo</span> vgextend vg_data /dev/sdd</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-扩展逻辑卷（LV）大小"><a href="#2-扩展逻辑卷（LV）大小" class="headerlink" title="2. 扩展逻辑卷（LV）大小"></a><strong>2. 扩展逻辑卷（LV）大小</strong></h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 扩展逻辑卷到 80G（需确保卷组有足够空间）</span></span><br><span class="line"><span class="built_in">sudo</span> lvextend -L +30G /dev/vg_data/lv_storage  <span class="comment"># 增加30G</span></span><br><span class="line"><span class="comment"># 或直接设置总大小</span></span><br><span class="line"><span class="built_in">sudo</span> lvextend -L 80G /dev/vg_data/lv_storage</span><br><span class="line"></span><br><span class="line"><span class="comment"># 扩展文件系统（ext4）</span></span><br><span class="line"><span class="built_in">sudo</span> resize2fs /dev/vg_data/lv_storage</span><br><span class="line"></span><br><span class="line"><span class="comment"># 对于 xfs 文件系统</span></span><br><span class="line"><span class="built_in">sudo</span> xfs_growfs /mnt/storage</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="五、缩小逻辑卷（LV）"><a href="#五、缩小逻辑卷（LV）" class="headerlink" title="五、缩小逻辑卷（LV）"></a><strong>五、缩小逻辑卷（LV）</strong></h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 缩小文件系统（ext4 示例，需卸载分区）</span></span><br><span class="line"><span class="built_in">sudo</span> umount /mnt/storage</span><br><span class="line"><span class="built_in">sudo</span> e2fsck -f /dev/vg_data/lv_storage</span><br><span class="line"><span class="built_in">sudo</span> resize2fs /dev/vg_data/lv_storage 40G  <span class="comment"># 缩小到40G</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 缩小逻辑卷</span></span><br><span class="line"><span class="built_in">sudo</span> lvreduce -L 40G /dev/vg_data/lv_storage</span><br><span class="line"></span><br><span class="line"><span class="comment"># 重新挂载</span></span><br><span class="line"><span class="built_in">sudo</span> mount /dev/vg_data/lv_storage /mnt/storage</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="六、删除-LVM-组件"><a href="#六、删除-LVM-组件" class="headerlink" title="六、删除 LVM 组件"></a><strong>六、删除 LVM 组件</strong></h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 删除逻辑卷</span></span><br><span class="line"><span class="built_in">sudo</span> lvremove /dev/vg_data/lv_storage</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除卷组</span></span><br><span class="line"><span class="built_in">sudo</span> vgremove vg_data</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除物理卷</span></span><br><span class="line"><span class="built_in">sudo</span> pvremove /dev/sdb /dev/sdc</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="七、LVM-快照（Snapshot）"><a href="#七、LVM-快照（Snapshot）" class="headerlink" title="七、LVM 快照（Snapshot）"></a><strong>七、LVM 快照（Snapshot）</strong></h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 创建快照（分配10G空间）</span></span><br><span class="line"><span class="built_in">sudo</span> lvcreate -s -n lv_storage_snapshot -L 10G /dev/vg_data/lv_storage</span><br><span class="line"></span><br><span class="line"><span class="comment"># 挂载快照（只读）</span></span><br><span class="line"><span class="built_in">sudo</span> mount -o ro /dev/vg_data/lv_storage_snapshot /mnt/snapshot</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除快照</span></span><br><span class="line"><span class="built_in">sudo</span> lvremove /dev/vg_data/lv_storage_snapshot</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="八、LVM-常用命令"><a href="#八、LVM-常用命令" class="headerlink" title="八、LVM 常用命令"></a><strong>八、LVM 常用命令</strong></h3><table>
+<thead>
+<tr>
+<th><strong>用途</strong></th>
+<th><strong>命令</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>查看物理卷</td>
+<td><code>pvs</code>, <code>pvdisplay</code></td>
+</tr>
+<tr>
+<td>查看卷组</td>
+<td><code>vgs</code>, <code>vgdisplay</code></td>
+</tr>
+<tr>
+<td>查看逻辑卷</td>
+<td><code>lvs</code>, <code>lvdisplay</code></td>
+</tr>
+<tr>
+<td>重命名卷组</td>
+<td><code>vgrename old_vg_name new_vg_name</code></td>
+</tr>
+<tr>
+<td>移动物理卷到其他卷组</td>
+<td><code>pvmove</code> + <code>vgreduce</code> + <code>vgextend</code></td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="九、注意事项"><a href="#九、注意事项" class="headerlink" title="九、注意事项"></a><strong>九、注意事项</strong></h3><p>1。 <strong>备份数据</strong>：调整 LVM 大小或删除操作前务必备份数据。<br>2。 <strong>文件系统兼容性</strong>：缩小逻辑卷需文件系统支持（如 ext4 支持缩小，xfs 不支持）。<br>3。 <strong>快照空间</strong>：快照空间不足会导致快照失效，建议分配足够空间。</p>
+<hr>
+<p>通过 LVM，您可以灵活管理存储资源，动态调整容量，并实现高效的数据备份与恢复。</p>
+<h2 id="VMware环境中分布式交换机和标准交换机的特性和区别"><a href="#VMware环境中分布式交换机和标准交换机的特性和区别" class="headerlink" title="VMware环境中分布式交换机和标准交换机的特性和区别"></a>VMware环境中分布式交换机和标准交换机的特性和区别</h2><p>在VMware vSphere环境中，**标准交换机（vSwitch）<strong>和</strong>分布式交换机（dvSwitch）**是管理虚拟网络流量的核心组件，两者的设计目标、功能特性及适用场景存在显著差异。</p>
+<hr>
+<h3 id="一、标准交换机（vSwitch）的特性"><a href="#一、标准交换机（vSwitch）的特性" class="headerlink" title="一、标准交换机（vSwitch）的特性"></a><strong>一、标准交换机（vSwitch）的特性</strong></h3><ol>
+<li><p><strong>架构与范围</strong>  </p>
+<ul>
+<li><strong>单主机管理</strong>：每个ESXi主机独立配置和管理自己的vSwitch，无法跨主机同步配置。  </li>
+<li><strong>简单拓扑</strong>：适用于小型环境或单主机部署，无需vCenter即可配置。</li>
+</ul>
+</li>
+<li><p><strong>核心功能</strong>  </p>
+<ul>
+<li><strong>端口组（Port Groups）</strong>：划分VLAN、流量策略（如安全模式、负载均衡）。  </li>
+<li><strong>上行链路（Uplinks）</strong>：绑定物理网卡（NIC Teaming）以实现冗余和带宽聚合。  </li>
+<li><strong>基本流量控制</strong>：支持基于MAC地址的负载均衡（如<code>源端口ID</code>、<code>IP哈希</code>）。</li>
+</ul>
+</li>
+<li><p><strong>适用场景</strong>  </p>
+<ul>
+<li>非集中管理的简单环境（如测试实验室、单主机部署）。  </li>
+<li>对网络配置需求较低的场景（无需跨主机统一策略）。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="二、分布式交换机（dvSwitch）的特性"><a href="#二、分布式交换机（dvSwitch）的特性" class="headerlink" title="二、分布式交换机（dvSwitch）的特性"></a><strong>二、分布式交换机（dvSwitch）的特性</strong></h3><ol>
+<li><p><strong>架构与范围</strong>  </p>
+<ul>
+<li><strong>集中管理</strong>：通过vCenter统一管理，跨多个ESXi主机同步网络配置。  </li>
+<li><strong>逻辑抽象</strong>：创建全局网络策略，独立于物理主机（如跨集群统一VLAN配置）。</li>
+</ul>
+</li>
+<li><p><strong>核心功能</strong>  </p>
+<ul>
+<li><strong>高级流量管理</strong>：  <ul>
+<li><strong>私有VLAN（PVLAN）</strong>：实现多层网络隔离。  </li>
+<li><strong>流量过滤（Traffic Filtering）</strong>：基于MAC&#x2F;IP的访问控制。  </li>
+<li><strong>NetFlow&#x2F;IPFIX</strong>：监控和分析网络流量。</li>
+</ul>
+</li>
+<li><strong>动态配置</strong>：  <ul>
+<li><strong>端口镜像（Port Mirroring）</strong>：跨主机复制流量到指定监控点。  </li>
+<li><strong>LACP支持</strong>：与物理交换机协同实现动态链路聚合。</li>
+</ul>
+</li>
+<li><strong>网络资源池</strong>：为租户或应用分配专用带宽和QoS策略。</li>
+</ul>
+</li>
+<li><p><strong>适用场景</strong>  </p>
+<ul>
+<li>企业级虚拟化环境（多主机集群、大规模部署）。  </li>
+<li>需要统一网络策略、高级监控或安全隔离的场景（如多租户云平台）。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="三、标准交换机-vs-分布式交换机的关键区别"><a href="#三、标准交换机-vs-分布式交换机的关键区别" class="headerlink" title="三、标准交换机 vs 分布式交换机的关键区别"></a><strong>三、标准交换机 vs 分布式交换机的关键区别</strong></h3><table>
+<thead>
+<tr>
+<th><strong>特性</strong></th>
+<th><strong>标准交换机（vSwitch）</strong></th>
+<th><strong>分布式交换机（dvSwitch）</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>管理方式</strong></td>
+<td>单主机独立配置，手动同步</td>
+<td>通过vCenter集中管理，配置自动同步</td>
+</tr>
+<tr>
+<td><strong>跨主机一致性</strong></td>
+<td>需逐台配置，易出现策略不一致</td>
+<td>全局策略统一，减少人为错误</td>
+</tr>
+<tr>
+<td><strong>高级功能</strong></td>
+<td>仅支持基础功能（VLAN、NIC Teaming）</td>
+<td>支持PVLAN、NetFlow、端口镜像、LACP等高级功能</td>
+</tr>
+<tr>
+<td><strong>许可证要求</strong></td>
+<td>所有vSphere版本均支持</td>
+<td>需Enterprise Plus许可证</td>
+</tr>
+<tr>
+<td><strong>适用规模</strong></td>
+<td>小型环境（单主机或少量主机）</td>
+<td>中大型企业环境（多主机集群、复杂网络需求）</td>
+</tr>
+<tr>
+<td><strong>迁移与维护</strong></td>
+<td>配置迁移需手动操作</td>
+<td>支持热迁移虚拟机网络配置，维护更灵活</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="四、配置示例与最佳实践"><a href="#四、配置示例与最佳实践" class="headerlink" title="四、配置示例与最佳实践"></a><strong>四、配置示例与最佳实践</strong></h3><ol>
+<li><p><strong>标准交换机配置（命令行）</strong>  </p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 创建vSwitch0并添加上行链路物理网卡vmnic0</span></span><br><span class="line">esxcli network vswitch standard add --vswitch-name=vSwitch0</span><br><span class="line">esxcli network vswitch standard uplink add --uplink-name=vmnic0 --vswitch-name=vSwitch0</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建端口组并设置VLAN ID</span></span><br><span class="line">esxcli network vswitch standard portgroup add --portgroup-name=VM_Network --vswitch-name=vSwitch0</span><br><span class="line">esxcli network vswitch standard portgroup <span class="built_in">set</span> --portgroup-name=VM_Network --vlan-id=100</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>分布式交换机配置（通过vCenter）</strong>  </p>
+<ul>
+<li>在vCenter中创建dvSwitch，添加所有ESXi主机的物理网卡为上行链路。  </li>
+<li>定义端口组并绑定高级策略（如PVLAN、流量过滤）。  </li>
+<li>启用NetFlow&#x2F;IPFIX，将流量日志发送到分析工具（如vRealize Network Insight）。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="五、选择建议"><a href="#五、选择建议" class="headerlink" title="五、选择建议"></a><strong>五、选择建议</strong></h3><ul>
+<li><p><strong>选择标准交换机</strong>：  </p>
+<ul>
+<li>环境简单，无需跨主机统一策略。  </li>
+<li>预算有限或无Enterprise Plus许可证。</li>
+</ul>
+</li>
+<li><p><strong>选择分布式交换机</strong>：  </p>
+<ul>
+<li>需要集中管理、高级网络功能或大规模自动化。  </li>
+<li>符合企业级安全与合规要求（如金融、医疗行业）。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="六、注意事项"><a href="#六、注意事项" class="headerlink" title="六、注意事项"></a><strong>六、注意事项</strong></h3><p>1。 <strong>兼容性</strong>：确保所有ESXi主机版本支持dvSwitch（通常需同版本或兼容版本）。<br>2。 <strong>迁移风险</strong>：将虚拟机从vSwitch迁移到dvSwitch时，需规划停机窗口或使用vMotion。<br>3。 <strong>备份配置</strong>：定期备份dvSwitch配置（通过vCenter或PowerCLI脚本）。  </p>
+<p>通过合理选择交换机类型，可以显著提升VMware环境的网络性能、管理效率及安全性。分布式交换机在复杂场景中优势明显，但需权衡许可证成本和运维复杂度。</p>
+<h2 id="vSphere环境中标准交换机和分布式交换机支持端口镜像么？"><a href="#vSphere环境中标准交换机和分布式交换机支持端口镜像么？" class="headerlink" title="vSphere环境中标准交换机和分布式交换机支持端口镜像么？"></a>vSphere环境中标准交换机和分布式交换机支持端口镜像么？</h2><p>在VMware vSphere环境中，**分布式交换机（dvSwitch）<strong>和</strong>标准交换机（vSwitch）<strong>对</strong>端口镜像（Port Mirroring）**的支持存在显著差异。以下是两者的支持情况及实现方式：</p>
+<hr>
+<h3 id="一、分布式交换机（dvSwitch）"><a href="#一、分布式交换机（dvSwitch）" class="headerlink" title="一、分布式交换机（dvSwitch）"></a><strong>一、分布式交换机（dvSwitch）</strong></h3><ol>
+<li><p><strong>支持情况</strong>  </p>
+<ul>
+<li><strong>原生支持</strong>：分布式交换机提供完整的端口镜像功能（称为<strong>端口镜像会话</strong>），可以直接通过vCenter配置。  </li>
+<li><strong>灵活配置</strong>：  <ul>
+<li><strong>镜像源</strong>：可指定单个端口、端口组或整个交换机的流量。  </li>
+<li><strong>镜像目标</strong>：将复制的流量发送到特定虚拟机或物理网卡（用于外部抓包设备）。  </li>
+<li><strong>流量过滤</strong>：支持基于VLAN、流量类型（如仅vMotion流量）的过滤规则。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>配置步骤</strong>  </p>
+<ul>
+<li>在vCenter中，进入<strong>分布式交换机 &gt; 配置 &gt; 端口镜像</strong>。  </li>
+<li>创建镜像会话，选择源端口（或端口组）和目标端口。  </li>
+<li>可设置镜像方向（入口&#x2F;出口&#x2F;双向）。</li>
+</ul>
+</li>
+<li><p><strong>适用场景</strong>  </p>
+<ul>
+<li>需要对虚拟机流量进行实时监控（如安全审计、故障排查）。  </li>
+<li>需要跨多台ESXi主机统一配置镜像策略。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="二、标准交换机（vSwitch）"><a href="#二、标准交换机（vSwitch）" class="headerlink" title="二、标准交换机（vSwitch）"></a><strong>二、标准交换机（vSwitch）</strong></h3><ol>
+<li><p><strong>支持情况</strong>  </p>
+<ul>
+<li><strong>不支持原生端口镜像</strong>：标准交换机无法通过图形界面或内置功能直接配置端口镜像。  </li>
+<li><strong>替代方案</strong>：  <ul>
+<li><strong>物理交换机镜像</strong>：在连接的物理交换机上配置端口镜像，将ESXi主机的上行链路流量复制到抓包设备。  </li>
+<li><strong>ESXi主机抓包</strong>：通过SSH登录到ESXi主机，使用<code>pktcap-uw</code>或<code>tcpdump-uw</code>工具直接捕获流量（需启用SSH）。  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 示例：捕获vmnic0网卡的流量并保存到文件</span></span><br><span class="line">tcpdump-uw -i vmnic0 -w /tmp/capture.pcap</span><br></pre></td></tr></table></figure></li>
+<li><strong>虚拟机自监控</strong>：在目标虚拟机内安装抓包工具（如Wireshark），但仅能捕获本机流量。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>局限性</strong>  </p>
+<ul>
+<li><strong>无法跨主机统一管理</strong>：需逐台配置物理交换机或主机命令行。  </li>
+<li><strong>性能影响</strong>：在ESXi主机上直接抓包可能占用CPU资源，且需手动管理抓包文件。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="三、关键对比"><a href="#三、关键对比" class="headerlink" title="三、关键对比"></a><strong>三、关键对比</strong></h3><table>
+<thead>
+<tr>
+<th><strong>特性</strong></th>
+<th><strong>分布式交换机（dvSwitch）</strong></th>
+<th><strong>标准交换机（vSwitch）</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>原生端口镜像支持</strong></td>
+<td>✔️ 通过vCenter配置，灵活且集中管理</td>
+<td>❌ 不支持，需依赖物理交换机或主机命令行</td>
+</tr>
+<tr>
+<td><strong>镜像范围</strong></td>
+<td>支持跨主机、跨虚拟机的流量复制</td>
+<td>仅能镜像单台主机的物理网卡或虚拟机内部流量</td>
+</tr>
+<tr>
+<td><strong>配置复杂度</strong></td>
+<td>低（图形化界面）</td>
+<td>高（需物理交换机配合或命令行操作）</td>
+</tr>
+<tr>
+<td><strong>适用场景</strong></td>
+<td>企业级环境，需集中监控和复杂策略</td>
+<td>小型环境或临时排查</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="四、端口镜像的最佳实践"><a href="#四、端口镜像的最佳实践" class="headerlink" title="四、端口镜像的最佳实践"></a><strong>四、端口镜像的最佳实践</strong></h3><ol>
+<li><p><strong>分布式交换机场景</strong>  </p>
+<ul>
+<li><strong>流量隔离</strong>：为镜像流量分配专用网络（避免与生产流量竞争带宽）。  </li>
+<li><strong>性能监控</strong>：镜像可能增加网络负载，需确保目标设备能处理高吞吐量。</li>
+</ul>
+</li>
+<li><p><strong>标准交换机场景</strong>  </p>
+<ul>
+<li><strong>物理交换机配合</strong>：在ToR（Top of Rack）交换机上配置SPAN&#x2F;RSPAN镜像端口。  </li>
+<li><strong>临时抓包</strong>：使用<code>tcpdump-uw</code>快速捕获问题流量后关闭，减少对主机的性能影响。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="五、总结"><a href="#五、总结" class="headerlink" title="五、总结"></a><strong>五、总结</strong></h3><ul>
+<li><strong>分布式交换机</strong>是VMware环境中实现端口镜像的首选方案，适合需要集中管理、灵活策略和跨主机流量监控的场景。  </li>
+<li><strong>标准交换机</strong>虽不支持原生端口镜像，但可通过物理设备或命令行工具间接实现流量捕获，适用于临时调试或简单环境。</li>
+</ul>
+<p><strong>建议</strong>：  </p>
+<ul>
+<li>若企业需要长期、稳定的流量监控，应升级到分布式交换机并配置端口镜像。  </li>
+<li>对于无法升级的环境，优先使用物理交换机镜像功能，避免对ESXi主机造成额外负担。</li>
+</ul>
+<h2 id="如何通过部署vCenter并建立三节点的vSphere集群是构建？"><a href="#如何通过部署vCenter并建立三节点的vSphere集群是构建？" class="headerlink" title="如何通过部署vCenter并建立三节点的vSphere集群是构建？"></a>如何通过部署vCenter并建立三节点的vSphere集群是构建？</h2><h3 id="一、准备工作-1"><a href="#一、准备工作-1" class="headerlink" title="一、准备工作"></a>一、准备工作</h3><ol>
+<li><p><strong>硬件与软件要求</strong>  </p>
+<ul>
+<li><strong>ESXi主机</strong>：至少3台物理服务器（需支持虚拟化，如Intel VT-x&#x2F;AMD-V），每台建议至少64GB内存、双网卡、RAID配置。  </li>
+<li><strong>vCenter Server</strong>：需一台虚拟机或物理机部署vCenter Server Appliance（VCSA），资源要求：  <ul>
+<li>小型环境：2 vCPU、12GB内存、200GB存储。</li>
+</ul>
+</li>
+<li><strong>网络要求</strong>：  <ul>
+<li>静态IP地址（vCenter和所有ESXi主机）。  </li>
+<li>DNS正向&#x2F;反向解析配置正确。  </li>
+<li>NTP服务器同步时间。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>下载安装文件</strong>  </p>
+<ul>
+<li>从VMware官网下载：  <ul>
+<li><strong>ESXi ISO镜像</strong>（如ESXi 7。 0 U3）。  </li>
+<li><strong>vCenter Server Appliance ( VCSA ) ISO</strong>。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="二、部署ESXi主机"><a href="#二、部署ESXi主机" class="headerlink" title="二、部署ESXi主机"></a><strong>二、部署ESXi主机</strong></h3><ol>
+<li><p><strong>安装ESXi到物理服务器</strong>  </p>
+<ul>
+<li>通过iDRAC&#x2F;iLO&#x2F;IPMI挂载ISO镜像安装ESXi。  </li>
+<li>配置管理网卡（VMkernel）的静态IP、子网掩码、网关。  </li>
+<li>启用SSH（可选，用于后期调试）：  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 在ESXi主机Shell中执行</span></span><br><span class="line">esxcli system ssh <span class="built_in">set</span> --enabled=<span class="literal">true</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p><strong>重复步骤</strong><br>在3台物理服务器上完成ESXi安装，分别命名为<code>esxi01</code>、<code>esxi02</code>、<code>esxi03</code>。</p>
+</li>
+</ol>
+<hr>
+<h3 id="三、部署vCenter-Server-Appliance-VCSA"><a href="#三、部署vCenter-Server-Appliance-VCSA" class="headerlink" title="三、部署vCenter Server Appliance ( VCSA )"></a><strong>三、部署vCenter Server Appliance ( VCSA )</strong></h3><ol>
+<li><p><strong>挂载VCSA ISO并启动安装向导</strong>  </p>
+<ul>
+<li>将VCSA ISO挂载到本地计算机，运行<code>vcsa-ui-installer\win32\installer.exe</code>（Windows）或通过Web界面启动。</li>
+</ul>
+</li>
+<li><p><strong>第一阶段部署（部署设备）</strong>  </p>
+<ul>
+<li><strong>目标ESXi主机</strong>：选择其中一台ESXi主机（如<code>esxi01</code>），输入其IP和root凭据。  </li>
+<li><strong>设置VCSA虚拟机</strong>：  <ul>
+<li>名称：<code>vcenter01</code>  </li>
+<li>密码：设置复杂密码（后续用于vCenter管理）。  </li>
+<li>存储：选择ESXi主机的存储（建议SSD）。</li>
+</ul>
+</li>
+<li><strong>网络配置</strong>：为vCenter分配静态IP（如<code>192. 168. 1. 100</code>）、DNS、子网掩码。</li>
+</ul>
+</li>
+<li><p><strong>第二阶段配置（初始化vCenter）</strong>  </p>
+<ul>
+<li><strong>SSO配置</strong>：  <ul>
+<li>域名：<code>vsphere.local</code>（默认）  </li>
+<li>管理员账户：<code>administrator@vsphere.local</code></li>
+</ul>
+</li>
+<li><strong>加入CEIP（可选）</strong>：根据需求选择是否启用。  </li>
+<li><strong>完成部署</strong>：等待约30分钟，vCenter服务启动后通过<code>https://&lt;vCenter_IP&gt;:443</code>登录。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="四、创建vSphere集群"><a href="#四、创建vSphere集群" class="headerlink" title="四、创建vSphere集群"></a><strong>四、创建vSphere集群</strong></h3><ol>
+<li><p><strong>将ESXi主机加入vCenter</strong>  </p>
+<ul>
+<li>登录vCenter Web Client，进入<strong>主机和集群</strong>视图。  </li>
+<li>右键数据中心，选择<strong>添加主机</strong>，依次输入三台ESXi主机的IP、root账户及密码。</li>
+</ul>
+</li>
+<li><p><strong>创建集群并启用高级功能</strong>  </p>
+<ul>
+<li>右键数据中心，选择<strong>新建集群</strong>，命名为<code>Cluster-01</code>。  </li>
+<li>配置集群功能：  <ul>
+<li><strong>DRS（分布式资源调度）</strong>：启用并选择自动化级别（如“全自动”）。  </li>
+<li><strong>vSphere HA（高可用性）</strong>：启用并配置心跳检测网络、主机隔离响应策略。  </li>
+<li><strong>EVC模式</strong>：若CPU型号不同，启用兼容性模式（如Intel Broadwell）。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>将主机拖入集群</strong>  </p>
+<ul>
+<li>将已添加的三台ESXi主机拖拽到<code>Cluster-01</code>集群中。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="五、配置共享存储（可选）"><a href="#五、配置共享存储（可选）" class="headerlink" title="五、配置共享存储（可选）"></a><strong>五、配置共享存储（可选）</strong></h3><ol>
+<li><p><strong>挂载共享存储（如NFS&#x2F;iSCSI）</strong>  </p>
+<ul>
+<li>在每台ESXi主机上配置存储适配器，挂载同一共享存储（如NAS&#x2F;SAN）。  </li>
+<li>创建VMFS数据存储供集群使用。</li>
+</ul>
+</li>
+<li><p><strong>验证存储可见性</strong><br>确保所有ESXi主机均可访问同一数据存储，以支持vMotion和HA。</p>
+</li>
+</ol>
+<hr>
+<h3 id="六、网络与安全配置"><a href="#六、网络与安全配置" class="headerlink" title="六、网络与安全配置"></a><strong>六、网络与安全配置</strong></h3><ol>
+<li><p><strong>配置分布式交换机（vDS）</strong>  </p>
+<ul>
+<li>创建vDS并添加所有主机的物理网卡（建议双网卡绑定）。  </li>
+<li>配置端口组（如<code>VM Network</code>、<code>vMotion</code>、<code>vSAN</code>）。</li>
+</ul>
+</li>
+<li><p><strong>安全加固</strong>  </p>
+<ul>
+<li>禁用ESXi Shell&#x2F;SSH（生产环境建议关闭）。  </li>
+<li>配置防火墙规则限制管理接口访问。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="七、验证集群功能"><a href="#七、验证集群功能" class="headerlink" title="七、验证集群功能"></a><strong>七、验证集群功能</strong></h3><ol>
+<li><strong>测试vMotion</strong>  <ul>
+<li>在集群内迁移虚拟机，验证网络和存储配置正确。</li>
+</ul>
+</li>
+<li><strong>模拟HA故障</strong>  <ul>
+<li>关闭一台ESXi主机，检查虚拟机是否自动迁移到其他节点。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="注意事项-1"><a href="#注意事项-1" class="headerlink" title="注意事项"></a><strong>注意事项</strong></h3><p>1。 <strong>许可证</strong>：确保为vCenter和ESXi分配有效许可证（评估版有60天试用期）。<br>2。 <strong>备份配置</strong>：定期备份vCenter（可通过VAMI界面或第三方工具）。<br>3。 <strong>日志监控</strong>：启用vCenter日志转发至Syslog服务器（如ELK）。  </p>
+<hr>
+<p>通过以上步骤，您可以成功部署一个高可用的三节点vSphere集群。后续可扩展存储（如vSAN）、部署NSX网络虚拟化或集成备份解决方案（如Veeam）。</p>
+<h2 id="Kubernets集群中Master的数量是如何决定下来的？"><a href="#Kubernets集群中Master的数量是如何决定下来的？" class="headerlink" title="Kubernets集群中Master的数量是如何决定下来的？"></a>Kubernets集群中Master的数量是如何决定下来的？</h2><p>Kubernetes 集群中 Master 节点数量的确定主要基于 <strong>高可用性（HA）需求</strong> 和 <strong>分布式一致性算法</strong> 的要求，以下是关键因素和典型配置：</p>
+<hr>
+<h3 id="1-高可用性（HA）需求"><a href="#1-高可用性（HA）需求" class="headerlink" title="1. 高可用性（HA）需求"></a>1. <strong>高可用性（HA）需求</strong></h3><ul>
+<li><strong>单节点（非生产环境）</strong>：单 Master 存在单点故障风险，仅适用于测试或开发环境。</li>
+<li><strong>多节点（生产环境）</strong>：多个 Master 节点确保即使部分节点故障，控制平面仍可运行。</li>
+</ul>
+<hr>
+<h3 id="2-分布式一致性算法（如-Raft）"><a href="#2-分布式一致性算法（如-Raft）" class="headerlink" title="2. 分布式一致性算法（如 Raft）"></a>2. <strong>分布式一致性算法（如 Raft）</strong></h3><ul>
+<li><strong>奇数节点原则</strong>：分布式系统（如 etcd）通常要求节点数为奇数（3、5、7等），以在故障时维持多数派（Quorum）。</li>
+<li><strong>容错能力</strong>：<ul>
+<li><strong>3 节点</strong>：允许 1 个节点故障（需 2 个节点存活）。</li>
+<li><strong>5 节点</strong>：允许 2 个节点故障（需 3 个节点存活）。</li>
+</ul>
+</li>
+<li><strong>偶数节点的劣势</strong>：4 节点与 3 节点的容错能力相同（均允许 1 个故障），但增加成本且无额外好处。</li>
+</ul>
+<hr>
+<h3 id="3-与-etcd-集群的关联"><a href="#3-与-etcd-集群的关联" class="headerlink" title="3. 与 etcd 集群的关联"></a>3. <strong>与 etcd 集群的关联</strong></h3><ul>
+<li><strong>集成部署</strong>：当 etcd 与 Master 节点共置时，Master 节点数通常等于 etcd 节点数（如 3 Master + 3 etcd）。</li>
+<li><strong>独立 etcd 集群</strong>：etcd 可独立部署，此时 Master 节点数可能与 etcd 节点数不同，但 Master 节点仍需保持奇数以实现自身高可用。</li>
+</ul>
+<hr>
+<h3 id="4-典型场景配置"><a href="#4-典型场景配置" class="headerlink" title="4. 典型场景配置"></a>4. <strong>典型场景配置</strong></h3><ul>
+<li><strong>小型&#x2F;中型集群</strong>：3 个 Master 节点（平衡成本与可用性）。</li>
+<li><strong>大型&#x2F;关键业务集群</strong>：5 个 Master 节点（更高容错能力）。</li>
+<li><strong>云托管服务（如 EKS、GKE）</strong>：Master 节点由云厂商管理，用户无需手动配置。</li>
+</ul>
+<hr>
+<h3 id="5-其他考虑因素"><a href="#5-其他考虑因素" class="headerlink" title="5. 其他考虑因素"></a>5. <strong>其他考虑因素</strong></h3><ul>
+<li><strong>网络开销</strong>：更多节点会增加选举和同步的通信延迟。</li>
+<li><strong>资源成本</strong>：每个 Master 节点需一定计算&#x2F;内存资源，需权衡成本与可靠性。</li>
+</ul>
+<hr>
+<h3 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h3><ul>
+<li><strong>核心原则</strong>：使用 <strong>奇数个 Master 节点</strong>（如 3、5）以确保高可用性和一致性。</li>
+<li><strong>生产环境最低推荐</strong>：3 个 Master 节点，允许 1 个节点故障。</li>
+<li><strong>特殊情况</strong>：若 etcd 独立部署，Master 节点数量可单独规划，但仍建议保持奇数。</li>
+</ul>
+<p>通过合理规划 Master 节点数量，可在故障容错、性能和成本之间取得平衡，确保 Kubernetes 控制平面的稳定运行。</p>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Linux/">Linux</a><a class="post-meta__tags" href="/tags/Kubernetes/">Kubernetes</a><a class="post-meta__tags" href="/tags/Storage/">Storage</a><a class="post-meta__tags" href="/tags/VirtualMachine/">VirtualMachine</a><a class="post-meta__tags" href="/tags/Interview/">Interview</a><a class="post-meta__tags" href="/tags/vSphere/">vSphere</a><a class="post-meta__tags" href="/tags/KVM/">KVM</a></div><div class="post-share"><div class="social-share" data-image="https://cdn.sujx.net/covers/cover91.jpg" data-sites="facebook,twitter,weibo,qq"></div><link rel="stylesheet" href="/libs/sharejs/css/share.min.css" media="print" onload="this.media='all'"><script src="/libs/sharejs/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>能否请我喝一杯咖啡？</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.jpg" target="_blank"><img class="post-qr-code-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/wechat.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2024/10/05/Coalmine-Datong/" title="煤海浮影"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/10/coalmine-11.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">煤海浮影</div></div><div class="info-2"><div class="info-item-1">这次国庆期间，有幸再次拜访了大同。除了云岗石窟、古城墙、刀削面和晋式火锅外，还去了晋华宫的煤矿博物馆。它的正式名称为晋华宫国家矿山公园，就在云岗石窟正对面，车程大概十五分钟左右，就在一篇矿工家属区的后面。这个景点就是同煤集团下属一个老矿场改建而来，在改建之时还在生产出煤。    10 山西大同·云岗   晋华宫到处都是煤炭元素，甚至给儿童玩耍的秋千就是拿矿工日常上下班的猴车改造的。其最主要的景点就是它的井下游览，这个是全国唯一一个正在生产之中的矿道改建的煤炭博物馆。门票价格为85元，不分男女老幼，统一价格85元。另外，游览还必须要支出5元的导游讲解费，这个会有小姐姐组织带领游览。“上工”需要先乘坐小火车从地面下降一百多米才能到坑口，期间巷道的四壁还在不断冒水。导游的小姐姐表示这都是正常的地下水渗漏，一直有水泵在排水和通风。井下展示了大量的煤矿生产科普资料和设备。该矿井自1950年代开始采掘，大跃进事情是同煤重点矿，后来复原了很多当时的井下场景。这个是在煤炭开采期间于生产煤层中发现的完整的树木化石。这个是展示了当年使用木制支护是进行加固的场景。整个矿场的巷道总长二十多公里，现在开放...</div></div></div></a><a class="pagination-related" href="/2024/09/28/Classified-Protection-of-Cyber-Security/" title="网络安全等级保护定级、测评、实施与运维"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover61.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">网络安全等级保护定级、测评、实施与运维</div></div><div class="info-2"><div class="info-item-1">等级保护制度是适用于中国当前实际的一种有效的网络安全管理方法。开展信息安全等级保护工作是保护信息化发展、维护国家信息安全的根本保障，是信息安全保障工作中国家意志的体现。    09 山西大同 云岗石窟   信息安全法律法规及标准规范网络安全法律政策体系法律 中华人民共和国宪法 中华人民共和国刑法 中华人民共和国国家安全法 中华人民共和国网络安全法 中华人民共和国密码法 中华人民共和国保守国家秘密法 中华人民共和国电子签名法  行政法规 中华人民共和国计算机信息系统安全保护条例 中华人民共和国计算机信息网络国籍联网暂行规定 商用密码管理条例 计算机软件保护条例  规章、地方性法规以及规范文件 计算机病毒防治管理办法 计算机信息系统保密管理暂行规定 计算机信息系统安全专用产品检测和销售许可证管理办法  网络安全标准系统基础标准 计算机信息系统安全保护等级划分准则 GB17859-1999 信息安全技术 网络安全等级保护实施指南 GB&#x2F;T 25058-2019  系统定级标准 信息安全技术 网络安全等级保护定级指南 GB&#x2F;T 22240-2020 信息安全技术 网络...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2022/11/03/KVM-Howto/" title="内核虚拟化KVM的使用"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/wallhaven-4dqdw3.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2022-11-03</div><div class="info-item-2">内核虚拟化KVM的使用</div></div><div class="info-2"><div class="info-item-1">概念KVM全称为Kernel Virtual Machine内核虚拟机，它是硬件辅助的全虚拟化解决方案，支持x86架构，并已移植到ARM、MIPS、PowerPC等架构。KVM作为可加载的内核模块包含在Linux内核之中，除了通用模块kvm.ko外，针对不同的CPU还有不同的模块，例如针对Intel的CPU的kvm-intel.ko，针对AMD的kvm-amd.ko. KVM的体系结构的核心是一组实现虚拟化功能的Linux内核模块，包括提供虚拟化能力的kvm。 ko，还包括特定CPU的模块和管理中断、时钟等设备管理模块。而其他设备例如网卡、显卡、存储控制器和磁盘则由QEMU( Quick Emulator )来负责。它通过&#x2F;dev&#x2F;kvm接口设置一个Guest操作系统的地址空间，从而提供模拟的I&#x2F;O设备。Libvirt是管理虚拟机和其他虚拟化功能的软件集合，包括API库、守护进程（ libvirtd ）和其他工具，它在KVM解决方案中扮演管理工具的角色。 入门创建虚机准备安装以Rocky Linux 8为例，需要准备一台对应虚机，并开启相关嵌套虚拟化...</div></div></div></a><a class="pagination-related" href="/2023/12/03/Kubernetes-CKA/" title="CKA学习纲要-基础部署和POD的管理"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023/12/F9rnEjrX0AAX9S5.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-12-03</div><div class="info-item-2">CKA学习纲要-基础部署和POD的管理</div></div><div class="info-2"><div class="info-item-1"> 部署、配置和验证环境 部署环境     主机 角色 IP    k8smaster Master 192. 168. 10. 120   k8snode1 Node 192. 168. 10. 121   k8snode2 Node 192. 168. 10. 122    版本信息     程序 版本号    Linux Rockylinux 9. 3   Kubernetes 1. 28. 2   Docker 24. 0. 7   Cri-Docker 0. 3. 8   部署 构建BaseOS# 所有节点主机配置免密登录# 提前下载相应yaml文件和镜像或者科学上网开启全局模式 部署Docker# 关闭防火墙systemctl disable --now firewalld# 关闭selinuxsed -i &#x27;s/enforceing/disabled&#x27; /etc/selinux/config# 关闭SWAPswapoff -a ; sed -i &#x27;/swap/d&#x27; /etc/fstab# 修改内核加载模块cat &gt; /et...</div></div></div></a><a class="pagination-related" href="/2021/05/08/centos8-make-template/" title="制作CentOS8的黄金模板"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/wallhaven-151377.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-05-08</div><div class="info-item-2">制作CentOS8的黄金模板</div></div><div class="info-2"><div class="info-item-1">前期准备 在虚拟化环境中部署CentOS8-Stream，包含Hyper-V、Esxi、Virtualbox等； 使用mini组件部署，大约会安装378个软件包； 安装过程中添加简体中文支持、设定时区为上海、使用硬盘自动分区、关闭kdump； 设定root密码（ 后期关闭root的ssh访问权限 ），并添加远程ssh访问管理员账户； 设定网络开机自动启动；   系统调整 安装工具 # 安装更新dnf makecachednf upgrade -y# 安装系统工具dnf install -y wget curl zip unzip vim mailx mlocate telnet net-tools bash-completion tmuxdnf install -y chrony rsync iotop git screen tree open-vm-tools yum-utilsupdatedb &amp;&amp; ldconfig# 配置默认主机名hostnamectl set-hostname vlnx000000# 配置模板机网络别名为eth0， 如果是Hyper-V的...</div></div></div></a><a class="pagination-related" href="/2024/05/17/Test-Disk-By-Fio/" title="磁盘性能测试"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover4.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-05-17</div><div class="info-item-2">磁盘性能测试</div></div><div class="info-2"><div class="info-item-1">前些天正好有个外协部门需要利旧，需要根据阿里云的测试流程对新华三的服务器和NVME磁盘进行一下测试，所以把手头的资料整理一下。    05 摄于洛阳·龙门石窟   存储一开始想写点什么来着，后来发现少数派上的文章写的非常棒，就一并转贴了 数字存储完全指南 存储设备的诞生与历史 机械硬盘的原理与参数详解 固态硬盘的历史、结构与原理 固态硬盘的参数解读与实际性能 运行内存都在运行什么？ 理解U盘、内存卡、移动硬盘和手机存储芯片构造  文牍测试流程 测试用例 测试报告 测试FIO简介FIO是一个用于测试磁盘IOPS性能的工具，可以对本地存储或者远程共享进行压力测试和验证，并能够给出磁盘性能的指标。FIO能够按照随机读、随机写、读写混合等不同IO模式对压测对象进行性能测试。 使用# 检查是否4k对齐[root@zhangjiakou ~]# fdisk -luDisk /dev/vda: 40 GiB, 42949672960 bytes, 83886080 sectorsUnits: sectors of 1 * 512 = 512 bytesSector size ( logical...</div></div></div></a><a class="pagination-related" href="/2022/03/21/VMware-vSphere-Performance/" title="「VMware vSphere 性能设计」"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover149.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2022-03-21</div><div class="info-item-2">「VMware vSphere 性能设计」</div></div><div class="info-2"><div class="info-item-1"> 本书从概念和操作两方面介绍了虚拟化基础设施的性能。   CPU虚拟化基础 CPU保护模式1。 CPU保护模式，也称为保护虚拟地址模式，是一种提供硬件级别内存保护的X86处理器操作模式。 实模式 为原始x86处理器设计 关闭内存保护功能 只有操作系统内核才可以无限制使用全部硬件资源   保护模式： 保护模式的特权等级：Ring0 Ring1 Ring2 Ring3 Ring 0 特权最多，Ring 3 特权做少 Ring 0：Kernel ；Ring 1 设备驱动； Ring 2 设备驱动； Ring 3 应用     定义CPU虚拟化的类型： 基于软件的CPU虚拟化： 运行于Ring1级别 需要VMM编译执行代码   基于硬件辅助的CPU虚拟化 运行于Ring0 使用Intel VT 或者AMD-V硬件辅助功能，无需软件编译     物理CPU与虚拟CPU之间的区别 每一个物理处理器内核被检测为一个pCPU 每个线程也可以被视为一个pCPU   vCPU状态 运行状态：在pCPU上被调度来运行指令 准备状态：在pCPU上准备调度，但由于调度延迟不直接运行 等待闲置状态：特殊状态...</div></div></div></a><a class="pagination-related" href="/2024/11/28/Podman-Howto/" title="Podman的入门"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover73.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-11-28</div><div class="info-item-2">Podman的入门</div></div><div class="info-2"><div class="info-item-1">Podman是一个开源的容器运行时项目，提供与Docker相似的功能，可以管理和运行任何符合OCI规范的容器和镜像。Podman提供了一个与Docker兼容的命令行前端来管理容器镜像。其主要的优点有：  无根模式运行，没有任何额外特权需要； 不需要守护进程3。 原生systemd集成，允许用户创建systemd单元文件并将容器作为系统服务运行。     11 天津·和平区·解放北路·利顺德大酒店   初始安装# 部署[root@podman ~]# dnf install -y podman podman-docker podman-composetouch /etc/containers/nodocker[root@podman ~]# podman -vpodman version 5. 3. 1# 配置镜像代理[root@podman ~]# vim /etc/containers/registries.confunqualified-search-registries = [&quot;docker.io&quot;][[registry]]prefix=&quot;do...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">靖轩</div><div class="author-info-description">逝者如斯夫,不舍昼夜</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/grepsu"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://gitee.com/grepsu" target="_blank" title="Gitee"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:sujx@live.cn" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS链接"><i class="fa  fa-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E9%98%B2%E6%AD%A2%E6%95%B0%E6%8D%AE%E4%B8%A2%E5%A4%B1"><span class="toc-number">1.</span> <span class="toc-text">如何防止数据丢失</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E9%A2%84%E9%98%B2%E6%8E%AA%E6%96%BD%EF%BC%9A%E4%BB%8E%E6%BA%90%E5%A4%B4%E9%99%8D%E4%BD%8E%E6%95%B0%E6%8D%AE%E4%B8%A2%E5%A4%B1%E9%A3%8E%E9%99%A9"><span class="toc-number">1.1.</span> <span class="toc-text">一、预防措施：从源头降低数据丢失风险</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E5%86%97%E4%BD%99%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1"><span class="toc-number">1.1.1.</span> <span class="toc-text">1. 冗余架构设计</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E6%95%B0%E6%8D%AE%E4%BF%9D%E6%8A%A4%E6%8A%80%E6%9C%AF"><span class="toc-number">1.1.2.</span> <span class="toc-text">2. 数据保护技术</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E7%A1%AC%E4%BB%B6%E5%8F%AF%E9%9D%A0%E6%80%A7%E4%BF%9D%E9%9A%9C"><span class="toc-number">1.1.3.</span> <span class="toc-text">3. 硬件可靠性保障</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%AE%9E%E6%97%B6%E7%9B%91%E6%8E%A7%E4%B8%8E%E9%A2%84%E8%AD%A6%EF%BC%9A%E6%8F%90%E5%89%8D%E5%8F%91%E7%8E%B0%E9%A3%8E%E9%99%A9"><span class="toc-number">1.2.</span> <span class="toc-text">二、实时监控与预警：提前发现风险</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E6%99%BA%E8%83%BD%E5%8C%96%E7%9B%91%E6%8E%A7%E5%B7%A5%E5%85%B7"><span class="toc-number">1.2.1.</span> <span class="toc-text">1. 智能化监控工具</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E5%AE%9A%E6%9C%9F%E5%81%A5%E5%BA%B7%E6%A3%80%E6%9F%A5"><span class="toc-number">1.2.2.</span> <span class="toc-text">2. 定期健康检查</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%95%B0%E6%8D%AE%E5%A4%87%E4%BB%BD%EF%BC%9A%E6%9C%80%E5%90%8E%E4%B8%80%E9%81%93%E9%98%B2%E7%BA%BF"><span class="toc-number">1.3.</span> <span class="toc-text">三、数据备份：最后一道防线</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-2-1%E5%A4%87%E4%BB%BD%E5%8E%9F%E5%88%99"><span class="toc-number">1.3.1.</span> <span class="toc-text">1. 3-2-1备份原则</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E5%8D%8E%E4%B8%BA%E5%A4%87%E4%BB%BD%E6%96%B9%E6%A1%88"><span class="toc-number">1.3.2.</span> <span class="toc-text">2. 华为备份方案</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E5%A4%87%E4%BB%BD%E9%AA%8C%E8%AF%81"><span class="toc-number">1.3.3.</span> <span class="toc-text">3. 备份验证</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E6%95%85%E9%9A%9C%E5%8F%91%E7%94%9F%E6%97%B6%E7%9A%84%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94"><span class="toc-number">1.4.</span> <span class="toc-text">四、故障发生时的应急响应</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E7%AB%8B%E5%8D%B3%E8%A1%8C%E5%8A%A8"><span class="toc-number">1.4.1.</span> <span class="toc-text">1. 立即行动</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E6%95%B0%E6%8D%AE%E6%81%A2%E5%A4%8D%E4%BC%98%E5%85%88%E7%BA%A7"><span class="toc-number">1.4.2.</span> <span class="toc-text">2. 数据恢复优先级</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E5%8D%8E%E4%B8%BA%E6%8A%80%E6%9C%AF%E6%94%AF%E6%8C%81"><span class="toc-number">1.4.3.</span> <span class="toc-text">3. 华为技术支持</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E9%95%BF%E6%9C%9F%E4%BC%98%E5%8C%96%EF%BC%9A%E6%9E%84%E5%BB%BA%E5%AE%B9%E7%81%BE%E4%BD%93%E7%B3%BB"><span class="toc-number">1.5.</span> <span class="toc-text">五、长期优化：构建容灾体系</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E5%AE%B9%E7%81%BE%E6%96%B9%E6%A1%88%E8%AE%BE%E8%AE%A1"><span class="toc-number">1.5.1.</span> <span class="toc-text">1. 容灾方案设计</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E6%95%B0%E6%8D%AE%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E7%AE%A1%E7%90%86"><span class="toc-number">1.5.2.</span> <span class="toc-text">2. 数据生命周期管理</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E5%85%B3%E9%94%AE%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-number">1.6.</span> <span class="toc-text">六、关键注意事项</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">1.7.</span> <span class="toc-text">总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E6%9B%B4%E6%8D%A2%E6%95%85%E9%9A%9C%E7%A1%AC%E7%9B%98"><span class="toc-number">2.</span> <span class="toc-text">如何更换故障硬盘</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%9B%B4%E6%8D%A2%E5%89%8D%E5%87%86%E5%A4%87"><span class="toc-number">2.1.</span> <span class="toc-text">一、更换前准备</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%9B%B4%E6%8D%A2%E6%93%8D%E4%BD%9C%E6%AD%A5%E9%AA%A4"><span class="toc-number">2.2.</span> <span class="toc-text">二、更换操作步骤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%9B%B4%E6%8D%A2%E5%90%8E%E9%AA%8C%E8%AF%81"><span class="toc-number">2.3.</span> <span class="toc-text">三、更换后验证</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%85%B3%E9%94%AE%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-number">2.4.</span> <span class="toc-text">四、关键注意事项</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E7%B4%A7%E6%80%A5%E6%83%85%E5%86%B5%E5%A4%84%E7%90%86"><span class="toc-number">2.5.</span> <span class="toc-text">五、紧急情况处理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A3%81%E7%9B%98%E9%98%B5%E5%88%97Raid%E7%9A%84%E7%BA%A7%E5%88%AB%E6%9C%89%E9%82%A3%E4%BA%9B%EF%BC%8C%E5%85%B6%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">3.</span> <span class="toc-text">磁盘阵列Raid的级别有那些，其应用场景是什么？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E3%80%81RAID%E7%BA%A7%E5%88%AB%E7%89%B9%E6%80%A7%E5%AF%B9%E6%AF%94"><span class="toc-number">3.1.</span> <span class="toc-text">一、RAID级别特性对比</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E8%AF%A6%E7%BB%86%E7%89%B9%E6%80%A7%E4%B8%8E%E5%9C%BA%E6%99%AF%E8%A7%A3%E6%9E%90"><span class="toc-number">3.2.</span> <span class="toc-text">二、详细特性与场景解析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-RAID-0%EF%BC%88%E6%9D%A1%E5%B8%A6%E5%8C%96%EF%BC%89"><span class="toc-number">3.2.1.</span> <span class="toc-text">1. RAID 0（条带化）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-RAID-1%EF%BC%88%E9%95%9C%E5%83%8F%EF%BC%89"><span class="toc-number">3.2.2.</span> <span class="toc-text">2. RAID 1（镜像）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-RAID-5%EF%BC%88%E5%88%86%E5%B8%83%E5%BC%8F%E5%A5%87%E5%81%B6%E6%A0%A1%E9%AA%8C%EF%BC%89"><span class="toc-number">3.2.3.</span> <span class="toc-text">3. RAID 5（分布式奇偶校验）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-RAID-6%EF%BC%88%E5%8F%8C%E9%87%8D%E5%88%86%E5%B8%83%E5%BC%8F%E6%A0%A1%E9%AA%8C%EF%BC%89"><span class="toc-number">3.2.4.</span> <span class="toc-text">4. RAID 6（双重分布式校验）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-RAID-10%EF%BC%88%E9%95%9C%E5%83%8F-%E6%9D%A1%E5%B8%A6%E5%8C%96%EF%BC%89"><span class="toc-number">3.2.5.</span> <span class="toc-text">5. RAID 10（镜像+条带化）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%85%B3%E9%94%AE%E5%8C%BA%E5%88%AB%E6%80%BB%E7%BB%93"><span class="toc-number">3.3.</span> <span class="toc-text">三、关键区别总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E9%80%89%E5%9E%8B%E5%BB%BA%E8%AE%AE"><span class="toc-number">3.4.</span> <span class="toc-text">四、选型建议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-number">3.5.</span> <span class="toc-text">五、注意事项</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E5%AF%B9%E4%B8%80%E5%8F%B0%E9%B2%B2%E9%B9%8F%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BF%9B%E8%A1%8C%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-number">4.</span> <span class="toc-text">如何对一台鲲鹏服务器进行初始化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C"><span class="toc-number">4.1.</span> <span class="toc-text">一、准备工作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85"><span class="toc-number">4.2.</span> <span class="toc-text">二、操作系统安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E7%BD%91%E7%BB%9C%E4%B8%8E%E5%AE%89%E5%85%A8%E9%85%8D%E7%BD%AE"><span class="toc-number">4.3.</span> <span class="toc-text">三、网络与安全配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E9%A9%B1%E5%8A%A8%E4%B8%8E%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96"><span class="toc-number">4.4.</span> <span class="toc-text">四、驱动与性能优化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E5%AD%98%E5%82%A8%E4%B8%8E%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="toc-number">4.5.</span> <span class="toc-text">五、存储与文件系统</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E7%9B%91%E6%8E%A7%E4%B8%8E%E7%BB%B4%E6%8A%A4"><span class="toc-number">4.6.</span> <span class="toc-text">六、监控与维护</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%83%E3%80%81%E5%A4%87%E4%BB%BD%E4%B8%8E%E6%81%A2%E5%A4%8D"><span class="toc-number">4.7.</span> <span class="toc-text">七、备份与恢复</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-number">4.8.</span> <span class="toc-text">注意事项</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8LVM%E7%AE%A1%E7%90%86%E7%A3%81%E7%9B%98"><span class="toc-number">5.</span> <span class="toc-text">如何使用LVM管理磁盘</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E3%80%81LVM-%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5"><span class="toc-number">5.1.</span> <span class="toc-text">一、LVM 核心概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%AE%89%E8%A3%85-LVM-%E5%B7%A5%E5%85%B7"><span class="toc-number">5.2.</span> <span class="toc-text">二、安装 LVM 工具</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%88%9B%E5%BB%BA%E5%92%8C%E7%AE%A1%E7%90%86-LVM"><span class="toc-number">5.3.</span> <span class="toc-text">三、创建和管理 LVM</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E5%88%9B%E5%BB%BA%E7%89%A9%E7%90%86%E5%8D%B7%EF%BC%88PV%EF%BC%89"><span class="toc-number">5.3.1.</span> <span class="toc-text">1. 创建物理卷（PV）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E5%88%9B%E5%BB%BA%E5%8D%B7%E7%BB%84%EF%BC%88VG%EF%BC%89"><span class="toc-number">5.3.2.</span> <span class="toc-text">2. 创建卷组（VG）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E5%88%9B%E5%BB%BA%E9%80%BB%E8%BE%91%E5%8D%B7%EF%BC%88LV%EF%BC%89"><span class="toc-number">5.3.3.</span> <span class="toc-text">3. 创建逻辑卷（LV）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%B9%B6%E6%8C%82%E8%BD%BD%E9%80%BB%E8%BE%91%E5%8D%B7"><span class="toc-number">5.3.4.</span> <span class="toc-text">4. 格式化并挂载逻辑卷</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E6%89%A9%E5%B1%95%E9%80%BB%E8%BE%91%E5%8D%B7%EF%BC%88LV%EF%BC%89"><span class="toc-number">5.4.</span> <span class="toc-text">四、扩展逻辑卷（LV）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E6%89%A9%E5%B1%95%E5%8D%B7%E7%BB%84%EF%BC%88VG%EF%BC%89%E5%AE%B9%E9%87%8F"><span class="toc-number">5.4.1.</span> <span class="toc-text">1. 扩展卷组（VG）容量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E6%89%A9%E5%B1%95%E9%80%BB%E8%BE%91%E5%8D%B7%EF%BC%88LV%EF%BC%89%E5%A4%A7%E5%B0%8F"><span class="toc-number">5.4.2.</span> <span class="toc-text">2. 扩展逻辑卷（LV）大小</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E7%BC%A9%E5%B0%8F%E9%80%BB%E8%BE%91%E5%8D%B7%EF%BC%88LV%EF%BC%89"><span class="toc-number">5.5.</span> <span class="toc-text">五、缩小逻辑卷（LV）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E5%88%A0%E9%99%A4-LVM-%E7%BB%84%E4%BB%B6"><span class="toc-number">5.6.</span> <span class="toc-text">六、删除 LVM 组件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%83%E3%80%81LVM-%E5%BF%AB%E7%85%A7%EF%BC%88Snapshot%EF%BC%89"><span class="toc-number">5.7.</span> <span class="toc-text">七、LVM 快照（Snapshot）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%AB%E3%80%81LVM-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-number">5.8.</span> <span class="toc-text">八、LVM 常用命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B9%9D%E3%80%81%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-number">5.9.</span> <span class="toc-text">九、注意事项</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#VMware%E7%8E%AF%E5%A2%83%E4%B8%AD%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%A4%E6%8D%A2%E6%9C%BA%E5%92%8C%E6%A0%87%E5%87%86%E4%BA%A4%E6%8D%A2%E6%9C%BA%E7%9A%84%E7%89%B9%E6%80%A7%E5%92%8C%E5%8C%BA%E5%88%AB"><span class="toc-number">6.</span> <span class="toc-text">VMware环境中分布式交换机和标准交换机的特性和区别</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%A0%87%E5%87%86%E4%BA%A4%E6%8D%A2%E6%9C%BA%EF%BC%88vSwitch%EF%BC%89%E7%9A%84%E7%89%B9%E6%80%A7"><span class="toc-number">6.1.</span> <span class="toc-text">一、标准交换机（vSwitch）的特性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%A4%E6%8D%A2%E6%9C%BA%EF%BC%88dvSwitch%EF%BC%89%E7%9A%84%E7%89%B9%E6%80%A7"><span class="toc-number">6.2.</span> <span class="toc-text">二、分布式交换机（dvSwitch）的特性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%A0%87%E5%87%86%E4%BA%A4%E6%8D%A2%E6%9C%BA-vs-%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%A4%E6%8D%A2%E6%9C%BA%E7%9A%84%E5%85%B3%E9%94%AE%E5%8C%BA%E5%88%AB"><span class="toc-number">6.3.</span> <span class="toc-text">三、标准交换机 vs 分布式交换机的关键区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E9%85%8D%E7%BD%AE%E7%A4%BA%E4%BE%8B%E4%B8%8E%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="toc-number">6.4.</span> <span class="toc-text">四、配置示例与最佳实践</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E9%80%89%E6%8B%A9%E5%BB%BA%E8%AE%AE"><span class="toc-number">6.5.</span> <span class="toc-text">五、选择建议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-number">6.6.</span> <span class="toc-text">六、注意事项</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#vSphere%E7%8E%AF%E5%A2%83%E4%B8%AD%E6%A0%87%E5%87%86%E4%BA%A4%E6%8D%A2%E6%9C%BA%E5%92%8C%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%A4%E6%8D%A2%E6%9C%BA%E6%94%AF%E6%8C%81%E7%AB%AF%E5%8F%A3%E9%95%9C%E5%83%8F%E4%B9%88%EF%BC%9F"><span class="toc-number">7.</span> <span class="toc-text">vSphere环境中标准交换机和分布式交换机支持端口镜像么？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%A4%E6%8D%A2%E6%9C%BA%EF%BC%88dvSwitch%EF%BC%89"><span class="toc-number">7.1.</span> <span class="toc-text">一、分布式交换机（dvSwitch）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%A0%87%E5%87%86%E4%BA%A4%E6%8D%A2%E6%9C%BA%EF%BC%88vSwitch%EF%BC%89"><span class="toc-number">7.2.</span> <span class="toc-text">二、标准交换机（vSwitch）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%85%B3%E9%94%AE%E5%AF%B9%E6%AF%94"><span class="toc-number">7.3.</span> <span class="toc-text">三、关键对比</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E7%AB%AF%E5%8F%A3%E9%95%9C%E5%83%8F%E7%9A%84%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="toc-number">7.4.</span> <span class="toc-text">四、端口镜像的最佳实践</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E6%80%BB%E7%BB%93"><span class="toc-number">7.5.</span> <span class="toc-text">五、总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E9%80%9A%E8%BF%87%E9%83%A8%E7%BD%B2vCenter%E5%B9%B6%E5%BB%BA%E7%AB%8B%E4%B8%89%E8%8A%82%E7%82%B9%E7%9A%84vSphere%E9%9B%86%E7%BE%A4%E6%98%AF%E6%9E%84%E5%BB%BA%EF%BC%9F"><span class="toc-number">8.</span> <span class="toc-text">如何通过部署vCenter并建立三节点的vSphere集群是构建？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C-1"><span class="toc-number">8.1.</span> <span class="toc-text">一、准备工作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E9%83%A8%E7%BD%B2ESXi%E4%B8%BB%E6%9C%BA"><span class="toc-number">8.2.</span> <span class="toc-text">二、部署ESXi主机</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E9%83%A8%E7%BD%B2vCenter-Server-Appliance-VCSA"><span class="toc-number">8.3.</span> <span class="toc-text">三、部署vCenter Server Appliance ( VCSA )</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%88%9B%E5%BB%BAvSphere%E9%9B%86%E7%BE%A4"><span class="toc-number">8.4.</span> <span class="toc-text">四、创建vSphere集群</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E9%85%8D%E7%BD%AE%E5%85%B1%E4%BA%AB%E5%AD%98%E5%82%A8%EF%BC%88%E5%8F%AF%E9%80%89%EF%BC%89"><span class="toc-number">8.5.</span> <span class="toc-text">五、配置共享存储（可选）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E7%BD%91%E7%BB%9C%E4%B8%8E%E5%AE%89%E5%85%A8%E9%85%8D%E7%BD%AE"><span class="toc-number">8.6.</span> <span class="toc-text">六、网络与安全配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%83%E3%80%81%E9%AA%8C%E8%AF%81%E9%9B%86%E7%BE%A4%E5%8A%9F%E8%83%BD"><span class="toc-number">8.7.</span> <span class="toc-text">七、验证集群功能</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9-1"><span class="toc-number">8.8.</span> <span class="toc-text">注意事项</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Kubernets%E9%9B%86%E7%BE%A4%E4%B8%ADMaster%E7%9A%84%E6%95%B0%E9%87%8F%E6%98%AF%E5%A6%82%E4%BD%95%E5%86%B3%E5%AE%9A%E4%B8%8B%E6%9D%A5%E7%9A%84%EF%BC%9F"><span class="toc-number">9.</span> <span class="toc-text">Kubernets集群中Master的数量是如何决定下来的？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E9%AB%98%E5%8F%AF%E7%94%A8%E6%80%A7%EF%BC%88HA%EF%BC%89%E9%9C%80%E6%B1%82"><span class="toc-number">9.1.</span> <span class="toc-text">1. 高可用性（HA）需求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%80%E8%87%B4%E6%80%A7%E7%AE%97%E6%B3%95%EF%BC%88%E5%A6%82-Raft%EF%BC%89"><span class="toc-number">9.2.</span> <span class="toc-text">2. 分布式一致性算法（如 Raft）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E4%B8%8E-etcd-%E9%9B%86%E7%BE%A4%E7%9A%84%E5%85%B3%E8%81%94"><span class="toc-number">9.3.</span> <span class="toc-text">3. 与 etcd 集群的关联</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E5%85%B8%E5%9E%8B%E5%9C%BA%E6%99%AF%E9%85%8D%E7%BD%AE"><span class="toc-number">9.4.</span> <span class="toc-text">4. 典型场景配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E5%85%B6%E4%BB%96%E8%80%83%E8%99%91%E5%9B%A0%E7%B4%A0"><span class="toc-number">9.5.</span> <span class="toc-text">5. 其他考虑因素</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93-1"><span class="toc-number">9.6.</span> <span class="toc-text">总结</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/07/03/AIGC_FoxHole/" title="海鹰">海鹰</a><time datetime="2026-07-03T01:04:07.000Z" title="发表于 2026-07-03 09:04:07">2026-07-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/11/fristVibeCoding/" title="鹊随金印：我的第一个完整的AI编程项目">鹊随金印：我的第一个完整的AI编程项目</a><time datetime="2026-06-11T01:04:07.000Z" title="发表于 2026-06-11 09:04:07">2026-06-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/03/VI_Howto/" title="VI编辑器简介">VI编辑器简介</a><time datetime="2026-06-03T01:04:07.000Z" title="发表于 2026-06-03 09:04:07">2026-06-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/28/HNCitic_2605/" title="我要上头条">我要上头条</a><time datetime="2026-05-28T01:04:07.000Z" title="发表于 2026-05-28 09:04:07">2026-05-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/12/TS-Domain-Controller-Sync-Failure/" title="记一次Windows AD域控制器同步故障排错">记一次Windows AD域控制器同步故障排错</a><time datetime="2026-05-12T03:04:07.000Z" title="发表于 2026-05-12 11:04:07">2026-05-12</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2008 - 2026 By 靖轩</span></div><div class="footer_custom_text">京ICP备17034757号</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.5"></script><script src="/js/main.js?v=5.5.5"></script><script src="/libs/fancybox/fancybox.umd.js"></script><script src="/js/instantpage.js" type="module"></script><script src="/libs/lazyload/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const parseViewBox = viewBox => {
+    if (!viewBox) return null
+    const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
+    if (parts.length !== 4 || parts.some(n => Number.isNaN(n))) return null
+    return parts
+  }
+
+  const getSvgViewBox = svg => {
+    const attr = parseViewBox(svg.getAttribute('viewBox'))
+    if (attr) return attr
+
+    // Fallback: use bbox to build a viewBox
+    try {
+      const bbox = svg.getBBox()
+      if (bbox && bbox.width && bbox.height) return [bbox.x, bbox.y, bbox.width, bbox.height]
+    } catch (e) {
+      // getBBox may fail on some edge cases; ignore
+    }
+
+    const w = Number(svg.getAttribute('width')) || 0
+    const h = Number(svg.getAttribute('height')) || 0
+    if (w > 0 && h > 0) return [0, 0, w, h]
+    return [0, 0, 100, 100]
+  }
+
+  const setSvgViewBox = (svg, vb) => {
+    svg.setAttribute('viewBox', `${vb[0]} ${vb[1]} ${vb[2]} ${vb[3]}`)
+  }
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v))
+
+  const openSvgInNewTab = ({ source, initViewBox }) => {
+    const getClonedSvg = () => {
+      if (typeof source === 'string') {
+        const template = document.createElement('template')
+        template.innerHTML = source.trim()
+        const svg = template.content.querySelector('svg')
+        return svg ? svg.cloneNode(true) : null
+      }
+      if (source && typeof source.cloneNode === 'function') {
+        return source.cloneNode(true)
+      }
+      return null
+    }
+
+    const clone = getClonedSvg()
+    if (!clone) return
+    if (initViewBox && initViewBox.length === 4) {
+      clone.setAttribute('viewBox', initViewBox.join(' '))
+    }
+    if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+    if (!clone.getAttribute('xmlns:xlink') && clone.outerHTML.includes('xlink:')) {
+      clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+    }
+    // inject background to match current theme
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    const bg = getComputedStyle(document.body).backgroundColor || (isDark ? '#1e1e1e' : '#ffffff')
+    if (!clone.style.background) clone.style.background = bg
+
+    const serializer = new XMLSerializer()
+    const svgSource = serializer.serializeToString(clone)
+    const htmlSource = `<!doctype html><html><head><meta charset="utf-8" />
+      <style>
+        html, body { width: 100%; height: 100%; margin: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; }
+        svg { max-width: 100%; max-height: 100%; height: auto; width: auto; }
+      </style>
+      </head><body>${svgSource}</body></html>`
+    const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank', 'noopener')
+    setTimeout(() => URL.revokeObjectURL(url), 30000)
+  }
+
+  const attachMermaidViewerButton = wrap => {
+    let btn = wrap.querySelector('.mermaid-open-btn')
+    if (!btn) {
+      btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'mermaid-open-btn'
+      wrap.appendChild(btn)
+    }
+
+    btn.innerHTML = '<i class="fa fa-search fa-fw" aria-hidden="true"></i>'
+
+    if (!btn.__mermaidViewerBound) {
+      btn.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        const svg = wrap.__mermaidOriginalSvg || wrap.querySelector('svg')
+        if (!svg) return
+        const initViewBox = wrap.__mermaidInitViewBox
+        if (typeof svg === 'string') {
+          openSvgInNewTab({ source: svg, initViewBox })
+          return
+        }
+        openSvgInNewTab({ source: svg, initViewBox })
+      })
+      btn.__mermaidViewerBound = true
+    }
+  }
+
+  // Zoom around a point (px, py) in the SVG viewport (in viewBox coordinates)
+  const zoomAtPoint = (vb, factor, px, py) => {
+    const w = vb[2] * factor
+    const h = vb[3] * factor
+    const nx = px - (px - vb[0]) * factor
+    const ny = py - (py - vb[1]) * factor
+    return [nx, ny, w, h]
+  }
+
+  const initMermaidGestures = wrap => {
+    const svg = wrap.querySelector('svg')
+    if (!svg) return
+
+    // Ensure viewBox exists so gestures always work
+    const initVb = getSvgViewBox(svg)
+    wrap.__mermaidInitViewBox = initVb
+    wrap.__mermaidCurViewBox = initVb.slice()
+    setSvgViewBox(svg, initVb)
+
+    // Avoid binding multiple times on themeChange/pjax
+    if (wrap.__mermaidGestureBound) return
+    wrap.__mermaidGestureBound = true
+
+    // Helper: map client (viewport) coordinate -> viewBox coordinate
+    const clientToViewBox = (clientX, clientY) => {
+      const rect = svg.getBoundingClientRect()
+      const vb = wrap.__mermaidCurViewBox || getSvgViewBox(svg)
+      const x = vb[0] + (clientX - rect.left) * (vb[2] / rect.width)
+      const y = vb[1] + (clientY - rect.top) * (vb[3] / rect.height)
+      return { x, y, rect, vb }
+    }
+
+    const state = {
+      pointers: new Map(),
+      startVb: null,
+      startDist: 0,
+      startCenter: null
+    }
+
+    const clampVb = vb => {
+      const init = wrap.__mermaidInitViewBox || vb
+      const minW = init[2] * 0.1
+      const maxW = init[2] * 10
+      const minH = init[3] * 0.1
+      const maxH = init[3] * 10
+      vb[2] = clamp(vb[2], minW, maxW)
+      vb[3] = clamp(vb[3], minH, maxH)
+      return vb
+    }
+
+    const setCurVb = vb => {
+      vb = clampVb(vb)
+      wrap.__mermaidCurViewBox = vb
+      setSvgViewBox(svg, vb)
+    }
+
+    const onPointerDown = e => {
+      // Allow only primary button for mouse
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      svg.setPointerCapture(e.pointerId)
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      if (state.pointers.size === 1) {
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      } else if (state.pointers.size === 2) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        state.startDist = Math.hypot(dx, dy)
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        state.startCenter = { x: (pts[0].x + pts[1].x) / 2, y: (pts[0].y + pts[1].y) / 2 }
+      }
+    }
+
+    const onPointerMove = e => {
+      if (!state.pointers.has(e.pointerId)) return
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      // Pan with 1 pointer
+      if (state.pointers.size === 1 && state.startVb) {
+        const p = [...state.pointers.values()][0]
+        const prev = { x: e.clientX - e.movementX, y: e.clientY - e.movementY }
+        // movementX/Y unreliable on touch, compute from stored last position
+        const last = wrap.__mermaidLastSinglePointer || p
+        const dxClient = p.x - last.x
+        const dyClient = p.y - last.y
+        wrap.__mermaidLastSinglePointer = p
+
+        const { rect } = clientToViewBox(p.x, p.y)
+        const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        const dx = dxClient * (vb[2] / rect.width)
+        const dy = dyClient * (vb[3] / rect.height)
+        setCurVb([vb[0] - dx, vb[1] - dy, vb[2], vb[3]])
+        return
+      }
+
+      // Pinch zoom with 2 pointers
+      if (state.pointers.size === 2 && state.startVb && state.startDist > 0) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        const dist = Math.hypot(dx, dy)
+        if (!dist) return
+        const factor = state.startDist / dist // dist bigger => zoom in (viewBox smaller)
+
+        const cx = (pts[0].x + pts[1].x) / 2
+        const cy = (pts[0].y + pts[1].y) / 2
+        const centerClient = { x: cx, y: cy }
+
+        const pxy = clientToViewBox(centerClient.x, centerClient.y)
+        const cpx = pxy.x
+        const cpy = pxy.y
+
+        const vb = zoomAtPoint(state.startVb, factor, cpx, cpy)
+        setCurVb(vb)
+      }
+    }
+
+    const onPointerUpOrCancel = e => {
+      state.pointers.delete(e.pointerId)
+      if (state.pointers.size === 0) {
+        state.startVb = null
+        state.startDist = 0
+        state.startCenter = null
+        wrap.__mermaidLastSinglePointer = null
+      } else if (state.pointers.size === 1) {
+        // reset single pointer baseline to avoid jump
+        wrap.__mermaidLastSinglePointer = [...state.pointers.values()][0]
+      }
+    }
+
+    // Wheel zoom (mouse/trackpad)
+    const onWheel = e => {
+      // ctrlKey on mac trackpad pinch; we treat both as zoom
+      e.preventDefault()
+      const delta = e.deltaY
+      const zoomFactor = delta > 0 ? 1.1 : 0.9
+      const { x, y } = clientToViewBox(e.clientX, e.clientY)
+      const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      setCurVb(zoomAtPoint(vb, zoomFactor, x, y))
+    }
+
+    const onDblClick = () => {
+      const init = wrap.__mermaidInitViewBox
+      if (!init) return
+      wrap.__mermaidCurViewBox = init.slice()
+      setSvgViewBox(svg, init)
+    }
+
+    svg.addEventListener('pointerdown', onPointerDown)
+    svg.addEventListener('pointermove', onPointerMove)
+    svg.addEventListener('pointerup', onPointerUpOrCancel)
+    svg.addEventListener('pointercancel', onPointerUpOrCancel)
+    svg.addEventListener('wheel', onWheel, { passive: false })
+    svg.addEventListener('dblclick', onDblClick)
+  }
+
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+
+      // Clear old render (themeChange/pjax will rerun)
+      const oldSvg = item.querySelector('svg')
+      if (oldSvg) oldSvg.remove()
+      item.__mermaidGestureBound = false
+
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+        if (true) initMermaidGestures(item)
+        item.__mermaidOriginalSvg = svg
+        if (true) attachMermaidViewerButton(item)
+      }
+
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('/libs/mermaid/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.5"></script></div></div></body></html>

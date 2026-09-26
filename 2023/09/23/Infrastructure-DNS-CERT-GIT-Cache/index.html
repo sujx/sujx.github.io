@@ -1,0 +1,572 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>快速构建实验环境的基础服务 | 靖轩</title><meta name="author" content="靖轩"><meta name="copyright" content="靖轩"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="在单机试验环境中，经常需要配置DNS解析、生成SSL证书、保存或者拉取配置脚本，这些操作往往散布到各个节点的实际操作中，较为繁琐且容易出错，所以创建一个虚机镜像来提供统一的服务就是有需求的。以下就是通过在VM上部署实现相关功能的操作实践。    类别 内容    功能 基础架构服务   主机名 infra.contoso.com   IP 192. 168. 10. 254   配置 2core">
+<meta property="og:type" content="article">
+<meta property="og:title" content="快速构建实验环境的基础服务">
+<meta property="og:url" content="https://www.sujx.net/2023/09/23/Infrastructure-DNS-CERT-GIT-Cache/index.html">
+<meta property="og:site_name" content="靖轩">
+<meta property="og:description" content="在单机试验环境中，经常需要配置DNS解析、生成SSL证书、保存或者拉取配置脚本，这些操作往往散布到各个节点的实际操作中，较为繁琐且容易出错，所以创建一个虚机镜像来提供统一的服务就是有需求的。以下就是通过在VM上部署实现相关功能的操作实践。    类别 内容    功能 基础架构服务   主机名 infra.contoso.com   IP 192. 168. 10. 254   配置 2core">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.sujx.net/covers/cover76.jpg">
+<meta property="article:published_time" content="2023-09-23T07:04:07.000Z">
+<meta property="article:modified_time" content="2026-09-26T02:32:14.962Z">
+<meta property="article:author" content="靖轩">
+<meta property="article:tag" content="Bind">
+<meta property="article:tag" content="Cache">
+<meta property="article:tag" content="DNSmasq">
+<meta property="article:tag" content="Gitea">
+<meta property="article:tag" content="cert">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.sujx.net/covers/cover76.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "快速构建实验环境的基础服务",
+  "url": "https://www.sujx.net/2023/09/23/Infrastructure-DNS-CERT-GIT-Cache/",
+  "image": "https://cdn.sujx.net/covers/cover76.jpg",
+  "datePublished": "2023-09-23T07:04:07.000Z",
+  "dateModified": "2026-09-26T02:32:14.962Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "靖轩",
+      "url": "https://www.sujx.net"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://cdn.sujx.net/about/favicon.png"><link rel="canonical" href="https://www.sujx.net/2023/09/23/Infrastructure-DNS-CERT-GIT-Cache/index.html"><link rel="preconnect" href="//cdnjs.cloudflare.com"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css?v=5.5.5"><link rel="stylesheet" href="/fonts/css/all.min.css"><link rel="stylesheet" href="/libs/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?417b20ac1984432f821159fac27d3bb5";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><link rel="stylesheet" href="/fonts/titillium-web.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: '/libs/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: true,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '快速构建实验环境的基础服务',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="alternate" href="/atom.xml" title="靖轩" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">靖轩</span></a><a class="nav-page-title" href="/"><span class="site-name">快速构建实验环境的基础服务</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">快速构建实验环境的基础服务</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-09-23T07:04:07.000Z" title="发表于 2023-09-23 15:04:07">2023-09-23</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-09-26T02:32:14.962Z" title="更新于 2026-09-26 10:32:14">2026-09-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F/">应用程序</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">2.7k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>12分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><p>在单机试验环境中，经常需要配置DNS解析、生成SSL证书、保存或者拉取配置脚本，这些操作往往散布到各个节点的实际操作中，较为繁琐且容易出错，所以创建一个虚机镜像来提供统一的服务就是有需求的。以下就是通过在VM上部署实现相关功能的操作实践。</p>
+<table>
+<thead>
+<tr>
+<th>类别</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>功能</td>
+<td>基础架构服务</td>
+</tr>
+<tr>
+<td>主机名</td>
+<td>infra.contoso.com</td>
+</tr>
+<tr>
+<td>IP</td>
+<td>192. 168. 10. 254</td>
+</tr>
+<tr>
+<td>配置</td>
+<td>2core 2G mem 40GB disk</td>
+</tr>
+<tr>
+<td>承载服务</td>
+<td>DNS以及DNS缓存、时间服务、SSL证书生成和下载、git服务、导航页、Ansible控制台、主机管理</td>
+</tr>
+</tbody></table>
+<h2 id="包管理安装"><a href="#包管理安装" class="headerlink" title="包管理安装"></a>包管理安装</h2><h3 id="主机准备"><a href="#主机准备" class="headerlink" title="主机准备"></a>主机准备</h3><h4 id="基础环境准备"><a href="#基础环境准备" class="headerlink" title="基础环境准备"></a>基础环境准备</h4><p>主机环境的准备执行准备：<br><a href="https://www.sujx.net/2023/06/30/RockyLinux-Template/">RockyLinux9的主机部署</a></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">系统更新</span></span><br><span class="line">dnf makecache</span><br><span class="line">dnf update -y</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">由于主机模板只给了20G硬盘，所以需要扩容</span></span><br><span class="line">dnf install cloud-utils-growpart-0. 33-1. el9. x86_64</span><br><span class="line">growpart /dev/sda 2</span><br><span class="line">lvextend -l +100%free  /dev/rl/root</span><br><span class="line">xfs_growfs /dev/rl/root</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">为后续Gitea修改本地SSH端口为2022端口</span></span><br><span class="line">echo &quot;127. 0. 0. 1		infra infra.contoso.com&quot; &gt;&gt; /etc/hosts</span><br><span class="line">sed -e &#x27;s|#Port 22|Port 2022|g&#x27; -i.bak /etc/ssh/sshd_config</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">开启新的防火墙端口</span></span><br><span class="line">firewall-cmd --permanent --add-port=2022/tcp</span><br><span class="line">firewall-cmd --reload</span><br><span class="line">systemctl restart sshd</span><br><span class="line">systemctl status sshd --no-pager</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">为后续使用创建文件夹</span></span><br><span class="line">mkdir -p /data/&#123;public, registry&#125;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">增加github的解析地址</span></span><br><span class="line">sh -c &#x27;sed -i &quot;/# GitHub520 Host Start/Q&quot; /etc/hosts &amp;&amp; curl https://raw.hellogithub.com/hosts &gt;&gt; /etc/hosts&#x27;</span><br></pre></td></tr></table></figure>
+
+<h3 id="时间服务器"><a href="#时间服务器" class="headerlink" title="时间服务器"></a>时间服务器</h3><h4 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装时间同步服务器</span></span><br><span class="line">dnf install -y chrony</span><br><span class="line">systemctl enable --now chronyd</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">设置时区为亚洲/上海</span></span><br><span class="line">timedatectl set-timezone Asia/Shanghai</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">添加阿里云NTP服务器</span></span><br><span class="line">cat &gt;&gt; /etc/chronyd.conf &lt;&lt;EOF</span><br><span class="line">pool time.pool.aliyun.com iburst</span><br><span class="line">pool cn.pool.ntp.org iburst</span><br><span class="line"></span><br><span class="line">allow 192. 168. 0. 0/16</span><br><span class="line">EOF</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">重启服务</span></span><br><span class="line">systemctl restart chronyd</span><br><span class="line">systemctl status chronyd --no-pager</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">开启防火墙</span></span><br><span class="line">firewall-cmd --permanent --add-service=ntp</span><br><span class="line">firewall-cmd --reload</span><br></pre></td></tr></table></figure>
+<h4 id="校验"><a href="#校验" class="headerlink" title="校验"></a>校验</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@Infra ~]# timedatectl status </span><br><span class="line">               Local time: Tue 2023-10-24 16:58:52 CST</span><br><span class="line">           Universal time: Tue 2023-10-24 08:58:52 UTC</span><br><span class="line">                 RTC time: Tue 2023-10-24 08:58:53</span><br><span class="line">                Time zone: Asia/Shanghai ( CST, +0800 )</span><br><span class="line">System clock synchronized: yes</span><br><span class="line">              NTP service: active</span><br><span class="line">          RTC in local TZ: no</span><br><span class="line"></span><br><span class="line">[root@Infra ~]# chronyc sources</span><br><span class="line">MS Name/IP address         Stratum Poll Reach LastRx Last sample               </span><br><span class="line">===============================================================================</span><br><span class="line">^? tick.ntp.infomaniak.ch        1   6     3     2    -14ms[  -14ms] +/-   88ms</span><br><span class="line">^? tock.ntp.infomaniak.ch        1   6     1     4    +41ms[  +41ms] +/-  144ms</span><br><span class="line">^? time.neu.edu.cn               1   6     7     1   +209us[ +209us] +/- 9831us</span><br><span class="line">^? ntp6. flashdance.cx            2   6     3     2    -37ms[  -37ms] +/-  143ms</span><br></pre></td></tr></table></figure>
+
+<h3 id="管理面板"><a href="#管理面板" class="headerlink" title="管理面板"></a>管理面板</h3><p>为方便管理，我们启用系统自带的cockpit管理界面来对系统进行维护。</p>
+<h4 id="部署-1"><a href="#部署-1" class="headerlink" title="部署"></a>部署</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">dnf install -y cockpit-session-recording cockpit-system</span><br><span class="line">dnf install -y cockpit-navigator cockpit-pcp</span><br><span class="line">dnf install -y cockpit-bridge cockpit-file-sharing</span><br><span class="line">systemctl enable cockpit.socket --now</span><br></pre></td></tr></table></figure>
+<h4 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h4><p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023/09/cockpit-index.PNG" alt="cockpit"></p>
+<h3 id="Ansible-Cli控制节点"><a href="#Ansible-Cli控制节点" class="headerlink" title="Ansible Cli控制节点"></a>Ansible Cli控制节点</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装</span></span><br><span class="line">dnf install -y ansible</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">创建目录</span></span><br><span class="line">mkdir -p ~/ansible/&#123;palybook, files, tmp, log&#125;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">配置文件</span></span><br><span class="line">cat &gt; ~/ansible/ansible.cfg &lt;&lt;EOF</span><br><span class="line">[defaults]</span><br><span class="line">inventory = ./inventory</span><br><span class="line">remote_tmp     = ~/. ansible/tmp</span><br><span class="line">local_tmp      = ~/. ansible/tmp</span><br><span class="line">log_path = ~/. ansible/log/ansible.log</span><br><span class="line"></span><br><span class="line">forks          = 5</span><br><span class="line">poll_interval  = 15</span><br><span class="line">transport      = smart</span><br><span class="line">host_key_checking = False</span><br><span class="line"></span><br><span class="line">[privilege_escalation]</span><br><span class="line">become = True</span><br><span class="line">become_method = sudo</span><br><span class="line">become_user = root</span><br><span class="line">EOF</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">创建主机文件, 配置简略</span></span><br><span class="line">cat &gt; ~/ansible/inventory &lt;&lt;EOF</span><br><span class="line">[Hosts]</span><br><span class="line">infra</span><br><span class="line">[Base]</span><br><span class="line"></span><br><span class="line">[K3s]</span><br><span class="line">kmaster[1:2]</span><br><span class="line">node[1:2]</span><br><span class="line"></span><br><span class="line">[K8s]</span><br><span class="line">node1</span><br><span class="line">node2</span><br><span class="line">EOF</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">校验</span></span><br><span class="line">cd ~/ansible/</span><br><span class="line">ansible --version</span><br></pre></td></tr></table></figure>
+<h3 id="内外网解析DNS"><a href="#内外网解析DNS" class="headerlink" title="内外网解析DNS"></a>内外网解析DNS</h3><p>为了在后续安装部署和Lab环境测试，这里安装部署bind9来作为内部环境的DNS解析服务。同时，后续部署还需要访问外部环境，为了环境隔离和加速DNS的解析服务，一并部署Dnsmasq作为外部环境的解析缓存。使用内部域名时，解析跳转到bind9，非内部域名则跳转阿里云的公共DNS。</p>
+<h4 id="Bind部署"><a href="#Bind部署" class="headerlink" title="Bind部署"></a>Bind部署</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装</span></span><br><span class="line">dnf install -y bind bind-utils</span><br><span class="line">systemctl enable --now named</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">添加解析文件</span></span><br><span class="line">cat &gt; /var/named/contoso.com.hosts &lt;&lt;EOF</span><br><span class="line"><span class="meta prompt_">$</span><span class="language-bash">ttl 3600</span></span><br><span class="line"><span class="meta prompt_">$</span><span class="language-bash">ORIGIN contoso.com.</span></span><br><span class="line">@	IN	SOA	Infra.sujx.live.cn. ( </span><br><span class="line">			2023102502</span><br><span class="line">			3600</span><br><span class="line">			600</span><br><span class="line">			1209600</span><br><span class="line">			3600  )</span><br><span class="line">contoso.com.	IN	NS	Infra.</span><br><span class="line">git		IN  A	192. 168. 10. 254</span><br><span class="line">home	IN  A	192. 168. 10. 254</span><br><span class="line">pub	IN  A	192. 168. 10. 254</span><br><span class="line">infra	IN  A	192. 168. 10. 254</span><br><span class="line"></span><br><span class="line">dev   	IN  A 	192. 168. 10. 100</span><br><span class="line">EOF</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">添加相关zone配置</span></span><br><span class="line">cat &gt;&gt; vim /etc/named.rfc1912. zones &lt;&lt;EOF</span><br><span class="line"> zone &quot;contoso.com&quot; IN &#123;</span><br><span class="line">  type master;</span><br><span class="line">  file &quot;contoso.com.hosts&quot;;</span><br><span class="line">&#125;;</span><br><span class="line">EOF</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">重新加载并校验结果</span></span><br><span class="line">named-checkconf</span><br><span class="line">named-checkzone &quot;contoso.com&quot; /var/named/contoso.com.hosts</span><br><span class="line">rndc reload</span><br><span class="line">dig git.contoso.com @127. 0. 0. 1</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">配置服务端口为本机10053</span></span><br><span class="line">sed -e &#x27;s|port 53|port 10053|g&#x27; -i.bak /etc/named.conf</span><br><span class="line">systemctl restart named</span><br><span class="line">systemctl status --no-pager named</span><br></pre></td></tr></table></figure>
+
+<h4 id="Dnsmasq部署"><a href="#Dnsmasq部署" class="headerlink" title="Dnsmasq部署"></a>Dnsmasq部署</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装</span></span><br><span class="line">dnf install -y dnsmasq</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">配置转发上游的公共DNS以及contoso.com的解析为本地10053端口</span></span><br><span class="line">cp /etc/dnsmasq.conf /etc/dnsmasq.conf.bak</span><br><span class="line">cat &gt; /etc/dnsmasq.conf &lt;&lt; EOF</span><br><span class="line">port=53</span><br><span class="line">proxy-dnssec</span><br><span class="line">no-negcache</span><br><span class="line">dns-forward-max=2000</span><br><span class="line">server=223. 5. 5. 5</span><br><span class="line">server=119. 29. 29. 29</span><br><span class="line">server=114. 114. 114. 114</span><br><span class="line">server=/contoso.com/127. 0. 0. 1#10053</span><br><span class="line">log-queries</span><br><span class="line">log-facility=/var/log/dnsmasq/dnsmasq.log</span><br><span class="line">log-async=50</span><br><span class="line">cache-size=100000</span><br><span class="line">EOF</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">创建日志文件</span></span><br><span class="line">mkdir /var/log/dnsmasq</span><br><span class="line">touch /var/log/dnsmasq/dnsmasq.log</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">设置自动启动</span></span><br><span class="line">systemctl  enable --now dnsmasq</span><br><span class="line">systemctl status dnsmasq --no-pager</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">开启防火墙</span></span><br><span class="line">firewall-cmd --permanent --add-service=dns</span><br><span class="line">firewall-cmd --reload</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">设置日志轮询</span></span><br><span class="line">cat &gt; /etc/logrotate.d/dnsmasq &lt;&lt; EOF</span><br><span class="line">/var/log/dnsmasq/dnsmasq.log &#123;</span><br><span class="line">notifempty</span><br><span class="line">daily</span><br><span class="line">dateext</span><br><span class="line">rotate 15</span><br><span class="line">sharedscripts</span><br><span class="line">postrotate</span><br><span class="line">[ ! -f /var/run/dnsmasq.pid ] || kill -USR2 `cat /var/run/dnsmasq.pid`</span><br><span class="line">endscript</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">执行测试</span></span><br><span class="line">logrotate -vf  /etc/logrotate.conf</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">设置本地网络地址解析DNS服务器为localhost</span></span><br><span class="line">nmcli c m ens160 ipv4. dns 127. 0. 0. 1</span><br><span class="line">nmcli c d ens160 &amp;&amp; nmcli c u ens160</span><br></pre></td></tr></table></figure>
+
+<h3 id="代码库Gitea"><a href="#代码库Gitea" class="headerlink" title="代码库Gitea"></a>代码库Gitea</h3><p><a target="_blank" rel="noopener" href="https://about.gitea.com/">gitea</a>是一个轻量级的Git代码仓库，为是gogs开发停滞之后的分叉，相关使用帮助可参考<a target="_blank" rel="noopener" href="https://docs.gitea.com/zh-cn/">文档</a></p>
+<p>gitea默认使用3000端口作为web访问端口， 22端口为SSH端口。</p>
+<h4 id="数据库准备"><a href="#数据库准备" class="headerlink" title="数据库准备"></a>数据库准备</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装</span></span><br><span class="line">dnf install -y mariadb mariadb-server mariadb-server</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">指定客户端和服务端使用utf8来访问mariadb</span></span><br><span class="line">cat &gt; /etc/my.cnf.d/charset.cnf &lt;&lt;EOF</span><br><span class="line">[mysqld]</span><br><span class="line">character-set-server = utf8mb4</span><br><span class="line"></span><br><span class="line">[client]</span><br><span class="line">default-character-set = utf8mb4</span><br><span class="line">EOF</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">拉起服务</span></span><br><span class="line">systemctl enable --now mariadb.service</span><br><span class="line">systemctl status --no-pager mariadb.service</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">创建gitea数据库，用户名为gitea，密码为gitea，仅限本地localhost访问</span></span><br><span class="line">mysql -uroot &lt;&lt; EOF</span><br><span class="line">CREATE USER &#x27;gitea&#x27; IDENTIFIED BY &#x27;gitea&#x27;;</span><br><span class="line">CREATE DATABASE giteadb CHARACTER SET &#x27;utf8mb4&#x27; COLLATE &#x27;utf8mb4_unicode_ci&#x27;;</span><br><span class="line">GRANT ALL PRIVILEGES ON giteadb.* TO &#x27;gitea&#x27;;</span><br><span class="line">FLUSH PRIVILEGES;</span><br><span class="line">exit</span><br><span class="line">EOF</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">访问测试</span></span><br><span class="line">mysql -ugitea -pgitea -hlocalhost &lt;&lt;EOF</span><br><span class="line">show databases;</span><br><span class="line">exit</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<h4 id="Gitea的部署"><a href="#Gitea的部署" class="headerlink" title="Gitea的部署"></a>Gitea的部署</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">下载二进制文件</span></span><br><span class="line">wget -O gitea https://dl.gitea.com/gitea/1. 21/gitea-1. 21-linux-amd64</span><br><span class="line">chmod +x gitea</span><br><span class="line">mv gitea /usr/local/bin/gitea</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">创建执行用户</span></span><br><span class="line">groupadd --system git</span><br><span class="line">adduser \</span><br><span class="line">   --system \</span><br><span class="line">   --shell /bin/bash \</span><br><span class="line">   --comment &#x27;Git Version Control&#x27; \</span><br><span class="line">   --gid git \</span><br><span class="line">   --home-dir /home/git \</span><br><span class="line">   --create-home \</span><br><span class="line">   git</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">创建工作路径</span></span><br><span class="line">mkdir -p /data/gitea/&#123;custom, data, log&#125;</span><br><span class="line">chown -R git:git /data/gitea/</span><br><span class="line">chmod -R 750 /data/gitea/</span><br><span class="line">mkdir /etc/gitea</span><br><span class="line">chown root:git /etc/gitea</span><br><span class="line">chmod 770 /etc/gitea</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">创建systemd管理文件</span></span><br><span class="line">cat &gt; /etc/systemd/system/gitea.service &lt;&lt;EOF</span><br><span class="line">[Unit]</span><br><span class="line">Description=Gitea ( Git with a cup of tea )</span><br><span class="line">After=network.target</span><br><span class="line">After=mariadb.service</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">RestartSec=2s</span><br><span class="line">Type=simple</span><br><span class="line">User=git</span><br><span class="line">Group=git</span><br><span class="line">WorkingDirectory=/data/gitea/</span><br><span class="line">ExecStart=/usr/local/bin/gitea web --config /etc/gitea/app.ini</span><br><span class="line">Restart=always</span><br><span class="line">Environment=USER=git HOME=/home/git GITEA_WORK_DIR=/data/gitea</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line">EOF</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">拉起服务</span></span><br><span class="line">systemctl daemon-reload</span><br><span class="line">systemctl enable --now gitea</span><br><span class="line">systemctl status --no-pager gitea</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">临时开启防火墙</span></span><br><span class="line">firewall-cmd --add-port=3000/tcp</span><br><span class="line">firewall-cmd --reload</span><br></pre></td></tr></table></figure>
+<h3 id="页面配置"><a href="#页面配置" class="headerlink" title="页面配置"></a>页面配置</h3><p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023/09/gitea-install.png" alt="gitea"></p>
+<h2 id="容器部署"><a href="#容器部署" class="headerlink" title="容器部署"></a>容器部署</h2><p>为了保证操作兼容性，当前仍然使用docker来进行部署。参照以下文档：</p>
+<p><a href="https://www.sujx.net/2023/07/10/RockyLinux-Container/">RockyLinuxan安装容器服务</a></p>
+<h3 id="证书生成Cert-Maker"><a href="#证书生成Cert-Maker" class="headerlink" title="证书生成Cert Maker"></a>证书生成Cert Maker</h3><h4 id="使用-1"><a href="#使用-1" class="headerlink" title="使用"></a>使用</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">使用苏洋开源的nodejs版本自签证书生成器</span></span><br><span class="line">docker pull soulteary/certs-maker</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">生成10年期通配符证书，可用于k8s环境部署</span></span><br><span class="line">docker run --rm -it -e CERT_DNS=&quot;contoso.com;*. contoso.com;*. data.contoso.com&quot; -e CERT_C=&quot;CN&quot; -e CERT_ST=&quot;TJ&quot; -e CERT_L=&quot;NK&quot; -e CERT_O=&quot;CONTOSO&quot; -e CERT_OU=&quot;IT Support&quot; -e FOR_K8S=&quot;ON&quot; -e CERT_CN=&quot;SUJX LAB&quot; -v /data/public/:/ssl soulteary/certs-maker</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">导入证书</span></span><br><span class="line">cp /data/files/contoso.com.crt /etc/pki/ca-trust/source/anchors/</span><br><span class="line">update-ca-trust</span><br></pre></td></tr></table></figure>
+<h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4><ol>
+<li><a target="_blank" rel="noopener" href="https://ohttps.com/docs/certformat">文件格式转换</a></li>
+<li><a target="_blank" rel="noopener" href="https://soulteary.com/2022/10/22/make-docker-tools-image-with-only-3md-self-signed-certificate-certs-maker.html">只有 3MB 的自签名证书制作 Docker 工具镜像：Certs Maker</a></li>
+<li><a target="_blank" rel="noopener" href="https://soulteary.com/2021/02/06/how-to-make-and-use-a-self-signed-certificate.html">如何制作和使用自签名证书</a></li>
+</ol>
+<h3 id="文件下载服务HTTP"><a href="#文件下载服务HTTP" class="headerlink" title="文件下载服务HTTP"></a>文件下载服务HTTP</h3><h4 id="部署-2"><a href="#部署-2" class="headerlink" title="部署"></a>部署</h4><p>为了传递脚本或者证书方便，需要部署一个静态的HTTP文件下载站点。这里使用Nginx容器来实现。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">创建Dockerfile</span></span><br><span class="line">mkdir -p ~/Dockerfile/nginx</span><br><span class="line">cat &gt; ~/Dockerfile/nginx/Dockfile &lt;&lt;EOF</span><br><span class="line">FROM nginx:latest</span><br><span class="line">MAINTAINER sujx@live.cn</span><br><span class="line">RUN rm -f /etc/nginx/conf.d/default.conf</span><br><span class="line">COPY ./default.conf /etc/nginx/conf.d/</span><br><span class="line">EOF</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">创建Nginx配置文件</span></span><br><span class="line">cat &gt; ~/Dockerfile/nginx/default.conf &lt;&lt;EOF</span><br><span class="line">server &#123;</span><br><span class="line">    listen 80;</span><br><span class="line">    server_name public;</span><br><span class="line">    location / &#123;</span><br><span class="line">        root /public;</span><br><span class="line">        autoindex on;</span><br><span class="line">        sub_filter &#x27;&lt;h1&gt;Index of /&lt;/h1&gt;&#x27;  &#x27;&lt;h1&gt;Get Files&lt;/h1&gt;&#x27;;</span><br><span class="line">        sub_filter_once on;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">生成镜像</span></span><br><span class="line">docker pull nginx</span><br><span class="line">cd ~/Dockerfile/nginx</span><br><span class="line">docker build -f ./Dockfile -t webshare .</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">部署站点</span></span><br><span class="line">docker run -itd -p 8088:80 --restart always --name publicfile -v /data/files:/public webshare</span><br></pre></td></tr></table></figure>
+
+<h3 id="内部站点导航页"><a href="#内部站点导航页" class="headerlink" title="内部站点导航页"></a>内部站点导航页</h3><p>为了可快速方便的查找各种web服务，使用一个站点导航页面来提供书签功能。来源为：<a target="_blank" rel="noopener" href="https://soulteary.com/2022/02/23/building-a-personal-bookmark-navigation-app-from-scratch-flare.html">个人导航书签</a></p>
+<h4 id="部署站点"><a href="#部署站点" class="headerlink" title="部署站点"></a>部署站点</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">拉取镜像</span></span><br><span class="line">docker pull soulteary/flare</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">创建配置目录</span></span><br><span class="line">mkdir /data/homepage</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">启动容器</span></span><br><span class="line">docker run -itd -p 5005:5005 -v /data/homepage:/app -e &quot;nologin=0&quot; -e &quot;FLARE_USER=flare&quot; -e &quot;FLARE_PASS=flare&quot; --restart always --name homepage soulteary/flare</span><br></pre></td></tr></table></figure>
+
+<h4 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@Infra ~]# tree /data/homepage/</span><br><span class="line">/data/homepage/</span><br><span class="line">├── apps.yml</span><br><span class="line">├── bookmarks.yml</span><br><span class="line">└── config.yml</span><br><span class="line"></span><br><span class="line">0 directories, 3 files</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">自定义站点，可以自定义图标、地址、名称和描述文字</span></span><br><span class="line">[root@Infra ~]# cat /data/homepage/apps.yml </span><br><span class="line">links:</span><br><span class="line">- name: 示例链接</span><br><span class="line">  link: https://link.example.com</span><br><span class="line">  icon: evernote</span><br><span class="line">  desc: 链接描述文本</span><br><span class="line">- name: 示例链接</span><br><span class="line">  link: https://link.example.com</span><br><span class="line">  icon: FireHydrant</span><br><span class="line">  desc: 链接描述文本</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">自定义书签，可以执行分类展示</span></span><br><span class="line">[root@Infra ~]# cat /data/homepage/bookmarks.yml </span><br><span class="line">categories:</span><br><span class="line">- id: cate-id-0</span><br><span class="line">  title: 链接分类1</span><br><span class="line">- id: cate-id-1</span><br><span class="line">  title: 链接分类2</span><br><span class="line">- id: cate-id-2</span><br><span class="line">  title: 链接分类3</span><br><span class="line">- id: cate-id-3</span><br><span class="line">  title: 链接分类4</span><br><span class="line">links:</span><br><span class="line">- name: 示例链接</span><br><span class="line">  link: https://link.example.com</span><br><span class="line">  icon: checkDecagram</span><br><span class="line">  category: cate-id-0</span><br><span class="line">- name: 示例链接</span><br><span class="line">  link: https://link.example.com</span><br><span class="line">  icon: sofaOutline</span><br><span class="line">  category: cate-id-1</span><br><span class="line">- name: 示例链接</span><br><span class="line">  link: https://link.example.com</span><br><span class="line">  icon: foodCroissant</span><br><span class="line">  category: cate-id-2</span><br></pre></td></tr></table></figure>
+
+<h4 id="参考-1"><a href="#参考-1" class="headerlink" title="参考"></a>参考</h4><ol>
+<li><a target="_blank" rel="noopener" href="https://github.com/soulteary/docker-flare">源站</a></li>
+</ol>
+<h2 id="收尾"><a href="#收尾" class="headerlink" title="收尾"></a>收尾</h2><h3 id="站点发布"><a href="#站点发布" class="headerlink" title="站点发布"></a>站点发布</h3><p>由于主机使用多个端口承载多个web服务，所以使用Nginx作为站点前端来实现对后端站点的反向代理。</p>
+<h4 id="Nginx的安装"><a href="#Nginx的安装" class="headerlink" title="Nginx的安装"></a>Nginx的安装</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">部署</span></span><br><span class="line">dnf install -y nginx</span><br><span class="line">systemctl enable --now nginx</span><br><span class="line">systemctl status --no-pager nginx</span><br><span class="line">firewall-cmd --permanent -add-service=&#123;http, https&#125;</span><br><span class="line">firewall-cmd --reload</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">放置证书</span></span><br><span class="line">mkdir -pv /etc/ssl/contoso.com</span><br><span class="line">cp /data/public/contoso.com.* /etc/ssl/contoso.com/</span><br></pre></td></tr></table></figure>
+<h4 id="站点配置"><a href="#站点配置" class="headerlink" title="站点配置"></a>站点配置</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">配置git.contoso.com</span></span><br><span class="line">cat &gt; /etc/nginx/conf.d/gitea.conf &lt;&lt;EOF</span><br><span class="line">server &#123;</span><br><span class="line">	listen       80 ;</span><br><span class="line">	listen       [::]:80 ;</span><br><span class="line">	return       301 https://$host$request_uri;</span><br><span class="line">	server_name  git.contoso.com;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">    listen       443 ssl http2;</span><br><span class="line">    listen       [::]:443 ssl http2;</span><br><span class="line">    server_name  git.contoso.com;</span><br><span class="line">	charset utf-8;</span><br><span class="line">	</span><br><span class="line">    ssl_certificate &quot;/etc/ssl/contoso.com/contoso.com.crt&quot;;</span><br><span class="line">    ssl_certificate_key &quot;/etc/ssl/contoso.com/contoso.com.key&quot;;</span><br><span class="line">    ssl_session_cache shared:SSL:1m;</span><br><span class="line">    ssl_session_timeout  10m;</span><br><span class="line">    ssl_ciphers PROFILE=SYSTEM;</span><br><span class="line">    ssl_prefer_server_ciphers on;</span><br><span class="line"></span><br><span class="line">    location / &#123;</span><br><span class="line">    proxy_pass http://127. 0. 0. 1:3000/;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br><span class="line">nginx -t</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">配置导航页home.contoso.com</span></span><br><span class="line">cat &gt; /etc/nginx/conf.d/homepage.conf &lt;&lt;EOF</span><br><span class="line">server &#123;</span><br><span class="line">	listen       80 ;</span><br><span class="line">	listen       [::]:80 ;</span><br><span class="line">	return       301 https://$host$request_uri;</span><br><span class="line">	server_name  home.contoso.com;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">    listen       443 ssl http2;</span><br><span class="line">    listen       [::]:443 ssl http2;</span><br><span class="line">    server_name  home.contoso.com;</span><br><span class="line">	charset utf-8;</span><br><span class="line">	</span><br><span class="line">    ssl_certificate &quot;/etc/ssl/contoso.com/contoso.com.crt&quot;;</span><br><span class="line">    ssl_certificate_key &quot;/etc/ssl/contoso.com/contoso.com.key&quot;;</span><br><span class="line">    ssl_session_cache shared:SSL:1m;</span><br><span class="line">    ssl_session_timeout  10m;</span><br><span class="line">    ssl_ciphers PROFILE=SYSTEM;</span><br><span class="line">    ssl_prefer_server_ciphers on;</span><br><span class="line"></span><br><span class="line">    location / &#123;</span><br><span class="line">    proxy_pass http://127. 0. 0. 1:5005/;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br><span class="line">nginx -t</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">配置公共文件下载， 为简化使用，保持使用80端口，并限制访问来源</span></span><br><span class="line">cat &gt; /etc/nginx/conf.d/public.conf &lt;&lt;EOF</span><br><span class="line">server &#123;</span><br><span class="line">  listen 80;</span><br><span class="line">  server_name pub.contoso.com;</span><br><span class="line">  </span><br><span class="line">  location / &#123;</span><br><span class="line">  autoindex on;</span><br><span class="line">  autoindex_exact_size  on;</span><br><span class="line">  autoindex_localtime   on;</span><br><span class="line">  root  /data/public/;</span><br><span class="line">  allow 127. 0. 0. 1;</span><br><span class="line">  allow 192. 168. 10. 0/24;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br><span class="line">nginx -t</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">重新读取配置文件</span></span><br><span class="line">systemctl reload nginx</span><br></pre></td></tr></table></figure>
+
+<h3 id="清理"><a href="#清理" class="headerlink" title="清理"></a>清理</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">加固gitea 配置文件权限</span></span><br><span class="line">chmod 750 /etc/gitea</span><br><span class="line">chmod 640 /etc/gitea/app.ini</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">检查防火墙</span></span><br><span class="line">firewall-cmd --list-all</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">重启并复查各个站点</span></span><br><span class="line">systemctl reboot</span><br></pre></td></tr></table></figure>
+
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/cert/">cert</a><a class="post-meta__tags" href="/tags/Bind/">Bind</a><a class="post-meta__tags" href="/tags/DNSmasq/">DNSmasq</a><a class="post-meta__tags" href="/tags/Cache/">Cache</a><a class="post-meta__tags" href="/tags/Gitea/">Gitea</a></div><div class="post-share"><div class="social-share" data-image="https://cdn.sujx.net/covers/cover76.jpg" data-sites="facebook,twitter,weibo,qq"></div><link rel="stylesheet" href="/libs/sharejs/css/share.min.css" media="print" onload="this.media='all'"><script src="/libs/sharejs/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>能否请我喝一杯咖啡？</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.jpg" target="_blank"><img class="post-qr-code-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/wechat.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2023/09/25/Webmin-DNS/" title="使用Webmin管理DNS"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023/09/webmin-000.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">使用Webmin管理DNS</div></div><div class="info-2"><div class="info-item-1">在企业生产实践中，对于经常进行DNS解析变动的测试环境，Bind9的维护是个不大不小的问题。运维开发通常需要提交相关请求之后，还需要SSH到解析服务器上去进行配置修改，就要开xshell然后登录找配置项进行变更。为了节约脑力和时间，通过已经添加到导航面板的web gui书签跳转到域名管理平台再进行管理就要快捷一点点。 WebMin为了方便管理DNS解析，我们可以使用Google SRE工程师Jamie Cameron开发的Webmin。这个工具是用perl语言编写的很强大的Linux主机管理面板，支持Linux主机环境的通用程序配置，包括Bind、Apache、MySQL等等。这位老哥还编写了管理虚拟化宿主机和类似cpanle的虚拟主机管理web平台。 安装# 下载安装脚本curl -o setup-repos.sh https://raw.githubusercontent.com/webmin/webmin/master/setup-repos.sh# 添加官方repo地址sh setup-repos.sh# 执行安装并安装perl的功能模块dnf makecachednf ...</div></div></div></a><a class="pagination-related" href="/2023/09/17/Ansible-AWX-K3s/" title="Ansible管理平台AWX的部署"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023/08/Anbile-Tower-strategy.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Ansible管理平台AWX的部署</div></div><div class="info-2"><div class="info-item-1">概念K3sK3s 是一个轻量级的 Kubernetes 发行版，非常简单易用而且轻量。只需要一个简单的安装脚本即可把 K3s 安装到主机。 AWXAWX是由Redhat运营的Ansible自动化运营平台Ansible Tower的上游项目，是将Ansible的管理和维护通过可视化的WEB GUI来进行展现。借用Ansible Tower的一张图来表示其具体架构：相关的内容可见以下链接：  Ansible AWX  由于Ansible AWX平台自v18之后，不在支持单机或者docker部署，要求必须部署到Kubernetes中，为了简化部署环境和步骤，现采用单节点的K3s来作为基础环境部署AWX。 部署环境准备# 本次部署基于RockyLinux 9. 2# 主机配置为2core CPU/4GB MEM/40GB Disk# 需要提前部署Dokcer和Kubectl# 设置防火墙firewall-cmd --set-default-zone=trustedfirewall-cmd --reload# 关闭selinuxsed -i &#x27;s/enforceing/disab...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/06/21/Import-Cert/" title="非Windows平台使用发票验真平台"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover115.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-06-21</div><div class="info-item-2">非Windows平台使用发票验真平台</div></div><div class="info-2"><div class="info-item-1">同事在Mac平台或者其他非Windows主机使用《国家税务总局全国增值税发票查验平台》的时候候会出现使用问题，导致无法进行发票验真操作。其实，这是一个很容易解决的小问题。   06 西安·喜来登酒店·1212   故障表现登录国家税务总局全国增值税发票查验平台，之后发现证书是国家税务总局自签的证书，而且是从2015年到2036年的十年证书。除此之外，页面还有弹窗错误，这是由验证码功能无法正确连接后台导致的。  官方处理官方的处理方式就是通过根证书安装引导界面来下载和部署安装国税总局的根证书和自签证书。但这种方式主要针对Windows平台，对于其他非Windows平台没有给出解决方案。 解决思路原始文件我们来拆解官方证书安装工具。将taxca.rar这个压缩包解压之后，可得到名为“一键安装. exe”的部署工具。然后继续解压缩就可以得到安装脚本和证书本体。其中证书分为两种，一种是p7b文件，另一种是两个cer文件。     目录: C:\Users\root\Downloads\taxcaMode                 LastWriteTime         Leng...</div></div></div></a><a class="pagination-related" href="/2026/01/11/Linux_Cache/" title="精通 Linux 缓存：提升性能与速度"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover138.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-01-11</div><div class="info-item-2">精通 Linux 缓存：提升性能与速度</div></div><div class="info-2"><div class="info-item-1">在系统管理和 DevOps 领域，性能至关重要。每一毫秒都至关重要，而 Linux 系统速度的一个最基本但最容易被误解的组件之一就是其缓存机制。许多管理员看到高内存使用率归因于“缓存”而本能地担忧，但这通常是系统健康且性能良好的迹象。理解 Linux 缓存不仅仅是一个学术练习；它是一项实用技能，使您能够准确诊断性能问题并优化您的基础设施。本全面指南将揭开 Linux 缓存系统的神秘面纱，从其核心组件到实用的监控和管理技术。 Linux 缓存是什么从根本上说，Linux 缓存是一个机制，它使用系统未使用的部分随机存取存储器（RAM）来存储最近从磁盘（如 SSD 或 HDD）读取或写入的数据。由于从 RAM 访问数据比从磁盘读取快几个数量级，因此这种缓存可以显著加快系统操作。你可以把它想象成一个图书管理员，他把最常被借阅的书籍放在附近的推车里，而不是每次使用后都放回庞大的书架上。下次有人询问这些热门书籍时，管理员可以立即递给他。在这个类比中，RAM 是推车，磁盘是主图书馆，而 Linux 内核是聪明的管理员。这个过程最小化了磁盘 I&#x2F;O（输入&#x2F;输出），这个计算机系...</div></div></div></a><a class="pagination-related" href="/2023/10/21/Ohttps-certs/" title="全网SSL证书的自动更新"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023/10/ohttps-index.PNG" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-10-21</div><div class="info-item-2">全网SSL证书的自动更新</div></div><div class="info-2"><div class="info-item-1">在运维实践中，SSL证书的维护也是值得重视的运维工作，特别是现在的普通商业SSL证书都变成2年期和1年期了。这里就需要专门抽时间来进行证书有效期监控和对各种CDN、云服务商、ECS进行证书更新维护。ohttps就是专门提供这个服务的saas服务商，这里有完整的介绍。 原理 使用certbot类似方案申请 **Let’s Encrypt**的域名证书   该网站集成了多个云服务商的SDK，通过对应API来修改dns记录、添加托管SSL证书  通过调用API来实现证书的自动更新   使用授权 获取阿里云、七牛等云服务商的 Access Key ID和Sercret  对RAM账号进行授权，这里很多需要Fullaccess权限，需要注意  添加管理节点   自动更新会在凌晨1点进行   问题 很多公有云不支持，比如AWS、AZURE等； 支付需要调用第三方平台打开较慢，且不知道哪里开发票  费用1。 一个通配符证书，使用阿里云的CDN和OSS、SSL，再加上监控服务，一年差不多是5块钱。2。 开通账号赠送5元体验金，基本上第一年免费了。3. 使用我的邀请链接注册，你我都将额外多获得1元...</div></div></div></a><a class="pagination-related" href="/2025/11/15/OhttpsSSL/" title="使用ohttps持续部署SSl证书"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover132.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-15</div><div class="info-item-2">使用ohttps持续部署SSl证书</div></div><div class="info-2"><div class="info-item-1">   11 天津 天塔   我虽然一直使用ohttps来提供免费证书的定时更新和CDN、SLB之类云服务的证书更新，但对于ECS服务器的SSL更新一直是手动来执行。随着管理站点的增加，现在更新一次证书需要在七八台机器上折腾，虽然三个月搞一次，但还是下决心使用推送的方式来解决这个问题。 准备域名 ohttps站点的管理后台    添加免费泛域名证书  设置目标域名的证书认证解析  添加CNAME域名  认证成功后就会自动申请一个泛域名证书   准备管理账户 接下来就需要在服务器上添加一个管理SSL证书和Nginx的账户  #!/bin/bash## Script: setup_cert_user.sh# Description: Create user &#x27;cert&#x27; with SSH key-only login, sudo for nginx service,#              and write access to /etc/nginx/ssl.# Usage: sudo ./setup_cert_user.sh# Author: Linux Ad...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">靖轩</div><div class="author-info-description">逝者如斯夫,不舍昼夜</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/grepsu"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://gitee.com/grepsu" target="_blank" title="Gitee"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:sujx@live.cn" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS链接"><i class="fa  fa-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8C%85%E7%AE%A1%E7%90%86%E5%AE%89%E8%A3%85"><span class="toc-number">1.</span> <span class="toc-text">包管理安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BB%E6%9C%BA%E5%87%86%E5%A4%87"><span class="toc-number">1.1.</span> <span class="toc-text">主机准备</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87"><span class="toc-number">1.1.1.</span> <span class="toc-text">基础环境准备</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%B6%E9%97%B4%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">1.2.</span> <span class="toc-text">时间服务器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%83%A8%E7%BD%B2"><span class="toc-number">1.2.1.</span> <span class="toc-text">部署</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A0%A1%E9%AA%8C"><span class="toc-number">1.2.2.</span> <span class="toc-text">校验</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AE%A1%E7%90%86%E9%9D%A2%E6%9D%BF"><span class="toc-number">1.3.</span> <span class="toc-text">管理面板</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%83%A8%E7%BD%B2-1"><span class="toc-number">1.3.1.</span> <span class="toc-text">部署</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8"><span class="toc-number">1.3.2.</span> <span class="toc-text">使用</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Ansible-Cli%E6%8E%A7%E5%88%B6%E8%8A%82%E7%82%B9"><span class="toc-number">1.4.</span> <span class="toc-text">Ansible Cli控制节点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%85%E5%A4%96%E7%BD%91%E8%A7%A3%E6%9E%90DNS"><span class="toc-number">1.5.</span> <span class="toc-text">内外网解析DNS</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Bind%E9%83%A8%E7%BD%B2"><span class="toc-number">1.5.1.</span> <span class="toc-text">Bind部署</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Dnsmasq%E9%83%A8%E7%BD%B2"><span class="toc-number">1.5.2.</span> <span class="toc-text">Dnsmasq部署</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%BA%93Gitea"><span class="toc-number">1.6.</span> <span class="toc-text">代码库Gitea</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E5%87%86%E5%A4%87"><span class="toc-number">1.6.1.</span> <span class="toc-text">数据库准备</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Gitea%E7%9A%84%E9%83%A8%E7%BD%B2"><span class="toc-number">1.6.2.</span> <span class="toc-text">Gitea的部署</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A1%B5%E9%9D%A2%E9%85%8D%E7%BD%AE"><span class="toc-number">1.7.</span> <span class="toc-text">页面配置</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%B9%E5%99%A8%E9%83%A8%E7%BD%B2"><span class="toc-number">2.</span> <span class="toc-text">容器部署</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%81%E4%B9%A6%E7%94%9F%E6%88%90Cert-Maker"><span class="toc-number">2.1.</span> <span class="toc-text">证书生成Cert Maker</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-1"><span class="toc-number">2.1.1.</span> <span class="toc-text">使用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">2.1.2.</span> <span class="toc-text">参考</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E4%B8%8B%E8%BD%BD%E6%9C%8D%E5%8A%A1HTTP"><span class="toc-number">2.2.</span> <span class="toc-text">文件下载服务HTTP</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%83%A8%E7%BD%B2-2"><span class="toc-number">2.2.1.</span> <span class="toc-text">部署</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%85%E9%83%A8%E7%AB%99%E7%82%B9%E5%AF%BC%E8%88%AA%E9%A1%B5"><span class="toc-number">2.3.</span> <span class="toc-text">内部站点导航页</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%83%A8%E7%BD%B2%E7%AB%99%E7%82%B9"><span class="toc-number">2.3.1.</span> <span class="toc-text">部署站点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">2.3.2.</span> <span class="toc-text">配置文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%82%E8%80%83-1"><span class="toc-number">2.3.3.</span> <span class="toc-text">参考</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%94%B6%E5%B0%BE"><span class="toc-number">3.</span> <span class="toc-text">收尾</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AB%99%E7%82%B9%E5%8F%91%E5%B8%83"><span class="toc-number">3.1.</span> <span class="toc-text">站点发布</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Nginx%E7%9A%84%E5%AE%89%E8%A3%85"><span class="toc-number">3.1.1.</span> <span class="toc-text">Nginx的安装</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%AB%99%E7%82%B9%E9%85%8D%E7%BD%AE"><span class="toc-number">3.1.2.</span> <span class="toc-text">站点配置</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B8%85%E7%90%86"><span class="toc-number">3.2.</span> <span class="toc-text">清理</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/07/03/AIGC_FoxHole/" title="海鹰">海鹰</a><time datetime="2026-07-03T01:04:07.000Z" title="发表于 2026-07-03 09:04:07">2026-07-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/11/fristVibeCoding/" title="鹊随金印：我的第一个完整的AI编程项目">鹊随金印：我的第一个完整的AI编程项目</a><time datetime="2026-06-11T01:04:07.000Z" title="发表于 2026-06-11 09:04:07">2026-06-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/03/VI_Howto/" title="VI编辑器简介">VI编辑器简介</a><time datetime="2026-06-03T01:04:07.000Z" title="发表于 2026-06-03 09:04:07">2026-06-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/28/HNCitic_2605/" title="我要上头条">我要上头条</a><time datetime="2026-05-28T01:04:07.000Z" title="发表于 2026-05-28 09:04:07">2026-05-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/12/TS-Domain-Controller-Sync-Failure/" title="记一次Windows AD域控制器同步故障排错">记一次Windows AD域控制器同步故障排错</a><time datetime="2026-05-12T03:04:07.000Z" title="发表于 2026-05-12 11:04:07">2026-05-12</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2008 - 2026 By 靖轩</span></div><div class="footer_custom_text">京ICP备17034757号</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.5"></script><script src="/js/main.js?v=5.5.5"></script><script src="/libs/fancybox/fancybox.umd.js"></script><script src="/js/instantpage.js" type="module"></script><script src="/libs/lazyload/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const parseViewBox = viewBox => {
+    if (!viewBox) return null
+    const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
+    if (parts.length !== 4 || parts.some(n => Number.isNaN(n))) return null
+    return parts
+  }
+
+  const getSvgViewBox = svg => {
+    const attr = parseViewBox(svg.getAttribute('viewBox'))
+    if (attr) return attr
+
+    // Fallback: use bbox to build a viewBox
+    try {
+      const bbox = svg.getBBox()
+      if (bbox && bbox.width && bbox.height) return [bbox.x, bbox.y, bbox.width, bbox.height]
+    } catch (e) {
+      // getBBox may fail on some edge cases; ignore
+    }
+
+    const w = Number(svg.getAttribute('width')) || 0
+    const h = Number(svg.getAttribute('height')) || 0
+    if (w > 0 && h > 0) return [0, 0, w, h]
+    return [0, 0, 100, 100]
+  }
+
+  const setSvgViewBox = (svg, vb) => {
+    svg.setAttribute('viewBox', `${vb[0]} ${vb[1]} ${vb[2]} ${vb[3]}`)
+  }
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v))
+
+  const openSvgInNewTab = ({ source, initViewBox }) => {
+    const getClonedSvg = () => {
+      if (typeof source === 'string') {
+        const template = document.createElement('template')
+        template.innerHTML = source.trim()
+        const svg = template.content.querySelector('svg')
+        return svg ? svg.cloneNode(true) : null
+      }
+      if (source && typeof source.cloneNode === 'function') {
+        return source.cloneNode(true)
+      }
+      return null
+    }
+
+    const clone = getClonedSvg()
+    if (!clone) return
+    if (initViewBox && initViewBox.length === 4) {
+      clone.setAttribute('viewBox', initViewBox.join(' '))
+    }
+    if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+    if (!clone.getAttribute('xmlns:xlink') && clone.outerHTML.includes('xlink:')) {
+      clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+    }
+    // inject background to match current theme
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    const bg = getComputedStyle(document.body).backgroundColor || (isDark ? '#1e1e1e' : '#ffffff')
+    if (!clone.style.background) clone.style.background = bg
+
+    const serializer = new XMLSerializer()
+    const svgSource = serializer.serializeToString(clone)
+    const htmlSource = `<!doctype html><html><head><meta charset="utf-8" />
+      <style>
+        html, body { width: 100%; height: 100%; margin: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; }
+        svg { max-width: 100%; max-height: 100%; height: auto; width: auto; }
+      </style>
+      </head><body>${svgSource}</body></html>`
+    const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank', 'noopener')
+    setTimeout(() => URL.revokeObjectURL(url), 30000)
+  }
+
+  const attachMermaidViewerButton = wrap => {
+    let btn = wrap.querySelector('.mermaid-open-btn')
+    if (!btn) {
+      btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'mermaid-open-btn'
+      wrap.appendChild(btn)
+    }
+
+    btn.innerHTML = '<i class="fa fa-search fa-fw" aria-hidden="true"></i>'
+
+    if (!btn.__mermaidViewerBound) {
+      btn.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        const svg = wrap.__mermaidOriginalSvg || wrap.querySelector('svg')
+        if (!svg) return
+        const initViewBox = wrap.__mermaidInitViewBox
+        if (typeof svg === 'string') {
+          openSvgInNewTab({ source: svg, initViewBox })
+          return
+        }
+        openSvgInNewTab({ source: svg, initViewBox })
+      })
+      btn.__mermaidViewerBound = true
+    }
+  }
+
+  // Zoom around a point (px, py) in the SVG viewport (in viewBox coordinates)
+  const zoomAtPoint = (vb, factor, px, py) => {
+    const w = vb[2] * factor
+    const h = vb[3] * factor
+    const nx = px - (px - vb[0]) * factor
+    const ny = py - (py - vb[1]) * factor
+    return [nx, ny, w, h]
+  }
+
+  const initMermaidGestures = wrap => {
+    const svg = wrap.querySelector('svg')
+    if (!svg) return
+
+    // Ensure viewBox exists so gestures always work
+    const initVb = getSvgViewBox(svg)
+    wrap.__mermaidInitViewBox = initVb
+    wrap.__mermaidCurViewBox = initVb.slice()
+    setSvgViewBox(svg, initVb)
+
+    // Avoid binding multiple times on themeChange/pjax
+    if (wrap.__mermaidGestureBound) return
+    wrap.__mermaidGestureBound = true
+
+    // Helper: map client (viewport) coordinate -> viewBox coordinate
+    const clientToViewBox = (clientX, clientY) => {
+      const rect = svg.getBoundingClientRect()
+      const vb = wrap.__mermaidCurViewBox || getSvgViewBox(svg)
+      const x = vb[0] + (clientX - rect.left) * (vb[2] / rect.width)
+      const y = vb[1] + (clientY - rect.top) * (vb[3] / rect.height)
+      return { x, y, rect, vb }
+    }
+
+    const state = {
+      pointers: new Map(),
+      startVb: null,
+      startDist: 0,
+      startCenter: null
+    }
+
+    const clampVb = vb => {
+      const init = wrap.__mermaidInitViewBox || vb
+      const minW = init[2] * 0.1
+      const maxW = init[2] * 10
+      const minH = init[3] * 0.1
+      const maxH = init[3] * 10
+      vb[2] = clamp(vb[2], minW, maxW)
+      vb[3] = clamp(vb[3], minH, maxH)
+      return vb
+    }
+
+    const setCurVb = vb => {
+      vb = clampVb(vb)
+      wrap.__mermaidCurViewBox = vb
+      setSvgViewBox(svg, vb)
+    }
+
+    const onPointerDown = e => {
+      // Allow only primary button for mouse
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      svg.setPointerCapture(e.pointerId)
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      if (state.pointers.size === 1) {
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      } else if (state.pointers.size === 2) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        state.startDist = Math.hypot(dx, dy)
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        state.startCenter = { x: (pts[0].x + pts[1].x) / 2, y: (pts[0].y + pts[1].y) / 2 }
+      }
+    }
+
+    const onPointerMove = e => {
+      if (!state.pointers.has(e.pointerId)) return
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      // Pan with 1 pointer
+      if (state.pointers.size === 1 && state.startVb) {
+        const p = [...state.pointers.values()][0]
+        const prev = { x: e.clientX - e.movementX, y: e.clientY - e.movementY }
+        // movementX/Y unreliable on touch, compute from stored last position
+        const last = wrap.__mermaidLastSinglePointer || p
+        const dxClient = p.x - last.x
+        const dyClient = p.y - last.y
+        wrap.__mermaidLastSinglePointer = p
+
+        const { rect } = clientToViewBox(p.x, p.y)
+        const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        const dx = dxClient * (vb[2] / rect.width)
+        const dy = dyClient * (vb[3] / rect.height)
+        setCurVb([vb[0] - dx, vb[1] - dy, vb[2], vb[3]])
+        return
+      }
+
+      // Pinch zoom with 2 pointers
+      if (state.pointers.size === 2 && state.startVb && state.startDist > 0) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        const dist = Math.hypot(dx, dy)
+        if (!dist) return
+        const factor = state.startDist / dist // dist bigger => zoom in (viewBox smaller)
+
+        const cx = (pts[0].x + pts[1].x) / 2
+        const cy = (pts[0].y + pts[1].y) / 2
+        const centerClient = { x: cx, y: cy }
+
+        const pxy = clientToViewBox(centerClient.x, centerClient.y)
+        const cpx = pxy.x
+        const cpy = pxy.y
+
+        const vb = zoomAtPoint(state.startVb, factor, cpx, cpy)
+        setCurVb(vb)
+      }
+    }
+
+    const onPointerUpOrCancel = e => {
+      state.pointers.delete(e.pointerId)
+      if (state.pointers.size === 0) {
+        state.startVb = null
+        state.startDist = 0
+        state.startCenter = null
+        wrap.__mermaidLastSinglePointer = null
+      } else if (state.pointers.size === 1) {
+        // reset single pointer baseline to avoid jump
+        wrap.__mermaidLastSinglePointer = [...state.pointers.values()][0]
+      }
+    }
+
+    // Wheel zoom (mouse/trackpad)
+    const onWheel = e => {
+      // ctrlKey on mac trackpad pinch; we treat both as zoom
+      e.preventDefault()
+      const delta = e.deltaY
+      const zoomFactor = delta > 0 ? 1.1 : 0.9
+      const { x, y } = clientToViewBox(e.clientX, e.clientY)
+      const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      setCurVb(zoomAtPoint(vb, zoomFactor, x, y))
+    }
+
+    const onDblClick = () => {
+      const init = wrap.__mermaidInitViewBox
+      if (!init) return
+      wrap.__mermaidCurViewBox = init.slice()
+      setSvgViewBox(svg, init)
+    }
+
+    svg.addEventListener('pointerdown', onPointerDown)
+    svg.addEventListener('pointermove', onPointerMove)
+    svg.addEventListener('pointerup', onPointerUpOrCancel)
+    svg.addEventListener('pointercancel', onPointerUpOrCancel)
+    svg.addEventListener('wheel', onWheel, { passive: false })
+    svg.addEventListener('dblclick', onDblClick)
+  }
+
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+
+      // Clear old render (themeChange/pjax will rerun)
+      const oldSvg = item.querySelector('svg')
+      if (oldSvg) oldSvg.remove()
+      item.__mermaidGestureBound = false
+
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+        if (true) initMermaidGestures(item)
+        item.__mermaidOriginalSvg = svg
+        if (true) attachMermaidViewerButton(item)
+      }
+
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('/libs/mermaid/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.5"></script></div></div></body></html>

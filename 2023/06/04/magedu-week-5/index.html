@@ -1,0 +1,587 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Linux系统基础知识·5 | 靖轩</title><meta name="author" content="靖轩"><meta name="copyright" content="靖轩"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="本文基于马哥教育就业班第五周课程总结   总结openssh服务安全加固  OpenSSH是Linux系统中常用的远程登录工具，为了保证系统的安全性，需要对OpenSSH服务进行加固。以下是OpenSSH服务安全加固措施的主要内容：禁用root用户登录：禁用root用户登录可以防止黑客使用root账户进行暴力破解。可以通过修改&#x2F;etc&#x2F;ssh&#x2F;sshd_config文件中的PermitRootL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux系统基础知识·5">
+<meta property="og:url" content="https://www.sujx.net/2023/06/04/magedu-week-5/index.html">
+<meta property="og:site_name" content="靖轩">
+<meta property="og:description" content="本文基于马哥教育就业班第五周课程总结   总结openssh服务安全加固  OpenSSH是Linux系统中常用的远程登录工具，为了保证系统的安全性，需要对OpenSSH服务进行加固。以下是OpenSSH服务安全加固措施的主要内容：禁用root用户登录：禁用root用户登录可以防止黑客使用root账户进行暴力破解。可以通过修改&#x2F;etc&#x2F;ssh&#x2F;sshd_config文件中的PermitRootL">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.sujx.net/2024/07/wallhaven-g8q8qd.jpg">
+<meta property="article:published_time" content="2023-06-04T14:48:47.000Z">
+<meta property="article:modified_time" content="2026-09-26T02:25:04.255Z">
+<meta property="article:author" content="靖轩">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="基础知识">
+<meta property="article:tag" content="面试题">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.sujx.net/2024/07/wallhaven-g8q8qd.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Linux系统基础知识·5",
+  "url": "https://www.sujx.net/2023/06/04/magedu-week-5/",
+  "image": "https://cdn.sujx.net/2024/07/wallhaven-g8q8qd.jpg",
+  "datePublished": "2023-06-04T14:48:47.000Z",
+  "dateModified": "2026-09-26T02:25:04.255Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "靖轩",
+      "url": "https://www.sujx.net"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://cdn.sujx.net/about/favicon.png"><link rel="canonical" href="https://www.sujx.net/2023/06/04/magedu-week-5/index.html"><link rel="preconnect" href="//cdnjs.cloudflare.com"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css?v=5.5.5"><link rel="stylesheet" href="/fonts/css/all.min.css"><link rel="stylesheet" href="/libs/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?417b20ac1984432f821159fac27d3bb5";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><link rel="stylesheet" href="/fonts/titillium-web.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: '/libs/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: true,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Linux系统基础知识·5',
+  isHighlightShrink: false,
+  isToc: false,
+  pageType: 'post'
+}</script><link rel="alternate" href="/atom.xml" title="靖轩" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">靖轩</span></a><a class="nav-page-title" href="/"><span class="site-name">Linux系统基础知识·5</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">Linux系统基础知识·5</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-06-04T14:48:47.000Z" title="发表于 2023-06-04 22:48:47">2023-06-04</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-09-26T02:25:04.255Z" title="更新于 2026-09-26 10:25:04">2026-09-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%BF%90%E7%BB%B4%E6%8A%80%E5%B7%A7/">运维技巧</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">10.5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>34分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><blockquote>
+<p>本文基于马哥教育就业班第五周课程总结</p>
+</blockquote>
+<ol>
+<li>总结openssh服务安全加固</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">OpenSSH是Linux系统中常用的远程登录工具，为了保证系统的安全性，需要对OpenSSH服务进行加固。以下是OpenSSH服务安全加固措施的主要内容：</span><br><span class="line">禁用root用户登录：</span><br><span class="line">禁用root用户登录可以防止黑客使用root账户进行暴力破解。可以通过修改/etc/ssh/sshd_config文件中的PermitRootLogin配置项为no来实现。</span><br><span class="line"></span><br><span class="line">修改SSH端口号：</span><br><span class="line">修改SSH端口号可以防止黑客使用默认端口号进行暴力破解。可以通过修改/etc/ssh/sshd_config文件中的Port配置项来实现。</span><br><span class="line"></span><br><span class="line">使用SSH密钥登录：</span><br><span class="line">使用SSH密钥登录可以防止黑客使用密码进行暴力破解。可以通过生成SSH密钥对，并将公钥添加到~/。 ssh/authorized_keys文件中来实现。</span><br><span class="line"></span><br><span class="line">禁用不安全的SSH协议版本：</span><br><span class="line">禁用不安全的SSH协议版本可以防止黑客利用SSH漏洞进行攻击。可以通过修改/etc/ssh/sshd_config文件中的Protocol配置项为2来禁用SSH协议版本1。</span><br><span class="line"></span><br><span class="line">使用防火墙限制SSH访问：</span><br><span class="line">使用防火墙可以限制SSH访问，只允许特定的IP地址或IP地址段访问SSH服务。可以通过iptables或firewalld等防火墙工具来实现。</span><br><span class="line"></span><br><span class="line">总之，OpenSSH服务安全加固措施包括禁用root用户登录、修改SSH端口号、使用SSH密钥登录、禁用不安全的SSH协议版本和使用防火墙限制SSH访问等。这些措施可以有效提高系统的安全性，防止黑客攻击和暴力破解。</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>总结sudo配置文件格式，总结相关示例</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo是Linux系统中常用的权限管理工具，可以授权普通用户执行特定的命令或操作。sudo配置文件是用来配置sudo的授权规则和选项的文件，通常位于/etc/sudoers或/etc/sudoers。 d目录下。以下是sudo配置文件格式和示例：</span><br><span class="line"></span><br><span class="line">格式：</span><br><span class="line">sudo配置文件采用类似于INI文件的格式，包括注释、别名、用户、主机、命令等部分。常用的配置项包括：</span><br><span class="line">（1）User_Alias：定义用户别名；</span><br><span class="line">（2）Host_Alias：定义主机别名；</span><br><span class="line">（3）Cmnd_Alias：定义命令别名；</span><br><span class="line">（4）Defaults：定义sudo的默认选项；</span><br><span class="line">（5）root ALL=( ALL ) ALL：允许root用户执行任何命令；</span><br><span class="line">（6）%wheel ALL=( ALL ) ALL：允许wheel组的用户执行任何命令；</span><br><span class="line">（7）user ALL=( root ) /usr/bin/passwd：允许user用户执行/usr/bin/passwd命令；</span><br><span class="line">（8）user ALL=( root ) NOPASSWD: /usr/bin/passwd：允许user用户执行/usr/bin/passwd命令，无需输入密码。</span><br><span class="line"></span><br><span class="line">示例：</span><br><span class="line">以下是一个简单的sudo配置文件示例：</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">User <span class="built_in">alias</span> specification</span></span><br><span class="line">User_Alias ADMINS = user1, user2</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Command <span class="built_in">alias</span> specification</span></span><br><span class="line">Cmnd_Alias SHUTDOWN = /sbin/shutdown, /sbin/reboot</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">User privilege specification</span></span><br><span class="line">root ALL=( ALL ) ALL</span><br><span class="line">ADMINS ALL=( ALL ) NOPASSWD: SHUTDOWN</span><br><span class="line"></span><br><span class="line">在示例中，定义了用户别名ADMINS和命令别名SHUTDOWN，允许root用户执行任何命令，允许ADMINS用户执行SHUTDOWN命令，无需输入密码。</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>总结PAM架构及工作原理</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">PAM（Pluggable Authentication Modules）是Linux系统中的一个身份验证框架，可以实现灵活的身份验证和授权机制。PAM架构包括应用程序、PAM库、PAM配置文件和PAM模块四个部分。以下是PAM架构及工作原理的主要内容：</span><br><span class="line"></span><br><span class="line">应用程序：</span><br><span class="line">应用程序是使用PAM进行身份验证和授权的程序，如登录、su、sudo等。</span><br><span class="line"></span><br><span class="line">PAM库：</span><br><span class="line">PAM库是PAM的核心组件，负责加载和调用PAM模块，以实现身份验证和授权功能。</span><br><span class="line"></span><br><span class="line">PAM配置文件：</span><br><span class="line">PAM配置文件是用来配置PAM模块的文件，通常位于/etc/pam。 d目录下。每个应用程序都有一个对应的PAM配置文件，用来定义PAM模块的顺序和选项。</span><br><span class="line"></span><br><span class="line">PAM模块：</span><br><span class="line">PAM模块是实现身份验证和授权功能的代码库，可以通过PAM库进行加载和调用。PAM模块包括认证模块、授权模块和会话模块等。</span><br><span class="line"></span><br><span class="line">PAM的工作原理如下：</span><br><span class="line">（1）应用程序调用PAM库：应用程序调用PAM库进行身份验证和授权。</span><br><span class="line">（2）PAM库加载PAM配置文件：PAM库根据应用程序指定的PAM配置文件，加载对应的PAM模块。</span><br><span class="line">（3）PAM库调用PAM模块：PAM库按照PAM配置文件中定义的顺序，调用PAM模块进行身份验证和授权。</span><br><span class="line">（4）PAM模块返回结果：PAM模块根据身份验证和授权的结果，返回成功或失败的信息。</span><br><span class="line">（5）PAM库返回结果：PAM库根据所有PAM模块的返回结果，返回最终的身份验证和授权结果给应用程序。</span><br><span class="line"></span><br><span class="line">总之，PAM架构包括应用程序、PAM库、PAM配置文件和PAM模块四个部分。PAM的工作原理是应用程序调用PAM库，PAM库加载PAM配置文件，调用PAM模块进行身份验证和授权，最终返回结果给应用程序。PAM的优点是可以实现灵活的身份验证和授权机制，可以根据不同的应用程序和用户需求进行定制。</span><br></pre></td></tr></table></figure>
+<ol start="4">
+<li>总结PAM配置文件格式，总结相关示例， nologin.so， limits， 等模块的使用</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">PAM（Pluggable Authentication Modules）是Linux系统中的一个身份验证框架，可以实现灵活的身份验证和授权机制。PAM配置文件是用来配置PAM模块的文件，通常位于/etc/pam。 d目录下。以下是PAM配置文件格式和示例，以及nologin。 so、limits等模块的使用：</span><br><span class="line"></span><br><span class="line">格式：</span><br><span class="line"></span><br><span class="line">PAM配置文件采用类似于INI文件的格式，包括注释、模块类型、模块名称、模块选项等部分。常用的配置项包括：</span><br><span class="line"></span><br><span class="line">（1）auth：身份验证模块；</span><br><span class="line">（2）account：授权模块；</span><br><span class="line">（3）password：密码模块；</span><br><span class="line">（4）session：会话模块；</span><br><span class="line">（5）module_name control_flag module_path module_options：模块配置项，包括模块名称、控制标志、模块路径和模块选项。</span><br><span class="line"></span><br><span class="line">示例：</span><br><span class="line"></span><br><span class="line">以下是一个简单的PAM配置文件示例：</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">PAM configuration <span class="keyword">for</span> the <span class="built_in">sudo</span> service</span></span><br><span class="line">auth    required    pam_env.so</span><br><span class="line">auth    required    pam_unix.so</span><br><span class="line">account required    pam_unix.so</span><br><span class="line">session required    pam_unix.so</span><br><span class="line">在示例中，定义了身份验证模块auth、授权模块account和会话模块session，使用了pam_env。 so和pam_unix。 so两个模块。</span><br><span class="line"></span><br><span class="line">nologin.so模块：</span><br><span class="line">nologin。 so模块可以禁止指定用户登录系统，通常用于系统维护期间。可以在PAM配置文件中添加以下配置项：</span><br><span class="line">auth    required    pam_nologin.so</span><br><span class="line"></span><br><span class="line">limits模块：</span><br><span class="line">limits模块可以限制用户的资源使用，如CPU时间、内存、文件打开数等。可以在PAM配置文件中添加以下配置项：</span><br><span class="line">session required    pam_limits.so</span><br><span class="line"></span><br><span class="line">总之，PAM配置文件是用来配置PAM模块的文件，通常位于/etc/pam。 d目录下。PAM配置文件采用类似于INI文件的格式，包括注释、模块类型、模块名称、模块选项等部分。常用的PAM模块包括nologin。 so和limits等模块，可以实现禁止用户登录和限制用户资源使用等功能。</span><br></pre></td></tr></table></figure>
+<ol start="5">
+<li>实现私有时间服务器</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">私有时间服务器是指在局域网内部署的时候间服务器，可以为局域网内的设备提供时间同步服务。实现私有时间服务器的步骤如下：</span><br><span class="line"></span><br><span class="line">安装NTP服务：</span><br><span class="line">NTP（Network Time Protocol）是一种用于时间同步的协议，可以通过安装NTP服务来实现私有时间服务器。可以使用以下命令安装NTP服务：</span><br><span class="line"></span><br><span class="line">sudo apt-get install -y ntp</span><br><span class="line">配置NTP服务：</span><br><span class="line">可以通过修改/etc/ntp。 conf文件来配置NTP服务。可以添加如下配置项：</span><br><span class="line"></span><br><span class="line">server 0. cn.pool.ntp.org</span><br><span class="line">server 1. cn.pool.ntp.org</span><br><span class="line">server 2. cn.pool.ntp.org</span><br><span class="line">server 3. cn.pool.ntp.org</span><br><span class="line">以上配置项表示使用中国NTP服务器提供的时候间同步服务。</span><br><span class="line"></span><br><span class="line">启动NTP服务：</span><br><span class="line">可以使用以下命令启动NTP服务：</span><br><span class="line">sudo systemctl start ntp</span><br><span class="line">可以使用以下命令验证NTP服务是否正常工作：</span><br><span class="line">sudo ntpq -p</span><br><span class="line">以上命令可以显示NTP服务器的状态和同步情况。</span><br><span class="line"></span><br><span class="line">配置客户端设备：</span><br><span class="line">可以在客户端设备上配置私有时间服务器，以实现时间同步。可以在/etc/ntp。 conf文件中添加如下配置项：</span><br><span class="line">server &lt;私有时间服务器IP地址&gt;</span><br><span class="line">以上配置项表示使用私有时间服务器提供的时候间同步服务。</span><br><span class="line"></span><br><span class="line">总之，实现私有时间服务器的步骤包括安装NTP服务、配置NTP服务、启动NTP服务、验证NTP服务和配置客户端设备。私有时间服务器可以为局域网内的设备提供时间同步服务，提高系统的时候间精度和稳定性。</span><br></pre></td></tr></table></figure>
+<ol start="6">
+<li>总结DNS域名三级结构</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">DNS（Domain Name System）是互联网中用于域名解析的系统，可以将域名转换为IP地址。DNS域名通常采用三级结构，包括主机名、域名和顶级域名。以下是DNS域名三级结构的主要内容：</span><br><span class="line"></span><br><span class="line">主机名：</span><br><span class="line">主机名是指计算机在网络中的名称，通常由字母、数字和连字符组成。主机名可以用来标识网络中的不同计算机，如www表示Web服务器，mail表示邮件服务器等。</span><br><span class="line">域名：</span><br><span class="line">域名是指互联网中的一个名称空间，用于标识不同的组织、机构或服务。域名通常由多个标签组成，每个标签之间用点号（。）分隔。例如，www。 example。 com中，example是域名，com是顶级域名。</span><br><span class="line">顶级域名：</span><br><span class="line">顶级域名是指域名中最后一个标签，通常表示域名的类型或国家/地区。顶级域名包括通用顶级域名（gTLD）和国家/地区顶级域名（ccTLD）。例如，com、org、net是通用顶级域名，cn、us、uk是国家/地区顶级域名。</span><br><span class="line"></span><br><span class="line">总之，DNS域名采用三级结构，包括主机名、域名和顶级域名。主机名用于标识网络中的不同计算机，域名用于标识不同的组织、机构或服务，顶级域名用于表示域名的类型或国家/地区。DNS域名解析是互联网中的重要服务，可以将域名转换为IP地址，实现网络通信。</span><br></pre></td></tr></table></figure>
+<ol start="7">
+<li>总结DNS服务工作原理，涉及递归和迭代查询原理</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">DNS（Domain Name System）是互联网中用于域名解析的系统，可以将域名转换为IP地址。DNS服务的工作原理包括递归查询和迭代查询两种方式。以下是DNS服务工作原理的主要内容：</span><br><span class="line">递归查询：</span><br><span class="line">递归查询是指DNS客户端向DNS服务器发出查询请求，DNS服务器负责查询并返回结果。如果DNS服务器无法解析域名，它会向其他DNS服务器发出查询请求，直到找到能够解析域名的DNS服务器为止。递归查询的优点是可以减少DNS客户端的负担，但缺点是会增加DNS服务器的负担。</span><br><span class="line"></span><br><span class="line">迭代查询：</span><br><span class="line">迭代查询是指DNS客户端向DNS服务器发出查询请求，DNS服务器只返回自己所知道的信息，如果无法解析域名，它会返回一个指向其他DNS服务器的引用，由DNS客户端继续查询。迭代查询的优点是可以减少DNS服务器的负担，但缺点是会增加DNS客户端的负担。</span><br><span class="line"></span><br><span class="line">DNS服务的工作原理如下：</span><br><span class="line">（1）DNS客户端向DNS服务器发出查询请求；</span><br><span class="line">（2）DNS服务器根据查询请求，进行递归查询或迭代查询；</span><br><span class="line">（3）如果DNS服务器无法解析域名，它会向其他DNS服务器发出查询请求，直到找到能够解析域名的DNS服务器为止；</span><br><span class="line">（4）DNS服务器返回查询结果给DNS客户端。</span><br><span class="line"></span><br><span class="line">总之，DNS服务的工作原理包括递归查询和迭代查询两种方式。递归查询是DNS服务器负责查询并返回结果，迭代查询是DNS服务器只返回自己所知道的信息，如果无法解析域名，它会返回一个指向其他DNS服务器的引用。DNS服务是互联网中的重要服务，可以将域名转换为IP地址，实现网络通信。</span><br></pre></td></tr></table></figure>
+<ol start="8">
+<li>实现私有DNS, 供本地网络主机作DNS递归查询</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">安装BIND服务：</span><br><span class="line">sudo apt-get install bind9</span><br><span class="line"></span><br><span class="line">配置BIND服务：</span><br><span class="line">可以通过修改/etc/bind/named。 conf文件来配置BIND服务。可以添加如下配置项：</span><br><span class="line">zone &quot;example.com&quot; IN &#123;</span><br><span class="line">    type master;</span><br><span class="line">    file &quot;/etc/bind/db.example.com&quot;;</span><br><span class="line">&#125;;</span><br><span class="line">以上配置项表示创建一个名为example。 com的DNS区域，并将其配置为主服务器。</span><br><span class="line"></span><br><span class="line">配置DNS区域文件：</span><br><span class="line">可以在/etc/bind/db。 example。 com文件中配置DNS区域文件。可以添加如下配置项：</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$</span><span class="language-bash">TTL 86400</span></span><br><span class="line">@   IN  SOA ns1. example.com.admin.example.com. ( </span><br><span class="line">            1   ; Serial</span><br><span class="line">            3600    ; Refresh</span><br><span class="line">            1800    ; Retry</span><br><span class="line">            604800  ; Expire</span><br><span class="line">            86400  ) ; Minimum TTL</span><br><span class="line"></span><br><span class="line">@   IN  NS  ns1. example.com.</span><br><span class="line"></span><br><span class="line">ns1 IN  A   &lt;私有DNS服务器IP地址&gt;</span><br><span class="line">以上配置项表示设置DNS区域文件的TTL、SOA、NS和A记录。</span><br><span class="line"></span><br><span class="line">启动BIND服务：sudo systemctl start bind9</span><br><span class="line"></span><br><span class="line">配置客户端设备：</span><br><span class="line">可以在客户端设备上配置私有DNS服务器，以实现DNS递归查询。可以在/etc/resolv。 conf文件中添加如下配置项：</span><br><span class="line"></span><br><span class="line">nameserver &lt;私有DNS服务器IP地址&gt;</span><br><span class="line">以上配置项表示使用私有DNS服务器提供的DNS递归查询服务。</span><br><span class="line"></span><br><span class="line">总之，实现私有DNS的步骤包括安装BIND服务、配置BIND服务、配置DNS区域文件、启动BIND服务和配置客户端设备。私有DNS可以为本地网络主机提供DNS递归查询服务，提高网络的安全性和稳定性。</span><br></pre></td></tr></table></figure>
+<ol start="9">
+<li>总结DNS服务器类型，解析答案，正反解析域，资源记录定义</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">DNS（Domain Name System）是互联网中用于域名解析的系统，可以将域名转换为IP地址。DNS服务器类型包括递归DNS服务器和权威DNS服务器，解析答案包括正向解析和反向解析，正反解析域包括域名和IP地址，资源记录定义包括A记录、CNAME记录、MX记录、NS记录等。以下是DNS服务器类型、解析答案、正反解析域、资源记录定义的主要内容：</span><br><span class="line"></span><br><span class="line">DNS服务器类型：</span><br><span class="line">（1）递归DNS服务器：递归DNS服务器负责向其他DNS服务器发出查询请求，并返回查询结果给DNS客户端。</span><br><span class="line">（2）权威DNS服务器：权威DNS服务器负责管理特定域名的DNS信息，包括域名解析和资源记录。</span><br><span class="line"></span><br><span class="line">解析答案：</span><br><span class="line">（1）正向解析：正向解析是指将域名转换为IP地址，通常用于Web服务器、邮件服务器等服务的访问。</span><br><span class="line">（2）反向解析：反向解析是指将IP地址转换为域名，通常用于网络安全、邮件反垃圾等方面。</span><br><span class="line"></span><br><span class="line">正反解析域：</span><br><span class="line">（1）域名：域名是指互联网中的一个名称空间，用于标识不同的组织、机构或服务。</span><br><span class="line">（2）IP地址：IP地址是指互联网中的一个标识符，用于标识不同的计算机或设备。</span><br><span class="line"></span><br><span class="line">资源记录定义：</span><br><span class="line">（1）A记录：A记录是指将域名解析为IPv4地址的记录。</span><br><span class="line">（2）CNAME记录：CNAME记录是指将域名解析为另一个域名的别名记录。</span><br><span class="line">（3）MX记录：MX记录是指将域名解析为邮件服务器的记录。</span><br><span class="line">（4）NS记录：NS记录是指将域名解析为权威DNS服务器的记录。</span><br><span class="line"></span><br><span class="line">总之，DNS服务器类型包括递归DNS服务器和权威DNS服务器，解析答案包括正向解析和反向解析，正反解析域包括域名和IP地址，资源记录定义包括A记录、CNAME记录、MX记录、NS记录等。DNS服务是互联网中的重要服务，可以将域名转换为IP地址，实现网络通信。</span><br></pre></td></tr></table></figure>
+<ol start="10">
+<li>实现DNS主从同步</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">DNS主从同步是指将主DNS服务器上的DNS信息同步到从DNS服务器上，以提高DNS服务的可靠性和稳定性。以下是实现DNS主从同步的步骤：</span><br><span class="line"></span><br><span class="line">配置主DNS服务器：</span><br><span class="line">可以在主DNS服务器上配置DNS信息，包括域名解析和资源记录。可以使用以下命令安装BIND服务并配置DNS信息：</span><br><span class="line">sudo apt-get install bind9</span><br><span class="line">sudo vi /etc/bind/named.conf.local</span><br><span class="line">配置从DNS服务器：</span><br><span class="line">可以在从DNS服务器上配置DNS信息，包括域名解析和资源记录。可以使用以下命令安装BIND服务并配置DNS信息：</span><br><span class="line">sudo apt-get install bind9</span><br><span class="line">sudo vi /etc/bind/named.conf.local</span><br><span class="line">配置主DNS服务器的授权：</span><br><span class="line">可以在主DNS服务器上配置从DNS服务器的授权，以允许从DNS服务器同步DNS信息。可以在/etc/bind/named。 conf。 local文件中添加如下配置项：</span><br><span class="line">zone &quot;example.com&quot; &#123;</span><br><span class="line">    type master;</span><br><span class="line">    file &quot;/etc/bind/db.example.com&quot;;</span><br><span class="line">    allow-transfer &#123; &lt;从DNS服务器IP地址&gt;; &#125;;</span><br><span class="line">&#125;;</span><br><span class="line">以上配置项表示允许从DNS服务器同步名为example。 com的DNS区域信息。</span><br><span class="line"></span><br><span class="line">配置从DNS服务器的转发：</span><br><span class="line">可以在从DNS服务器上配置主DNS服务器的转发，以便从DNS服务器能够获取DNS信息。可以在/etc/bind/named。 conf。 options文件中添加如下配置项：</span><br><span class="line">forwarders &#123;</span><br><span class="line">    &lt;主DNS服务器IP地址&gt;;</span><br><span class="line">&#125;;</span><br><span class="line">以上配置项表示将DNS查询请求转发到主DNS服务器。</span><br><span class="line"></span><br><span class="line">启动BIND服务：</span><br><span class="line">可以使用以下命令启动BIND服务：</span><br><span class="line">sudo systemctl start bind9</span><br><span class="line">验证DNS主从同步：</span><br><span class="line">可以使用以下命令验证DNS主从同步是否正常工作：</span><br><span class="line">sudo systemctl status bind9</span><br><span class="line">以上命令可以显示BIND服务的状态和同步情况。</span><br><span class="line"></span><br><span class="line">总之，实现DNS主从同步的步骤包括配置主DNS服务器、配置从DNS服务器、配置主DNS服务器的授权、配置从DNS服务器的转发、启动BIND服务和验证DNS主从同步。DNS主从同步可以提高DNS服务的可靠性和稳定性，确保DNS信息的一致性和准确性。</span><br></pre></td></tr></table></figure>
+<ol start="11">
+<li>实现DNS子域授权</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">DNS子域授权是指将特定子域名的DNS信息授权给其他DNS服务器管理，以提高DNS服务的可靠性和稳定性。以下是实现DNS子域授权的步骤：</span><br><span class="line"></span><br><span class="line">配置主DNS服务器：</span><br><span class="line">可以在主DNS服务器上配置DNS信息，包括域名解析和资源记录。可以使用以下命令安装BIND服务并配置DNS信息：</span><br><span class="line">sudo apt-get install bind9</span><br><span class="line">sudo vi /etc/bind/named.conf.local</span><br><span class="line">配置子域授权：</span><br><span class="line">可以在主DNS服务器上配置子域授权，以允许其他DNS服务器管理特定子域名的DNS信息。可以在/etc/bind/named。 conf。 local文件中添加如下配置项：</span><br><span class="line">zone &quot;sub.example.com&quot; &#123;</span><br><span class="line">    type master;</span><br><span class="line">    file &quot;/etc/bind/db.sub.example.com&quot;;</span><br><span class="line">    allow-transfer &#123; &lt;其他DNS服务器IP地址&gt;; &#125;;</span><br><span class="line">&#125;;</span><br><span class="line">以上配置项表示允许其他DNS服务器管理名为sub。 example。 com的DNS子域信息。</span><br><span class="line"></span><br><span class="line">配置其他DNS服务器：</span><br><span class="line">可以在其他DNS服务器上配置DNS信息，包括域名解析和资源记录。可以使用以下命令安装BIND服务并配置DNS信息：</span><br><span class="line">sudo apt-get install bind9</span><br><span class="line">sudo vi /etc/bind/named.conf.local</span><br><span class="line">配置其他DNS服务器的授权：</span><br><span class="line">可以在其他DNS服务器上配置主DNS服务器的授权，以便其他DNS服务器能够获取DNS信息。可以在/etc/bind/named。 conf。 options文件中添加如下配置项：</span><br><span class="line">zone &quot;sub.example.com&quot; &#123;</span><br><span class="line">    type slave;</span><br><span class="line">    file &quot;/var/cache/bind/db.sub.example.com&quot;;</span><br><span class="line">    masters &#123; &lt;主DNS服务器IP地址&gt;; &#125;;</span><br><span class="line">&#125;;</span><br><span class="line">以上配置项表示将名为sub。 example。 com的DNS子域信息从主DNS服务器同步到其他DNS服务器。</span><br><span class="line"></span><br><span class="line">启动BIND服务：</span><br><span class="line">sudo systemctl start bind9</span><br><span class="line">验证DNS子域授权：</span><br><span class="line">可以使用以下命令验证DNS子域授权是否正常工作：</span><br><span class="line">sudo systemctl status bind9</span><br><span class="line">以上命令可以显示BIND服务的状态和同步情况。</span><br><span class="line"></span><br><span class="line">总之，实现DNS子域授权的步骤包括配置主DNS服务器、配置子域授权、配置其他DNS服务器、配置其他DNS服务器的授权、启动BIND服务和验证DNS子域授权。DNS子域授权可以提高DNS服务的可靠性和稳定性，确保DNS信息的一致性和准确性。</span><br></pre></td></tr></table></figure>
+<ol start="12">
+<li>基于acl实现智能DNS</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">基于ACL（Access Control List）实现智能DNS是指根据客户端IP地址或其他条件，对DNS查询请求进行智能路由和负载均衡，以提高DNS服务的性能和可靠性。以下是基于ACL实现智能DNS的步骤：</span><br><span class="line">配置主DNS服务器：</span><br><span class="line">可以在主DNS服务器上配置DNS信息，包括域名解析和资源记录。可以使用以下命令安装BIND服务并配置DNS信息：</span><br><span class="line">sudo apt-get install bind9</span><br><span class="line">sudo vi /etc/bind/named.conf.local</span><br><span class="line">配置ACL规则：</span><br><span class="line">可以在主DNS服务器上配置ACL规则，以根据客户端IP地址或其他条件，对DNS查询请求进行智能路由和负载均衡。可以在/etc/bind/named。 conf。 options文件中添加如下配置项：</span><br><span class="line">acl &quot;internal&quot; &#123;</span><br><span class="line">    &lt;内部网络IP地址段&gt;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">acl &quot;external&quot; &#123;</span><br><span class="line">    !&lt;内部网络IP地址段&gt;;</span><br><span class="line">&#125;;</span><br><span class="line">以上配置项表示将IP地址分为内部网络和外部网络两个ACL规则。</span><br><span class="line"></span><br><span class="line">配置DNS策略：</span><br><span class="line">可以在主DNS服务器上配置DNS策略，以根据ACL规则，对DNS查询请求进行智能路由和负载均衡。可以在/etc/bind/named。 conf。 options文件中添加如下配置项：</span><br><span class="line">options &#123;</span><br><span class="line">    recursion yes;</span><br><span class="line">    allow-query &#123; any; &#125;;</span><br><span class="line">    forwarders &#123;</span><br><span class="line">        &lt;外部DNS服务器IP地址&gt;;</span><br><span class="line">    &#125;;</span><br><span class="line">    zone &quot;example.com&quot; &#123;</span><br><span class="line">        type master;</span><br><span class="line">        file &quot;/etc/bind/db.example.com&quot;;</span><br><span class="line">        allow-transfer &#123; &lt;其他DNS服务器IP地址&gt;; &#125;;</span><br><span class="line">    &#125;;</span><br><span class="line">    zone &quot;sub.example.com&quot; &#123;</span><br><span class="line">        type master;</span><br><span class="line">        file &quot;/etc/bind/db.sub.example.com&quot;;</span><br><span class="line">        allow-transfer &#123; &lt;其他DNS服务器IP地址&gt;; &#125;;</span><br><span class="line">    &#125;;</span><br><span class="line">    view &quot;internal&quot; &#123;</span><br><span class="line">        match-clients &#123; internal; &#125;;</span><br><span class="line">        recursion yes;</span><br><span class="line">        zone &quot;example.com&quot; &#123;</span><br><span class="line">            type master;</span><br><span class="line">            file &quot;/etc/bind/db.example.com&quot;;</span><br><span class="line">        &#125;;</span><br><span class="line">        zone &quot;sub.example.com&quot; &#123;</span><br><span class="line">            type master;</span><br><span class="line">            file &quot;/etc/bind/db.sub.example.com&quot;;</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;;</span><br><span class="line">    view &quot;external&quot; &#123;</span><br><span class="line">        match-clients &#123; external; &#125;;</span><br><span class="line">        recursion no;</span><br><span class="line">        zone &quot;example.com&quot; &#123;</span><br><span class="line">            type master;</span><br><span class="line">            file &quot;/etc/bind/db.example.com&quot;;</span><br><span class="line">            forwarders &#123;</span><br><span class="line">                &lt;外部DNS服务器IP地址&gt;;</span><br><span class="line">            &#125;;</span><br><span class="line">        &#125;;</span><br><span class="line">        zone &quot;sub.example.com&quot; &#123;</span><br><span class="line">            type master;</span><br><span class="line">            file &quot;/etc/bind/db.sub.example.com&quot;;</span><br><span class="line">            forwarders &#123;</span><br><span class="line">                &lt;外部DNS服务器IP地址&gt;;</span><br><span class="line">            &#125;;</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;;</span><br><span class="line">以上配置项表示将DNS查询请求分为内部网络和外部网络两个视图，根据ACL规则对DNS查询请求进行智能路由和负载均衡。</span><br><span class="line"></span><br><span class="line">启动BIND服务：sudo systemctl start bind9</span><br></pre></td></tr></table></figure>
+<ol start="13">
+<li>总结防火墙分类</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">防火墙是一种网络安全设备，用于保护计算机和网络免受未经授权的访问和攻击。根据不同的分类标准，防火墙可以分为多种类型。以下是防火墙分类的主要内容：</span><br><span class="line"></span><br><span class="line">按照部署位置分类：</span><br><span class="line">（1）网络层防火墙：网络层防火墙通常部署在网络边界，用于过滤和控制网络流量。</span><br><span class="line">（2）主机层防火墙：主机层防火墙通常部署在主机上，用于保护主机免受攻击。</span><br><span class="line"></span><br><span class="line">按照过滤方式分类：</span><br><span class="line">（1）包过滤防火墙：包过滤防火墙根据IP地址、端口号和协议类型等信息，对网络流量进行过滤和控制。</span><br><span class="line">（2）状态检测防火墙：状态检测防火墙根据网络连接的状态，对网络流量进行过滤和控制。</span><br><span class="line"></span><br><span class="line">按照技术实现分类：</span><br><span class="line">（1）软件防火墙：软件防火墙是一种基于软件的防火墙，通常运行在操作系统或应用程序中。</span><br><span class="line">（2）硬件防火墙：硬件防火墙是一种基于硬件的防火墙，通常作为独立设备部署在网络边界。</span><br><span class="line"></span><br><span class="line">按照功能分类：</span><br><span class="line">（1）包过滤防火墙：包过滤防火墙主要用于过滤和控制网络流量，以保护网络安全。</span><br><span class="line">（2）入侵检测防火墙：入侵检测防火墙主要用于检测和防止网络入侵和攻击。</span><br><span class="line">（3）网关防火墙：网关防火墙主要用于保护网络</span><br></pre></td></tr></table></figure>
+<p>14。 总结iptable 5表5链， 基本使用，扩展模块。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">iptables是Linux系统中的一种防火墙软件，可以用于过滤和控制网络流量，以保护计算机和网络安全。iptables包括5个表和5个链，可以通过基本使用和扩展模块来实现不同的防火墙功能。以下是iptables的主要内容：</span><br><span class="line"></span><br><span class="line">5个表：</span><br><span class="line">（1）filter表：filter表是iptables默认的表，用于过滤和控制网络流量。</span><br><span class="line">（2）nat表：nat表用于网络地址转换（NAT），可以将私有IP地址转换为公共IP地址。</span><br><span class="line">（3）mangle表：mangle表用于修改网络数据包的头部信息，可以实现QoS（Quality of Service）和路由策略等功能。</span><br><span class="line">（4）raw表：raw表用于处理网络数据包的原始数据，可以实现连接跟踪和状态检测等功能。</span><br><span class="line">（5）security表：security表用于实现SELinux（Security-Enhanced Linux）安全策略。</span><br><span class="line"></span><br><span class="line">5个链：</span><br><span class="line">（1）INPUT链：INPUT链用于处理进入计算机的数据包。</span><br><span class="line">（2）OUTPUT链：OUTPUT链用于处理从计算机出去的数据包。</span><br><span class="line">（3）FORWARD链：FORWARD链用于处理通过计算机转发的数据包。</span><br><span class="line">（4）PREROUTING链：PREROUTING链用于处理数据包到达计算机之前的操作。</span><br><span class="line">（5）POSTROUTING链：POSTROUTING链用于处理数据包离开计算机之后的操作。</span><br><span class="line"></span><br><span class="line">基本使用：</span><br><span class="line"></span><br><span class="line">（1）查看iptables规则：iptables -L</span><br><span class="line">（2）添加iptables规则：iptables -A &lt;链名&gt; &lt;规则&gt;</span><br><span class="line">（3）删除iptables规则：iptables -D &lt;链名&gt; &lt;规则&gt;</span><br><span class="line">（4）保存iptables规则：iptables-save &gt; /etc/sysconfig/iptables</span><br><span class="line">（5）恢复iptables规则：iptables-restore &lt; /etc/sysconfig/iptables</span><br><span class="line"></span><br><span class="line">扩展模块：</span><br><span class="line">（1）conntrack模块：conntrack模块用于连接跟踪，可以实现状态检测和连接管理等功能。</span><br><span class="line">（2）limit模块：limit模块用于限制网络流量</span><br></pre></td></tr></table></figure>
+<ol start="15">
+<li>总结iptables规则优化实践，规则保存和恢复</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">iptables规则优化实践是指通过优化iptables规则，提高防火墙的性能和安全性。规则保存和恢复是指将iptables规则保存到文件中，以便在系统重启或防火墙重启后恢复规则。以下是iptables规则优化实践和规则保存和恢复的主要内容：</span><br><span class="line"></span><br><span class="line">规则优化实践：</span><br><span class="line">（1）合并规则：将多个规则合并成一个规则，可以减少规则数量，提高防火墙性能。</span><br><span class="line">（2）使用链：将规则分组到不同的链中，可以提高规则的可读性和管理性，同时也可以提高防火墙性能。</span><br><span class="line">（3）使用IP集合：使用IP集合可以将多个IP地址合并成一个集合，可以减少规则数量，提高防火墙性能。</span><br><span class="line">（4）使用扩展模块：使用扩展模块可以实现更复杂的防火墙功能，例如连接跟踪、状态检测和QoS等功能。</span><br><span class="line"></span><br><span class="line">规则保存和恢复：</span><br><span class="line">（1）保存规则：可以使用iptables-save命令将iptables规则保存到文件中，例如：iptables-save &gt; /etc/sysconfig/iptables。</span><br><span class="line">（2）恢复规则：可以使用iptables-restore命令从文件中恢复iptables规则，例如：iptables-restore &lt; /etc/sysconfig/iptables。</span><br><span class="line">（3）自动保存规则：可以使用iptables-persistent软件包自动保存iptables规则，例如：sudo apt-get install iptables-persistent。</span><br><span class="line"></span><br><span class="line">总之，iptables规则优化实践和规则保存和恢复可以提高防火墙的性能和安全性，确保防火墙规则的一致性和准确性。</span><br></pre></td></tr></table></figure>
+<ol start="16">
+<li>总结NAT转换原理， DNAT&#x2F;SDNAT原理，并自行设计架构实现DNAT&#x2F;SNAT</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">NAT（Network Address Translation）是一种网络地址转换技术，用于将私有IP地址转换为公共IP地址，以实现网络连接和通信。NAT转换原理是将私有IP地址和端口号映射到公共IP地址和端口号，以便网络数据包能够正确地传输和接收。DNAT（Destination NAT）和SNAT（Source NAT）是NAT的两种常见形式，分别用于目标地址转换和源地址转换。以下是DNAT/SDNAT的原理和自行设计架构实现DNAT/SNAT的主要内容：</span><br><span class="line"></span><br><span class="line">DNAT原理：</span><br><span class="line">DNAT是一种目标地址转换技术，用于将公共IP地址和端口号映射到私有IP地址和端口号，以实现网络连接和通信。DNAT的原理是在网络数据包到达NAT设备之前，将目标IP地址和端口号修改为私有IP地址和端口号，然后将数据包转发到目标主机。当目标主机返回数据包时，NAT设备将私有IP地址和端口号修改为公共IP地址和端口号，然后将数据包转发回源主机。</span><br><span class="line"></span><br><span class="line">SNAT原理：</span><br><span class="line">SNAT是一种源地址转换技术，用于将私有IP地址和端口号映射到公共IP地址和端口号，以实现网络连接和通信。SNAT的原理是在网络数据包离开NAT设备之前，将源IP地址和端口号修改为公共IP地址和端口号，然后将数据包转发到目标主机。当目标主机返回数据包时，NAT设备将公共IP地址和端口号修改为私有IP地址和端口号，然后将数据包转发回源主机。</span><br><span class="line"></span><br><span class="line">自行设计架构实现DNAT/SNAT：</span><br><span class="line">可以使用iptables命令和网络拓扑结构，自行设计架构实现DNAT/SNAT。以下是一个简单的架构实现DNAT/SNAT的示例：</span><br><span class="line">（1）网络拓扑结构：</span><br><span class="line">Internet – Router – Web Server</span><br><span class="line">（2）DNAT规则：</span><br><span class="line">iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j DNAT --to-destination 192. 168. 1. 100:80</span><br><span class="line">（3）SNAT规则：</span><br><span class="line">iptables -t nat -A POSTROUTING -o eth0 -j SNAT --to-source 203. 0. 113. 1</span><br><span class="line"></span><br><span class="line">以上规则表示将公共IP地址203。 0。 113。 1的网络数据包转发到私有IP地址192。 168。 1。 100的Web服务器，并将私有IP地址和端口号转换为公共IP地址和端口号。同时，将私有IP地址和端口号转换为公共IP地址和端口号，以便网络数据包能够正确地传输和接收。</span><br><span class="line"></span><br><span class="line">总之，NAT转换原理是将私有IP地址转换为公共IP地址，以实现网络连接</span><br></pre></td></tr></table></figure>
+<ol start="17">
+<li>使用REDIRECT将90端口重定向80，并可以访问到80端口的服务</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">可以使用iptables命令和REDIRECT选项将90端口重定向到80端口，并可以访问到80端口的服务。以下是具体步骤：</span><br><span class="line"></span><br><span class="line">添加iptables规则：iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 90</span><br><span class="line">启动服务：sudo systemctl start apache2</span><br><span class="line">访问服务：http://127. 0. 0. 1:90/。</span><br><span class="line"></span><br><span class="line">以上步骤可以将90端口重定向到80端口，并可以访问到80端口的服务。注意，需要确保80端口的服务已经启动，并且iptables规则已经添加成功。</span><br></pre></td></tr></table></figure>
+<ol start="18">
+<li>firewalld常见区域总结</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">firewalld是一种Linux系统中的防火墙管理工具，可以用于过滤和控制网络流量，以保护计算机和网络安全。firewalld中的区域是指不同的网络环境，可以根据不同的区域设置不同的防火墙规则。以下是firewalld常见区域的主要内容：</span><br><span class="line"></span><br><span class="line">public区域是firewalld默认的区域，适用于公共网络环境，例如互联网。在public区域中，所有的网络服务都是禁止的，需要手动添加防火墙规则。</span><br><span class="line"></span><br><span class="line">internal区域适用于内部网络环境，例如局域网。在internal区域中，所有的网络服务都是允许的，可以自由访问内部网络资源。</span><br><span class="line"></span><br><span class="line">dmz区域适用于半信任网络环境，例如企业的外部网络。在dmz区域中，只允许特定的网络服务，例如Web服务器和邮件服务器等，其他的网络服务都是禁止的。</span><br><span class="line"></span><br><span class="line">work区域适用于工作网络环境，例如办公室网络。在work区域中，只允许特定的网络服务，例如文件共享和打印机共享等，其他的网络服务都是禁止的。</span><br><span class="line"></span><br><span class="line">home区域适用于家庭网络环境，例如家庭网络。在home区域中，只允许特定的网络服务，例如文件共享和打印机共享等，其他的网络服务都是禁止的。</span><br><span class="line"></span><br><span class="line">总之，firewalld常见区域可以根据不同的网络环境设置不同的防火墙规则，以保护计算机和网络安全。需要根据实际情况选择合适的区域，并设置相应的防火墙规则。</span><br></pre></td></tr></table></figure>
+<ol start="19">
+<li>通过ntftable来实现暴露本机80&#x2F;443&#x2F;ssh服务端口给指定网络访问</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ntftable是Linux系统中的一种网络过滤工具，可以用于过滤和控制网络流量，以保护计算机和网络安全。可以使用ntftable来实现暴露本机80/443/ssh服务端口给指定网络访问。以下是具体步骤：</span><br><span class="line"></span><br><span class="line">创建ntftable规则：</span><br><span class="line">可以使用以下命令创建ntftable规则，允许指定网络访问本机80/443/ssh服务端口：</span><br><span class="line">sudo iptables -I INPUT -p tcp -s 192. 168. 1. 0/24 --dport 80 -j ACCEPT</span><br><span class="line">sudo iptables -I INPUT -p tcp -s 192. 168. 1. 0/24 --dport 443 -j ACCEPT</span><br><span class="line">sudo iptables -I INPUT -p tcp -s 192. 168. 1. 0/24 --dport 22 -j ACCEPT</span><br><span class="line">保存ntftable规则：</span><br><span class="line"></span><br><span class="line">可以使用以下命令保存ntftable规则，以便在系统重启后自动加载规则：</span><br><span class="line">sudo iptables-save &gt; /etc/sysconfig/iptables</span><br><span class="line">重启ntftable服务：</span><br><span class="line"></span><br><span class="line">可以使用以下命令重启ntftable服务，以使新的规则生效：</span><br><span class="line">sudo systemctl restart iptables</span><br><span class="line"></span><br><span class="line">以上步骤可以使用ntftable实现暴露本机80/443/ssh服务端口给指定网络访问。需要根据实际情况修改规则中的IP地址和端口号，并确保ntftable服务已经启动。</span><br></pre></td></tr></table></figure>
+<ol start="20">
+<li>总结关系型数据库相关概念，关系，行，列，主键，惟一键，域</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">关系型数据库是一种基于关系模型的数据库，使用表格来存储和管理数据。以下是关系型数据库相关概念的主要内容：</span><br><span class="line">关系：关系是指表格中的数据之间的关系，可以用图形化的方式表示为箭头或线段。关系可以是一对一、一对多或多对多的关系。</span><br><span class="line"></span><br><span class="line">行：行是指表格中的一条记录，也称为元组或实例。每一行包含多个列，表示该行的数据。</span><br><span class="line"></span><br><span class="line">列：列是指表格中的一个字段，也称为属性或域。每一列包含相同类型的数据，例如整数、字符串或日期。</span><br><span class="line"></span><br><span class="line">主键：主键是指表格中的一个或多个列，用于唯一标识每一行数据。主键可以是单个列或多个列的组合，用于确保数据的唯一性和完整性。</span><br><span class="line"></span><br><span class="line">唯一键：唯一键是指表格中的一个或多个列，用于确保数据的唯一性，但不用于标识每一行数据。唯一键可以是单个列或多个列的组合。</span><br><span class="line"></span><br><span class="line">域：域是指列中的数据类型和取值范围，例如整数、字符串或日期。域可以用于限制数据的类型和范围，以确保数据的正确性和一致性。</span><br><span class="line"></span><br><span class="line">总之，关系型数据库是一种基于关系模型的数据库，使用表格来存储和管理数据。关系、行、列、主键、唯一键和域是关系型数据库中的重要概念，需要深入理解和掌握。</span><br></pre></td></tr></table></figure>
+<p>21。 总结关联类型，1对1，1对多，多对多关系。可以自行设计表进行解释</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">关联类型是指表格之间的关系类型，包括1对1、1对多和多对多关系。以下是关联类型的主要内容和自行设计表进行解释的示例：</span><br><span class="line"></span><br><span class="line">1对1关系：</span><br><span class="line">1对1关系是指两个表格之间的一种关系，其中每个记录在另一个表格中只有一个匹配项。例如，一个人只能有一个身份证号码，一个身份证号码也只能对应一个人。</span><br><span class="line"></span><br><span class="line">示例：</span><br><span class="line">表格1：人员信息表</span><br><span class="line">ID	姓名	年龄	性别</span><br><span class="line">1	张三	20	男</span><br><span class="line">2	李四	25	女</span><br><span class="line"></span><br><span class="line">表格2：身份证信息表</span><br><span class="line">ID	身份证号码</span><br><span class="line">1	1234567890</span><br><span class="line">2	0987654321</span><br><span class="line"></span><br><span class="line">1对多关系：</span><br><span class="line">1对多关系是指两个表格之间的一种关系，其中一个表格中的每个记录在另一个表格中可以有多个匹配项。例如，一个部门可以有多个员工，但一个员工只能属于一个部门。</span><br><span class="line"></span><br><span class="line">示例：</span><br><span class="line">表格1：部门信息表</span><br><span class="line">ID	部门名称</span><br><span class="line">1	研发部</span><br><span class="line">2	销售部</span><br><span class="line"></span><br><span class="line">表格2：员工信息表</span><br><span class="line">ID	姓名	年龄	性别	部门ID</span><br><span class="line">1	张三	20	男	1</span><br><span class="line">2	李四	25	女	1</span><br><span class="line">3	王五	30	男	2</span><br><span class="line"></span><br><span class="line">多对多关系：</span><br><span class="line">多对多关系是指两个表格之间的一种关系，其中一个表格中的每个记录在另一个表格中可以有多个匹配项，反之亦然。例如，一个学生可以选修多门课程，一门课程也可以被多个学生选修。</span><br><span class="line"></span><br><span class="line">示例：</span><br><span class="line">表格1：学生信息表</span><br><span class="line">ID	姓名	年龄	性别</span><br><span class="line">1	张三	20	男</span><br><span class="line">2	李四	25	女</span><br><span class="line"></span><br><span class="line">表格2：课程信息表</span><br><span class="line">ID	课程名称</span><br><span class="line">1	数学</span><br><span class="line">2	英语</span><br><span class="line"></span><br><span class="line">表格3：选课信息表</span><br><span class="line">ID	学生ID	课程ID</span><br><span class="line">1	1	1</span><br><span class="line">2	1	2</span><br><span class="line">3	2	1</span><br><span class="line"></span><br><span class="line">总之，关联类型是指表格之间的关系类型，包括1对1、1对多和多对多关系。需要根据实际情况选择合适的关联类型，并设计相应的表格结构。</span><br></pre></td></tr></table></figure>
+<ol start="22">
+<li>总结mysql设计范式</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">MySQL设计范式是指在MySQL数据库中，为了保证数据的一致性、完整性和可靠性，需要遵循一定的设计规范和标准。MySQL设计范式主要包括以下几个方面：</span><br><span class="line"></span><br><span class="line">第一范式（1NF）：</span><br><span class="line">第一范式要求每个数据列都是原子性的，即每个数据列都不能再分解为更小的数据项。例如，一个订单表中的“订单明细”列应该拆分为多个列，而不是将多个订单明细放在同一个列中。</span><br><span class="line"></span><br><span class="line">第二范式（2NF）：</span><br><span class="line">第二范式要求每个非主键列都完全依赖于主键，而不是依赖于主键的一部分。例如，一个订单表中的“订单金额”列应该与“订单号”列一起作为主键，而不是只依赖于“订单号”列。</span><br><span class="line"></span><br><span class="line">第三范式（3NF）：</span><br><span class="line">第三范式要求每个非主键列都不依赖于其他非主键列，而是直接依赖于主键。例如，一个订单表中的“客户地址”列应该拆分为多个列，而不是与“客户名称”列放在同一个列中。</span><br><span class="line"></span><br><span class="line">巴斯-科德范式（BCNF）：</span><br><span class="line">巴斯-科德范式要求每个非主键列都不依赖于其他非主键列，而是直接依赖于主键或超键。BCNF是第三范式的扩展，可以更好地保证数据的一致性和完整性。</span><br><span class="line"></span><br><span class="line">总之，MySQL设计范式是为了保证数据的一致性、完整性和可靠性，需要遵循一定的设计规范和标准。第一范式、第二范式、第三范式和巴斯-科德范式是MySQL设计范式中的重要概念，需要深入理解和掌握。</span><br></pre></td></tr></table></figure>
+<ol start="23">
+<li>总结Mysql多种安装方式，及安全加固，并总结mysql配置文件</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">MySQL是一种流行的关系型数据库管理系统，有多种安装方式和安全加固方法。以下是MySQL多种安装方式和安全加固的主要内容：</span><br><span class="line">源码安装：</span><br><span class="line">源码安装是指从MySQL官网下载源代码，然后编译和安装MySQL。源码安装需要一定的Linux系统和编译知识，适合高级用户和开发人员。</span><br><span class="line">二进制包安装：</span><br><span class="line">二进制包安装是指从MySQL官网下载预编译的二进制包，然后解压和安装MySQL。二进制包安装比源码安装更简单，适合普通用户和系统管理员。</span><br><span class="line">包管理器安装：</span><br><span class="line">包管理器安装是指使用Linux系统自带的包管理器，例如yum或apt-get，安装MySQL。包管理器安装比二进制包安装更简单，可以自动解决依赖关系。</span><br><span class="line"></span><br><span class="line">安全加固：</span><br><span class="line">为了保护MySQL数据库的安全性，可以采取以下措施：</span><br><span class="line">修改默认的root密码</span><br><span class="line">创建新的用户和密码，并授权给特定的数据库和表格</span><br><span class="line">禁止远程root登录</span><br><span class="line">启用防火墙，限制MySQL的访问</span><br><span class="line"></span><br><span class="line">MySQL配置文件：</span><br><span class="line">MySQL配置文件是指MySQL服务器的配置文件，用于配置MySQL服务器的各种参数和选项。MySQL配置文件通常位于/etc/mysql/my。 cnf或/etc/my。 cnf，可以使用文本编辑器进行修改。MySQL配置文件中的主要参数和选项包括：</span><br><span class="line">数据库目录和日志文件目录</span><br><span class="line">端口号和套接字文件</span><br><span class="line">缓存大小和连接数</span><br><span class="line">字符集和排序规则</span><br><span class="line">安全选项和日志记录</span><br><span class="line"></span><br><span class="line">总之，MySQL有多种安装方式和安全加固方法，需要根据实际情况选择合适的方式和方法。MySQL配置文件是MySQL服务器的配置文件，用于配置MySQL服务器的各种参数和选项。需要深入理解和掌握MySQL的安装、配置和安全加固。</span><br></pre></td></tr></table></figure>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Linux/">Linux</a><a class="post-meta__tags" href="/tags/%E9%9D%A2%E8%AF%95%E9%A2%98/">面试题</a><a class="post-meta__tags" href="/tags/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a></div><div class="post-share"><div class="social-share" data-image="https://cdn.sujx.net/2024/07/wallhaven-g8q8qd.jpg" data-sites="facebook,twitter,weibo,qq"></div><link rel="stylesheet" href="/libs/sharejs/css/share.min.css" media="print" onload="this.media='all'"><script src="/libs/sharejs/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>能否请我喝一杯咖啡？</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.jpg" target="_blank"><img class="post-qr-code-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/wechat.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2023/06/20/Trave-BJ-Taihu/" title="垛子公园"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023pic/20230705130419.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">垛子公园</div></div><div class="info-2"><div class="info-item-1">返京路上路过台湖的垛子公园，一个还没有盖好的大公园 </div></div></div></a><a class="pagination-related" href="/2023/06/01/magedu-week-4/" title="Linux系统基础知识·4"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/05/wallhaven-zx8r3v.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Linux系统基础知识·4</div></div><div class="info-2"><div class="info-item-1"> 本文基于马哥教育就业班第四周课程总结  1。 总结脚本高级命令trap， install， mktemp， expect， 进程优先级命令：nice， renice， 进程管理工具: ps， pstree， prtstat， pgrep， pidof， uptime， mpstat， top， htop， free， pmap， vmstat， iostat， iotop， iftop， nload， nethogs， iptraf-ng， dstat， glances， cockpit， kill， job， 任务相关的命令: at， crontab， 命令，选项，示例。 #脚本高级命令：trap命令：trap命令用于捕获和处理shell脚本中的信号。它可以用于在脚本执行期间处理中断、退出等信号。以下是一个trap命令的示例：trap &#x27;echo &quot;Interrupted&quot;; exit&#x27; INTinstall命令：install命令用于将文件到指定目录，并设置文件的权限和所有者。以下是一个install命令的示例：install -m ...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2023/04/10/magedu-week-1/" title="Linux系统基础知识·1"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/05/wallhaven-833vpo.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-04-10</div><div class="info-item-2">Linux系统基础知识·1</div></div><div class="info-2"><div class="info-item-1"> 一个完整计算系统的简要介绍 一个完整的计算系统通常包含以下几个组成部分：1。 输入设备：用于输入数据和指令的设备，例如键盘、鼠标、触控屏等。2。 输出设备：用于显示计算结果和其他信息的设备，例如显示器、打印机等。3。 中央处理器（CPU）：执行计算机指令、控制数据处理流程的核心部件。4。 存储器：用于存储程序和数据的设备，包括内存和外存。5。 总线：连接各个硬件组件的通信路径。6。 操作系统：控制计算机各个部分的软件系统，管理计算机资源，提供用户接口等功能。7。 应用程序：各种用于完成特定任务的软件程序，例如文字处理、图像处理、音频制作等。在一个完整的计算系统中，这些部件通常紧密配合、相互协作，共同完成各种复杂的计算任务。 简述进制转换，并举例 进制转换是指将一个数字从一种进制表示方式转换为另一种进制表示方式的过程。常见的进制包括二进制、八进制、十进制和十六进制。下面以十进制为例，简述一下如何将一个十进制数转换成其他进制的表示方式。1。 转换成二进制：利用除法取余法，将十进制数不断除以2，直到商为0为止，将余数倒序排列即为该数的二进制表示。例如：将十进制数27转换成二进制，过程...</div></div></div></a><a class="pagination-related" href="/2023/05/21/magedu-week-3/" title="Linux系统基础知识·3"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/04/wallhaven-mdj888.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-05-21</div><div class="info-item-2">Linux系统基础知识·3</div></div><div class="info-2"><div class="info-item-1"> 本文基于马哥教育就业班第三周课程总结  软件管理 尝试基于gcc命令说明 c语言编译过程。  C语言编译过程主要包括预处理、编译、汇编和链接四个阶段。gcc命令是一个常用的C语言编译器，可以完成这四个阶段的工作。下面是gcc命令的使用示例和各个阶段的说明：1。 预处理阶段主要是对源代码进行宏替换、头文件包含等操作，生成预处理后的代码。gcc命令中使用参数“-E”来进行预处理，示例命令如下：$ gcc -E main.c -o main.i2。 编译阶段主要是将预处理后的代码转换成汇编代码。gcc命令中使用参数“-S”来进行编译，示例命令如下：$ gcc -S main.i -o main.s3。 汇编阶段主要是将汇编代码转换成机器码。gcc命令中使用参数“-c”来进行汇编，示例命令如下：$ gcc -c main.s -o main.o4。 链接阶段主要是将多个目标文件链接成一个可执行文件。gcc命令中使用参数“-o”来指定输出文件名，示例命令如下：$ gcc main.o -o main以上是gcc命令的使用示例和C语言编译过程的各个阶段说明。在实际编译过程中，可以使用gcc...</div></div></div></a><a class="pagination-related" href="/2023/05/14/magedu-week-2/" title="Linux系统基础知识·2"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/wallhaven-43wj9y.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-05-14</div><div class="info-item-2">Linux系统基础知识·2</div></div><div class="info-2"><div class="info-item-1"> 本文基于马哥教育就业班第二周课程总结  系统设计 请总结Linux的安全模型  Linux的安全模型基于许多不同的安全措施，包括访问控制、加密、审计和漏洞修补以下是Linux安全模型的主要要点：1. 访问控制：Linux使用许多不同的访问控制机制来保护系统和数据其中最常见的是基于用户和组的访问控制，它允许管理员为每个用户和组分配不同的权限此外，Linux还支持访问控制列表（ACL）和强制访问控制（MAC）等高级访问控制机制；2. 加密：Linux支持许多不同的加密技术，包括SSL / TLS、SSH、IPSec和GPG等这些技术可以用于保护数据传输和存储，以及验证用户身份；3. 审计：Linux支持系统级别的审计，可以记录用户活动、系统事件和安全事件等这些日志可以用于监控系统安全性，并帮助管理员识别潜在的安全问题；4. 漏洞修补：Linux社区积极修补系统中发现的漏洞，并发布安全更新管理员应该定期更新系统以确保最新的安全补丁已安装；总之，Linux的安全模型是一个多层次的、综合的安全框架，它提供了许多不同的安全措施来保护系统和数据管理员应该了解这些措施，并采取适当的措施来保护他...</div></div></div></a><a class="pagination-related" href="/2023/06/01/magedu-week-4/" title="Linux系统基础知识·4"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/05/wallhaven-zx8r3v.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-06-01</div><div class="info-item-2">Linux系统基础知识·4</div></div><div class="info-2"><div class="info-item-1"> 本文基于马哥教育就业班第四周课程总结  1。 总结脚本高级命令trap， install， mktemp， expect， 进程优先级命令：nice， renice， 进程管理工具: ps， pstree， prtstat， pgrep， pidof， uptime， mpstat， top， htop， free， pmap， vmstat， iostat， iotop， iftop， nload， nethogs， iptraf-ng， dstat， glances， cockpit， kill， job， 任务相关的命令: at， crontab， 命令，选项，示例。 #脚本高级命令：trap命令：trap命令用于捕获和处理shell脚本中的信号。它可以用于在脚本执行期间处理中断、退出等信号。以下是一个trap命令的示例：trap &#x27;echo &quot;Interrupted&quot;; exit&#x27; INTinstall命令：install命令用于将文件到指定目录，并设置文件的权限和所有者。以下是一个install命令的示例：install -m ...</div></div></div></a><a class="pagination-related" href="/2023/05/29/magedu-arc-1/" title="Linux动手实践·1"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/wallhaven-4lekzl.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-05-29</div><div class="info-item-2">Linux动手实践·1</div></div><div class="info-2"><div class="info-item-1"> 根据马哥教育架构班课程第一周作业而来  题目要求 在两台服务器上安装kvm虚拟化，把其中一台的虚拟机迁移到另一台；  2。 手动制作一个容器镜像创建成容器并正常运行。 操作实践 KVM虚拟化  # 新建三个虚机，分别承担KVM两个节点和一个NFS主机的角色# Node1: 192. 168. 10. 101 KVM主机# Node2: 192. 168. 10. 102 KVM主机# Stor1: 192. 168. 10. 11 NFS主机，提供iso和kvm两个共享挂载点# 在三台主机的/etc/hosts配置解析记录192. 168. 10. 101 node1192. 168. 10. 102 node2192. 168. 10. 11  stor1# KVM主机的部署，Node1和Node2同步操作# 最小虚拟化宿主环境, 仅包括libvirt和qemu-kvmyum group install -y virtualization-hypervisor # 用于访问和控制虚拟机以及容器的接口，包括libvirt客户端yum group install -y virtu...</div></div></div></a><a class="pagination-related" href="/2023/12/03/Kubernetes-CKA/" title="CKA学习纲要-基础部署和POD的管理"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023/12/F9rnEjrX0AAX9S5.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-12-03</div><div class="info-item-2">CKA学习纲要-基础部署和POD的管理</div></div><div class="info-2"><div class="info-item-1"> 部署、配置和验证环境 部署环境     主机 角色 IP    k8smaster Master 192. 168. 10. 120   k8snode1 Node 192. 168. 10. 121   k8snode2 Node 192. 168. 10. 122    版本信息     程序 版本号    Linux Rockylinux 9. 3   Kubernetes 1. 28. 2   Docker 24. 0. 7   Cri-Docker 0. 3. 8   部署 构建BaseOS# 所有节点主机配置免密登录# 提前下载相应yaml文件和镜像或者科学上网开启全局模式 部署Docker# 关闭防火墙systemctl disable --now firewalld# 关闭selinuxsed -i &#x27;s/enforceing/disabled&#x27; /etc/selinux/config# 关闭SWAPswapoff -a ; sed -i &#x27;/swap/d&#x27; /etc/fstab# 修改内核加载模块cat &gt; /et...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">靖轩</div><div class="author-info-description">逝者如斯夫,不舍昼夜</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/grepsu"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://gitee.com/grepsu" target="_blank" title="Gitee"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:sujx@live.cn" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS链接"><i class="fa  fa-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/07/03/AIGC_FoxHole/" title="海鹰">海鹰</a><time datetime="2026-07-03T01:04:07.000Z" title="发表于 2026-07-03 09:04:07">2026-07-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/11/fristVibeCoding/" title="鹊随金印：我的第一个完整的AI编程项目">鹊随金印：我的第一个完整的AI编程项目</a><time datetime="2026-06-11T01:04:07.000Z" title="发表于 2026-06-11 09:04:07">2026-06-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/03/VI_Howto/" title="VI编辑器简介">VI编辑器简介</a><time datetime="2026-06-03T01:04:07.000Z" title="发表于 2026-06-03 09:04:07">2026-06-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/28/HNCitic_2605/" title="我要上头条">我要上头条</a><time datetime="2026-05-28T01:04:07.000Z" title="发表于 2026-05-28 09:04:07">2026-05-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/12/TS-Domain-Controller-Sync-Failure/" title="记一次Windows AD域控制器同步故障排错">记一次Windows AD域控制器同步故障排错</a><time datetime="2026-05-12T03:04:07.000Z" title="发表于 2026-05-12 11:04:07">2026-05-12</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2008 - 2026 By 靖轩</span></div><div class="footer_custom_text">京ICP备17034757号</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.5"></script><script src="/js/main.js?v=5.5.5"></script><script src="/libs/fancybox/fancybox.umd.js"></script><script src="/js/instantpage.js" type="module"></script><script src="/libs/lazyload/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const parseViewBox = viewBox => {
+    if (!viewBox) return null
+    const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
+    if (parts.length !== 4 || parts.some(n => Number.isNaN(n))) return null
+    return parts
+  }
+
+  const getSvgViewBox = svg => {
+    const attr = parseViewBox(svg.getAttribute('viewBox'))
+    if (attr) return attr
+
+    // Fallback: use bbox to build a viewBox
+    try {
+      const bbox = svg.getBBox()
+      if (bbox && bbox.width && bbox.height) return [bbox.x, bbox.y, bbox.width, bbox.height]
+    } catch (e) {
+      // getBBox may fail on some edge cases; ignore
+    }
+
+    const w = Number(svg.getAttribute('width')) || 0
+    const h = Number(svg.getAttribute('height')) || 0
+    if (w > 0 && h > 0) return [0, 0, w, h]
+    return [0, 0, 100, 100]
+  }
+
+  const setSvgViewBox = (svg, vb) => {
+    svg.setAttribute('viewBox', `${vb[0]} ${vb[1]} ${vb[2]} ${vb[3]}`)
+  }
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v))
+
+  const openSvgInNewTab = ({ source, initViewBox }) => {
+    const getClonedSvg = () => {
+      if (typeof source === 'string') {
+        const template = document.createElement('template')
+        template.innerHTML = source.trim()
+        const svg = template.content.querySelector('svg')
+        return svg ? svg.cloneNode(true) : null
+      }
+      if (source && typeof source.cloneNode === 'function') {
+        return source.cloneNode(true)
+      }
+      return null
+    }
+
+    const clone = getClonedSvg()
+    if (!clone) return
+    if (initViewBox && initViewBox.length === 4) {
+      clone.setAttribute('viewBox', initViewBox.join(' '))
+    }
+    if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+    if (!clone.getAttribute('xmlns:xlink') && clone.outerHTML.includes('xlink:')) {
+      clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+    }
+    // inject background to match current theme
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    const bg = getComputedStyle(document.body).backgroundColor || (isDark ? '#1e1e1e' : '#ffffff')
+    if (!clone.style.background) clone.style.background = bg
+
+    const serializer = new XMLSerializer()
+    const svgSource = serializer.serializeToString(clone)
+    const htmlSource = `<!doctype html><html><head><meta charset="utf-8" />
+      <style>
+        html, body { width: 100%; height: 100%; margin: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; }
+        svg { max-width: 100%; max-height: 100%; height: auto; width: auto; }
+      </style>
+      </head><body>${svgSource}</body></html>`
+    const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank', 'noopener')
+    setTimeout(() => URL.revokeObjectURL(url), 30000)
+  }
+
+  const attachMermaidViewerButton = wrap => {
+    let btn = wrap.querySelector('.mermaid-open-btn')
+    if (!btn) {
+      btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'mermaid-open-btn'
+      wrap.appendChild(btn)
+    }
+
+    btn.innerHTML = '<i class="fa fa-search fa-fw" aria-hidden="true"></i>'
+
+    if (!btn.__mermaidViewerBound) {
+      btn.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        const svg = wrap.__mermaidOriginalSvg || wrap.querySelector('svg')
+        if (!svg) return
+        const initViewBox = wrap.__mermaidInitViewBox
+        if (typeof svg === 'string') {
+          openSvgInNewTab({ source: svg, initViewBox })
+          return
+        }
+        openSvgInNewTab({ source: svg, initViewBox })
+      })
+      btn.__mermaidViewerBound = true
+    }
+  }
+
+  // Zoom around a point (px, py) in the SVG viewport (in viewBox coordinates)
+  const zoomAtPoint = (vb, factor, px, py) => {
+    const w = vb[2] * factor
+    const h = vb[3] * factor
+    const nx = px - (px - vb[0]) * factor
+    const ny = py - (py - vb[1]) * factor
+    return [nx, ny, w, h]
+  }
+
+  const initMermaidGestures = wrap => {
+    const svg = wrap.querySelector('svg')
+    if (!svg) return
+
+    // Ensure viewBox exists so gestures always work
+    const initVb = getSvgViewBox(svg)
+    wrap.__mermaidInitViewBox = initVb
+    wrap.__mermaidCurViewBox = initVb.slice()
+    setSvgViewBox(svg, initVb)
+
+    // Avoid binding multiple times on themeChange/pjax
+    if (wrap.__mermaidGestureBound) return
+    wrap.__mermaidGestureBound = true
+
+    // Helper: map client (viewport) coordinate -> viewBox coordinate
+    const clientToViewBox = (clientX, clientY) => {
+      const rect = svg.getBoundingClientRect()
+      const vb = wrap.__mermaidCurViewBox || getSvgViewBox(svg)
+      const x = vb[0] + (clientX - rect.left) * (vb[2] / rect.width)
+      const y = vb[1] + (clientY - rect.top) * (vb[3] / rect.height)
+      return { x, y, rect, vb }
+    }
+
+    const state = {
+      pointers: new Map(),
+      startVb: null,
+      startDist: 0,
+      startCenter: null
+    }
+
+    const clampVb = vb => {
+      const init = wrap.__mermaidInitViewBox || vb
+      const minW = init[2] * 0.1
+      const maxW = init[2] * 10
+      const minH = init[3] * 0.1
+      const maxH = init[3] * 10
+      vb[2] = clamp(vb[2], minW, maxW)
+      vb[3] = clamp(vb[3], minH, maxH)
+      return vb
+    }
+
+    const setCurVb = vb => {
+      vb = clampVb(vb)
+      wrap.__mermaidCurViewBox = vb
+      setSvgViewBox(svg, vb)
+    }
+
+    const onPointerDown = e => {
+      // Allow only primary button for mouse
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      svg.setPointerCapture(e.pointerId)
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      if (state.pointers.size === 1) {
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      } else if (state.pointers.size === 2) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        state.startDist = Math.hypot(dx, dy)
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        state.startCenter = { x: (pts[0].x + pts[1].x) / 2, y: (pts[0].y + pts[1].y) / 2 }
+      }
+    }
+
+    const onPointerMove = e => {
+      if (!state.pointers.has(e.pointerId)) return
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      // Pan with 1 pointer
+      if (state.pointers.size === 1 && state.startVb) {
+        const p = [...state.pointers.values()][0]
+        const prev = { x: e.clientX - e.movementX, y: e.clientY - e.movementY }
+        // movementX/Y unreliable on touch, compute from stored last position
+        const last = wrap.__mermaidLastSinglePointer || p
+        const dxClient = p.x - last.x
+        const dyClient = p.y - last.y
+        wrap.__mermaidLastSinglePointer = p
+
+        const { rect } = clientToViewBox(p.x, p.y)
+        const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        const dx = dxClient * (vb[2] / rect.width)
+        const dy = dyClient * (vb[3] / rect.height)
+        setCurVb([vb[0] - dx, vb[1] - dy, vb[2], vb[3]])
+        return
+      }
+
+      // Pinch zoom with 2 pointers
+      if (state.pointers.size === 2 && state.startVb && state.startDist > 0) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        const dist = Math.hypot(dx, dy)
+        if (!dist) return
+        const factor = state.startDist / dist // dist bigger => zoom in (viewBox smaller)
+
+        const cx = (pts[0].x + pts[1].x) / 2
+        const cy = (pts[0].y + pts[1].y) / 2
+        const centerClient = { x: cx, y: cy }
+
+        const pxy = clientToViewBox(centerClient.x, centerClient.y)
+        const cpx = pxy.x
+        const cpy = pxy.y
+
+        const vb = zoomAtPoint(state.startVb, factor, cpx, cpy)
+        setCurVb(vb)
+      }
+    }
+
+    const onPointerUpOrCancel = e => {
+      state.pointers.delete(e.pointerId)
+      if (state.pointers.size === 0) {
+        state.startVb = null
+        state.startDist = 0
+        state.startCenter = null
+        wrap.__mermaidLastSinglePointer = null
+      } else if (state.pointers.size === 1) {
+        // reset single pointer baseline to avoid jump
+        wrap.__mermaidLastSinglePointer = [...state.pointers.values()][0]
+      }
+    }
+
+    // Wheel zoom (mouse/trackpad)
+    const onWheel = e => {
+      // ctrlKey on mac trackpad pinch; we treat both as zoom
+      e.preventDefault()
+      const delta = e.deltaY
+      const zoomFactor = delta > 0 ? 1.1 : 0.9
+      const { x, y } = clientToViewBox(e.clientX, e.clientY)
+      const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      setCurVb(zoomAtPoint(vb, zoomFactor, x, y))
+    }
+
+    const onDblClick = () => {
+      const init = wrap.__mermaidInitViewBox
+      if (!init) return
+      wrap.__mermaidCurViewBox = init.slice()
+      setSvgViewBox(svg, init)
+    }
+
+    svg.addEventListener('pointerdown', onPointerDown)
+    svg.addEventListener('pointermove', onPointerMove)
+    svg.addEventListener('pointerup', onPointerUpOrCancel)
+    svg.addEventListener('pointercancel', onPointerUpOrCancel)
+    svg.addEventListener('wheel', onWheel, { passive: false })
+    svg.addEventListener('dblclick', onDblClick)
+  }
+
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+
+      // Clear old render (themeChange/pjax will rerun)
+      const oldSvg = item.querySelector('svg')
+      if (oldSvg) oldSvg.remove()
+      item.__mermaidGestureBound = false
+
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+        if (true) initMermaidGestures(item)
+        item.__mermaidOriginalSvg = svg
+        if (true) attachMermaidViewerButton(item)
+      }
+
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('/libs/mermaid/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.5"></script></div></div></body></html>

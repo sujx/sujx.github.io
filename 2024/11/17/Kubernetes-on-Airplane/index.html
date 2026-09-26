@@ -1,0 +1,560 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>飞行的Kubernetes | 靖轩</title><meta name="author" content="靖轩"><meta name="copyright" content="靖轩"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="很久之前， 我就已经看到过报道美军在F35之上通过Kubernetes来实现软件的快速部署和快速迭代，只不过并没有更进一步的详细描述和报道。这些天，我通过简单的搜索和总结，发现这件事情其实是臭鼬工厂和红帽合伙搞的事情，他们应该是开始批量使用配置实时内核的RHEL版本机载计算设备了。  旧闻三则 U-2联邦实验室实现Kubernetes飞行源自：U-2 Federal Lab achieves fl">
+<meta property="og:type" content="article">
+<meta property="og:title" content="飞行的Kubernetes">
+<meta property="og:url" content="https://www.sujx.net/2024/11/17/Kubernetes-on-Airplane/index.html">
+<meta property="og:site_name" content="靖轩">
+<meta property="og:description" content="很久之前， 我就已经看到过报道美军在F35之上通过Kubernetes来实现软件的快速部署和快速迭代，只不过并没有更进一步的详细描述和报道。这些天，我通过简单的搜索和总结，发现这件事情其实是臭鼬工厂和红帽合伙搞的事情，他们应该是开始批量使用配置实时内核的RHEL版本机载计算设备了。  旧闻三则 U-2联邦实验室实现Kubernetes飞行源自：U-2 Federal Lab achieves fl">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.sujx.net/2024/11/17/aireplane-k8s-01.jpg">
+<meta property="article:published_time" content="2024-11-16T22:04:07.000Z">
+<meta property="article:modified_time" content="2026-09-26T02:32:14.974Z">
+<meta property="article:author" content="靖轩">
+<meta property="article:tag" content="DevOPS">
+<meta property="article:tag" content="Kubernetes">
+<meta property="article:tag" content="Redhat">
+<meta property="article:tag" content="computer">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.sujx.net/2024/11/17/aireplane-k8s-01.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "飞行的Kubernetes",
+  "url": "https://www.sujx.net/2024/11/17/Kubernetes-on-Airplane/",
+  "image": "https://cdn.sujx.net/2024/11/17/aireplane-k8s-01.jpg",
+  "datePublished": "2024-11-16T22:04:07.000Z",
+  "dateModified": "2026-09-26T02:32:14.974Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "靖轩",
+      "url": "https://www.sujx.net"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://cdn.sujx.net/about/favicon.png"><link rel="canonical" href="https://www.sujx.net/2024/11/17/Kubernetes-on-Airplane/index.html"><link rel="preconnect" href="//cdnjs.cloudflare.com"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css?v=5.5.5"><link rel="stylesheet" href="/fonts/css/all.min.css"><link rel="stylesheet" href="/libs/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?417b20ac1984432f821159fac27d3bb5";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><link rel="stylesheet" href="/fonts/titillium-web.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: '/libs/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: true,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '飞行的Kubernetes',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="alternate" href="/atom.xml" title="靖轩" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">靖轩</span></a><a class="nav-page-title" href="/"><span class="site-name">飞行的Kubernetes</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">飞行的Kubernetes</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-11-16T22:04:07.000Z" title="发表于 2024-11-17 06:04:07">2024-11-17</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-09-26T02:32:14.974Z" title="更新于 2026-09-26 10:32:14">2026-09-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%A1%AC%E4%BB%B6%E6%9D%82%E8%B0%88/">硬件杂谈</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">4.3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>13分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><p>很久之前， 我就已经看到过报道美军在F35之上通过Kubernetes来实现软件的快速部署和快速迭代，只不过并没有更进一步的详细描述和报道。这些天，我通过简单的搜索和总结，发现这件事情其实是臭鼬工厂和红帽合伙搞的事情，他们应该是开始批量使用配置实时内核的RHEL版本机载计算设备了。</p>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/11/17/aireplane-k8s-01.jpg"></p>
+<h2 id="旧闻三则"><a href="#旧闻三则" class="headerlink" title="旧闻三则"></a>旧闻三则</h2><hr>
+<h3 id="U-2联邦实验室实现Kubernetes飞行"><a href="#U-2联邦实验室实现Kubernetes飞行" class="headerlink" title="U-2联邦实验室实现Kubernetes飞行"></a>U-2联邦实验室实现Kubernetes飞行</h3><p>源自：<a target="_blank" rel="noopener" href="https://www.af.mil/News/Article-Display/Article/2375297/u-2-federal-lab-achieves-flight-with-kubernetes/">U-2 Federal Lab achieves flight with Kubernetes</a></p>
+<p>发布于2020年10月7日<br>由空中作战司令部公共事务部<br>空中作战司令部公共事务部运营<br>加利福尼亚州比利空军基地 </p>
+<p>9月22日，U-2联邦实验室在比利空军基地分配给第9侦察联队的U-2“龙夫人”上成功利用了Kubernetes进行当地训练飞行。这代表了Kubernetes首次在国防部的主要武器系统中飞行。</p>
+<p>Kubernetes是一个开源的容器编排系统，用于自动化计算机应用的部署、扩展和管理。它最初由谷歌设计，现在由云原生计算基金会维护。其以容器为中心的管理环境代表用户工作负载协调计算、网络和存储，并允许部署复杂的基于微服务的应用程序，实现完全自动化。</p>
+<p>在国防部内，Kubernetes将允许军事武器系统汇集可用的机载计算能力，以满足高级系统和软件需求。</p>
+<p>U-2飞行汇集了飞机上的四台单独的、飞行认证的计算机的能力，利用Kubernetes的优势运行高级机器学习算法，而不影响飞机的飞行或任务系统。“将U-2的传统计算机系统与现代Kubernetes软件成功结合，是空军现有武器系统上软件开发容器化的一个关键里程碑，”空军首席软件官尼古拉斯·夏兰说。</p>
+<p>“我对U-2联邦实验室和我们的侦察镇飞行员感到无比自豪，他们使在U-2上飞行Kubernetes成为可能，”第9侦察联队指挥官希瑟·福克斯上校说。“这是一个里程碑式的成就，为我们快速实验铺平了道路，因为我们不断努力更快地带来未来，提高我们飞行员的战场意识。将Kubernetes集成到U-2上，利用了飞机的高空视线，并使其在竞争激烈的环境中更具生存能力。我们期待与国防部的其他平台合作，输出这一惊人的能力。”</p>
+<p>U-2联邦实验室旨在将“战士、开发者和采购者的汇合”垂直整合在同一操作屋顶下。该实验室已经开发并获得国家标准化技术研究所的批准，建立了联邦政府的第20个实验室认证计划。它提倡“边缘开发”——在有界、安全的环境中，在操作系统上开发新软件集成的概念。“鉴于他们所展示的巨大价值，空中作战司令部正在基于U-2联邦实验室的构建，建立并认证整个企业中的这一流程，”空中作战司令部首席科学家约翰·马蒂亚斯博士说。“我们希望释放数字工程和敏捷软件开发的力量，抓住快速演变技术栈的机会；最终通过压缩将先进技术部署到战场上的时候间，以与战士相关的速度，实现前所未有的能力交付。”</p>
+<p>空军领导人此前曾表示，未来战斗的胜利将取决于服务充分利用前沿数字技术。在像U-2这样的主要武器系统上展示Kubernetes的使用，与数字空军倡议一致，并使飞行员能够在需要时和需要的地方获得实时数据。</p>
+<hr>
+<h3 id="国防部在-F-16-和战舰上实现了-DevSecOps"><a href="#国防部在-F-16-和战舰上实现了-DevSecOps" class="headerlink" title="国防部在 F-16 和战舰上实现了 DevSecOps"></a>国防部在 F-16 和战舰上实现了 DevSecOps</h3><p>源自：<a target="_blank" rel="noopener" href="https://www.cncf.io/case-studies/dod/">With Kubernetes, the U. S. Department of Defense is enabling DevSecOps on F-16s and battleships</a></p>
+<p>近来，美国国防部的大型武器系统软件交付可能需要 3 到 10 年的时候间。美国空军首席软件官 Nicolas M。 Chaillan 表示：“大多数团队都使用瀑布式开发，没有最小可行产品，没有增量交付，也没有来自最终用户的反馈循环。特别是在人工智能、机器学习和网络安全方面，每个人都意识到我们必须加快步伐。Chaillan 和国防部首席信息官、信息企业副首席信息官 Peter Ranks 创建了国防部企业 DevSecOps 参考设计，要求在整个国防部使用符合 CNCF 标准的 Kubernetes 集群和其他开源技术。</p>
+<p>发布曾经需要长达 3 到 8 个月的时候间，而现在只需一周即可完成。云飞地的运营授权 （ ATO ） 可在一周内获得，此外，“我们在平台堆栈上拥有持续的 ATO，”Chaillan 说道。“任何时候，只要软件要通过审核，就会自动获得认证。因此，您每天可以多次推送软件。”总而言之，“我们认为，有了这 37 个项目，计划的项目时间将节省 100 多年，”他补充道。美国空军首席软件官 Nicolas M。 Chaillan 表示：“大多数团队都采用瀑布式开发，没有最小可行产品，没有增量交付，也没有来自最终用户的反馈循环。”此外，“网络安全大多是事后才想到的。”</p>
+<p>2018 年夏天，Chaillan 被任命来扭转局面，他的解决方案很简单，但对国防部来说却是革命性的。他和国防部信息企业副首席信息官 Peter Ranks 共同创建了国防部企业 DevSecOps 参考设计，要求使用符合 CNCF 标准的 Kubernetes 集群和其他开源技术。Chaillan 说：“国防部企业 DevSecOps 参考设计定义了 DevSecOps 管道的门槛。只要团队符合该参考设计，他们就可以获得国防部范围内的持续 ATO（操作权限）。”</p>
+<p>他说，Kubernetes 被选为“我们的抽象层，因此我们知道它的行为方式相同。”“对我们来说，它的价值在于抽象、编排、弹性和自我修复。”Envoy 和 Istio 提供了一个控制和数据平面，这“至关重要，这样我们就不会在不同环境之间产生偏差，因为我们有多个机密环境，”他补充道。 </p>
+<p>Chaillan 表示，该计划旨在“快速学习，快速失败，避免因同一原因而失败两次”。“特别是在人工智能、机器学习和网络安全方面，每个人都意识到我们必须加快步伐。”</p>
+<p>为了推动采用，团队被选中使用云原生最佳实践构建最小可行产品 （ MVP ）。一些团队选择了简单的应用程序来证明这是可以做到的。但 Chaillan 采取了不同的方式：“我解决了武器系统问题，以便将军和高级管理人员能够关注，而这通常是你最终获得资金的地方。所以如果你让人们兴奋并证明你可以做到，那么你就可以证明这是可行的。”因此，在 2019 年秋季，位于犹他州希尔空军基地的 SoniKube 团队开始在 F-16 喷气式飞机上运行 Kubernetes。由 Jeff McCoy 领导的国防部 Platform One 团队成员加入该团队，教他们如何将 Kubernetes 安装在喷气式飞机的传统硬件上。“我们必须能够在两分钟内使用 Istio 在喷气式飞机上启动 Kubernetes，因为这是喷气式飞机出现问题时的必备条件，并且它必须能够在两分钟内重新启动，”Chaillan 说。“这是最大的挑战。”</p>
+<p>在 45 天内，团队实现了这一目标，并能够在喷气式飞机上为空军采购、技术和后勤部助理部长 Will Roper 博士进行演示。“我们在 Istio 上运行了集群，然后推出了五六个微服务，”Chaillan 说。“许多喷气式飞机都使用较旧的编程语言运行，因此能够运行 Go、Python 和 Java 非常令人兴奋。”</p>
+<p>目前共有 37 个团队致力于在 Kubernetes 上构建应用程序：“我们的团队在武器系统的各个方面都在进行这项工作，从太空系统到核系统再到喷气式飞机，”他说。 </p>
+<p>虽然其中一些项目是机密的，但其他项目已经能够分享其成果。例如，联合平台正在努力推动云端的网络攻防能力。Chaillan 说：“过去六个月，我们一直在使用 Kubernetes 来编排堆栈并容器化我们正在构建的工具。联合平台在交付容器的快速迭代方面非常成功。”</p>
+<p>海军的 24 小时战斗编译计划是另一个例子：“Kubernetes 使他们能够在 [海上] 断开连接的情况下在船上推动生产，”Chaillan 说。Kessel Run 团队“在几周内就为不同类型的设备和 iPad 以及其他酷炫的边缘用例上的作战人员带来了价值。”</p>
+<p>凭借这些成功案例，Chaillan 提倡在整个国防部范围内提供企业级产品。他们成立了两个团队：Cloud One，为开发团队提供云环境；Platform One，在 Kubernetes 集群上设置 DevSecOps 环境。团队可以从多种发行版中进行选择，例如 OpenShift、Tanzu、D2IQ 和 Rancher。</p>
+<p>有了这些云原生技术和实践，国防部节省了大量时间。以前需要 3 到 8 个月才能完成的发布，现在只需一周即可完成。云飞地的 ATO 可以在一周内获得，而且“我们在平台堆栈上拥有持续的 ATO”，Chaillan 说。“只要软件通过测试和安全门，就会自动获得认证。因此，您可以每天多次推送软件。”</p>
+<p>另一个好处是容器现在可以在整个国防部范围内进行认证。Chaillan 说：“我们不再需要每个团队进行认证，而是可以集中进行一次认证，而且认证可以一直延续到机密环境。”</p>
+<p>总而言之，“我们认为通过这 37 个项目，可以节省 100 多年的计划时间，”他补充道。</p>
+<p>此外，将 DevSecOps 引入所有环境（包括机密和非机密环境）“是一个非常大的推动因素”，Chaillan 说道。“他们可以在数据所在的位置运行所有机密级别，而这正是您需要数据的地方。因此，有了这种交钥匙工程，您就可以准备好环境，我们刚刚签订了 55 份云服务、人才和许可证合同。因此，如果像 F-16 这样的团队来找我，说‘我需要云计算、存储、Kubernetes 发行版、源代码存储库、用于 CI&#x2F;CD 管道的一系列不同工具和五名 DevSecOps 工程师’，他们可以在 30 天内获得所有这些。”这个过程过去需要 3 到 6 个月。</p>
+<p>Chaillan 的下一个目标是完成对国防部应用程序 10 万名员工的培训。这听起来可能令人望而生畏，但正如 Chaillan 指出的那样，“我们已经组建了一支从未使用过 Kubernetes 的团队，招募了一些人员并对他们进行了培训，将他们安置在基地外的一栋商业建筑中，并在 45 天内打造出了 F-16 MVP。这在以前可能需要一两年的时候间。”</p>
+<hr>
+<h3 id="Lockheed-Martin-实现开发流程的转型，加快交付速度"><a href="#Lockheed-Martin-实现开发流程的转型，加快交付速度" class="headerlink" title="Lockheed Martin 实现开发流程的转型，加快交付速度"></a>Lockheed Martin 实现开发流程的转型，加快交付速度</h3><p>源自：<a target="_blank" rel="noopener" href="https://www.redhat.com/zh/success-stories/lockheed-martin">Lockheed Martin transforms development processes, speeds delivery</a></p>
+<p>作为一家全球性安防与航空航天公司，Lockheed Martin 需要对其所用的应用开发流程进行现代化改造，以便为美国空军的 F-22 猛禽战斗机提供新的功能。该公司选择红帽® 开放创新实验室来带领其完成敏捷转型，并帮助其在 F-22 上实施开源架构。凭借新的敏捷流程，Lockheed Martin 将其对未来冲刺迭代的预测能力提高了 40%，而且能提前 3 年提供新的通信功能。</p>
+<p>为了在竞争中保持领先地位，Lockheed Martin 需要采用敏捷方法和 DevSecOps 实践来升级其开发流程。“拥有像 F-22 猛禽战斗机这样闻名于世的平台时，对手就会一直想办法对抗它，”Lockheed Martin F-16&#x2F;F-22 产品开发副总裁 Michael Cawood 说道，“这意味着我们必须要不断增加新的功能，改进 F-22，而且还必须比以往更快。这就需要我们变革自己的组织结构和工作方式。”</p>
+<p>Lockheed Martin 选择了红帽开放创新实验室来帮助他们从瀑布式开发转型为敏捷方法，同时理顺其嵌入式系统的纷繁关系。Lockheed Martin 与红帽携手合作，共同构建了一个开放式架构，以加快应用开发和交付速度。Cawood 表示：“通过与红帽开放创新实验室团队的合作，我们的一切都发生了改变，包括我们的工具链、我们的流程，最重要的还有我们的文化。我们的新文化根植于 DevSecOps 和敏捷方法，再加上基于红帽 OpenShift 容器平台的灵活平台，F-22 团队将继续努力，确保猛禽战斗机满足美国的国防需求。”</p>
+<p>Lockheed Martin 的新流程和平台免除了耗时多日的设计审查工作。现在，面对每次的冲刺迭代，公司都展现了良好的能力成熟度。此外，Lockheed Martin 现在还提出了“最小可行产品”（MVP）的概念，旨在尽快向客户交付功能。F-22 猛禽战斗机团队已将其对未来冲刺迭代的预测能力提高了 40%，而且仅仅在项目启动 1 年后，Lockheed Martin 就能提前 3 年为 F-22 提供新的通信功能。“通过与红帽的合作，有朝一日我们一定能做到前一天开发新功能，第二天就试飞，随后即可交付给作战人员；就像我们在移动设备上接收更新那样。”Cawood 说道。</p>
+<blockquote>
+<p>很高兴我们能够更快、更经济高效地为 F-22 机队提供新的功能。更令人欣喜的是我们看到了未来的发展前景，我们将继续改进我们的思维方式，并将这种转变扩展到 F-16 及其他 Lockheed Martin 产品上。</p>
+<p>Michael Cawood</p>
+<p>F-16&#x2F;F-22 产品开发副总裁， 洛克希德马丁公司</p>
+</blockquote>
+<h2 id="背后的技术"><a href="#背后的技术" class="headerlink" title="背后的技术"></a>背后的技术</h2><p>洛马公司的臭鼬工厂提出了一个Enterprise Open System Architecture 复杂组织体开放式系统架构 E-OSA的体系架构，其目的是为了应对更大规模的计算机应用推广和计算机网络的发展需求。对于不同用途、不同功能的电子信息系统，用开放标准设计的计算机或软件体系结构，其目的是简化与添加、修改、删除和交换组件相关的工作。臭鼬工厂的OSA架构主要是目的是：</p>
+<p>1 ) 优化系统性能并降低装备成本；<br>2 ) 通过技术及商业模式的创新使系统组件更容易升级；<br>3 ) 使用标准接口，支持可操作性、可移植性和可变规模能力，同时系统组件不受供应商限制，可进行独立采购。</p>
+<p>因此，OSA的核心不仅仅是将一套简单的标准或业务战略和技术体系结构的组合，还包含对各标准协同规则制定，以及应用程序集成操作系统的规则制定。主要包括以下一些子系统：</p>
+<ol>
+<li>OMS（OMS，Open Mission System）：开放式任务系统；</li>
+<li>FACE（Future Airborne Capability Environment）：未来机载能力环境；</li>
+<li>SOSA（Sensor Open System Architecture）：传感器开放系统架构；</li>
+<li>HOST（Hardware Open System Technologies）：硬件开放系统技术</li>
+</ol>
+<p>前述所有应用的硬件基础都要依赖于下面这个臭鼬工厂的“爱因斯坦盒子”EMC²，也就是基于标准硬件结合商业系统而构建的计算系统。硬件部分是使用类似刀片服务器的4刀片商业硬件实现高可用，而系统部分则是直接采用红帽的RHEL企业级操作系统外加边缘计算系统Microshift( Openshift的精简版本 )，搭配开发环境使用标准版本的Openshift和DevOPS来实现敏捷开发、快速部署。</p>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/11/17/aireplane-k8s-04.jpg"></p>
+<p>下图则是该项目的演进路线</p>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/11/17/aireplane-k8s-03.png"></p>
+<hr>
+<p>参考：</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/670425177">美开放式系统架构浅析：基础介绍篇</a></li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/673592342">美开放式系统架构浅析–OMS篇</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.redhat.com/zh-cn/documentation/red_hat_device_edge/4/html/overview/device-edge-overview#device-edge-overview">红帽设备边缘</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.redhat.com/en/about/press-releases/lockheed-martin-red-hat-collaborate-advance-artificial-intelligence-military-missions">Lockheed Martin, Red Hat Collaborate to Advance Artificial Intelligence for Military Missions</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.lockheedmartin.com/en-us/products/OSA.html">Enterprise OSA</a></li>
+</ol>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Kubernetes/">Kubernetes</a><a class="post-meta__tags" href="/tags/computer/">computer</a><a class="post-meta__tags" href="/tags/Redhat/">Redhat</a><a class="post-meta__tags" href="/tags/DevOPS/">DevOPS</a></div><div class="post-share"><div class="social-share" data-image="https://cdn.sujx.net/2024/11/17/aireplane-k8s-01.jpg" data-sites="facebook,twitter,weibo,qq"></div><link rel="stylesheet" href="/libs/sharejs/css/share.min.css" media="print" onload="this.media='all'"><script src="/libs/sharejs/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>能否请我喝一杯咖啡？</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.jpg" target="_blank"><img class="post-qr-code-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/wechat.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2024/11/22/Guide-Speech-Beijing/" title="北京导游综合能力测试"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/11/23/beijing-08.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">北京导游综合能力测试</div></div><div class="info-2"><div class="info-item-1"> 以下为参加北京地区导游资格考试科目五的导游词，包括天安门、故宫、长城、颐和园、十三陵。内容参考了多个导游课程、B站、知乎、北京导游手册的多个内容来源，恕不一一备注了。  考试要求基本概况 人机景点讲解10分钟，分值占比55分 综合能力题时间为27分钟，共计33道题，分值占比45分  第一单元考试形式1。 考试开始后，系统自动进入第1单元并抽取景点讲解题1道，考生在准备完成后，手动点击“开始录制”按钮进行录制作答。2。 试题回答完毕后，考生可点击“回放视频”按钮回放录制的答题信息，回放过程中可随时点击“结束回放”按钮停止回放。3。 如需重新回答，则点击“重新录制”按钮进行重新录制。重新录制后，之前录制的答题信息将被覆盖，考生需再次点击“回放视频”按钮回放录制的答题信息。如4。 确认本题答题完成则等待本单元倒计时结束。 考试内容以下题目抽取讲解题一道，录音作答： 1。 天安门：介绍天安门城楼及建筑特点，介绍金水桥、国旗及旗杆、人民英雄纪念碑、毛主席纪念堂、正阳门、人民大会堂、国家博物馆。2。 故宫：介绍故宫的历史沿革；详细介绍整体布局；中轴线上的主要建筑和陈设的功能及特点；列入世界...</div></div></div></a><a class="pagination-related" href="/2024/11/10/CZTP-Howto/" title="零信任安全入门"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover63.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">零信任安全入门</div></div><div class="info-2"><div class="info-item-1">从不信任，始终验证（ Never Trust， Always Verify ） 零信任既不是技术也不是产品，而是一种安全理念和长期战略。零信任的思想是应对未来网络安全威胁的一种新的安全范式，其目的是减少网络安全风险。零信任基于身份认证和授权重新构建访问控制的信任基础，从而确保身份可信、设备可信、应用可信和链路可信。它是一个全面的模型，致力于构建一个以身份为中心的策略模型以实现动态的访问控制。  假设网络自始至终充满外部和内部威胁，不能仅凭网络位置来评估信任（假设已经被攻破） 默认情况下不应该信任网络内部或外部的任何人、设备、系统，需要基于认证和授权重构访问控制的信任基础（持续验证，永不信任） 访问控制策略应该是动态的，基于设备和用户的多源环境数据计算得来（只授予必需的最小权限）  零信任不是没有信任，而是让信任边界最小化，减少网络攻击的爆炸边界。零信任是把安全风险最小化的一种安全范式。零信任不是安全的银弹。    09 山西大同浑源·悬空寺   概述定义在假定网络环境已经被攻陷的前提下，当执行信息系统和服务中的每次访问请求时，降低其决策准确度的不确定性。零信任架构是一种企业网络安...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2024/09/30/Interview-2409/" title="面试题目"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover91.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-09-30</div><div class="info-item-2">面试题目</div></div><div class="info-2"><div class="info-item-1">如何防止数据丢失在数据存储管理中，防止数据丢失和最小化故障损失需要从预防措施、实时监控、快速响应机制和容灾备份多个维度构建完整的数据保护体系。以下是结合华为存储设备的详细策略：  一、预防措施：从源头降低数据丢失风险1. 冗余架构设计 RAID级别优化   避免使用RAID 0（无冗余），优先选择RAID 6（允许双盘故障）或RAID 10（高性能+冗余）。   华为存储支持智能RAID 2。 0+技术，可将物理硬盘划分为更细粒度的块（CK），提升重建效率。   多副本与纠删码（EC）   针对分布式存储（如OceanStor Pacific），启用多副本（如3副本）或EC（如8+4），容忍节点级故障。    2. 数据保护技术 快照（Snapshot）   定期为关键业务LUN&#x2F;文件系统创建快照（如每小时一次），保留最近24小时快照。   华为存储支持秒级快照，通过“差分位图”技术减少性能影响。   克隆与远程复制   使用HyperClone创建完整数据副本，用于开发测试或应急恢复。   配置HyperReplication（异步&#x2F;同步）将数据复制到异地容...</div></div></div></a><a class="pagination-related" href="/2023/12/03/Kubernetes-CKA/" title="CKA学习纲要-基础部署和POD的管理"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023/12/F9rnEjrX0AAX9S5.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-12-03</div><div class="info-item-2">CKA学习纲要-基础部署和POD的管理</div></div><div class="info-2"><div class="info-item-1"> 部署、配置和验证环境 部署环境     主机 角色 IP    k8smaster Master 192. 168. 10. 120   k8snode1 Node 192. 168. 10. 121   k8snode2 Node 192. 168. 10. 122    版本信息     程序 版本号    Linux Rockylinux 9. 3   Kubernetes 1. 28. 2   Docker 24. 0. 7   Cri-Docker 0. 3. 8   部署 构建BaseOS# 所有节点主机配置免密登录# 提前下载相应yaml文件和镜像或者科学上网开启全局模式 部署Docker# 关闭防火墙systemctl disable --now firewalld# 关闭selinuxsed -i &#x27;s/enforceing/disabled&#x27; /etc/selinux/config# 关闭SWAPswapoff -a ; sed -i &#x27;/swap/d&#x27; /etc/fstab# 修改内核加载模块cat &gt; /et...</div></div></div></a><a class="pagination-related" href="/2023/08/10/Kubernetes-CICD/" title="CI&#x2F;CD初步"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/wallhaven-4lekzl.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-10</div><div class="info-item-2">CI&#x2F;CD初步</div></div><div class="info-2"><div class="info-item-1"> 现在利用已有的k8s环境部署一套CI&#x2F;CD环境  DevOps理解CI&#x2F;CD，持续集成和持续交付的基本过程包括如下几个步骤：  软件更新或者迭代——Gitlab 新版软件打包成镜像——Jenkins 新的镜像在k8s中集成——Registry  当代码提交到gitlab之后，会立马触发jenkins将新代码编译成镜像，然后再在kmaster上部署新的镜像。  镜像仓库Registry部署# 部署docker并修改docker启动参数[root@Gitlab ~]# vim /usr/lib/systemd/system/docker.service# 新增--insecure-registry=192. 168. 10. 9:5000 -H tcp://0. 0. 0. 0:2376 ExecStart=/usr/bin/dockerd --insecure-registry=192. 168. 10. 9:5000 -H tcp://0. 0. 0. 0:2376 -H fd:// --containerd=/run/containerd/containe...</div></div></div></a><a class="pagination-related" href="/2023/08/05/Kubernetes-Extra/" title="Kubernetes高级概念"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/05/wallhaven-md1qr8.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-05</div><div class="info-item-2">Kubernetes高级概念</div></div><div class="info-2"><div class="info-item-1">安全管理kubeconfig文件是指用于登录的文件，默认是指~&#x2F;。 kube&#x2F;config。这个文件是在刚装好kubernetes集群后按提示复制过来的，它和&#x2F;etc&#x2F;kubernetes&#x2F;admin。 conf是一样的，里面包括了集群的地址、admin用户以及各种证书和密钥的信息。创建kubernetes集群时，文件中的admin已被授予最大权限。 # 只要有了admin.conf文件就可管理集群[root@kmaster ~]# sz /etc/kubernetes/admin.conf # Windows系统部署kubectl也可管理PowerShell 7. 3. 7PS C:\Users\root&gt; kubectl get nodes --kubeconfig=admin.confNAME      STATUS   ROLES                  AGE   VERSIONkmaster   Ready    control-plane, master   35d   v1. 21. 14knode...</div></div></div></a><a class="pagination-related" href="/2022/09/19/Kubernetes-Deploy/" title="Kubernetes的部署"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/wallhaven-4dzk5g.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2022-09-19</div><div class="info-item-2">Kubernetes的部署</div></div><div class="info-2"><div class="info-item-1">概要Kubernetes 这个名字源于希腊语，意为“舵手”或“飞行员”。k8s 这个缩写是因为 k 和 s 之间有八个字符的关系。 Kubernetes 是一个可移植、可扩展的开源平台，用于管理容器化的工作负载和服务，可促进声明式配置和自动化。 Kubernetes 拥有一个庞大且快速增长的生态，其服务、支持和工具的使用范围相当广泛。  随着容器的广泛应用，Kubernetes能够满足容器的资源管理和任务编排的需要，它可以实现：  服务发现和负载均衡  Kubernetes 可以使用 DNS 名称或自己的 IP 地址来暴露容器。 如果进入容器的流量很大， Kubernetes 可以负载均衡并分配网络流量，从而使部署稳定。  存储编排  Kubernetes 允许你自动挂载你选择的存储系统，例如本地存储、公共云提供商等。  自动部署和回滚  你可以使用 Kubernetes 描述已部署容器的所需状态， 它可以以受控的速率将实际状态更改为期望状态。 例如，你可以自动化 Kubernetes 来为你的部署创建新容器， 删除现有容器并将它们的所有资源用于新容器。  自动完成装箱计算  你...</div></div></div></a><a class="pagination-related" href="/2024/07/13/K3s-HA/" title="在Openrule上部署K3S群集"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover138.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-07-13</div><div class="info-item-2">在Openrule上部署K3S群集</div></div><div class="info-2"><div class="info-item-1">什么是K3SK3s 是轻量级的 Kubernetes。K3s 易于安装，仅需要 Kubernetes 内存的一半，所有组件都在一个小于 100 MB 的二进制文件中。K3s 是一个完全兼容的 Kubernetes 发行版，具有以下增强功能：  打包为单个二进制文件。 使用基于 sqlite3 作为默认存储机制的轻量级存储后端。同时支持使用 etcd3、MySQL 和 Postgres。 封装在简单的启动程序中，可以处理很多复杂的 TLS 和选项。 默认情况下是安全的，对轻量级环境有合理的默认值。 所有 Kubernetes control plane 组件的操作都封装在单个二进制文件和进程中。因此，K3s 支持自动化和管理复杂的集群操作（例如证书分发等）。 最大程度减轻了外部依赖性，K3s 仅需要现代内核和 cgroup 挂载。K3s 打包了所需的依赖，包括： containerd Flannel ( CNI ) CoreDNS Traefik ( Ingress ) Klipper-lb ( Service LB ) 嵌入式网络策略控制器 嵌入式 local-path-prov...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">靖轩</div><div class="author-info-description">逝者如斯夫,不舍昼夜</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/grepsu"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://gitee.com/grepsu" target="_blank" title="Gitee"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:sujx@live.cn" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS链接"><i class="fa  fa-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%97%A7%E9%97%BB%E4%B8%89%E5%88%99"><span class="toc-number">1.</span> <span class="toc-text">旧闻三则</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#U-2%E8%81%94%E9%82%A6%E5%AE%9E%E9%AA%8C%E5%AE%A4%E5%AE%9E%E7%8E%B0Kubernetes%E9%A3%9E%E8%A1%8C"><span class="toc-number">1.1.</span> <span class="toc-text">U-2联邦实验室实现Kubernetes飞行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%BD%E9%98%B2%E9%83%A8%E5%9C%A8-F-16-%E5%92%8C%E6%88%98%E8%88%B0%E4%B8%8A%E5%AE%9E%E7%8E%B0%E4%BA%86-DevSecOps"><span class="toc-number">1.2.</span> <span class="toc-text">国防部在 F-16 和战舰上实现了 DevSecOps</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Lockheed-Martin-%E5%AE%9E%E7%8E%B0%E5%BC%80%E5%8F%91%E6%B5%81%E7%A8%8B%E7%9A%84%E8%BD%AC%E5%9E%8B%EF%BC%8C%E5%8A%A0%E5%BF%AB%E4%BA%A4%E4%BB%98%E9%80%9F%E5%BA%A6"><span class="toc-number">1.3.</span> <span class="toc-text">Lockheed Martin 实现开发流程的转型，加快交付速度</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%83%8C%E5%90%8E%E7%9A%84%E6%8A%80%E6%9C%AF"><span class="toc-number">2.</span> <span class="toc-text">背后的技术</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/07/03/AIGC_FoxHole/" title="海鹰">海鹰</a><time datetime="2026-07-03T01:04:07.000Z" title="发表于 2026-07-03 09:04:07">2026-07-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/11/fristVibeCoding/" title="鹊随金印：我的第一个完整的AI编程项目">鹊随金印：我的第一个完整的AI编程项目</a><time datetime="2026-06-11T01:04:07.000Z" title="发表于 2026-06-11 09:04:07">2026-06-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/03/VI_Howto/" title="VI编辑器简介">VI编辑器简介</a><time datetime="2026-06-03T01:04:07.000Z" title="发表于 2026-06-03 09:04:07">2026-06-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/28/HNCitic_2605/" title="我要上头条">我要上头条</a><time datetime="2026-05-28T01:04:07.000Z" title="发表于 2026-05-28 09:04:07">2026-05-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/12/TS-Domain-Controller-Sync-Failure/" title="记一次Windows AD域控制器同步故障排错">记一次Windows AD域控制器同步故障排错</a><time datetime="2026-05-12T03:04:07.000Z" title="发表于 2026-05-12 11:04:07">2026-05-12</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2008 - 2026 By 靖轩</span></div><div class="footer_custom_text">京ICP备17034757号</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.5"></script><script src="/js/main.js?v=5.5.5"></script><script src="/libs/fancybox/fancybox.umd.js"></script><script src="/js/instantpage.js" type="module"></script><script src="/libs/lazyload/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const parseViewBox = viewBox => {
+    if (!viewBox) return null
+    const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
+    if (parts.length !== 4 || parts.some(n => Number.isNaN(n))) return null
+    return parts
+  }
+
+  const getSvgViewBox = svg => {
+    const attr = parseViewBox(svg.getAttribute('viewBox'))
+    if (attr) return attr
+
+    // Fallback: use bbox to build a viewBox
+    try {
+      const bbox = svg.getBBox()
+      if (bbox && bbox.width && bbox.height) return [bbox.x, bbox.y, bbox.width, bbox.height]
+    } catch (e) {
+      // getBBox may fail on some edge cases; ignore
+    }
+
+    const w = Number(svg.getAttribute('width')) || 0
+    const h = Number(svg.getAttribute('height')) || 0
+    if (w > 0 && h > 0) return [0, 0, w, h]
+    return [0, 0, 100, 100]
+  }
+
+  const setSvgViewBox = (svg, vb) => {
+    svg.setAttribute('viewBox', `${vb[0]} ${vb[1]} ${vb[2]} ${vb[3]}`)
+  }
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v))
+
+  const openSvgInNewTab = ({ source, initViewBox }) => {
+    const getClonedSvg = () => {
+      if (typeof source === 'string') {
+        const template = document.createElement('template')
+        template.innerHTML = source.trim()
+        const svg = template.content.querySelector('svg')
+        return svg ? svg.cloneNode(true) : null
+      }
+      if (source && typeof source.cloneNode === 'function') {
+        return source.cloneNode(true)
+      }
+      return null
+    }
+
+    const clone = getClonedSvg()
+    if (!clone) return
+    if (initViewBox && initViewBox.length === 4) {
+      clone.setAttribute('viewBox', initViewBox.join(' '))
+    }
+    if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+    if (!clone.getAttribute('xmlns:xlink') && clone.outerHTML.includes('xlink:')) {
+      clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+    }
+    // inject background to match current theme
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    const bg = getComputedStyle(document.body).backgroundColor || (isDark ? '#1e1e1e' : '#ffffff')
+    if (!clone.style.background) clone.style.background = bg
+
+    const serializer = new XMLSerializer()
+    const svgSource = serializer.serializeToString(clone)
+    const htmlSource = `<!doctype html><html><head><meta charset="utf-8" />
+      <style>
+        html, body { width: 100%; height: 100%; margin: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; }
+        svg { max-width: 100%; max-height: 100%; height: auto; width: auto; }
+      </style>
+      </head><body>${svgSource}</body></html>`
+    const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank', 'noopener')
+    setTimeout(() => URL.revokeObjectURL(url), 30000)
+  }
+
+  const attachMermaidViewerButton = wrap => {
+    let btn = wrap.querySelector('.mermaid-open-btn')
+    if (!btn) {
+      btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'mermaid-open-btn'
+      wrap.appendChild(btn)
+    }
+
+    btn.innerHTML = '<i class="fa fa-search fa-fw" aria-hidden="true"></i>'
+
+    if (!btn.__mermaidViewerBound) {
+      btn.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        const svg = wrap.__mermaidOriginalSvg || wrap.querySelector('svg')
+        if (!svg) return
+        const initViewBox = wrap.__mermaidInitViewBox
+        if (typeof svg === 'string') {
+          openSvgInNewTab({ source: svg, initViewBox })
+          return
+        }
+        openSvgInNewTab({ source: svg, initViewBox })
+      })
+      btn.__mermaidViewerBound = true
+    }
+  }
+
+  // Zoom around a point (px, py) in the SVG viewport (in viewBox coordinates)
+  const zoomAtPoint = (vb, factor, px, py) => {
+    const w = vb[2] * factor
+    const h = vb[3] * factor
+    const nx = px - (px - vb[0]) * factor
+    const ny = py - (py - vb[1]) * factor
+    return [nx, ny, w, h]
+  }
+
+  const initMermaidGestures = wrap => {
+    const svg = wrap.querySelector('svg')
+    if (!svg) return
+
+    // Ensure viewBox exists so gestures always work
+    const initVb = getSvgViewBox(svg)
+    wrap.__mermaidInitViewBox = initVb
+    wrap.__mermaidCurViewBox = initVb.slice()
+    setSvgViewBox(svg, initVb)
+
+    // Avoid binding multiple times on themeChange/pjax
+    if (wrap.__mermaidGestureBound) return
+    wrap.__mermaidGestureBound = true
+
+    // Helper: map client (viewport) coordinate -> viewBox coordinate
+    const clientToViewBox = (clientX, clientY) => {
+      const rect = svg.getBoundingClientRect()
+      const vb = wrap.__mermaidCurViewBox || getSvgViewBox(svg)
+      const x = vb[0] + (clientX - rect.left) * (vb[2] / rect.width)
+      const y = vb[1] + (clientY - rect.top) * (vb[3] / rect.height)
+      return { x, y, rect, vb }
+    }
+
+    const state = {
+      pointers: new Map(),
+      startVb: null,
+      startDist: 0,
+      startCenter: null
+    }
+
+    const clampVb = vb => {
+      const init = wrap.__mermaidInitViewBox || vb
+      const minW = init[2] * 0.1
+      const maxW = init[2] * 10
+      const minH = init[3] * 0.1
+      const maxH = init[3] * 10
+      vb[2] = clamp(vb[2], minW, maxW)
+      vb[3] = clamp(vb[3], minH, maxH)
+      return vb
+    }
+
+    const setCurVb = vb => {
+      vb = clampVb(vb)
+      wrap.__mermaidCurViewBox = vb
+      setSvgViewBox(svg, vb)
+    }
+
+    const onPointerDown = e => {
+      // Allow only primary button for mouse
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      svg.setPointerCapture(e.pointerId)
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      if (state.pointers.size === 1) {
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      } else if (state.pointers.size === 2) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        state.startDist = Math.hypot(dx, dy)
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        state.startCenter = { x: (pts[0].x + pts[1].x) / 2, y: (pts[0].y + pts[1].y) / 2 }
+      }
+    }
+
+    const onPointerMove = e => {
+      if (!state.pointers.has(e.pointerId)) return
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      // Pan with 1 pointer
+      if (state.pointers.size === 1 && state.startVb) {
+        const p = [...state.pointers.values()][0]
+        const prev = { x: e.clientX - e.movementX, y: e.clientY - e.movementY }
+        // movementX/Y unreliable on touch, compute from stored last position
+        const last = wrap.__mermaidLastSinglePointer || p
+        const dxClient = p.x - last.x
+        const dyClient = p.y - last.y
+        wrap.__mermaidLastSinglePointer = p
+
+        const { rect } = clientToViewBox(p.x, p.y)
+        const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        const dx = dxClient * (vb[2] / rect.width)
+        const dy = dyClient * (vb[3] / rect.height)
+        setCurVb([vb[0] - dx, vb[1] - dy, vb[2], vb[3]])
+        return
+      }
+
+      // Pinch zoom with 2 pointers
+      if (state.pointers.size === 2 && state.startVb && state.startDist > 0) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        const dist = Math.hypot(dx, dy)
+        if (!dist) return
+        const factor = state.startDist / dist // dist bigger => zoom in (viewBox smaller)
+
+        const cx = (pts[0].x + pts[1].x) / 2
+        const cy = (pts[0].y + pts[1].y) / 2
+        const centerClient = { x: cx, y: cy }
+
+        const pxy = clientToViewBox(centerClient.x, centerClient.y)
+        const cpx = pxy.x
+        const cpy = pxy.y
+
+        const vb = zoomAtPoint(state.startVb, factor, cpx, cpy)
+        setCurVb(vb)
+      }
+    }
+
+    const onPointerUpOrCancel = e => {
+      state.pointers.delete(e.pointerId)
+      if (state.pointers.size === 0) {
+        state.startVb = null
+        state.startDist = 0
+        state.startCenter = null
+        wrap.__mermaidLastSinglePointer = null
+      } else if (state.pointers.size === 1) {
+        // reset single pointer baseline to avoid jump
+        wrap.__mermaidLastSinglePointer = [...state.pointers.values()][0]
+      }
+    }
+
+    // Wheel zoom (mouse/trackpad)
+    const onWheel = e => {
+      // ctrlKey on mac trackpad pinch; we treat both as zoom
+      e.preventDefault()
+      const delta = e.deltaY
+      const zoomFactor = delta > 0 ? 1.1 : 0.9
+      const { x, y } = clientToViewBox(e.clientX, e.clientY)
+      const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      setCurVb(zoomAtPoint(vb, zoomFactor, x, y))
+    }
+
+    const onDblClick = () => {
+      const init = wrap.__mermaidInitViewBox
+      if (!init) return
+      wrap.__mermaidCurViewBox = init.slice()
+      setSvgViewBox(svg, init)
+    }
+
+    svg.addEventListener('pointerdown', onPointerDown)
+    svg.addEventListener('pointermove', onPointerMove)
+    svg.addEventListener('pointerup', onPointerUpOrCancel)
+    svg.addEventListener('pointercancel', onPointerUpOrCancel)
+    svg.addEventListener('wheel', onWheel, { passive: false })
+    svg.addEventListener('dblclick', onDblClick)
+  }
+
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+
+      // Clear old render (themeChange/pjax will rerun)
+      const oldSvg = item.querySelector('svg')
+      if (oldSvg) oldSvg.remove()
+      item.__mermaidGestureBound = false
+
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+        if (true) initMermaidGestures(item)
+        item.__mermaidOriginalSvg = svg
+        if (true) attachMermaidViewerButton(item)
+      }
+
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('/libs/mermaid/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.5"></script></div></div></body></html>

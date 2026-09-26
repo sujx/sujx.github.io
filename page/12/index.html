@@ -1,0 +1,570 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>靖轩</title><meta name="author" content="靖轩"><meta name="copyright" content="靖轩"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="逝者如斯夫,不舍昼夜">
+<meta property="og:type" content="website">
+<meta property="og:title" content="靖轩">
+<meta property="og:url" content="https://www.sujx.net/page/12/index.html">
+<meta property="og:site_name" content="靖轩">
+<meta property="og:description" content="逝者如斯夫,不舍昼夜">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.sujx.net/about/avatar.jpg">
+<meta property="article:author" content="靖轩">
+<meta property="article:tag" content="靖轩,sujx">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.sujx.net/about/avatar.jpg"><script type="application/ld+json"></script><link rel="shortcut icon" href="https://cdn.sujx.net/about/favicon.png"><link rel="canonical" href="https://www.sujx.net/page/12/index.html"><link rel="preconnect" href="//cdnjs.cloudflare.com"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css?v=5.5.5"><link rel="stylesheet" href="/fonts/css/all.min.css"><link rel="stylesheet" href="/libs/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?417b20ac1984432f821159fac27d3bb5";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><link rel="stylesheet" href="/fonts/titillium-web.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: '/libs/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: true,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '靖轩',
+  isHighlightShrink: false,
+  isToc: false,
+  pageType: 'home'
+}</script><link rel="alternate" href="/atom.xml" title="靖轩" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">靖轩</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><h1 class="title-seo">靖轩</h1></header><main class="layout" id="content-inner"><div class="recent-posts nc" id="recent-posts"><div class="recent-post-items"><div class="recent-post-item"><div class="post_cover"><a href="/2024/05/11/Interview-2405/" title="面试题目"><img class="post-bg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="面试题目"></a></div><div class="recent-post-info"><a class="article-title" href="/2024/05/11/Interview-2405/" title="面试题目">面试题目</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2024-05-11T15:37:30.000Z" title="发表于 2024-05-11 23:37:30">2024-05-11</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%93%8D%E4%BD%9C%E7%AC%94%E8%AE%B0/">操作笔记</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/interview/">interview</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E9%9D%A2%E8%AF%95%E9%A2%98/">面试题</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/Sysadmin/">Sysadmin</a></span></div><div class="content">最近参加了多个面试，感觉现在找工作的确很别扭，无论招聘的、面试的、求职的全都处于一种躁动的焦虑之中。招聘方越来越多要求全日制统招本科为必须项外，有要求必须会华为私有云 FusionCompute 8。 0版本的、有要求必须精通国产麒麟系统配置管理的、有要求必须有三个一千万以上标的的项目的、有要求系统&#x2F;数据库&#x2F;中间件&#x2F;网络&#x2F;安全&#x2F;项目管理几个大项全能的、有要求必须要有两张不同厂商服务器管理认证的、有必须有华为数通IE证书的、有要求必须实现过全套Azure&#x2F;AWS&#x2F;GCP云上DevOPS流程的（ 绝不认可阿里云、华为云 ）、有要求必须有宁畅、SUMA这种新厂商服务器维护经验的。给人的观感就是项目急需某个螺丝钉，老板让HR赶紧找个人顶上去，至于培训上手就别想了，都是有今天没明天的节奏。    05 摄于河北邯郸临漳    以下是我参加某个公司金融机构驻场运维的面试题目。我在这里把题目存一下，以作纪录吧。当然答案并不是标准答案，更多是个人的理解和阐述。 Linux主机 是否做过Linux的升级补丁？如何搭建本地的Lin...</div></div></div><div class="recent-post-item"><div class="post_cover"><a href="/2024/05/03/RedTeams-VS-BlueTeams/" title="「红蓝攻防」"><img class="post-bg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover6.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="「红蓝攻防」"></a></div><div class="recent-post-info"><a class="article-title" href="/2024/05/03/RedTeams-VS-BlueTeams/" title="「红蓝攻防」">「红蓝攻防」</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2024-05-03T01:04:07.000Z" title="发表于 2024-05-03 09:04:07">2024-05-03</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E7%BD%91%E7%BB%9C%E5%AE%89%E8%A3%85/">网络安装</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/Cybersecurity/">Cybersecurity</a></span></div><div class="content">这是奇安信出版的一本关于网络安全攻击和防御的一本带有指导性的书籍。    09 摄于辽宁葫芦岛宁远觉华岛   红蓝对抗基础红队 指网络实战攻防演练中的攻击一方 以发现系统薄弱环节、提升系统安全性为目标 攻击一般只限定攻击范围和攻击时段，要求实际获取系统权限或系统数据 通常3人为一组展开测试，综合能力最强为组长，其他人要各有专长 工作已经体系化、职业化和工具化 从实战对抗手法来看，呈现出社工化、强对抗和迂回攻击的特点  蓝队 指网络实战攻防演练中的防守一方2。 的主要工作包括演练前安全检查、整改与加固，演练期间的网络安全监测、预警、分析、验证、处置，演练后期复盘和总结。 并不是由运营单位一家组成，而是由系统运营、安全运营、安全厂家、攻防专家、软件厂商、网络运维、云提供商多家合力 技术发展趋势由被动防守向正面对抗进化  紫队 紫队指攻防演练中的组织方 紫队负责演练组织、过程监控、技术指导、应急保障、风险控制、演练总结、技术措施与优化策略建议等工作 对于不宜在实网中直接攻防的系统，或者高危操作，紫队可以组织攻防双方进行沙盘推演  常见薄弱环节 互联网未知资产或服务大量存在 网络及子网内...</div></div></div><div class="recent-post-item"><div class="post_cover"><a href="/2024/04/19/Vulnerability_Managment/" title="漏洞管理实践"><img class="post-bg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover7.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="漏洞管理实践"></a></div><div class="recent-post-info"><a class="article-title" href="/2024/04/19/Vulnerability_Managment/" title="漏洞管理实践">漏洞管理实践</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2024-04-19T03:04:07.000Z" title="发表于 2024-04-19 11:04:07">2024-04-19</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/Cybersecurity/">Cybersecurity</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/Vulnerability/">Vulnerability</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E6%BC%8F%E6%B4%9E/">漏洞</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/System-Admin/">System Admin</a></span></div><div class="content">漏洞管理不等同于补丁管理。补丁管理对于整个企业中的服务器和终端的版本与补丁等级进行跟踪。漏洞管理则是要在资源有限的情况下，解决最严重的漏洞，从而最大限度改善安全状况，而不是安装所有的补丁。    04 摄于天津滨海新区·大沽炮台博物馆    基本概念CIA三要素 信息的机密性：谁能访问数据 信息的完整性：谁能修改数据 信息的可用性：对获得授权的用户来说，数据是否可用  漏洞管理 洞悉当前的漏洞环境 对收集的数据与其他来源获得的与安全相关的数据进行分析 根据数据分析结果提出建议  数据收集 内部数据收集 收集有关组织环境的信息 资产信息 主机清单 网络配置信息 定期扫描   使用漏洞扫描器发现漏洞 使用漏洞扫描器监测网络内主机漏洞 确保扫描器有访问权限 安装多个扫描器 配置扫描器 获取结果   使用非扫描代理\软件配置管理工具或者CMDB, 通过软件清单与漏洞数据库对比， 从而确定已知漏洞。     外部数据收集 从组织外部获取数据，比如CVE等 第三方威胁情报 威胁情报feed 专用漏洞利用程序      数据分析 精简漏洞清单， 也叫剔除法 按重要性对漏洞进行排序， 也叫排名法...</div></div></div><div class="recent-post-item"><div class="post_cover"><a href="/2024/04/15/Visit-IDC/" title="探访某手数据中心"><img class="post-bg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover12.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="探访某手数据中心"></a></div><div class="recent-post-info"><a class="article-title" href="/2024/04/15/Visit-IDC/" title="探访某手数据中心">探访某手数据中心</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2024-04-15T01:04:07.000Z" title="发表于 2024-04-15 09:04:07">2024-04-15</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E7%A1%AC%E4%BB%B6%E6%9D%82%E8%B0%88/">硬件杂谈</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/Datacenter/">Datacenter</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/IDC/">IDC</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E6%9C%BA%E6%88%BF/">机房</a></span></div><div class="content">这几日有机会到某手干活，顺道大体看了一下他们这个号称装机20万台的数据中心。 虽然我是走马观花，只看到了世纪互联维护的机房和探索智造维护的机架服务器，没有深入操作系统层面，不过也足够扩展我的知识面了。    03 摄于天津南开·古丽花儿饭店，舞者其实是饭店收银员   IDC设施1。 数据中心周围环境绿化较好，内外噪音不大。1。 这个世纪互联管理的数据中心要比先前我常去的亚太和铁通机房管理的要好。出入都需要工单和人脸认证，手机都需要粘贴防摄影贴纸，而且晚上十点以后的夜班值班也都很负责任。1。 整体设施很新，进行管理和维护的人员都很精干、年轻，包括保安在内。 机架维护 整体机架采用脊叶模式，交换机顶置，汇聚设备在通道门口，是常见的布局；  服务器采用高密度部署，服务器采用托盘放置，中间不留间隔，一个42U机柜能放到30个左右的设备；   服务器采用热通道、背靠背部署，电源线缆和网络线缆部署到封闭的热通道内，主机面板在外部放置，和下图是相反的布局；   服务器采用多个品牌，目力所及包括戴尔、惠普、浪潮、联想，还有个没见过的SUMA品牌服务器以及他家自研的设备；  房间冷风从墙上整体吹出...</div></div></div><div class="recent-post-item"><div class="post_cover"><a href="/2024/04/10/Interview-Some-Tips/" title="面试中的非技术问题"><img class="post-bg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover15.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="面试中的非技术问题"></a></div><div class="recent-post-info"><a class="article-title" href="/2024/04/10/Interview-Some-Tips/" title="面试中的非技术问题">面试中的非技术问题</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2024-04-10T01:04:07.000Z" title="发表于 2024-04-10 09:04:07">2024-04-10</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%93%8D%E4%BD%9C%E7%AC%94%E8%AE%B0/">操作笔记</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/interview/">interview</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E9%9D%A2%E8%AF%95/">面试</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E8%87%AA%E6%88%91%E6%8E%A5%E5%8F%97/">自我接受</a></span></div><div class="content"> 面试是一个人与人的沟通，是信息的交流和互换  自我介绍开场白上午好，我叫靖轩。 我今天很高兴能有这个机会来参加本次面试。有机会加入贵公司担任系统运维工程师一职，我感到非常激动。 我在IT基础设施和系统运维方面拥有超过十年的工作经验，我培养和训练了一系列强大的技能组合，与此职位完美契合。 个人经历我毕业于北京航空航天大学行政管理专业。在北航天华集团作为通讯编辑，参与了北京2008奥运会、共青团中央、中央电视台、北京电视台、解放军空军政治部等单位的重大活动。在北京农科院信息化所作为行政助理，参与了北京市河道整治、东营市智慧农业等多个重要项目的招投标。 随后我在新京报开始了我的IT系统运维的职业生涯。由于我的奉献精神以及结果驱动的方法，独立完成了基于Hyper-V和SCVMM的私有云的实施、法新社、新华社图片库与内部图片库的系统搭建和运维、内部OA和IM系统的实施，并多次处理重大故障。期间，我作为IT系统工程师的身份参与了北京奥运会、汶川地震、北京七二一暴雨、北京市政务内网改造等重大报道活动的IT支持活动，获得了2010年度优秀员工的称号，并成为了所在党支部委员。在这一时期，我考取了...</div></div></div><div class="recent-post-item"><div class="post_cover"><a href="/2024/04/03/Kanban-Whatis/" title="「看板实战」"><img class="post-bg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/04/fa8cfd9eb20d93321ca4531190587f65-scaled.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="「看板实战」"></a></div><div class="recent-post-info"><a class="article-title" href="/2024/04/03/Kanban-Whatis/" title="「看板实战」">「看板实战」</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2024-04-02T23:04:07.000Z" title="发表于 2024-04-03 07:04:07">2024-04-03</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/">软件工程</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/">项目管理</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/Kanban/">Kanban</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E5%B7%A5%E4%BD%9C%E6%96%B9%E6%B3%95/">工作方法</a></span></div><div class="content"> 看板，即时一种可视化流程管理系统，也是一种在组织中创建渐进变革的方法。   学习看板开始看板之旅白板通过一张大白板进行可视化，可以称为信息辐射源。这种信息呈现是明显的，并且当人们经过时就可以清楚的看到。而电子工具更像是信息冰箱，你必须要打开它到处寻找想要的信息。   让隐藏的工作无所遁形 为每个工作项建立一个即时贴   帮你理清 谁在干什么 你正在处理的工作 进行中的工作数量   工作可视化之后，将信息散播给看到的每个人  工作流映射把你们的工作流程映射到白板上，然后把即时贴放到正确的位置。起点是开始着手进行记录，终点是生产系统上线。  识别所有阶段，从工作进入到工作离开团队 不要奢求完美 检视合并进行调整   工作直到对客户产生价值才算是完成 通过可视化工作流，可以看到 工作状态 潜在的问题       待办 分析 开发 测试 验收 等待运维发布 发布到生产环境    X          X          X       工作项 你不能看到，你就不能改进。   从卡片上你可以 看到工作项的进展状态 能够决定下一步如何处理   常见属性： 工作项描述 电子系统中的唯一标识...</div></div></div><div class="recent-post-item"><div class="post_cover"><a href="/2024/03/24/Aliyun-ECS-Down/" title="阿里云ECS主机下载"><img class="post-bg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover52.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="阿里云ECS主机下载"></a></div><div class="recent-post-info"><a class="article-title" href="/2024/03/24/Aliyun-ECS-Down/" title="阿里云ECS主机下载">阿里云ECS主机下载</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2024-03-24T07:04:07.000Z" title="发表于 2024-03-24 15:04:07">2024-03-24</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F/">应用程序</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/Aliyun/">Aliyun</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/ECS/">ECS</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/Migrate/">Migrate</a></span></div><div class="content">在公有云的主机的运维工作中，经常会需要对ECS主机进行备份。大体备份的方式有两种，一种是对应用程序数据本体的备份，一种则是利用快照的备份。而当我们遇到内部托管的无主主机需要离线归档备份的主机，则需要下载镜像导入本地私有云，然后再在公有云上停机、中止续费、释放主机。 准备 创建快照   自动上传至OSS      制作镜像   准备导出镜像（ 需要开通对应地域OSS和进行资源授权 ）   导出镜像到OSS存储空间   等待镜像导出至OSS，然后通过OSS下载    导入 镜像转换 阿里云下载的原始镜像使用的是raw格式，我们可以手动修改后缀为img格式，然后我们就可以使用starwind的V2V工具和qemu的工具进行镜像转换。  starwind   使用开源的qemu程序进行文件转换 C:\Program Files\qemu&gt; .\qemu-img.exe convert d:\iso\zhangjiakou.img -f raw -O vmdk d:\iso\out.vmdk  QEMU程序我上传到CDN了，点此下载    新建虚机，并指定硬盘为转换完成的vmdk文件...</div></div></div><div class="recent-post-item"><div class="post_cover"><a href="/2024/03/19/Aliyun-ECS-Transfer/" title="阿里云ECS在多账号间迁移"><img class="post-bg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover61.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="阿里云ECS在多账号间迁移"></a></div><div class="recent-post-info"><a class="article-title" href="/2024/03/19/Aliyun-ECS-Transfer/" title="阿里云ECS在多账号间迁移">阿里云ECS在多账号间迁移</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2024-03-19T07:04:07.000Z" title="发表于 2024-03-19 15:04:07">2024-03-19</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F/">应用程序</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/Aliyun/">Aliyun</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/ECS/">ECS</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/Transfer/">Transfer</a></span></div><div class="content">阿里云的ECS可以在多个账号之间进行迁移，但需要迁入和迁出账号都属于同一个认证主体。另外，主机账号的迁移不支持主机所在地域和可用区的迁移，如有需求则还要在迁移完成之后，再进行可用区迁移。 准备 需要迁入账号的信息，包括账号名和账号ID2。 需要在同一个区域可用区准备安全组、资源组、VPC以及相应的交换机和私网IP地址。  迁移 找到资源过户选项 确认过户资源 发起过户 迁入账户同位置发现待迁入主机 迁入主机  </div></div></div><div class="recent-post-item"><div class="post_cover"><a href="/2024/03/13/Local-Install-EVENG/" title="本地裸机安装EVE-NG"><img class="post-bg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover62.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="本地裸机安装EVE-NG"></a></div><div class="recent-post-info"><a class="article-title" href="/2024/03/13/Local-Install-EVENG/" title="本地裸机安装EVE-NG">本地裸机安装EVE-NG</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2024-03-13T05:17:07.000Z" title="发表于 2024-03-13 13:17:07">2024-03-13</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F/">应用程序</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/Networking/">Networking</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/Ubuntu/">Ubuntu</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/EVE-NG/">EVE-NG</a></span></div><div class="content"> 从微信群文件里面翻出来的指导手册，现在还能用，只是忘了出处了，大约应该是51CTO教RHCA的庚老师的笔记。  1、安装前准备1、裸机一台，建议组“洋垃圾”，内存64g以上，CPU 16线程以上，500g以上固态盘2、U盘：8G以上3、准备一个引导系统的windows系统4、Rufus软件（ubuntu启动盘制作工具，百度下载）5、准备ubuntu16. 04. 7的安装镜像6、eve—ng材料包7、良好的internet环境8、定制linux镜像（包含ubuntu、SUSE，centos-stream）9、EVE-NG官方文档材料包链接：链接：https://pan.baidu.com/s/14QbWkX8C7-iy-NwbVzUNRg 提取码：dos6   2、制作U盘启动盘使用Rufus软件制作一个ubuntu16的启动盘 3、安装ubuntu16操作系统安装ubuntu16操作系统为EVE-NG的底层系统，参考 官方文档的3. 3章节 4、修改ubuntu系统配置1、修改SSH-Server配置先使用普通用户登录#切换到root用户sudo -i #设置root密码为1...</div></div></div><div class="recent-post-item"><div class="post_cover"><a href="/2024/03/06/How-to-Select-Datacenter/" title="如何选择IDC"><img class="post-bg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover40.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="如何选择IDC"></a></div><div class="recent-post-info"><a class="article-title" href="/2024/03/06/How-to-Select-Datacenter/" title="如何选择IDC">如何选择IDC</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2024-03-05T18:02:02.000Z" title="发表于 2024-03-06 02:02:02">2024-03-06</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E7%A1%AC%E4%BB%B6%E6%9D%82%E8%B0%88/">硬件杂谈</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E8%BF%90%E7%BB%B4%E4%BA%A4%E4%BB%98/">运维交付</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E8%B5%84%E4%BA%A7%E7%AE%A1%E7%90%86/">资产管理</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E6%95%B0%E6%8D%AE%E4%B8%AD%E5%BF%83/">数据中心</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8/">服务器</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/IDC/">IDC</a></span></div><div class="content">什么是数据中心？数据中心是承载 IT 基础架构的实体房间、建筑或设施，用于构建、运行和交付应用和服务，以及存储和管理与这些应用和服务相关的数据。 近年来，数据中心已从专供一家企业使用并受到严格控制的私有本地设施，发展成为由云服务提供商拥有的远程设施或这些设施构成的网络，这些设施容纳虚拟化的 IT 基础架构，供多家企业和客户共享使用。  数据中心的选择空间环境评估地质环境 五个远离：远离水\土\火\污\磁 三个临近: 靠近市政主干道 临近公共交通站 临近城市及生活商业区   一个确保：确保良好的移动信号， 保证联络通常  空间结构 机房的抗震等级和载荷（ GB50223-2008 ） 外场地空间的选择 机房的选择 机柜的选择 辅助区域的选择  基础设施评估电气系统 可靠性要求  输电侧的高可靠性 全路径的所有节点要保证充分冗余 备用方案的持续支援能力   用电安全要求  机房接地系统必须满足要求 所有设备的可导电外壳均应做等电位连接， 不应有对地绝缘的孤立导体 机房所在大楼的接地电阻应小于1Ω 机房地板或者地面应有静电泄放措施   电力容量要求  不推荐使用20A以下机柜， 最好使...</div></div></div></div><nav id="pagination"><div class="pagination"><a class="extend prev" rel="prev" href="/page/11/#content-inner"><i class="fas fa-chevron-left fa-fw"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/#content-inner">11</a><span class="page-number current">12</span><a class="page-number" href="/page/13/#content-inner">13</a><span class="space">&hellip;</span><a class="page-number" href="/page/29/#content-inner">29</a><a class="extend next" rel="next" href="/page/13/#content-inner"><i class="fas fa-chevron-right fa-fw"></i></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">靖轩</div><div class="author-info-description">逝者如斯夫,不舍昼夜</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/grepsu"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://gitee.com/grepsu" target="_blank" title="Gitee"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:sujx@live.cn" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS链接"><i class="fa  fa-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/07/03/AIGC_FoxHole/" title="海鹰">海鹰</a><time datetime="2026-07-03T01:04:07.000Z" title="发表于 2026-07-03 09:04:07">2026-07-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/11/fristVibeCoding/" title="鹊随金印：我的第一个完整的AI编程项目">鹊随金印：我的第一个完整的AI编程项目</a><time datetime="2026-06-11T01:04:07.000Z" title="发表于 2026-06-11 09:04:07">2026-06-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/03/VI_Howto/" title="VI编辑器简介">VI编辑器简介</a><time datetime="2026-06-03T01:04:07.000Z" title="发表于 2026-06-03 09:04:07">2026-06-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/28/HNCitic_2605/" title="我要上头条">我要上头条</a><time datetime="2026-05-28T01:04:07.000Z" title="发表于 2026-05-28 09:04:07">2026-05-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/12/TS-Domain-Controller-Sync-Failure/" title="记一次Windows AD域控制器同步故障排错">记一次Windows AD域控制器同步故障排错</a><time datetime="2026-05-12T03:04:07.000Z" title="发表于 2026-05-12 11:04:07">2026-05-12</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
+            <i class="fas fa-folder-open"></i>
+            <span>分类</span>
+            <a class="card-more-btn" href="/categories/" title="查看更多">
+      <i class="fas fa-angle-right"></i></a>
+          </div>
+          <ul class="card-category-list" id="aside-cat-list">
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8/"><span class="card-category-list-name">信息安全</span><span class="card-category-list-count">22</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E5%B7%A5%E4%BD%9C%E7%95%99%E7%97%95/"><span class="card-category-list-name">工作留痕</span><span class="card-category-list-count">3</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F/"><span class="card-category-list-name">应用程序</span><span class="card-category-list-count">65</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/"><span class="card-category-list-name">开发基础</span><span class="card-category-list-count">9</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%AC%94%E8%AE%B0/"><span class="card-category-list-name">操作笔记</span><span class="card-category-list-count">37</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%B5%B7%E5%A4%96%E6%9D%82%E8%B0%88/"><span class="card-category-list-name">海外杂谈</span><span class="card-category-list-count">14</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E7%A1%AC%E4%BB%B6%E6%9D%82%E8%B0%88/"><span class="card-category-list-name">硬件杂谈</span><span class="card-category-list-count">14</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"><span class="card-category-list-name">读书笔记</span><span class="card-category-list-count">49</span></a></li>
+          </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/7zip/" style="font-size: 1.19em; color: rgb(115, 177, 50);">7zip</a><a href="/tags/application/" style="font-size: 1.15em; color: rgb(147, 186, 50);">application</a><a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" style="font-size: 1.45em; color: rgb(50, 50, 173);">读书笔记</a><a href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/" style="font-size: 1.34em; color: rgb(185, 76, 50);">软件工程</a><a href="/tags/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/" style="font-size: 1.3em; color: rgb(50, 167, 167);">项目管理</a><a href="/tags/%E6%8A%80%E6%9C%AF%E4%B8%BA%E5%BE%84/" style="font-size: 1.15em; color: rgb(50, 94, 50);">技术为径</a><a href="/tags/job-description/" style="font-size: 1.15em; color: rgb(200, 106, 91);">job description</a><a href="/tags/Large-Model/" style="font-size: 1.15em; color: rgb(50, 126, 95);">Large Model</a><a href="/tags/Operations-Engineer/" style="font-size: 1.15em; color: rgb(107, 157, 88);">Operations Engineer</a><a href="/tags/%E8%81%8C%E4%B8%9A%E8%A7%84%E5%88%92/" style="font-size: 1.15em; color: rgb(170, 74, 159);">职业规划</a><a href="/tags/%E5%88%9B%E4%BD%9C/" style="font-size: 1.15em; color: rgb(50, 96, 113);">创作</a><a href="/tags/AI%E8%A7%86%E9%A2%91/" style="font-size: 1.15em; color: rgb(117, 155, 167);">AI视频</a><a href="/tags/AIGC/" style="font-size: 1.19em; color: rgb(50, 92, 197);">AIGC</a><a href="/tags/%E7%BD%91%E5%8D%A1/" style="font-size: 1.19em; color: rgb(183, 60, 50);">网卡</a><a href="/tags/100Gbps/" style="font-size: 1.15em; color: rgb(198, 93, 50);">100Gbps</a><a href="/tags/25Gbps/" style="font-size: 1.15em; color: rgb(192, 194, 60);">25Gbps</a><a href="/tags/Datacenter/" style="font-size: 1.19em; color: rgb(97, 50, 174);">Datacenter</a><a href="/tags/%E9%98%BF%E9%87%8C%E4%BA%91/" style="font-size: 1.38em; color: rgb(194, 148, 50);">阿里云</a><a href="/tags/ACE-%E6%9D%AD%E5%B7%9E-Exam/" style="font-size: 1.15em; color: rgb(105, 131, 50);">ACE - 杭州 - Exam</a><a href="/tags/%E8%81%8C%E4%B8%9A%E8%AE%A4%E8%AF%81/" style="font-size: 1.15em; color: rgb(50, 77, 133);">职业认证</a><a href="/tags/ACE/" style="font-size: 1.15em; color: rgb(51, 50, 189);">ACE</a><a href="/tags/aliyun/" style="font-size: 1.26em; color: rgb(65, 55, 50);">aliyun</a><a href="/tags/ecs/" style="font-size: 1.15em; color: rgb(171, 50, 151);">ecs</a><a href="/tags/%E5%9B%BE%E5%BD%A2%E5%8C%96/" style="font-size: 1.15em; color: rgb(98, 50, 165);">图形化</a><a href="/tags/seeyon/" style="font-size: 1.15em; color: rgb(167, 129, 179);">seeyon</a><a href="/tags/%E8%87%B4%E8%BF%9C%E4%BA%92%E8%81%94/" style="font-size: 1.15em; color: rgb(60, 107, 109);">致远互联</a><a href="/tags/Aliyun/" style="font-size: 1.26em; color: rgb(98, 119, 50);">Aliyun</a><a href="/tags/Exam/" style="font-size: 1.22em; color: rgb(50, 51, 108);">Exam</a><a href="/tags/AI/" style="font-size: 1.19em; color: rgb(50, 162, 122);">AI</a><a href="/tags/Note/" style="font-size: 1.15em; color: rgb(95, 162, 50);">Note</a><a href="/tags/Handbook/" style="font-size: 1.15em; color: rgb(50, 105, 124);">Handbook</a><a href="/tags/PM/" style="font-size: 1.15em; color: rgb(50, 50, 185);">PM</a><a href="/tags/ECS/" style="font-size: 1.22em; color: rgb(96, 50, 132);">ECS</a><a href="/tags/Kdump/" style="font-size: 1.15em; color: rgb(187, 83, 91);">Kdump</a><a href="/tags/Linux/" style="font-size: 1.41em; color: rgb(50, 89, 84);">Linux</a><a href="/tags/Test/" style="font-size: 1.15em; color: rgb(50, 163, 119);">Test</a><a href="/tags/Performance/" style="font-size: 1.22em; color: rgb(127, 50, 76);">Performance</a><a href="/tags/Migrate/" style="font-size: 1.15em; color: rgb(160, 187, 75);">Migrate</a><a href="/tags/Transfer/" style="font-size: 1.15em; color: rgb(195, 167, 50);">Transfer</a><a href="/tags/%E6%9D%AD%E5%B7%9E/" style="font-size: 1.15em; color: rgb(50, 65, 179);">杭州</a></div></div><div class="card-widget card-archives">
+    <div class="item-headline">
+      <i class="fas fa-archive"></i>
+      <span>归档</span>
+      <a class="card-more-btn" href="/archives/"
+            title="查看更多">
+            <i class="fas fa-angle-right"></i>
+          </a>
+    </div>
+  
+    <ul class="card-archive-list">
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2026/07/">
+            <span class="card-archive-list-date">
+              七月 2026
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2026/06/">
+            <span class="card-archive-list-date">
+              六月 2026
+            </span>
+            <span class="card-archive-list-count">2</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2026/05/">
+            <span class="card-archive-list-date">
+              五月 2026
+            </span>
+            <span class="card-archive-list-count">4</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2026/04/">
+            <span class="card-archive-list-date">
+              四月 2026
+            </span>
+            <span class="card-archive-list-count">3</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2026/03/">
+            <span class="card-archive-list-date">
+              三月 2026
+            </span>
+            <span class="card-archive-list-count">4</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2026/02/">
+            <span class="card-archive-list-date">
+              二月 2026
+            </span>
+            <span class="card-archive-list-count">3</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2026/01/">
+            <span class="card-archive-list-date">
+              一月 2026
+            </span>
+            <span class="card-archive-list-count">4</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/12/">
+            <span class="card-archive-list-date">
+              十二月 2025
+            </span>
+            <span class="card-archive-list-count">3</span>
+          </a>
+        </li>
+      
+    </ul>
+  </div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站信息</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">287</div></div><div class="webinfo-item"><div class="item-name">本站总字数 :</div><div class="item-count">762.9k</div></div><div class="webinfo-item"><div class="item-name">本站访客数 :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站总浏览量 :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2026-09-26T02:41:57.751Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2008 - 2026 By 靖轩</span></div><div class="footer_custom_text">京ICP备17034757号</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.5"></script><script src="/js/main.js?v=5.5.5"></script><script src="/libs/fancybox/fancybox.umd.js"></script><script src="/js/instantpage.js" type="module"></script><script src="/libs/lazyload/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const parseViewBox = viewBox => {
+    if (!viewBox) return null
+    const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
+    if (parts.length !== 4 || parts.some(n => Number.isNaN(n))) return null
+    return parts
+  }
+
+  const getSvgViewBox = svg => {
+    const attr = parseViewBox(svg.getAttribute('viewBox'))
+    if (attr) return attr
+
+    // Fallback: use bbox to build a viewBox
+    try {
+      const bbox = svg.getBBox()
+      if (bbox && bbox.width && bbox.height) return [bbox.x, bbox.y, bbox.width, bbox.height]
+    } catch (e) {
+      // getBBox may fail on some edge cases; ignore
+    }
+
+    const w = Number(svg.getAttribute('width')) || 0
+    const h = Number(svg.getAttribute('height')) || 0
+    if (w > 0 && h > 0) return [0, 0, w, h]
+    return [0, 0, 100, 100]
+  }
+
+  const setSvgViewBox = (svg, vb) => {
+    svg.setAttribute('viewBox', `${vb[0]} ${vb[1]} ${vb[2]} ${vb[3]}`)
+  }
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v))
+
+  const openSvgInNewTab = ({ source, initViewBox }) => {
+    const getClonedSvg = () => {
+      if (typeof source === 'string') {
+        const template = document.createElement('template')
+        template.innerHTML = source.trim()
+        const svg = template.content.querySelector('svg')
+        return svg ? svg.cloneNode(true) : null
+      }
+      if (source && typeof source.cloneNode === 'function') {
+        return source.cloneNode(true)
+      }
+      return null
+    }
+
+    const clone = getClonedSvg()
+    if (!clone) return
+    if (initViewBox && initViewBox.length === 4) {
+      clone.setAttribute('viewBox', initViewBox.join(' '))
+    }
+    if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+    if (!clone.getAttribute('xmlns:xlink') && clone.outerHTML.includes('xlink:')) {
+      clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+    }
+    // inject background to match current theme
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    const bg = getComputedStyle(document.body).backgroundColor || (isDark ? '#1e1e1e' : '#ffffff')
+    if (!clone.style.background) clone.style.background = bg
+
+    const serializer = new XMLSerializer()
+    const svgSource = serializer.serializeToString(clone)
+    const htmlSource = `<!doctype html><html><head><meta charset="utf-8" />
+      <style>
+        html, body { width: 100%; height: 100%; margin: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; }
+        svg { max-width: 100%; max-height: 100%; height: auto; width: auto; }
+      </style>
+      </head><body>${svgSource}</body></html>`
+    const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank', 'noopener')
+    setTimeout(() => URL.revokeObjectURL(url), 30000)
+  }
+
+  const attachMermaidViewerButton = wrap => {
+    let btn = wrap.querySelector('.mermaid-open-btn')
+    if (!btn) {
+      btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'mermaid-open-btn'
+      wrap.appendChild(btn)
+    }
+
+    btn.innerHTML = '<i class="fa fa-search fa-fw" aria-hidden="true"></i>'
+
+    if (!btn.__mermaidViewerBound) {
+      btn.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        const svg = wrap.__mermaidOriginalSvg || wrap.querySelector('svg')
+        if (!svg) return
+        const initViewBox = wrap.__mermaidInitViewBox
+        if (typeof svg === 'string') {
+          openSvgInNewTab({ source: svg, initViewBox })
+          return
+        }
+        openSvgInNewTab({ source: svg, initViewBox })
+      })
+      btn.__mermaidViewerBound = true
+    }
+  }
+
+  // Zoom around a point (px, py) in the SVG viewport (in viewBox coordinates)
+  const zoomAtPoint = (vb, factor, px, py) => {
+    const w = vb[2] * factor
+    const h = vb[3] * factor
+    const nx = px - (px - vb[0]) * factor
+    const ny = py - (py - vb[1]) * factor
+    return [nx, ny, w, h]
+  }
+
+  const initMermaidGestures = wrap => {
+    const svg = wrap.querySelector('svg')
+    if (!svg) return
+
+    // Ensure viewBox exists so gestures always work
+    const initVb = getSvgViewBox(svg)
+    wrap.__mermaidInitViewBox = initVb
+    wrap.__mermaidCurViewBox = initVb.slice()
+    setSvgViewBox(svg, initVb)
+
+    // Avoid binding multiple times on themeChange/pjax
+    if (wrap.__mermaidGestureBound) return
+    wrap.__mermaidGestureBound = true
+
+    // Helper: map client (viewport) coordinate -> viewBox coordinate
+    const clientToViewBox = (clientX, clientY) => {
+      const rect = svg.getBoundingClientRect()
+      const vb = wrap.__mermaidCurViewBox || getSvgViewBox(svg)
+      const x = vb[0] + (clientX - rect.left) * (vb[2] / rect.width)
+      const y = vb[1] + (clientY - rect.top) * (vb[3] / rect.height)
+      return { x, y, rect, vb }
+    }
+
+    const state = {
+      pointers: new Map(),
+      startVb: null,
+      startDist: 0,
+      startCenter: null
+    }
+
+    const clampVb = vb => {
+      const init = wrap.__mermaidInitViewBox || vb
+      const minW = init[2] * 0.1
+      const maxW = init[2] * 10
+      const minH = init[3] * 0.1
+      const maxH = init[3] * 10
+      vb[2] = clamp(vb[2], minW, maxW)
+      vb[3] = clamp(vb[3], minH, maxH)
+      return vb
+    }
+
+    const setCurVb = vb => {
+      vb = clampVb(vb)
+      wrap.__mermaidCurViewBox = vb
+      setSvgViewBox(svg, vb)
+    }
+
+    const onPointerDown = e => {
+      // Allow only primary button for mouse
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      svg.setPointerCapture(e.pointerId)
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      if (state.pointers.size === 1) {
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      } else if (state.pointers.size === 2) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        state.startDist = Math.hypot(dx, dy)
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        state.startCenter = { x: (pts[0].x + pts[1].x) / 2, y: (pts[0].y + pts[1].y) / 2 }
+      }
+    }
+
+    const onPointerMove = e => {
+      if (!state.pointers.has(e.pointerId)) return
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      // Pan with 1 pointer
+      if (state.pointers.size === 1 && state.startVb) {
+        const p = [...state.pointers.values()][0]
+        const prev = { x: e.clientX - e.movementX, y: e.clientY - e.movementY }
+        // movementX/Y unreliable on touch, compute from stored last position
+        const last = wrap.__mermaidLastSinglePointer || p
+        const dxClient = p.x - last.x
+        const dyClient = p.y - last.y
+        wrap.__mermaidLastSinglePointer = p
+
+        const { rect } = clientToViewBox(p.x, p.y)
+        const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        const dx = dxClient * (vb[2] / rect.width)
+        const dy = dyClient * (vb[3] / rect.height)
+        setCurVb([vb[0] - dx, vb[1] - dy, vb[2], vb[3]])
+        return
+      }
+
+      // Pinch zoom with 2 pointers
+      if (state.pointers.size === 2 && state.startVb && state.startDist > 0) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        const dist = Math.hypot(dx, dy)
+        if (!dist) return
+        const factor = state.startDist / dist // dist bigger => zoom in (viewBox smaller)
+
+        const cx = (pts[0].x + pts[1].x) / 2
+        const cy = (pts[0].y + pts[1].y) / 2
+        const centerClient = { x: cx, y: cy }
+
+        const pxy = clientToViewBox(centerClient.x, centerClient.y)
+        const cpx = pxy.x
+        const cpy = pxy.y
+
+        const vb = zoomAtPoint(state.startVb, factor, cpx, cpy)
+        setCurVb(vb)
+      }
+    }
+
+    const onPointerUpOrCancel = e => {
+      state.pointers.delete(e.pointerId)
+      if (state.pointers.size === 0) {
+        state.startVb = null
+        state.startDist = 0
+        state.startCenter = null
+        wrap.__mermaidLastSinglePointer = null
+      } else if (state.pointers.size === 1) {
+        // reset single pointer baseline to avoid jump
+        wrap.__mermaidLastSinglePointer = [...state.pointers.values()][0]
+      }
+    }
+
+    // Wheel zoom (mouse/trackpad)
+    const onWheel = e => {
+      // ctrlKey on mac trackpad pinch; we treat both as zoom
+      e.preventDefault()
+      const delta = e.deltaY
+      const zoomFactor = delta > 0 ? 1.1 : 0.9
+      const { x, y } = clientToViewBox(e.clientX, e.clientY)
+      const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      setCurVb(zoomAtPoint(vb, zoomFactor, x, y))
+    }
+
+    const onDblClick = () => {
+      const init = wrap.__mermaidInitViewBox
+      if (!init) return
+      wrap.__mermaidCurViewBox = init.slice()
+      setSvgViewBox(svg, init)
+    }
+
+    svg.addEventListener('pointerdown', onPointerDown)
+    svg.addEventListener('pointermove', onPointerMove)
+    svg.addEventListener('pointerup', onPointerUpOrCancel)
+    svg.addEventListener('pointercancel', onPointerUpOrCancel)
+    svg.addEventListener('wheel', onWheel, { passive: false })
+    svg.addEventListener('dblclick', onDblClick)
+  }
+
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+
+      // Clear old render (themeChange/pjax will rerun)
+      const oldSvg = item.querySelector('svg')
+      if (oldSvg) oldSvg.remove()
+      item.__mermaidGestureBound = false
+
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+        if (true) initMermaidGestures(item)
+        item.__mermaidOriginalSvg = svg
+        if (true) attachMermaidViewerButton(item)
+      }
+
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('/libs/mermaid/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.5"></script></div></div></body></html>

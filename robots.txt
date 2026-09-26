@@ -1,0 +1,17 @@
+# robots.txt for sujx.net
+User-agent: *
+Allow: /
+Disallow: /tags/
+Disallow: /books/
+Disallow: /movies/
+Disallow: /netdata/
+Disallow: /html/
+Disallow: /js/
+Disallow: /css/
+Disallow: /search.xml
+
+# Sitemap
+Sitemap: https://www.sujx.net/sitemap.xml
+
+# RSS Feed
+# RSS Feed: https://www.sujx.net/atom.xml

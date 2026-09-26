@@ -1,0 +1,576 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>搭建Minecraft服务器 | 靖轩</title><meta name="author" content="靖轩"><meta name="copyright" content="靖轩"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="因为上小学的娃在鼓动他同学和他一块来玩Minecraft，已经成功的拉了两个，但其他小朋友又没有正版微软游戏账号，所以就需要搭建一个私服。于是，有了这个游戏私服的搭建过程。    03 天津·和平大悦城·内山书店   部署实施节点拓扑我手头正好有两个阿里云的低价促销主机，其中99元的主机承载了包括blog、rss阅读器、看板等角色，就拿它来当管理面板。另外，还有一台199的2核4G内存服务器除了测">
+<meta property="og:type" content="article">
+<meta property="og:title" content="搭建Minecraft服务器">
+<meta property="og:url" content="https://www.sujx.net/2025/03/23/How2-Minecraft-Server-McMangager/index.html">
+<meta property="og:site_name" content="靖轩">
+<meta property="og:description" content="因为上小学的娃在鼓动他同学和他一块来玩Minecraft，已经成功的拉了两个，但其他小朋友又没有正版微软游戏账号，所以就需要搭建一个私服。于是，有了这个游戏私服的搭建过程。    03 天津·和平大悦城·内山书店   部署实施节点拓扑我手头正好有两个阿里云的低价促销主机，其中99元的主机承载了包括blog、rss阅读器、看板等角色，就拿它来当管理面板。另外，还有一台199的2核4G内存服务器除了测">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.sujx.net/covers/cover96.jpg">
+<meta property="article:published_time" content="2025-03-23T07:04:07.000Z">
+<meta property="article:modified_time" content="2026-09-26T02:32:14.958Z">
+<meta property="article:author" content="靖轩">
+<meta property="article:tag" content="Game">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="Minecraft">
+<meta property="article:tag" content="Nginx">
+<meta property="article:tag" content="我的世界">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.sujx.net/covers/cover96.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "搭建Minecraft服务器",
+  "url": "https://www.sujx.net/2025/03/23/How2-Minecraft-Server-McMangager/",
+  "image": "https://cdn.sujx.net/covers/cover96.jpg",
+  "datePublished": "2025-03-23T07:04:07.000Z",
+  "dateModified": "2026-09-26T02:32:14.958Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "靖轩",
+      "url": "https://www.sujx.net"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://cdn.sujx.net/about/favicon.png"><link rel="canonical" href="https://www.sujx.net/2025/03/23/How2-Minecraft-Server-McMangager/index.html"><link rel="preconnect" href="//cdnjs.cloudflare.com"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css?v=5.5.5"><link rel="stylesheet" href="/fonts/css/all.min.css"><link rel="stylesheet" href="/libs/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?417b20ac1984432f821159fac27d3bb5";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><link rel="stylesheet" href="/fonts/titillium-web.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: '/libs/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: true,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '搭建Minecraft服务器',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="alternate" href="/atom.xml" title="靖轩" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">靖轩</span></a><a class="nav-page-title" href="/"><span class="site-name">搭建Minecraft服务器</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">搭建Minecraft服务器</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-03-23T07:04:07.000Z" title="发表于 2025-03-23 15:04:07">2025-03-23</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-09-26T02:32:14.958Z" title="更新于 2026-09-26 10:32:14">2026-09-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F/">应用程序</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">1.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>4分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><p>因为上小学的娃在鼓动他同学和他一块来玩Minecraft，已经成功的拉了两个，但其他小朋友又没有正版微软游戏账号，所以就需要搭建一个私服。于是，有了这个游戏私服的搭建过程。</p>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover96.jpg"></p>
+<blockquote>
+<ol start="2025">
+<li>03 天津·和平大悦城·内山书店</li>
+</ol>
+</blockquote>
+<h2 id="部署实施"><a href="#部署实施" class="headerlink" title="部署实施"></a>部署实施</h2><h3 id="节点拓扑"><a href="#节点拓扑" class="headerlink" title="节点拓扑"></a>节点拓扑</h3><p>我手头正好有两个阿里云的低价促销主机，其中99元的主机承载了包括blog、rss阅读器、看板等角色，就拿它来当管理面板。另外，还有一台199的2核4G内存服务器除了测试和学习外，其他负载不大，这里就把它作为游戏私服。</p>
+<p>基本情况如下：</p>
+<table>
+<thead>
+<tr>
+<th>主机</th>
+<th>域名</th>
+<th>功能</th>
+<th>配置</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>wulan</td>
+<td>mcsm.contoso.com</td>
+<td>控制面板</td>
+<td>2核2G</td>
+<td>搭建MCSM的管理面板</td>
+</tr>
+<tr>
+<td>beijing</td>
+<td>mc.contoso.com</td>
+<td>部署站点、服务站点</td>
+<td>2核4G</td>
+<td>通过MCSM daemon来部署Minecraft的服务器</td>
+</tr>
+</tbody></table>
+<h3 id="部署方式"><a href="#部署方式" class="headerlink" title="部署方式"></a>部署方式</h3><p><a target="_blank" rel="noopener" href="https://www.mcsmanager.com/">MCSManager</a> 是一款开源，分布式，一键部署，支持 <code>Minecraft</code> 和 <code>Steam 游戏服务器</code> 的控制面板，具有快捷上手、部署方便、支持分布式部署的优点。MCSM可以本地部署使用，也可以使用Docker来部署。其实，两种方法大同小异。我们这里就使用本地安装来进行部署。首先，要在阿里云上开通23333 24444 25655 这三个端口的安全组，其次，要配置DNS解析来访问主机。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">在wulan主机上拉取安装脚本并进行安装</span></span><br><span class="line">sudo su -c &quot;wget -qO- https://script.mcsmanager.com/setup_cn.sh | bash&quot;</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">拉起面板管理的服务进程。</span></span><br><span class="line">systemctl enable --now mcsm-web.service</span><br><span class="line">systemctl enable --now firewalld</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">开启web访问端口</span></span><br><span class="line">firewall-cmd --permanent --add-port=23333/tcp</span><br><span class="line">firewall-cmd --reload</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">在beijing主机上拉取安装脚本并进行安装</span></span><br><span class="line">sudo su -c &quot;wget -qO- https://script.mcsmanager.com/setup_cn.sh | bash&quot;</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">拉起终端管理的服务进程。</span></span><br><span class="line">systemctl enable --now mcsm-web.service</span><br><span class="line">systemctl enable --now firewalld</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">开启管理进程端口</span></span><br><span class="line">firewall-cmd --permanent --add-port=24444/tcp</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">开启游戏连接端口</span></span><br><span class="line">firewall-cmd --permanent --add-port=25655/tcp</span><br><span class="line">firewall-cmd --reload</span><br></pre></td></tr></table></figure>
+
+<h2 id="运维管理"><a href="#运维管理" class="headerlink" title="运维管理"></a>运维管理</h2><h3 id="登录管理页面"><a href="#登录管理页面" class="headerlink" title="登录管理页面"></a>登录管理页面</h3><ol>
+<li><p>访问 <a target="_blank" rel="noopener" href="http://mcsm.contoso.com:23333/">http://mcsm.contoso.com:23333</a> 管理入口</p>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2025/03/mcsm-01.PNG"></p>
+</li>
+<li><p>创建管理账号</p>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2025/03/mcsm-02.PNG"></p>
+</li>
+<li><p>添加远程节点<br><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2025/03/mcsm-04.PNG"></p>
+</li>
+<li><p>主机管理界面</p>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2025/03/mcsm-03.PNG"></p>
+</li>
+</ol>
+<h3 id="搭建应用实例"><a href="#搭建应用实例" class="headerlink" title="搭建应用实例"></a>搭建应用实例</h3><ol>
+<li><p>添加应用实例<br><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2025/03/mcsm-05.PNG"></p>
+</li>
+<li><p>选择快速部署<br><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2025/03/mcsm-06.PNG"></p>
+</li>
+<li><p>选择不同预制部署方案， 拉取服务端和配置文件<br><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2025/03/mcsm-08.PNG"></p>
+</li>
+<li><p>启动应用进程， 部署Paper版本MC的Server<br><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2025/03/mcsm-07.PNG"></p>
+</li>
+</ol>
+<h2 id="玩家界面"><a href="#玩家界面" class="headerlink" title="玩家界面"></a>玩家界面</h2><h3 id="获取启动器"><a href="#获取启动器" class="headerlink" title="获取启动器"></a>获取启动器</h3><p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2025/03/mcsm-12.PNG"></p>
+<h3 id="下载客户端"><a href="#下载客户端" class="headerlink" title="下载客户端"></a>下载客户端</h3><p>注意： 客户端版本要与服务器版本一致<br><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2025/03/mcsm-14.PNG"></p>
+<h3 id="登录游戏"><a href="#登录游戏" class="headerlink" title="登录游戏"></a>登录游戏</h3><p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2025/03/mcsm-15.PNG"></p>
+<h3 id="配置私服地址"><a href="#配置私服地址" class="headerlink" title="配置私服地址"></a>配置私服地址</h3><p>在多人游戏中，指定服务器地址<br><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2025/03/mcsm-16.PNG"></p>
+<h2 id="进阶调整"><a href="#进阶调整" class="headerlink" title="进阶调整"></a>进阶调整</h2><p>由于MCSM管理默认为非加密通信， 同时还要访问自定义端口， 需要格外配置防火墙， 因此我将这些端口反向代理到常用端口上去， 可以相对的提高安全性。由于MCSM的控制流量实际是web socket的协议， 仅仅将网页前端加密是无法正常访问后端的守护进程的， 必须要将两端的通信都要加密才可以。因此， 就需要配置两台服务器的SSL.<br><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2025/03/mcsm-10.PNG"></p>
+<h3 id="创建SSL证书"><a href="#创建SSL证书" class="headerlink" title="创建SSL证书"></a>创建SSL证书</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">获取SSL证书</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">配置SSL</span></span><br><span class="line">略</span><br></pre></td></tr></table></figure>
+
+<h3 id="管理面板的代理"><a href="#管理面板的代理" class="headerlink" title="管理面板的代理"></a>管理面板的代理</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装Nginx</span></span><br><span class="line">dnf install -y nginx</span><br><span class="line">systemctl enable --now nginx</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">配置防火墙</span></span><br><span class="line">firewall-cmd --permanent --add-service=&#123;http, https&#125;</span><br><span class="line">firewall-cmd --reload</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">配置Nginx</span></span><br><span class="line">cat &gt; /etc/nginx/conf.d/05-mcsm-web.conf &lt;&lt;EOF</span><br><span class="line">server &#123;</span><br><span class="line">    listen 443 ssl ;</span><br><span class="line">    listen 80 ;</span><br><span class="line">    charset utf-8;</span><br><span class="line">    server_name mcsm.contoso.com ;</span><br><span class="line">    resolver 223. 5. 5. 5;</span><br><span class="line"></span><br><span class="line">    error_page 497 https://$host$request_uri; </span><br><span class="line">    if ( $scheme = &quot;http&quot; )&#123;</span><br><span class="line">        return 302 https://$host$request_uri;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    location / &#123;</span><br><span class="line">        proxy_pass http://localhost:23333 ;</span><br><span class="line"></span><br><span class="line">        proxy_set_header Host $host;</span><br><span class="line">        proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">        proxy_set_header REMOTE-HOST $remote_addr;</span><br><span class="line">        proxy_set_header Upgrade $http_upgrade;</span><br><span class="line">        proxy_set_header Connection &quot;upgrade&quot;;</span><br><span class="line">        add_header X-Cache $upstream_cache_status;</span><br><span class="line">        proxy_cookie_flags ~ secure;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line">nginx -t</span><br><span class="line">nginx -s reload</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">关闭多余端口</span></span><br><span class="line">firewall-cmd --permanent --remove-port=23333/tcp</span><br><span class="line">firewall-cmd --reload</span><br></pre></td></tr></table></figure>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2025/03/mcsm-13.PNG"></p>
+<h3 id="管理进程的代理"><a href="#管理进程的代理" class="headerlink" title="管理进程的代理"></a>管理进程的代理</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装Nginx</span></span><br><span class="line">dnf install -y nginx</span><br><span class="line">systemctl enable --now nginx</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">配置防火墙</span></span><br><span class="line">firewall-cmd --permanent --add-service=&#123;http, https&#125;</span><br><span class="line">firewall-cmd --reload</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">配置Nginx, 使用443端口代理mcsm-daemon程序</span></span><br><span class="line">cat &gt; /etc/nginx/conf.d/05-mcsm-daemon.conf &lt;&lt;EOF</span><br><span class="line">server</span><br><span class="line">&#123;</span><br><span class="line">	listen 443 ssl;</span><br><span class="line">	server_name  mc.contoso.com;</span><br><span class="line">	resolver 223. 5. 5. 5;</span><br><span class="line">	charset utf-8;</span><br><span class="line">    include /etc/nginx/ssl/ssl.conf;</span><br><span class="line"></span><br><span class="line">	proxy_hide_header Upgrade;</span><br><span class="line">	location / &#123;</span><br><span class="line">		proxy_set_header Host $host;</span><br><span class="line">		proxy_set_header X-Real-Ip $remote_addr;</span><br><span class="line">		proxy_set_header X-Forwarded-For $remote_addr;</span><br><span class="line">		proxy_set_header REMOTE-HOST $remote_addr;</span><br><span class="line"></span><br><span class="line">		proxy_pass http://127. 0. 0. 1:24444;</span><br><span class="line"></span><br><span class="line">		proxy_set_header Upgrade $http_upgrade;</span><br><span class="line">		proxy_set_header Connection &quot;upgrade&quot;;</span><br><span class="line"></span><br><span class="line">		proxy_request_buffering off;</span><br><span class="line">		proxy_buffering off;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line">nginx -t</span><br><span class="line">nginx -s reload</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">关闭多余端口</span></span><br><span class="line">firewall-cmd --permanent --remove-port=24444/tcp</span><br><span class="line">firewall-cmd --reload</span><br></pre></td></tr></table></figure>
+
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2025/03/mcsm-11.PNG"></p>
+<h3 id="相关网址"><a href="#相关网址" class="headerlink" title="相关网址"></a>相关网址</h3><ol>
+<li><a target="_blank" rel="noopener" href="https://mcversions.net/">MC原版服务端下载</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.mcsmanager.com/">MCSM管理面板下载</a></li>
+<li><a target="_blank" rel="noopener" href="https://papermc.io/">PaperMC版本服务端下载</a></li>
+<li><a target="_blank" rel="noopener" href="https://pcl.ruanmao.net/">PCL2 启动器下载</a></li>
+</ol>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Linux/">Linux</a><a class="post-meta__tags" href="/tags/Nginx/">Nginx</a><a class="post-meta__tags" href="/tags/Minecraft/">Minecraft</a><a class="post-meta__tags" href="/tags/Game/">Game</a><a class="post-meta__tags" href="/tags/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8C/">我的世界</a></div><div class="post-share"><div class="social-share" data-image="https://cdn.sujx.net/covers/cover96.jpg" data-sites="facebook,twitter,weibo,qq"></div><link rel="stylesheet" href="/libs/sharejs/css/share.min.css" media="print" onload="this.media='all'"><script src="/libs/sharejs/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>能否请我喝一杯咖啡？</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.jpg" target="_blank"><img class="post-qr-code-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/wechat.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/04/01/KunTai-R722/" title="神码鲲泰R722初始化"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover94.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">神码鲲泰R722初始化</div></div><div class="info-2"><div class="info-item-1">因为最近手头的项目上正好用到神州数码的鲲泰R722服务器，把交付前初始化的部分工作整理记录一下。个人感知它这个产品实际上是华为泰山2280服务器的OEM，基本上出现的问题到华为文档里面找就可以了。    03 天津·滨海新区·北塘   概述KunTai R722 均衡型服务器是神州数码基于鲲鹏处理器推出的新一代 ARM 数据中心服务器。具有高效能计算、安全可靠、幵放生态的优势 ， 适合为大数据、分布式存储、原生应用、高性能计算和数据库等应用高效加速，旨在满足数据中心多样性计算、绿色计算的需求。搭载面向服务器领域的 64bits 高性能多核鲲鹏处理器，系统最高能够提供 128 核、2。 6GHz 主频的计算能力，为用户提供高达 50% 的性能提升。通过高达 8个 PCIe 4。 0 插槽和多达 27 块硬盘的本地存储支持，实现卓越的扩展能力。配置冗余热插拔电源风扇，合理规划散热设计，支持 5° C~40° C 的运行环境温度，确保 7X24 小时长时间稳定运行，带来相对较高的能效回报。 iBMC 鲲泰服务器iBMC的IP地址默认为 192. 168. 2. 10 默认管理员为 Ad...</div></div></div></a><a class="pagination-related" href="/2025/03/16/Maintenance-Engineer-Training/" title="维保工程师赋能培训"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover90.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">维保工程师赋能培训</div></div><div class="info-2"><div class="info-item-1">这是联想企业级服务技术支持团队的一个上门工程师培训内容。主要内容有三个部分：  服务与规范 上门工程师操作细则 案例复盘   服务与规范服务的定义 为他人做事，并使他人从中受益的一种有偿或无偿的活动，不以实物形式而以劳动的形式满足他人某种特殊的需求 客户是任何商业活动中最重要的人，是工作的目的，不是让我们与之争论或较智的对象 客户的重要性  如何做好服务 ITIL:服务是为客户提供价值的一种手段，使客户不用承担额外的成本和风险就可获得所期望的结果 客户最不希望发生的事情 数据丢失、应用中断 根因分析   规范定义 按照既定标准的要求进行操作，使某一行为或活动达到或超越规定的标准 “三查七对一注意” 来自医疗护理一线 三查指操作前查、操作中查、操作后查 检查药品的有效期、配伍禁忌 检查药品有无变质、浑浊 检查药品的容器有无破损、瓶盖有无松动   七对：查对床号、查对姓名、查对药名、查对剂量、查对浓度、查对时间、查对用法 一注意：注意用药前的过敏史、配伍禁忌和用药后的反应      操作细则首次联系 规范的自我介绍 使用标准话术自我介绍 自我介绍完成之后确认用户信息 确认故障机使用者...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/10/17/How2-Minecraft-Server-Systemd/" title="手动搭建MineCraft服务器"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover129.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-17</div><div class="info-item-2">手动搭建MineCraft服务器</div></div><div class="info-2"><div class="info-item-1"> 原先使用MCManager部署的我的世界服务器需要重新刷一下新出的系统，所以就借机备份重新手动部署，体会一下原始的Minecraft是如何运行起来的。     06 陕西·西安 秦汉通航的医疗救援直升机   我将为您详细介绍如何手动搭建Java版Minecraft服务器（不借助一键安装工具）。以下是完整步骤： 环境准备部署JAVA# 查看系统版本cat /etc/rocky-releaseuname -r# 检查是否已安装Javajava -versionwhich java# 检查已安装的Java包rpm -qa | grep -i javarpm -qa | grep -i jdk# 卸载OpenJDK（如果需要）# dnf remove -y java-* openjdk-* jdk-*# 部署Oracle版本Java, 手动下载官方LTS长期支持版JDKrpm -Uvh jdk-21_linux-x64_bin.rpm# 部署OpenJDK版本Javadnf install -y java-21-openjdk.x86_64# 验证安装java -versionjava...</div></div></div></a><a class="pagination-related" href="/2023/05/29/magedu-arc-1/" title="Linux动手实践·1"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/wallhaven-4lekzl.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-05-29</div><div class="info-item-2">Linux动手实践·1</div></div><div class="info-2"><div class="info-item-1"> 根据马哥教育架构班课程第一周作业而来  题目要求 在两台服务器上安装kvm虚拟化，把其中一台的虚拟机迁移到另一台；  2。 手动制作一个容器镜像创建成容器并正常运行。 操作实践 KVM虚拟化  # 新建三个虚机，分别承担KVM两个节点和一个NFS主机的角色# Node1: 192. 168. 10. 101 KVM主机# Node2: 192. 168. 10. 102 KVM主机# Stor1: 192. 168. 10. 11 NFS主机，提供iso和kvm两个共享挂载点# 在三台主机的/etc/hosts配置解析记录192. 168. 10. 101 node1192. 168. 10. 102 node2192. 168. 10. 11  stor1# KVM主机的部署，Node1和Node2同步操作# 最小虚拟化宿主环境, 仅包括libvirt和qemu-kvmyum group install -y virtualization-hypervisor # 用于访问和控制虚拟机以及容器的接口，包括libvirt客户端yum group install -y virtu...</div></div></div></a><a class="pagination-related" href="/2021/10/09/Dnsmasq/" title="配置DNSMasq缓存系统"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover104.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-10-09</div><div class="info-item-2">配置DNSMasq缓存系统</div></div><div class="info-2"><div class="info-item-1">部署DNSMasq实现解析缓存服务DNSMasq是一个简洁、快速的DNS和DHCP服务器，我们可以使用它为局域网和主机自身提供可靠的DHCPv4、DHCPv6、BOOTP以及PXE服务。本文将记录一次DNSMasq的部署过程，并由该服务提供Github。 com的域名解析。 部署# 系统更新yum makecacheyum update -y# 安装软件yum install -y dnsmasq# 启动服务systemctl enable dnsmasq.service --now# 开通防火墙firewall-cmd --permanent --add-service=dnsfirewall-cmd --reload# 检查状态systemctl status dnsmasq● dnsmasq.service - DNS caching server.   Loaded: loaded ( /usr/lib/systemd/system/dnsmasq.service; enabled; vendor preset: disabled )   Active: active (...</div></div></div></a><a class="pagination-related" href="/2026/06/03/VI_Howto/" title="VI编辑器简介"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover154.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-03</div><div class="info-item-2">VI编辑器简介</div></div><div class="info-2"><div class="info-item-1"> 学习使用 vi 文本编辑器对于任何在 Linux 环境下工作的人来说都是必不可少的。虽然适应其工作方式需要一些时间，但掌握 vi 命令能让你在无需离开终端或使用鼠标的情况下，极其快速地编辑文件。    2026.05 河北·秦皇岛·山海关区 天下第一关景区  在本文中，我们将介绍你所需的 vi 核心命令，以便像专家一样导航、编辑和保存文本文件。 什么是 vi 编辑器？vi 编辑器由 Bill Joy 于 1976 年创建，是一款快速、轻量级的文本编辑器，允许你直接在终端窗口中操作文本文件。大多数现代 Linux 系统使用名为 vim（vi improved，增强版 vi）的更新版本，但大多数 vi 命令在 vim 和 vi 中都有效。由于它几乎预装在每一个类 Unix 系统上，掌握 vi 的使用是管理服务器和编写脚本的一项有用技能。 理解 vi 的几种模式要掌握 vi 命令，你必须理解 vi 是一个模式编辑器。与大多数程序直接开始键入不同，vi 根据你所在的模式改变其行为：  命令模式：打开文件时的默认模式。你按下的每个键都作为命令执行——例如移动光标或删除一行——而不是输入文...</div></div></div></a><a class="pagination-related" href="/2025/09/10/RockyLinux-Versionlocak/" title="如何锁定RockyLinux的主要程序版本"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover128.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-09-10</div><div class="info-item-2">如何锁定RockyLinux的主要程序版本</div></div><div class="info-2"><div class="info-item-1"> 本文将详细介绍多种锁定Rocky Linux系统主版本的方法，防止意外升级到新版本。其中，有相当脚本内容由AI生成，并未得到完全验证，特别对于内部升级源的地址、管理脚本需要认真鉴别再使用。     06 陕西·西安·秦汉通航公司   使用dnf版本锁定插件安装dnf-plugin-versionlock# 安装版本锁定插件sudo dnf install -y dnf-plugin-versionlock# 验证安装dnf list installed | grep versionlock  锁定整个系统版本# 方法1：锁定所有已安装的包sudo dnf versionlock add &#x27;*&#x27;  锁定特定关键包# 锁定核心系统包sudo dnf versionlock add kernel*sudo dnf versionlock add systemd*sudo dnf versionlock add glibc*sudo dnf versionlock add rocky-release*# 查看已锁定的包sudo dnf versionlock lis...</div></div></div></a><a class="pagination-related" href="/2024/05/17/Test-Disk-By-Fio/" title="磁盘性能测试"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover4.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-05-17</div><div class="info-item-2">磁盘性能测试</div></div><div class="info-2"><div class="info-item-1">前些天正好有个外协部门需要利旧，需要根据阿里云的测试流程对新华三的服务器和NVME磁盘进行一下测试，所以把手头的资料整理一下。    05 摄于洛阳·龙门石窟   存储一开始想写点什么来着，后来发现少数派上的文章写的非常棒，就一并转贴了 数字存储完全指南 存储设备的诞生与历史 机械硬盘的原理与参数详解 固态硬盘的历史、结构与原理 固态硬盘的参数解读与实际性能 运行内存都在运行什么？ 理解U盘、内存卡、移动硬盘和手机存储芯片构造  文牍测试流程 测试用例 测试报告 测试FIO简介FIO是一个用于测试磁盘IOPS性能的工具，可以对本地存储或者远程共享进行压力测试和验证，并能够给出磁盘性能的指标。FIO能够按照随机读、随机写、读写混合等不同IO模式对压测对象进行性能测试。 使用# 检查是否4k对齐[root@zhangjiakou ~]# fdisk -luDisk /dev/vda: 40 GiB, 42949672960 bytes, 83886080 sectorsUnits: sectors of 1 * 512 = 512 bytesSector size ( logical...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">靖轩</div><div class="author-info-description">逝者如斯夫,不舍昼夜</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/grepsu"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://gitee.com/grepsu" target="_blank" title="Gitee"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:sujx@live.cn" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS链接"><i class="fa  fa-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%83%A8%E7%BD%B2%E5%AE%9E%E6%96%BD"><span class="toc-number">1.</span> <span class="toc-text">部署实施</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8A%82%E7%82%B9%E6%8B%93%E6%89%91"><span class="toc-number">1.1.</span> <span class="toc-text">节点拓扑</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%83%A8%E7%BD%B2%E6%96%B9%E5%BC%8F"><span class="toc-number">1.2.</span> <span class="toc-text">部署方式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%90%E7%BB%B4%E7%AE%A1%E7%90%86"><span class="toc-number">2.</span> <span class="toc-text">运维管理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%99%BB%E5%BD%95%E7%AE%A1%E7%90%86%E9%A1%B5%E9%9D%A2"><span class="toc-number">2.1.</span> <span class="toc-text">登录管理页面</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%90%AD%E5%BB%BA%E5%BA%94%E7%94%A8%E5%AE%9E%E4%BE%8B"><span class="toc-number">2.2.</span> <span class="toc-text">搭建应用实例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8E%A9%E5%AE%B6%E7%95%8C%E9%9D%A2"><span class="toc-number">3.</span> <span class="toc-text">玩家界面</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E5%90%AF%E5%8A%A8%E5%99%A8"><span class="toc-number">3.1.</span> <span class="toc-text">获取启动器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="toc-number">3.2.</span> <span class="toc-text">下载客户端</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%99%BB%E5%BD%95%E6%B8%B8%E6%88%8F"><span class="toc-number">3.3.</span> <span class="toc-text">登录游戏</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E7%A7%81%E6%9C%8D%E5%9C%B0%E5%9D%80"><span class="toc-number">3.4.</span> <span class="toc-text">配置私服地址</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E9%98%B6%E8%B0%83%E6%95%B4"><span class="toc-number">4.</span> <span class="toc-text">进阶调整</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BASSL%E8%AF%81%E4%B9%A6"><span class="toc-number">4.1.</span> <span class="toc-text">创建SSL证书</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AE%A1%E7%90%86%E9%9D%A2%E6%9D%BF%E7%9A%84%E4%BB%A3%E7%90%86"><span class="toc-number">4.2.</span> <span class="toc-text">管理面板的代理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AE%A1%E7%90%86%E8%BF%9B%E7%A8%8B%E7%9A%84%E4%BB%A3%E7%90%86"><span class="toc-number">4.3.</span> <span class="toc-text">管理进程的代理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%B8%E5%85%B3%E7%BD%91%E5%9D%80"><span class="toc-number">4.4.</span> <span class="toc-text">相关网址</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/07/03/AIGC_FoxHole/" title="海鹰">海鹰</a><time datetime="2026-07-03T01:04:07.000Z" title="发表于 2026-07-03 09:04:07">2026-07-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/11/fristVibeCoding/" title="鹊随金印：我的第一个完整的AI编程项目">鹊随金印：我的第一个完整的AI编程项目</a><time datetime="2026-06-11T01:04:07.000Z" title="发表于 2026-06-11 09:04:07">2026-06-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/03/VI_Howto/" title="VI编辑器简介">VI编辑器简介</a><time datetime="2026-06-03T01:04:07.000Z" title="发表于 2026-06-03 09:04:07">2026-06-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/28/HNCitic_2605/" title="我要上头条">我要上头条</a><time datetime="2026-05-28T01:04:07.000Z" title="发表于 2026-05-28 09:04:07">2026-05-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/12/TS-Domain-Controller-Sync-Failure/" title="记一次Windows AD域控制器同步故障排错">记一次Windows AD域控制器同步故障排错</a><time datetime="2026-05-12T03:04:07.000Z" title="发表于 2026-05-12 11:04:07">2026-05-12</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2008 - 2026 By 靖轩</span></div><div class="footer_custom_text">京ICP备17034757号</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.5"></script><script src="/js/main.js?v=5.5.5"></script><script src="/libs/fancybox/fancybox.umd.js"></script><script src="/js/instantpage.js" type="module"></script><script src="/libs/lazyload/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const parseViewBox = viewBox => {
+    if (!viewBox) return null
+    const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
+    if (parts.length !== 4 || parts.some(n => Number.isNaN(n))) return null
+    return parts
+  }
+
+  const getSvgViewBox = svg => {
+    const attr = parseViewBox(svg.getAttribute('viewBox'))
+    if (attr) return attr
+
+    // Fallback: use bbox to build a viewBox
+    try {
+      const bbox = svg.getBBox()
+      if (bbox && bbox.width && bbox.height) return [bbox.x, bbox.y, bbox.width, bbox.height]
+    } catch (e) {
+      // getBBox may fail on some edge cases; ignore
+    }
+
+    const w = Number(svg.getAttribute('width')) || 0
+    const h = Number(svg.getAttribute('height')) || 0
+    if (w > 0 && h > 0) return [0, 0, w, h]
+    return [0, 0, 100, 100]
+  }
+
+  const setSvgViewBox = (svg, vb) => {
+    svg.setAttribute('viewBox', `${vb[0]} ${vb[1]} ${vb[2]} ${vb[3]}`)
+  }
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v))
+
+  const openSvgInNewTab = ({ source, initViewBox }) => {
+    const getClonedSvg = () => {
+      if (typeof source === 'string') {
+        const template = document.createElement('template')
+        template.innerHTML = source.trim()
+        const svg = template.content.querySelector('svg')
+        return svg ? svg.cloneNode(true) : null
+      }
+      if (source && typeof source.cloneNode === 'function') {
+        return source.cloneNode(true)
+      }
+      return null
+    }
+
+    const clone = getClonedSvg()
+    if (!clone) return
+    if (initViewBox && initViewBox.length === 4) {
+      clone.setAttribute('viewBox', initViewBox.join(' '))
+    }
+    if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+    if (!clone.getAttribute('xmlns:xlink') && clone.outerHTML.includes('xlink:')) {
+      clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+    }
+    // inject background to match current theme
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    const bg = getComputedStyle(document.body).backgroundColor || (isDark ? '#1e1e1e' : '#ffffff')
+    if (!clone.style.background) clone.style.background = bg
+
+    const serializer = new XMLSerializer()
+    const svgSource = serializer.serializeToString(clone)
+    const htmlSource = `<!doctype html><html><head><meta charset="utf-8" />
+      <style>
+        html, body { width: 100%; height: 100%; margin: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; }
+        svg { max-width: 100%; max-height: 100%; height: auto; width: auto; }
+      </style>
+      </head><body>${svgSource}</body></html>`
+    const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank', 'noopener')
+    setTimeout(() => URL.revokeObjectURL(url), 30000)
+  }
+
+  const attachMermaidViewerButton = wrap => {
+    let btn = wrap.querySelector('.mermaid-open-btn')
+    if (!btn) {
+      btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'mermaid-open-btn'
+      wrap.appendChild(btn)
+    }
+
+    btn.innerHTML = '<i class="fa fa-search fa-fw" aria-hidden="true"></i>'
+
+    if (!btn.__mermaidViewerBound) {
+      btn.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        const svg = wrap.__mermaidOriginalSvg || wrap.querySelector('svg')
+        if (!svg) return
+        const initViewBox = wrap.__mermaidInitViewBox
+        if (typeof svg === 'string') {
+          openSvgInNewTab({ source: svg, initViewBox })
+          return
+        }
+        openSvgInNewTab({ source: svg, initViewBox })
+      })
+      btn.__mermaidViewerBound = true
+    }
+  }
+
+  // Zoom around a point (px, py) in the SVG viewport (in viewBox coordinates)
+  const zoomAtPoint = (vb, factor, px, py) => {
+    const w = vb[2] * factor
+    const h = vb[3] * factor
+    const nx = px - (px - vb[0]) * factor
+    const ny = py - (py - vb[1]) * factor
+    return [nx, ny, w, h]
+  }
+
+  const initMermaidGestures = wrap => {
+    const svg = wrap.querySelector('svg')
+    if (!svg) return
+
+    // Ensure viewBox exists so gestures always work
+    const initVb = getSvgViewBox(svg)
+    wrap.__mermaidInitViewBox = initVb
+    wrap.__mermaidCurViewBox = initVb.slice()
+    setSvgViewBox(svg, initVb)
+
+    // Avoid binding multiple times on themeChange/pjax
+    if (wrap.__mermaidGestureBound) return
+    wrap.__mermaidGestureBound = true
+
+    // Helper: map client (viewport) coordinate -> viewBox coordinate
+    const clientToViewBox = (clientX, clientY) => {
+      const rect = svg.getBoundingClientRect()
+      const vb = wrap.__mermaidCurViewBox || getSvgViewBox(svg)
+      const x = vb[0] + (clientX - rect.left) * (vb[2] / rect.width)
+      const y = vb[1] + (clientY - rect.top) * (vb[3] / rect.height)
+      return { x, y, rect, vb }
+    }
+
+    const state = {
+      pointers: new Map(),
+      startVb: null,
+      startDist: 0,
+      startCenter: null
+    }
+
+    const clampVb = vb => {
+      const init = wrap.__mermaidInitViewBox || vb
+      const minW = init[2] * 0.1
+      const maxW = init[2] * 10
+      const minH = init[3] * 0.1
+      const maxH = init[3] * 10
+      vb[2] = clamp(vb[2], minW, maxW)
+      vb[3] = clamp(vb[3], minH, maxH)
+      return vb
+    }
+
+    const setCurVb = vb => {
+      vb = clampVb(vb)
+      wrap.__mermaidCurViewBox = vb
+      setSvgViewBox(svg, vb)
+    }
+
+    const onPointerDown = e => {
+      // Allow only primary button for mouse
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      svg.setPointerCapture(e.pointerId)
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      if (state.pointers.size === 1) {
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      } else if (state.pointers.size === 2) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        state.startDist = Math.hypot(dx, dy)
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        state.startCenter = { x: (pts[0].x + pts[1].x) / 2, y: (pts[0].y + pts[1].y) / 2 }
+      }
+    }
+
+    const onPointerMove = e => {
+      if (!state.pointers.has(e.pointerId)) return
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      // Pan with 1 pointer
+      if (state.pointers.size === 1 && state.startVb) {
+        const p = [...state.pointers.values()][0]
+        const prev = { x: e.clientX - e.movementX, y: e.clientY - e.movementY }
+        // movementX/Y unreliable on touch, compute from stored last position
+        const last = wrap.__mermaidLastSinglePointer || p
+        const dxClient = p.x - last.x
+        const dyClient = p.y - last.y
+        wrap.__mermaidLastSinglePointer = p
+
+        const { rect } = clientToViewBox(p.x, p.y)
+        const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        const dx = dxClient * (vb[2] / rect.width)
+        const dy = dyClient * (vb[3] / rect.height)
+        setCurVb([vb[0] - dx, vb[1] - dy, vb[2], vb[3]])
+        return
+      }
+
+      // Pinch zoom with 2 pointers
+      if (state.pointers.size === 2 && state.startVb && state.startDist > 0) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        const dist = Math.hypot(dx, dy)
+        if (!dist) return
+        const factor = state.startDist / dist // dist bigger => zoom in (viewBox smaller)
+
+        const cx = (pts[0].x + pts[1].x) / 2
+        const cy = (pts[0].y + pts[1].y) / 2
+        const centerClient = { x: cx, y: cy }
+
+        const pxy = clientToViewBox(centerClient.x, centerClient.y)
+        const cpx = pxy.x
+        const cpy = pxy.y
+
+        const vb = zoomAtPoint(state.startVb, factor, cpx, cpy)
+        setCurVb(vb)
+      }
+    }
+
+    const onPointerUpOrCancel = e => {
+      state.pointers.delete(e.pointerId)
+      if (state.pointers.size === 0) {
+        state.startVb = null
+        state.startDist = 0
+        state.startCenter = null
+        wrap.__mermaidLastSinglePointer = null
+      } else if (state.pointers.size === 1) {
+        // reset single pointer baseline to avoid jump
+        wrap.__mermaidLastSinglePointer = [...state.pointers.values()][0]
+      }
+    }
+
+    // Wheel zoom (mouse/trackpad)
+    const onWheel = e => {
+      // ctrlKey on mac trackpad pinch; we treat both as zoom
+      e.preventDefault()
+      const delta = e.deltaY
+      const zoomFactor = delta > 0 ? 1.1 : 0.9
+      const { x, y } = clientToViewBox(e.clientX, e.clientY)
+      const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      setCurVb(zoomAtPoint(vb, zoomFactor, x, y))
+    }
+
+    const onDblClick = () => {
+      const init = wrap.__mermaidInitViewBox
+      if (!init) return
+      wrap.__mermaidCurViewBox = init.slice()
+      setSvgViewBox(svg, init)
+    }
+
+    svg.addEventListener('pointerdown', onPointerDown)
+    svg.addEventListener('pointermove', onPointerMove)
+    svg.addEventListener('pointerup', onPointerUpOrCancel)
+    svg.addEventListener('pointercancel', onPointerUpOrCancel)
+    svg.addEventListener('wheel', onWheel, { passive: false })
+    svg.addEventListener('dblclick', onDblClick)
+  }
+
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+
+      // Clear old render (themeChange/pjax will rerun)
+      const oldSvg = item.querySelector('svg')
+      if (oldSvg) oldSvg.remove()
+      item.__mermaidGestureBound = false
+
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+        if (true) initMermaidGestures(item)
+        item.__mermaidOriginalSvg = svg
+        if (true) attachMermaidViewerButton(item)
+      }
+
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('/libs/mermaid/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.5"></script></div></div></body></html>

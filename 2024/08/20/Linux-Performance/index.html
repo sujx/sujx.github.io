@@ -1,0 +1,906 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>「Linux性能优化大师」 | 靖轩</title><meta name="author" content="靖轩"><meta name="copyright" content="靖轩"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="我其实是买了这本书好多年了，都是拿起来翻了两页就看不动了，最近下决心还是把它看完吧，毕竟这书真的有点老了。该书是基于LInux 2。 6内核和RHEL6的版本为例进行的Linux性能解析，即便在15年成书的时候候，都已经算老了。这本书的内容的确有很大问题，个人感觉更像红帽EX442考试的参考教程，很多语句就像英文硬翻的，只能说有一定的科普的作用。 说起来，该书作者赵永刚还是我素未谋面的同事，他是我">
+<meta property="og:type" content="article">
+<meta property="og:title" content="「Linux性能优化大师」">
+<meta property="og:url" content="https://www.sujx.net/2024/08/20/Linux-Performance/index.html">
+<meta property="og:site_name" content="靖轩">
+<meta property="og:description" content="我其实是买了这本书好多年了，都是拿起来翻了两页就看不动了，最近下决心还是把它看完吧，毕竟这书真的有点老了。该书是基于LInux 2。 6内核和RHEL6的版本为例进行的Linux性能解析，即便在15年成书的时候候，都已经算老了。这本书的内容的确有很大问题，个人感觉更像红帽EX442考试的参考教程，很多语句就像英文硬翻的，只能说有一定的科普的作用。 说起来，该书作者赵永刚还是我素未谋面的同事，他是我">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.sujx.net/covers/cover41.jpg">
+<meta property="article:published_time" content="2024-08-19T23:04:07.000Z">
+<meta property="article:modified_time" content="2026-09-26T02:25:04.169Z">
+<meta property="article:author" content="靖轩">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="performance">
+<meta property="article:tag" content="读书笔记">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.sujx.net/covers/cover41.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "「Linux性能优化大师」",
+  "url": "https://www.sujx.net/2024/08/20/Linux-Performance/",
+  "image": "https://cdn.sujx.net/covers/cover41.jpg",
+  "datePublished": "2024-08-19T23:04:07.000Z",
+  "dateModified": "2026-09-26T02:25:04.169Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "靖轩",
+      "url": "https://www.sujx.net"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://cdn.sujx.net/about/favicon.png"><link rel="canonical" href="https://www.sujx.net/2024/08/20/Linux-Performance/index.html"><link rel="preconnect" href="//cdnjs.cloudflare.com"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css?v=5.5.5"><link rel="stylesheet" href="/fonts/css/all.min.css"><link rel="stylesheet" href="/libs/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?417b20ac1984432f821159fac27d3bb5";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><link rel="stylesheet" href="/fonts/titillium-web.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: '/libs/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: true,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '「Linux性能优化大师」',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="alternate" href="/atom.xml" title="靖轩" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">靖轩</span></a><a class="nav-page-title" href="/"><span class="site-name">「Linux性能优化大师」</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">「Linux性能优化大师」</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-08-19T23:04:07.000Z" title="发表于 2024-08-20 07:04:07">2024-08-20</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-09-26T02:25:04.169Z" title="更新于 2026-09-26 10:25:04">2026-09-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">6.9k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>25分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><p>我其实是买了这本书好多年了，都是拿起来翻了两页就看不动了，最近下决心还是把它看完吧，毕竟这书真的有点老了。该书是基于LInux 2。 6内核和RHEL6的版本为例进行的Linux性能解析，即便在15年成书的时候候，都已经算老了。这本书的内容的确有很大问题，个人感觉更像红帽EX442考试的参考教程，很多语句就像英文硬翻的，只能说有一定的科普的作用。</p>
+<p>说起来，该书作者赵永刚还是我素未谋面的同事，他是我在纷享工作岗位的前前任，我曾经蹲的工位也曾是他的工位。</p>
+<blockquote>
+<p>性能调优是一项艰巨的任务，需要深入了解硬件、操作系统和应用程序的工作原理。</p>
+</blockquote>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover41.jpg"></p>
+<blockquote>
+<ol start="2024">
+<li>07 摄于北京朝阳区·众秀大厦</li>
+</ol>
+</blockquote>
+<h2 id="深入理解Linux操作系统"><a href="#深入理解Linux操作系统" class="headerlink" title="深入理解Linux操作系统"></a>深入理解Linux操作系统</h2><h3 id="Linux进程管理"><a href="#Linux进程管理" class="headerlink" title="Linux进程管理"></a>Linux进程管理</h3><h4 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h4><p>进程管理在任何操作系统中都是最重要的任务之一。进程是在处理器上执行的一个实例，进程可以使用任意资源以便内核可以处理完成任务。在Linux操作系统上运行的进程多是通过task_struct结构来管理的，也被称为进程描述符。一个进程描述符包含了单个进程在运行期间所有必要的信息，比如进程表示、属性、构建进程的资源等。</p>
+<p>每个进程都有自己的生命周期，比如创建、执行、终止、删除等。只要系统启动和运行，这些阶段就会不断重复。</p>
+<p>1。 当一个进程创建一个新进程时，父进程就会发出一个fork()系统调用，然后父进程得到一个子进程的进程描述符，并设置一个新的ID。<br>2. exec()系统调用将新的程序复制到子进程的地址空间，内核给子进程分配新的物理页，子进程执行自己的程序，而不是父进程相同的操作<br>3. 当程序执行完成，通过exit()系统调用终止子进程，exit()释放进程数据结构并发送一个终止信号通知父进程<br>4. 子进程不会完全移除，知道父进程通过wait()调用得知子进程已终止，父进程就会释放进程描述符</p>
+<h4 id="线程"><a href="#线程" class="headerlink" title="线程"></a>线程</h4><p>线程时进程中产生的一个执行单元，在同一个进程中与其他线程并行运行，共享相同的资源，访问同一组应用程序数据。线程也被称为轻量级进程。因为资源共享，所以互斥、锁、序列化是用户应用程序要实现的机制。</p>
+<p>具体的实现有：</p>
+<ol>
+<li>LinuxThreads</li>
+<li>Native POSIX Thread Library</li>
+<li>Next Generation POSIX Thread</li>
+</ol>
+<h4 id="优先级和nice等级"><a href="#优先级和nice等级" class="headerlink" title="优先级和nice等级"></a>优先级和nice等级</h4><p>进程优先级是一个数字，用来确定CPU处理进程的顺序，并可以确定实时优先级和非实时优先级。最高实时优先级（99）对应于系统优先级0，最低非实时优先级（0）对应于系统优先级99。</p>
+<p>一个进程可以间接通过使用nice级别来修改实时优先级，高实时优先级的进程可以更多的占用CPU时间。Linux的nice级别可以从最低的19到-20的最高优先级，默认为0。</p>
+<h4 id="上下文处理"><a href="#上下文处理" class="headerlink" title="上下文处理"></a>上下文处理</h4><p>在处理器执行期间，运行进程的信息被存储在处理器的寄存器和高速缓存中，执行的进程被加载到寄存器的数据集被称为上下文，切换过程被称为上下文切换。</p>
+<h4 id="中断处理"><a href="#中断处理" class="headerlink" title="中断处理"></a>中断处理</h4><p>中断处理时优先级最高的任务之一，通常由I&#x2F;O设备产生，是由内核通知事件。当中断信号到达内核时，内核必须要从当前执行的进程切换到一个新的进程。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@share ~]# cat /proc/interrupts </span><br><span class="line">            CPU0       </span><br><span class="line">   0:         27   IO-APIC    2-edge      timer</span><br><span class="line">   1:          9   IO-APIC    1-edge      i8042</span><br><span class="line">   8:          0   IO-APIC    8-edge      rtc0</span><br><span class="line">   9:          0   IO-APIC    9-fasteoi   acpi</span><br><span class="line">  12:         15   IO-APIC   12-edge      i8042</span><br><span class="line">  14:          0   IO-APIC   14-edge      ata_piix</span><br><span class="line">  15:          0   IO-APIC   15-edge      ata_piix</span><br><span class="line">  16:          0   IO-APIC   16-fasteoi   vmwgfx</span><br><span class="line">  17:       4854   IO-APIC   17-fasteoi   ioc0</span><br><span class="line">  18:        397   IO-APIC   18-fasteoi   ens32</span><br><span class="line">  24:          0  PCI-MSI-0000:00:15. 0    0-edge      PCIe PME, pciehp</span><br><span class="line">  ……</span><br></pre></td></tr></table></figure>
+
+<h4 id="进程状态"><a href="#进程状态" class="headerlink" title="进程状态"></a>进程状态</h4><ol>
+<li>TASK_RUNNING</li>
+<li>TASK_STOPPED</li>
+<li>TASK_INTERRUPTIBLE</li>
+<li>TASK_UNINTERRUPTIBLE</li>
+<li>TASK_ZOMBIE</li>
+</ol>
+<p>当一个进程接收到一个终止信号，在它结束之前需要一些时间结束所有任务，在此期间它就是僵尸进程。使用kill命令无法杀死僵尸进程，除非杀死父进程。</p>
+<h4 id="进程的内存段"><a href="#进程的内存段" class="headerlink" title="进程的内存段"></a>进程的内存段</h4><ol>
+<li>文本段：存储可执行代码</li>
+<li>数据段<ol>
+<li>数据，初始化数据，比如静态变量</li>
+<li>BSS，零初始化数据，数据被初始化为零</li>
+<li>堆，根据需求动态分配内存，向高地址增长</li>
+</ol>
+</li>
+<li>堆栈段，局部变量、函数参数、返回的存储函数存放区域</li>
+</ol>
+<h4 id="CPU调度程序"><a href="#CPU调度程序" class="headerlink" title="CPU调度程序"></a>CPU调度程序</h4><p>内核使用进程调度程序来确定那个程序在那个给定时间点运行。</p>
+<ol>
+<li>0( 1 )调度程序</li>
+<li>CFS完全公平调度程序</li>
+</ol>
+<h3 id="内存体系结构"><a href="#内存体系结构" class="headerlink" title="内存体系结构"></a>内存体系结构</h3><h4 id="物理内存和虚拟内存"><a href="#物理内存和虚拟内存" class="headerlink" title="物理内存和虚拟内存"></a>物理内存和虚拟内存</h4><ol>
+<li>页帧分配<ol>
+<li>一个分页是物理内存或者虚拟内存中一组连续线性地址，内核以内存页为单位处理内存，通常为4KB大小</li>
+<li>进程不能直接对物理内存寻址，每个进程有一个虚拟地址空间，页帧的物理地址被映射到进程的虚拟地址</li>
+</ol>
+</li>
+<li>虚拟内存寻址布局<ol>
+<li>32位架构的最大地址访问空间是4GB，其中1GB为内核空间，3GB为用户空间<br>2。 64位架构没有限制。</li>
+</ol>
+</li>
+</ol>
+<h4 id="虚拟内存管理"><a href="#虚拟内存管理" class="headerlink" title="虚拟内存管理"></a>虚拟内存管理</h4><p>管理虚拟内存的默认规则：分配所有有效空闲内存空间作为磁盘缓存。</p>
+<p>1。 伙伴算法：把所有空闲的内存，以2的幂次方的形式，分成11个块链表，分别对应为1、2、4、8、16、32、64、128、256、512、1024个页块。</p>
+   <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@share ~]# cat /proc/buddyinfo </span><br><span class="line">Node 0, zone      DMA      0      0      0      0      0      1      1      1      0      1      3 </span><br><span class="line">Node 0, zone    DMA32    235     43     27      3      4      7      4      3      3      5     55</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><p>分页回收</p>
+<p>当进程所需要分页不足时，内核将尝试释放一定数量的分页，然后进行重新分配。内核线程kswapd和内核函数try_to_free_page()负责分页回收。其原则基于Least Recently Used最近最少原则，最近最少使用哦个的分页被释放，活跃列表和非活跃列表用于维护候选分页。</p>
+<p>kswapd同时遵循宁可缩小分页缓存也不改变分页移出（ page out 或者 swap out ）进程拥有的分页的原则。分页缓存时分页被映射到磁盘上的一个文件，被称为匿名内存。可以通过&#x2F;proc&#x2F;sys&#x2F;vm&#x2F;swapiness来控制，1表示尽量使用分页缓存，10表示尽量不使用。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@share ~]# cat /proc/sys/vm/swappiness </span><br><span class="line">10</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>SWAP</p>
+<p>当发生分页回收时，在非活跃列表中属于进程空间的候选分页可以被移出。如果虚拟内存管理器发现内存分页已经被分配，但大量时间还没有使用完，就会把这个内存分页移动到swap空间。</p>
+</li>
+</ol>
+<h3 id="文件系统"><a href="#文件系统" class="headerlink" title="文件系统"></a>文件系统</h3><h4 id="虚拟文件系统"><a href="#虚拟文件系统" class="headerlink" title="虚拟文件系统"></a>虚拟文件系统</h4><p>VFS时驻留在用户进程与各类型的Linux文件系统之间的抽象接口层。VFS提供了访问文件系统对象的通用对象模型和方法，对用户进程隐藏了文件系统实现的方法和差异。</p>
+<h4 id="文件系统日志"><a href="#文件系统日志" class="headerlink" title="文件系统日志"></a>文件系统日志</h4><p>为了保证数据的完整性，文件系统在执行写入数据到实际文件系统之前，先将改变数据写入日志区域。被写入日志区域的数据称为日志记录。它包含了改变的文件系统元数据和实际的文件数据。</p>
+<h4 id="EXT2"><a href="#EXT2" class="headerlink" title="EXT2"></a>EXT2</h4><p>EXT3的前身，没有日志功能，是个快速、简单的文件系统。以引导扇区开始，然后是块组将整个文件系统分成若干区域，将用户数据的索引节点表和数据块更紧密的保存在盘片上，以此减少寻道时间。</p>
+<p>一个块组包括</p>
+<ol>
+<li>超级块，存储文件系统信息，放置在每个块组的顶部</li>
+<li>块组描述符：存储块组信息</li>
+<li>数据块位图：用于空闲数据块管理</li>
+<li>索引节点位图：用于空闲索引节点管理</li>
+<li>索引节点表：保存文件的元数据</li>
+<li>数据块：实际用户数据存储</li>
+</ol>
+<h4 id="EXT3"><a href="#EXT3" class="headerlink" title="EXT3"></a>EXT3</h4><p>增加了日志功能的ext2，提高了可用性和数据完整性。其日志模式有以下三种</p>
+<ol>
+<li>全日志，元数据和实际数据先被写入日志区，然后再写入主文件系统</li>
+<li>顺序，实际数据直接写入主文件系统，元数据在实际数据写完后再被写入日志区，是默认的模式</li>
+<li>回写，元数据先写入日志区，然后再将实际数据直接写入文件系统</li>
+</ol>
+<h4 id="EXT4"><a href="#EXT4" class="headerlink" title="EXT4"></a>EXT4</h4><p>EXT3的升级，提供了文件系统的伸缩性，突破了文件系统的限制，支持最大单体16TB文件，存储容量最大1EB。此外还采用了一系列提高性能和安全性的措施：</p>
+<ol>
+<li>文件级预分配</li>
+<li>延迟块分配</li>
+<li>多个块分配</li>
+<li>执行文件系统日志校验和</li>
+<li>在线磁盘碎片整理</li>
+</ol>
+<h4 id="XFS"><a href="#XFS" class="headerlink" title="XFS"></a>XFS</h4><h4 id="Btrfs"><a href="#Btrfs" class="headerlink" title="Btrfs"></a>Btrfs</h4><h3 id="磁盘I-O系统"><a href="#磁盘I-O系统" class="headerlink" title="磁盘I&#x2F;O系统"></a>磁盘I&#x2F;O系统</h3><h4 id="体系结构"><a href="#体系结构" class="headerlink" title="体系结构"></a>体系结构</h4><p>当磁盘执行写入操作时发生的基本操作</p>
+<ol>
+<li>一个进程通过write()系统调用请求写一个文件</li>
+<li>内核更新已映射文件的分页缓存</li>
+<li>内核线程将分页缓存刷新到磁盘</li>
+<li>文件系统层同时放置块缓存，并向块设备提交写请求</li>
+<li>块设备从上层得到请求，并执行IO操作</li>
+<li>设备驱动器将执行写操作</li>
+<li>磁盘设备固件执行硬件操作</li>
+</ol>
+<h4 id="Cache"><a href="#Cache" class="headerlink" title="Cache"></a>Cache</h4><ol>
+<li>存储层次结构</li>
+<li>访问局部性</li>
+<li>刷新脏页</li>
+</ol>
+<h4 id="块层"><a href="#块层" class="headerlink" title="块层"></a>块层</h4><h5 id="IO电梯调度"><a href="#IO电梯调度" class="headerlink" title="IO电梯调度"></a>IO电梯调度</h5><ol>
+<li>CFQ 完全公平队列，使用并发读写系统，例如多媒体应用和桌面系统</li>
+<li>Deadline算法，近似实时算法，适用于数据库服务器等大I&#x2F;O操作</li>
+<li>NOOP算法，无操作，执行先入先出队列，使用SSD和SAN</li>
+</ol>
+<h5 id="设备驱动程序"><a href="#设备驱动程序" class="headerlink" title="设备驱动程序"></a>设备驱动程序</h5><ol>
+<li>SCSI</li>
+</ol>
+<h5 id="RAID"><a href="#RAID" class="headerlink" title="RAID"></a>RAID</h5><h3 id="网络子系统"><a href="#网络子系统" class="headerlink" title="网络子系统"></a>网络子系统</h3><h4 id="网络化的实现"><a href="#网络化的实现" class="headerlink" title="网络化的实现"></a>网络化的实现</h4><h5 id="网络传输基本操作"><a href="#网络传输基本操作" class="headerlink" title="网络传输基本操作"></a>网络传输基本操作</h5><ol>
+<li>当应用程序发送数据到对等主机时，应用程序创建数据</li>
+<li>应用程序打开socket，并通过socket接口写入数据</li>
+<li>socket缓冲区引用数据，向下穿过各层</li>
+<li>TCP&#x2F;IP各层添加报头、校验和、路由操作、分片等等</li>
+<li>网络接口卡向线缆发送数据，并增加一个中断</li>
+<li>以太帧到达对等主机网络接口卡</li>
+<li>如果mac地址匹配接口卡的mac地址，将帧移动到网络接口卡的缓冲区</li>
+<li>CPU之后处理数据包，并使其向上穿过各层，直到应用程序的TCP端口</li>
+</ol>
+<h5 id="socket-buffer内核缓冲区"><a href="#socket-buffer内核缓冲区" class="headerlink" title="socket buffer内核缓冲区"></a>socket buffer内核缓冲区</h5><h5 id="NAPI（Network-API）"><a href="#NAPI（Network-API）" class="headerlink" title="NAPI（Network API）"></a>NAPI（Network API）</h5><h5 id="Netfilter"><a href="#Netfilter" class="headerlink" title="Netfilter"></a>Netfilter</h5><ol>
+<li>数据包过滤filter</li>
+<li>地址转换nat</li>
+<li>改变数据包mangle</li>
+</ol>
+<h5 id="连续跟踪"><a href="#连续跟踪" class="headerlink" title="连续跟踪"></a>连续跟踪</h5><h4 id="TCP-IP"><a href="#TCP-IP" class="headerlink" title="TCP&#x2F;IP"></a>TCP&#x2F;IP</h4><ol>
+<li>建立连接</li>
+<li>流量控制</li>
+<li>传输窗口</li>
+<li>重传</li>
+</ol>
+<h4 id="Offload"><a href="#Offload" class="headerlink" title="Offload"></a>Offload</h4><h4 id="Bonding"><a href="#Bonding" class="headerlink" title="Bonding"></a>Bonding</h4><h3 id="性能度量标准"><a href="#性能度量标准" class="headerlink" title="性能度量标准"></a>性能度量标准</h3><h4 id="CPU"><a href="#CPU" class="headerlink" title="CPU"></a>CPU</h4><ol>
+<li>CPU使用率</li>
+<li>用户进程消耗时间</li>
+<li>内核操作消耗时间</li>
+<li>等待</li>
+<li>CPU空闲时间</li>
+<li>Nice消耗CPU时间</li>
+<li>平均负载<ol>
+<li>不是一个百分比</li>
+<li>队列等待进程数和等待不可中断任务被完成进程数之和</li>
+</ol>
+</li>
+<li>可运行进程</li>
+<li>阻塞的进程</li>
+<li>上下文切换</li>
+<li>中断</li>
+</ol>
+<h4 id="内存"><a href="#内存" class="headerlink" title="内存"></a>内存</h4><ol>
+<li>空闲内存</li>
+<li>使用的swap</li>
+<li>缓存和缓冲</li>
+<li>slab</li>
+<li>活跃和非活跃内存</li>
+</ol>
+<h4 id="块设备"><a href="#块设备" class="headerlink" title="块设备"></a>块设备</h4><ol>
+<li>IO等待</li>
+<li>平均队列长度</li>
+<li>平均等待时间</li>
+<li>每秒传输</li>
+<li>每秒读取&#x2F;写入块的数量</li>
+<li>每秒读取&#x2F;写入的字节</li>
+</ol>
+<h4 id="网络接口"><a href="#网络接口" class="headerlink" title="网络接口"></a>网络接口</h4><ol>
+<li>接收和发送的数据包</li>
+<li>接收和发送的字节</li>
+<li>每秒钟的冲突数量</li>
+<li>丢弃的数据包</li>
+<li>溢出</li>
+<li>错误</li>
+</ol>
+<h2 id="分析性能瓶颈"><a href="#分析性能瓶颈" class="headerlink" title="分析性能瓶颈"></a>分析性能瓶颈</h2><h3 id="识别系统瓶颈"><a href="#识别系统瓶颈" class="headerlink" title="识别系统瓶颈"></a>识别系统瓶颈</h3><h4 id="处理步骤"><a href="#处理步骤" class="headerlink" title="处理步骤"></a>处理步骤</h4><ol>
+<li>了解你的系统</li>
+<li>备份系统</li>
+<li>监控和分析系统的性能</li>
+<li>缩小瓶颈</li>
+<li>通过尝试以此一个更改，找到发生瓶颈的原因</li>
+</ol>
+<h4 id="收集信息"><a href="#收集信息" class="headerlink" title="收集信息"></a>收集信息</h4><ol>
+<li>你能给我一个问题服务器的完整描述吗？<ol>
+<li>型号</li>
+<li>生产日期</li>
+<li>配置</li>
+<li>外围设备</li>
+<li>操作系统版本和更新级别</li>
+</ol>
+</li>
+<li>你能告诉我到底时什么问题吗？<ol>
+<li>有什么症状？</li>
+<li>描述任意错误信息</li>
+</ol>
+</li>
+<li>谁遇到的这个问题？</li>
+<li>问题可以复现么？<ol>
+<li>复现的步骤是什么？</li>
+<li>这是一个间歇性的问题么？</li>
+<li>它发生在一天的某个时段，或是几天，或是周几？</li>
+<li>这是不寻常的么？</li>
+</ol>
+</li>
+<li>问题是什么时候开始的？他是平缓的，还是很快的发生？</li>
+<li>对服务器做出任何改变或者对客户端使用服务器的方法做出任何改变？</li>
+<li>是否涉及任何其他服务器或硬件组件？</li>
+<li>是否有任何可用的日志？</li>
+<li>问题的优先级是什么？什么时候能解决？</li>
+</ol>
+<h4 id="分析服务器性能"><a href="#分析服务器性能" class="headerlink" title="分析服务器性能"></a>分析服务器性能</h4><ol>
+<li>了解影响服务器性能的因素</li>
+<li>测量当前性能，创建一个性能基线，与未来的测量相比较</li>
+<li>使用监控工具来识别性能瓶颈</li>
+<li>组件工作导致瓶颈，那么升级组件就是一个号的方法</li>
+<li>测量新的性能</li>
+</ol>
+<h3 id="CPU瓶颈"><a href="#CPU瓶颈" class="headerlink" title="CPU瓶颈"></a>CPU瓶颈</h3><p>高CPU使用率并不总是意味着CPU忙于工作，它可能在等待另一个子系统。当执行适当的分析时，要整体来查看系统和所有子系统。</p>
+<ol>
+<li>使用top或者htop，查看CPU的使用者</li>
+<li>使用sar和gnuplot进行长期监控，并输出为图表</li>
+<li>vmstat</li>
+</ol>
+<p>如果确认是CPU的问题，那么可以采取以下措施来提高性能：</p>
+<ol>
+<li>使用ps -ef命令来确认后台是否有不必要的程序</li>
+<li>使用top识别非关键性CPU密集程序，并使用renice修改它们的优先级</li>
+<li>尝试使用taskset来绑定进程到指定CPU，确保进程不会在处理器之间跳跃，导致cache刷新</li>
+<li>根据应用程序特性来选择CPU，例如单线程程序需要更快的CPU，而不是更多的CPU</li>
+<li>确保使用最新的驱动程序和固件</li>
+</ol>
+<h3 id="内存瓶颈"><a href="#内存瓶颈" class="headerlink" title="内存瓶颈"></a>内存瓶颈</h3><p>如果认为存在内存瓶颈，可以执行如下操作：</p>
+<ol>
+<li>调整swap空间，使用大页、hugetlb共享内存</li>
+<li>增加或者减少分页的大小</li>
+<li>改进活跃和非活跃内存的处理</li>
+<li>调整分页移出率</li>
+<li>限制服务器上每个用户的资源使用</li>
+<li>停止不必要的服务</li>
+<li>增加内存</li>
+</ol>
+<h3 id="磁盘瓶颈"><a href="#磁盘瓶颈" class="headerlink" title="磁盘瓶颈"></a>磁盘瓶颈</h3><p>磁盘子系统是最常见的瓶颈。常见的瓶颈有磁盘空间太小和同一个阵列上有太多的逻辑磁盘。</p>
+<p>检查磁盘瓶颈的分析方法有两种：</p>
+<ol>
+<li>实时监控</li>
+<li>收集性能数据</li>
+<li>使用iostat或者vmstat来获取相关指标</li>
+</ol>
+<p>磁盘性能瓶颈的调优的方法：</p>
+<ol>
+<li>增加更快的磁盘控制器</li>
+<li>在raid中增加更多的磁盘驱动器</li>
+<li>考虑使用条带化的Linux逻辑卷</li>
+<li>将进程卸载到网络中的另一个系统</li>
+<li>添加更多的内存，提高系统内的磁盘cache</li>
+</ol>
+<h3 id="网络瓶颈"><a href="#网络瓶颈" class="headerlink" title="网络瓶颈"></a>网络瓶颈</h3><ol>
+<li>确保网卡配置与路由器和交换机配置相匹配</li>
+<li>调整网络配置和拓扑</li>
+<li>使用更快的网卡</li>
+<li>调整适当的TCP&#x2F;IP内核参数</li>
+<li>更新网卡驱动并重新检查性能</li>
+<li>添加网卡，并组件bond或者team，形成一个适配器群组</li>
+</ol>
+<h2 id="调整操作系统"><a href="#调整操作系统" class="headerlink" title="调整操作系统"></a>调整操作系统</h2><h3 id="调整原则"><a href="#调整原则" class="headerlink" title="调整原则"></a>调整原则</h3><ol>
+<li>分析和评估当前系统配置</li>
+<li>确保系统按照硬件制造商所述运行，所有设备在最佳模式下运行</li>
+<li>系统被设计为最佳性能，最小化运行不必要任务和子系统</li>
+<li>调整通常是让系统适应一个特定的工作负载</li>
+</ol>
+<h3 id="变更管理"><a href="#变更管理" class="headerlink" title="变更管理"></a>变更管理</h3><ol>
+<li>在调整任何Linux系统之前，实施适当的变更管理过程</li>
+<li>绝不在生产服务器上开始调整设置</li>
+<li>绝不在调整过程期间改变一个以上的变量</li>
+<li>重新启动可能提高性能的参数，<br>5。 记录成功的参数并分析它们，无论你人为它们是多么微不足道。</li>
+</ol>
+<h3 id="安装事项"><a href="#安装事项" class="headerlink" title="安装事项"></a>安装事项</h3><ol>
+<li>需要什么特点和版本的Linux</li>
+<li>选择正确的内核</li>
+<li>选择什么样的分区布局</li>
+<li>使用什么样的文件系统</li>
+<li>软件的选择</li>
+<li>Netfilter配置</li>
+<li>SElinux</li>
+<li>运行级别的选择</li>
+</ol>
+<h3 id="当前配置"><a href="#当前配置" class="headerlink" title="当前配置"></a>当前配置</h3><h4 id="硬件信息"><a href="#硬件信息" class="headerlink" title="硬件信息"></a>硬件信息</h4><ol>
+<li><p>CPU</p>
+<ol>
+<li>模式、架构、主板芯片</li>
+<li>多少个插槽、每CPU多少个核心、多少个线程、socket如何连接</li>
+<li>CPU每层cache有多大、cache是私有还是共享、cache如何组织和访问</li>
+<li>处理的特性和功能</li>
+</ol>
+</li>
+<li><p>内存</p>
+<ol>
+<li>多少内存，硬件允许最大内存数量是多少？</li>
+<li>系统使用内存技术是什么？带宽和延迟</li>
+<li>内存如何被连接到CPU</li>
+<li>NUMA节点使用什么技术？</li>
+</ol>
+</li>
+<li><p>存储</p>
+<ol>
+<li>存储设备是什么类型，是机械硬盘还是固态硬盘</li>
+<li>SSD驱动器使用的是MLC还是SLC，RAID级别和条带的大小</li>
+<li>直连式存储使用什么连接，带宽是多少</li>
+<li>SAN设备是使用fc还是iscsi，带宽和延迟是多少？</li>
+</ol>
+</li>
+<li><p>网络</p>
+<ol>
+<li>网络接口卡是什么，线缆规格是什么</li>
+<li>有什么特殊用途的网络，带宽是多少？</li>
+<li>需要特别能力么？比如网卡直通、IO虚拟化等</li>
+</ol>
+</li>
+</ol>
+<h4 id="系统内容"><a href="#系统内容" class="headerlink" title="系统内容"></a>系统内容</h4><ol>
+<li><p>查看内核信息</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@testnode ~]# dmesg</span><br><span class="line">[    0. 000000] Linux version 5. 14. 0-427. 33. 1. el9_4. x86_64 ( mockbuild@iad1-prod-build001. bld.equ.rockylinux.org ) ( gcc ( GCC ) 11. 4. 1 20231218 ( Red Hat 11. 4. 1-3 ), GNU ld version 2. 35. 2-43. el9 ) #1 SMP PREEMPT_DYNAMIC Wed Aug 28 17:34:59 UTC 2024</span><br><span class="line">[    0. 000000] The list of certified hardware and cloud instances for Enterprise Linux 9 can be viewed at the Red Hat Ecosystem Catalog, https://catalog.redhat.com.</span><br><span class="line">[    0. 000000] Command line: BOOT_IMAGE=( hd0, msdos1 )/vmlinuz-5. 14. 0-427. 33. 1. el9_4. x86_64 root=/dev/mapper/rl-root ro resume=/dev/mapper/rl-swap rd.lvm.lv=rl/root rd.lvm.lv=rl/swap rhgb quiet crashkernel=1G-4G:192M, 4G-64G:256M, 64G-:512M</span><br><span class="line">[    0. 000000] Disabled fast string operations</span><br><span class="line">[    0. 000000] x86/fpu: Supporting XSAVE feature 0x001: &#x27;x87 floating point registers&#x27;</span><br><span class="line">[    0. 000000] x86/fpu: Supporting XSAVE feature 0x002: &#x27;SSE registers&#x27;</span><br><span class="line">[    0. 000000] x86/fpu: Supporting XSAVE feature 0x004: &#x27;AVX registers&#x27;</span><br><span class="line">[    0. 000000] x86/fpu: xstate_offset[2]:  576, xstate_sizes[2]:  256</span><br><span class="line">[    0. 000000] x86/fpu: Enabled xstate features 0x7, context size is 832 bytes, using &#x27;compacted&#x27; format.</span><br><span class="line">[    0. 000000] signal: max sigframe size: 1776</span><br><span class="line">[    0. 000000] BIOS-provided physical RAM map:</span><br><span class="line">[    0. 000000] NX ( Execute Disable ) protection: active</span><br><span class="line">[    0. 000000] SMBIOS 2. 7 present.</span><br><span class="line">[    0. 000000] DMI: VMware, Inc. VMware Virtual Platform/440BX Desktop Reference Platform, BIOS 6. 00 11/12/2020</span><br><span class="line">[    0. 000000] vmware: hypercall mode: 0x02</span><br><span class="line">[    0. 000000] Hypervisor detected: VMware</span><br><span class="line">[    0. 000000] vmware: TSC freq read from hypervisor : 2112. 004 MHz</span><br><span class="line">[    0. 000000] vmware: Host bus clock speed read from hypervisor : 66000000 Hz</span><br><span class="line">[    0. 000000] vmware: using clock offset of 16204854701 ns</span><br><span class="line">[    0. 000017] tsc: Detected 2112. 004 MHz processor</span><br><span class="line">[    0. 001892] e820: update [mem 0x00000000-0x00000fff] usable ==&gt; reserved</span><br><span class="line">[    0. 001897] e820: remove [mem 0x000a0000-0x000fffff] usable</span><br><span class="line">[    0. 001903] last_pfn = 0x80000 max_arch_pfn = 0x400000000</span><br><span class="line">[    0. 001992] total RAM covered: 3072M</span><br><span class="line">[    0. 002467] Found optimal setting for mtrr clean up</span><br><span class="line">[    0. 002468]  gran_size: 64K  chunk_size: 64K         num_reg: 2      lose cover RAM: 0G</span><br><span class="line">[    0. 002472] MTRR map: 7 entries ( 6 fixed + 1 variable; max 22 ), built from 8 variable MTRRs</span><br><span class="line">[    0. 002478] x86/PAT: Configuration [0-7]: WB  WC  UC- UC  WB  WP  UC- WT  </span><br><span class="line">[    0. 012113] found SMP MP-table at [mem 0x000f6a70-0x000f6a7f]</span><br><span class="line">[    0. 012161] Using GB pages for direct mapping</span><br><span class="line">[    0. 012312] RAMDISK: [mem 0x33c10000-0x35dfffff]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看CPU信息</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看CPU信息</span></span><br><span class="line">[root@testnode ~]# lscpu</span><br><span class="line">Architecture:            x86_64</span><br><span class="line">  CPU op-mode( s ):        32-bit, 64-bit</span><br><span class="line">  Address sizes:         45 bits physical, 48 bits virtual</span><br><span class="line">  Byte Order:            Little Endian</span><br><span class="line">CPU( s ):                  1</span><br><span class="line">  On-line CPU( s ) list:   0</span><br><span class="line">Vendor ID:               GenuineIntel</span><br><span class="line">  BIOS Vendor ID:        GenuineIntel</span><br><span class="line">  Model name:            Intel( R ) Core( TM ) i5-10210U CPU @ 1. 60GHz</span><br><span class="line">    BIOS Model name:     Intel( R ) Core( TM ) i5-10210U CPU @ 1. 60GHz</span><br><span class="line">    CPU family:          6</span><br><span class="line">    Model:               142</span><br><span class="line">    Thread( s ) per core:  1</span><br><span class="line">    Core( s ) per socket:  1</span><br><span class="line">    Socket( s ):           1</span><br><span class="line">    Stepping:            12</span><br><span class="line">    BogoMIPS:            4224. 00</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看CPU各级缓存信息</span></span><br><span class="line">[root@testnode ~]# lscpu -p</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">The following is the parsable format, <span class="built_in">which</span> can be fed to other</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">programs. Each different item <span class="keyword">in</span> every column has an unique ID</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">starting usually from zero.</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">CPU, Core, Socket, Node, ,L1d, L1i, L2, L3</span></span><br><span class="line">0, 0, 0, 0, ,0, 0, 0, 0</span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>查看BIOS信息</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@testnode ~]# dmidecode</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">dmidecode 3. 5</span></span><br><span class="line">Getting SMBIOS data from sysfs.</span><br><span class="line">SMBIOS 2. 7 present.</span><br><span class="line">620 structures occupying 29188 bytes.</span><br><span class="line">Table at 0x000E0010.</span><br><span class="line"></span><br><span class="line">Handle 0x0000, DMI type 0, 24 bytes</span><br><span class="line">BIOS Information</span><br><span class="line">        Vendor: Phoenix Technologies LTD</span><br><span class="line">        Version: 6. 00</span><br><span class="line">        Release Date: 11/12/2020</span><br><span class="line">        Address: 0xEA480</span><br><span class="line">        Runtime Size: 88960 bytes</span><br><span class="line">        ROM Size: 64 kB</span><br><span class="line">        Characteristics:</span><br><span class="line">                ISA is supported</span><br><span class="line">                PCI is supported</span><br><span class="line">                PC Card ( PCMCIA ) is supported</span><br><span class="line">                PNP is supported</span><br><span class="line">                APM is supported</span><br><span class="line">                BIOS is upgradeable</span><br><span class="line">                BIOS shadowing is allowed</span><br><span class="line">                ESCD support is available</span><br><span class="line">                Boot from CD is supported</span><br><span class="line">                Selectable boot is supported</span><br><span class="line">                EDD is supported</span><br><span class="line">                Print screen service is supported ( int 5h )</span><br><span class="line">                8042 keyboard services are supported ( int 9h )</span><br><span class="line">                Serial services are supported ( int 14h )</span><br><span class="line">                Printer services are supported ( int 17h )</span><br><span class="line">                CGA/mono video services are supported ( int 10h )</span><br><span class="line">                ACPI is supported</span><br><span class="line">                Smart battery is supported</span><br><span class="line">                BIOS boot specification is supported</span><br><span class="line">                Function key-initiated network boot is supported</span><br><span class="line">                Targeted content distribution is supported</span><br><span class="line">        BIOS Revision: 4. 6</span><br><span class="line">        Firmware Revision: 0. 0</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h4 id="最小化资源使用"><a href="#最小化资源使用" class="headerlink" title="最小化资源使用"></a>最小化资源使用</h4><p>   以最高性能水平设计的系统必须最小化任何资源的浪费。</p>
+<ol>
+<li>清理守护进程，只运行必要服务</li>
+<li>更改运行级别</li>
+<li>SElinux的设置</li>
+<li>重新编译内核</li>
+</ol>
+<h3 id="内核参数"><a href="#内核参数" class="headerlink" title="内核参数"></a>内核参数</h3><h4 id="proc文件系统"><a href="#proc文件系统" class="headerlink" title="proc文件系统"></a>proc文件系统</h4><p>proc文件系统提供了一个用于访问正在运行的内核的接口，可以用它来进行监控和在联机状态下更改内核设置。proc文件系统不是一个真正的文件系统，它不存储数据知识提供了一个访问正在运行的内核的接口。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@testnode ~]# ls /proc</span><br><span class="line">1     14    1634  25   32  40   428  436  444  454  463  473  482  492  500  511  522  55   61   624  689  738  760  792  804  879  90          consoles       fb           keys         meminfo       schedstat      sysvipc</span><br><span class="line">10    15    17    26   33  41   429  437  445  455  464  474  483  493  502  513  524  56   617  625  69   74   761  795  81   88   92          cpuinfo        filesystems  key-users    misc          scsi           thread-self</span><br><span class="line">100   16    18    267  34  419  43   438  446  456  465  475  484  494  503  514  525  57   618  626  7    75   762  796  82   883  959         crypto         fs           kmsg         modules       self           timer_list</span><br><span class="line">1026  1600  19    27   35  42   430  439  447  457  466  476  486  495  504  515  526  58   619  63   70   755  768  797  83   889  acpi        devices        interrupts   kpagecgroup  mounts        slabinfo       tty</span><br><span class="line">105   1603  2     28   36  420  431  44   448  458  467  477  487  496  505  516  527  59   62   64   704  756  77   798  84   89   bootconfig  diskstats      iomem        kpagecount   mpt           softirqs       uptime</span><br><span class="line">106   1604  20    29   37  422  432  440  449  459  468  478  488  498  506  517  528  592  620  65   71   757  770  799  85   891  buddyinfo   dma            ioports      kpageflags   mtrr          stat           version</span><br><span class="line">11    1611  21    3    38  423  433  441  450  460  469  479  489  499  507  519  539  599  621  66   72   758  78   8    852  898  bus         driver         irq          loadavg      net           swaps          vmallocinfo</span><br><span class="line">12    1612  23    30   39  425  434  442  451  461  470  480  49   5    508  520  54   6    622  67   73   759  79   80   86   899  cgroups     dynamic_debug  kallsyms     locks        pagetypeinfo  sys            vmstat</span><br><span class="line">13    1616  24    31   4   427  435  443  453  462  471  481  491  50   510  521  541  60   623  68   737  76   791  800  87   9    cmdline     execdomains    kcore        mdstat       partitions    sysrq-trigger  zoneinfo</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>数字目录：表示运行的进程和它们各自的进程ID</li>
+<li>ACPI：桌面和笔记本系统支持的高级配置和电源接口</li>
+<li>bus：总线子系统，比如PCI总线和USB接口</li>
+<li>irq: 系统中断信息</li>
+<li>net：网络接口的原始统计</li>
+<li>scsi：关于各自系统的scsi子系统信息</li>
+<li>sys：可以调整的内核参数</li>
+<li>tty：系统的虚拟终端和它连接的物理设备的信息</li>
+</ol>
+<h3 id="调整处理器子系统"><a href="#调整处理器子系统" class="headerlink" title="调整处理器子系统"></a>调整处理器子系统</h3><h4 id="调整进程优先级"><a href="#调整进程优先级" class="headerlink" title="调整进程优先级"></a>调整进程优先级</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看进程的调度策略</span></span><br><span class="line">[root@testnode ~]# chrt -m</span><br><span class="line">SCHED_OTHER min/max priority	: 0/0</span><br><span class="line">SCHED_FIFO min/max priority	: 1/99</span><br><span class="line">SCHED_RR min/max priority	: 1/99</span><br><span class="line">SCHED_BATCH min/max priority	: 0/0</span><br><span class="line">SCHED_IDLE min/max priority	: 0/0</span><br><span class="line">SCHED_DEADLINE min/max priority	: 0/0</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查找rsyslogd的PID</span></span><br><span class="line">[root@testnode ~]# ps -aux |grep rsyslogd</span><br><span class="line">root        1026  0. 0  0. 4 165572  7936 ?        Ssl  11:27   0:00 /usr/sbin/rsyslogd -n</span><br><span class="line">root        1660  0. 0  0. 1   6408  2176 pts/0    S+   11:37   0:00 grep --color=auto rsyslogd</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看rsyslogd的进程调度信息</span></span><br><span class="line">[root@testnode ~]# chrt -p 1026</span><br><span class="line">pid 1026&#x27;s current scheduling policy: SCHED_OTHER</span><br><span class="line">pid 1026&#x27;s current scheduling priority: 0</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">将rsyslogd的实时调度优先级调整为50</span></span><br><span class="line">[root@testnode ~]# chrt -p 50 1026</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">再次查看rsyslogd的调度优先级</span></span><br><span class="line">[root@testnode ~]# chrt -p 1026</span><br><span class="line">pid 1026&#x27;s current scheduling policy: SCHED_RR</span><br><span class="line">pid 1026&#x27;s current scheduling priority: 50</span><br></pre></td></tr></table></figure>
+
+<h4 id="调整CPU亲和力"><a href="#调整CPU亲和力" class="headerlink" title="调整CPU亲和力"></a>调整CPU亲和力</h4><p>CPU亲和力就是为了把一个或者多个进程绑定到一个或者多个核心上。CPU亲和力表示为十六进制的位掩码，最低位代表第一个逻辑CPU，最高位对应最后一个逻辑CPU</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看rsyslogd进程的PID</span></span><br><span class="line">[root@testnode ~]# ps -aux |grep rsyslogd</span><br><span class="line">root        1220  0. 3  0. 1 173028  6016 ?        Ssl  11:43   0:00 /usr/sbin/rsyslogd -n</span><br><span class="line">root        1703  0. 0  0. 0   6408  2048 pts/0    S+   11:44   0:00 grep --color=auto rsyslogd</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看1220号进程所在CPU</span></span><br><span class="line">[root@testnode ~]# taskset -p 1220</span><br><span class="line">pid 1220&#x27;s current affinity mask: f</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">将1220号调整到第二个逻辑CPU</span></span><br><span class="line">[root@testnode ~]# taskset -p 2 1220</span><br><span class="line">pid 1220&#x27;s current affinity mask: f</span><br><span class="line">pid 1220&#x27;s new affinity mask: 2</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">将1220号调整到第4个CPU</span></span><br><span class="line">[root@testnode ~]# taskset -p 8 1220</span><br><span class="line">pid 1220&#x27;s current affinity mask: 2</span><br><span class="line">pid 1220&#x27;s new affinity mask: 8</span><br></pre></td></tr></table></figure>
+
+<h4 id="虚拟机的亲和力"><a href="#虚拟机的亲和力" class="headerlink" title="虚拟机的亲和力"></a>虚拟机的亲和力</h4><p>可以将虚机里面的vcpu绑定到指定CPU</p>
+<h4 id="平衡中断"><a href="#平衡中断" class="headerlink" title="平衡中断"></a>平衡中断</h4><h4 id="NUMA"><a href="#NUMA" class="headerlink" title="NUMA"></a>NUMA</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看当前主机的NUMA硬件情况，可见只有一个NUMA节点，上面有4个CPU逻辑核</span></span><br><span class="line">[root@testnode ~]# numactl --hardware</span><br><span class="line">available: 1 nodes ( 0 )</span><br><span class="line">node 0 cpus: 0 1 2 3</span><br><span class="line">node 0 size: 3627 MB</span><br><span class="line">node 0 free: 2962 MB</span><br><span class="line">node distances:</span><br><span class="line">node   0 </span><br><span class="line">  0:  10</span><br></pre></td></tr></table></figure>
+
+<h3 id="调整内存子系统"><a href="#调整内存子系统" class="headerlink" title="调整内存子系统"></a>调整内存子系统</h3><h4 id="内存回收"><a href="#内存回收" class="headerlink" title="内存回收"></a>内存回收</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看内存信息</span></span><br><span class="line">[root@testnode ~]# cat /proc/meminfo </span><br><span class="line">MemTotal:        3714640 kB</span><br><span class="line">MemFree:         3032472 kB</span><br><span class="line">MemAvailable:    3181968 kB</span><br><span class="line">Buffers:            2708 kB</span><br><span class="line">Cached:           343196 kB</span><br><span class="line">SwapCached:            0 kB</span><br><span class="line">Active:           206616 kB</span><br><span class="line">Inactive:         222348 kB</span><br><span class="line">Active( anon ):     100392 kB</span><br><span class="line">Inactive( anon ):        0 kB</span><br><span class="line">Active( file ):     106224 kB</span><br><span class="line">Inactive( file ):   222348 kB</span><br><span class="line">Unevictable:           0 kB</span><br><span class="line">Mlocked:               0 kB</span><br><span class="line">SwapTotal:       2113532 kB</span><br><span class="line">SwapFree:        2113532 kB</span><br><span class="line">Zswap:                 0 kB</span><br><span class="line">Zswapped:              0 kB</span><br><span class="line">Dirty:                 0 kB</span><br><span class="line">Writeback:             0 kB</span><br><span class="line">AnonPages:         83120 kB</span><br><span class="line">Mapped:            60456 kB</span><br><span class="line">Shmem:             17332 kB</span><br><span class="line">KReclaimable:      49416 kB</span><br><span class="line">Slab:             102096 kB</span><br><span class="line">SReclaimable:      49416 kB</span><br><span class="line">SUnreclaim:        52680 kB</span><br><span class="line">KernelStack:        6128 kB</span><br><span class="line">PageTables:         2136 kB</span><br><span class="line">SecPageTables:         0 kB</span><br><span class="line">NFS_Unstable:          0 kB</span><br><span class="line">Bounce:                0 kB</span><br><span class="line">WritebackTmp:          0 kB</span><br><span class="line">CommitLimit:     3970852 kB</span><br><span class="line">Committed_AS:     329092 kB</span><br><span class="line">VmallocTotal:   34359738367 kB</span><br><span class="line">VmallocUsed:       57540 kB</span><br><span class="line">VmallocChunk:          0 kB</span><br><span class="line">Percpu:            50688 kB</span><br><span class="line">HardwareCorrupted:     0 kB</span><br><span class="line">AnonHugePages:     20480 kB</span><br><span class="line">ShmemHugePages:        0 kB</span><br><span class="line">ShmemPmdMapped:        0 kB</span><br><span class="line">FileHugePages:         0 kB</span><br><span class="line">FilePmdMapped:         0 kB</span><br><span class="line">CmaTotal:              0 kB</span><br><span class="line">CmaFree:               0 kB</span><br><span class="line">Unaccepted:            0 kB</span><br><span class="line">HugePages_Total:       0</span><br><span class="line">HugePages_Free:        0</span><br><span class="line">HugePages_Rsvd:        0</span><br><span class="line">HugePages_Surp:        0</span><br><span class="line">Hugepagesize:       2048 kB</span><br><span class="line">Hugetlb:               0 kB</span><br><span class="line">DirectMap4k:      145216 kB</span><br><span class="line">DirectMap2M:     4048896 kB</span><br><span class="line">DirectMap1G:     2097152 kB</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><p>处理内存不足（OOM）</p>
+</li>
+<li><p>OOM killer，内核为进程保持一个运行的不良分数，分数越高越有可能被杀掉</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@testnode ~]# cat /proc/1220/oom_score</span><br><span class="line">667</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h4 id="调整SWAP"><a href="#调整SWAP" class="headerlink" title="调整SWAP"></a>调整SWAP</h4><ol>
+<li>swappiness的调整</li>
+<li>优化swap空间<ol>
+<li>使用高速硬盘作为swap空间</li>
+<li>创建空闲分区作为swap空间，避免使用swap文件</li>
+<li>使用多个swap分区，分散swap读写压力</li>
+</ol>
+</li>
+<li>合理估算swap空间</li>
+</ol>
+<h4 id="HugeTLBfs"><a href="#HugeTLBfs" class="headerlink" title="HugeTLBfs"></a>HugeTLBfs</h4><p>HugeTLBfs特性可以是应用程序使用比普通分页更大的分页。可以通过proc&#x2F;sys&#x2F;vm&#x2F;nr_hugepages修改大页大小，但大页大小和数量超过可用物理内存会引起内核panic。</p>
+<h4 id="内存同页合并"><a href="#内存同页合并" class="headerlink" title="内存同页合并"></a>内存同页合并</h4><p>使用Kernel Samepage Merging功能将KVM虚机中完全相同的分页到同一个内存分页中。ksm进程实际地扫描内存和合并分页，ksmtuned控制ksm是否扫描内存和如何积极扫描内存。</p>
+<h3 id="调整磁盘子系统"><a href="#调整磁盘子系统" class="headerlink" title="调整磁盘子系统"></a>调整磁盘子系统</h3><p>磁盘子系统的性能最终取决于一个给定设备能够处理的输入输出请求的数量。一般情况下，增加驱动器数量或者更换更快速的硬盘是提高服务器性能最有效的手段。</p>
+<ol>
+<li>通过创建合适的硬盘分区来提高文件系统属性安全和数据完整性</li>
+<li>选择正确的I&#x2F;O算法</li>
+<li>选择合适的Cache模式</li>
+</ol>
+<h3 id="调整网络子系统"><a href="#调整网络子系统" class="headerlink" title="调整网络子系统"></a>调整网络子系统</h3><ol>
+<li>使用网卡绑定</li>
+<li>巨帧</li>
+<li>速度与双工模式</li>
+<li>增加网络缓冲区</li>
+<li>增加数据包队列</li>
+<li>配置offload</li>
+<li>TCP&#x2F;IP调整</li>
+</ol>
+<h3 id="限制资源使用"><a href="#限制资源使用" class="headerlink" title="限制资源使用"></a>限制资源使用</h3><ol>
+<li><p>ulimit</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">系统默认状态</span></span><br><span class="line">[root@testnode ~]# ulimit -a</span><br><span class="line">real-time non-blocking time  ( microseconds, -R ) unlimited</span><br><span class="line">core file size              ( blocks, -c ) 0</span><br><span class="line">data seg size               ( kbytes, -d ) unlimited</span><br><span class="line">scheduling priority                 ( -e ) 0</span><br><span class="line">file size                   ( blocks, -f ) unlimited</span><br><span class="line">pending signals                     ( -i ) 14349</span><br><span class="line">max locked memory           ( kbytes, -l ) 8192</span><br><span class="line">max memory size             ( kbytes, -m ) unlimited</span><br><span class="line">open files                          ( -n ) 64000</span><br><span class="line">pipe size                ( 512 bytes, -p ) 8</span><br><span class="line">POSIX message queues         ( bytes, -q ) 819200</span><br><span class="line">real-time priority                  ( -r ) 0</span><br><span class="line">stack size                  ( kbytes, -s ) 8192</span><br><span class="line">cpu time                   ( seconds, -t ) unlimited</span><br><span class="line">max user processes                  ( -u ) 14349</span><br><span class="line">virtual memory              ( kbytes, -v ) unlimited</span><br><span class="line">file locks                          ( -x ) unlimited</span><br></pre></td></tr></table></figure></li>
+<li><p>cgroup</p>
+</li>
+</ol>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</a><a class="post-meta__tags" href="/tags/Linux/">Linux</a><a class="post-meta__tags" href="/tags/performance/">performance</a></div><div class="post-share"><div class="social-share" data-image="https://cdn.sujx.net/covers/cover41.jpg" data-sites="facebook,twitter,weibo,qq"></div><link rel="stylesheet" href="/libs/sharejs/css/share.min.css" media="print" onload="this.media='all'"><script src="/libs/sharejs/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>能否请我喝一杯咖啡？</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.jpg" target="_blank"><img class="post-qr-code-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/wechat.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2024/08/25/jiangsu-wuxi-jiangyin/" title="江阴要塞一瞥"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/08/20240825222444.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">江阴要塞一瞥</div></div><div class="info-2"><div class="info-item-1">这两天有机会到无锡江阴来做一个华为FusionCompute的虚拟化节点扩容的项目。早就知道江阴一个县级市5000亿的GDP，相当于包头和鄂尔多斯之和。过来之后才有明确的概念，我坐车上沿路过去看到的连片的厂区和高速公路上密集的车流，真是一副巨型经济机器高速运转的蓬勃气势。  2024。 08 江苏·无锡·江阴 陈毅老总题诗”江阴天堑望无涯，废垒犹存散似沙。客过风兴敌惶急，军民游击满南华”  周五、周六忙的昏天黑地，周日正好偷得浮生半日闲，我找机会去看了看知名的江阴要塞。从高德地图上找到江阴要塞，首先出来的是江阴要塞森林公园，但我打车的司机好像也没有概念这个公园的大门到底是那个。我于是从地图上找到了江阴军事文化博物馆试一试。还好，从军事文化博物馆上去还是很容易找到各个景点的。原以为这边应该是旅客较多的地方，但走了一圈除了锻炼的两三个老人，就只有一二遛狗的年轻人了。甚至这个江阴军事文化博物馆也是闭门谢客了。从这条渡江第一船作为起点，往山上走大概十分钟就到了望江楼，只可惜也是高挂谢客牌。不过，旁边的高尔夫球场倒是热热闹闹的。从望江楼后面的小路过去，就是黄山炮台的主炮台了。这个主炮台气势...</div></div></div></a><a class="pagination-related" href="/2024/08/14/NFS-iSCSI/" title="Linux的集中式网络存储"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover43.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Linux的集中式网络存储</div></div><div class="info-2"><div class="info-item-1">网络存储主要分为两种形式，一种是块存储，就是共享存储是以块设备的形式挂载到目标服务器之上的，代表就是iSCSI、ceph；另一种是文件存储，就是文件是以共享文件夹的形式来挂载到目标服务器之上，这方面的代表就是NFS和SMB，以及新兴的S3存储。这里简单记录以下iSCSI和NFS的搭建。其他文件存储形式，后续再记录。    07 摄于山东泰安·泰山·南天门   iSCSIiSCSI是基于IP协议的技术标准，该技术允许用户通过TCP&#x2F;IP网络来构建IP-SAN. 基本构成 iSCSI会话的建立是通过启动器（ Initiator ）和目标器（ Target ）实现的 Target为服务端，是一个或者多个LUN的集合 Initiator则是客户端使用的工具，用来连接target Target和Initator都使用IQN来识别 IQN是target的唯一标识符，命名标准为iqn.yyyy-mm.&lt;倒过来的域名，全局唯一&gt;[:识别名称]  配置流程Target配置 安装target 创建target 为target添加lun 指定initiator  Initiato...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2022/03/21/VMware-vSphere-Performance/" title="「VMware vSphere 性能设计」"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover149.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2022-03-21</div><div class="info-item-2">「VMware vSphere 性能设计」</div></div><div class="info-2"><div class="info-item-1"> 本书从概念和操作两方面介绍了虚拟化基础设施的性能。   CPU虚拟化基础 CPU保护模式1。 CPU保护模式，也称为保护虚拟地址模式，是一种提供硬件级别内存保护的X86处理器操作模式。 实模式 为原始x86处理器设计 关闭内存保护功能 只有操作系统内核才可以无限制使用全部硬件资源   保护模式： 保护模式的特权等级：Ring0 Ring1 Ring2 Ring3 Ring 0 特权最多，Ring 3 特权做少 Ring 0：Kernel ；Ring 1 设备驱动； Ring 2 设备驱动； Ring 3 应用     定义CPU虚拟化的类型： 基于软件的CPU虚拟化： 运行于Ring1级别 需要VMM编译执行代码   基于硬件辅助的CPU虚拟化 运行于Ring0 使用Intel VT 或者AMD-V硬件辅助功能，无需软件编译     物理CPU与虚拟CPU之间的区别 每一个物理处理器内核被检测为一个pCPU 每个线程也可以被视为一个pCPU   vCPU状态 运行状态：在pCPU上被调度来运行指令 准备状态：在pCPU上准备调度，但由于调度延迟不直接运行 等待闲置状态：特殊状态...</div></div></div></a><a class="pagination-related" href="/2024/09/16/System-Planning-and-Management-adv/" title="系统规划与管理-进阶"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover57.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-09-16</div><div class="info-item-2">系统规划与管理-进阶</div></div><div class="info-2"><div class="info-item-1">   10 摄于北京朝阳·国贸地铁站   IT服务规划设计规划涉及处于整个IT服务生命周期的前端，帮助IT服务提供方了解客户需求并进行全面需求分析，然后通过服务要素、服务模式和服务方案的具体设计，最终形成SLA。其主要目的在于：  设计满足业务需求的IT服务 设计SLA、策略方法和指标 设计服务过程及其控制方法 规划服务组织架构、人员编制、岗位及任职要求 识别风险，定义风险控制措施和机制 识别和规划支持服务所需的技术及资源 评估IT服务成本，制定服务预算，控制服务成本 制定服务质量管理计划  IT服务规划设计活动规划设计的活动 服务需求识别 服务目录设计 服务方案设计 服务模式设计 服务级别设计 人员要素设计 过程要素设计 技术要素设计 资源要素设计   服务成本评估 服务级别协议设计  关键成功因素 确保规划设计考虑全面 当服务变更或补充规划设计的任一独立元素时，要综合考虑有关职能、管理和运营层面问题 明确重点，充分沟通 策划、实施、检查和改进（ PDCA ）  服务目录管理目的 为所有商定服务提供单一、连贯的信息来源 确保所有获准使用相关服务的人能够知道这些信息  种类 业务...</div></div></div></a><a class="pagination-related" href="/2021/07/09/clamav-privte-depoly/" title="建立内网Linux防病毒系统"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/wallhaven-4lekzl.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-07-09</div><div class="info-item-2">建立内网Linux防病毒系统</div></div><div class="info-2"><div class="info-item-1">ClamAV本来是为了Postfix邮件网关而开发的防毒软件，主要目的是对邮件队列里面的邮件进行病毒查杀。然后，这个防毒模块独立出来成为一个提供病毒、恶意软件、蠕虫的查杀能力的开源软件，成为了Linux环境下实现文件安全的主要选择。� 部署ClamAV 添加EPEL源  # ClamAV的RHEL/CentOS源是直接用epel来发布的yum cleanallyum makecacheyum install -y git python3-pipyum install -y epel-release# 添加华为云源sed -i &quot;s/#baseurl/baseurl/g&quot; /etc/yum.repos.d/epel.reposed -i &quot;s/metalink/#metalink/g&quot; /etc/yum.repos.d/epel.reposed -i &quot;s@https\?://download.example/pub@https://repo.huaweicloud.com@g&quot; /etc/yum.repos.d/epel...</div></div></div></a><a class="pagination-related" href="/2025/04/24/Opinon-Monitor/" title="「新媒体舆情监测与管理」"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover95.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-04-24</div><div class="info-item-2">「新媒体舆情监测与管理」</div></div><div class="info-2"><div class="info-item-1"> 每一个个体都认为自己是独立思考，自己的思想具有独立性以及原创性，所做的选择出自于自我自由意志的选择，但整体所呈现出来的却是大家一致的共同性。  人类经历了口语传播时代、文字传播时代、印刷传播时代、电子传播时代等多个不同的历史发展阶段。随着互联网时代的到来，新的信息的产生、发布和传播模式，带来了舆情的发生、发展的新变革，也使得网络舆情相比以往口口相传的社会舆情具有更加空前的影响力。    03 天津空港经济开发区·中国移动空港机房   网络时代与网络舆情网络时代信息传播的特点内容的特点 丰富多样 可存储性 易检索性 易复制性 多形态性  传播的特点 即时性 交互性 综合性 便捷性 成本低  主体的特点 虚拟性 多元化 主体性 自由性 自主性  受众的特点 群体性 个体性 自由性  理解舆情和网络舆情 舆情基本上就是对一些事实从道义上加以解释和经过整理的一种看法  舆情通俗地讲就是社情民意，是指社会各阶层民众对社会存在和发展所持有的情绪、态度、看法意见和行为倾向。 网络舆情是社会民众在网络空间对公共事务和公共性问题以及具体事件产生或发表的情绪、意见、看法、态度、诉求的交汇与综合。 ...</div></div></div></a><a class="pagination-related" href="/2024/08/28/HPC-Whatis/" title="简述HPC"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover42.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-08-28</div><div class="info-item-2">简述HPC</div></div><div class="info-2"><div class="info-item-1">高性能计算 （ HPC:High Performance Computing ） 是一种利用强大处理器集群并行处理海量多维数据集（也称为大数据）并以极高速度解决复杂问题的技术。 几十年来，超级计算机（搭载数百万个处理器或处理器核心的专用计算机）一直是高性能计算的关键。如今，越来越多的组织在托管在本地或云端的高速计算机服务器集群上运行 HPC 服务。HPC 工作负载揭示了重要的新洞察分析，推动了人类知识的进步，并创造了显著的竞争优势。例如，HPC 用于 DNA 测序、自动化股票交易，并运行人工智能 （ AI ） 算法和模拟（例如自动驾驶汽车），实时分析来自物联网传感器、雷达和 GPS 系统的 TB 数据流，以做出瞬间决策。    08 摄于山东济南 马路边一个树枝长得特别舒展的行道树   HPC的内容主要包括：  大规模并行计算 并行计算在多台计算机服务器或处理器上同时运行多个任务。大规模并行计算是利用成千上万至数百万个处理器或处理器内核进行并行计算。  计算机集群（也称 HPC Cluster） HPC Cluster 由多台联网的高速计算机服务器组成，并配备用于管理并行计算工作...</div></div></div></a><a class="pagination-related" href="/2023/05/21/magedu-week-3/" title="Linux系统基础知识·3"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/04/wallhaven-mdj888.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-05-21</div><div class="info-item-2">Linux系统基础知识·3</div></div><div class="info-2"><div class="info-item-1"> 本文基于马哥教育就业班第三周课程总结  软件管理 尝试基于gcc命令说明 c语言编译过程。  C语言编译过程主要包括预处理、编译、汇编和链接四个阶段。gcc命令是一个常用的C语言编译器，可以完成这四个阶段的工作。下面是gcc命令的使用示例和各个阶段的说明：1。 预处理阶段主要是对源代码进行宏替换、头文件包含等操作，生成预处理后的代码。gcc命令中使用参数“-E”来进行预处理，示例命令如下：$ gcc -E main.c -o main.i2。 编译阶段主要是将预处理后的代码转换成汇编代码。gcc命令中使用参数“-S”来进行编译，示例命令如下：$ gcc -S main.i -o main.s3。 汇编阶段主要是将汇编代码转换成机器码。gcc命令中使用参数“-c”来进行汇编，示例命令如下：$ gcc -c main.s -o main.o4。 链接阶段主要是将多个目标文件链接成一个可执行文件。gcc命令中使用参数“-o”来指定输出文件名，示例命令如下：$ gcc main.o -o main以上是gcc命令的使用示例和C语言编译过程的各个阶段说明。在实际编译过程中，可以使用gcc...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">靖轩</div><div class="author-info-description">逝者如斯夫,不舍昼夜</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/grepsu"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://gitee.com/grepsu" target="_blank" title="Gitee"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:sujx@live.cn" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS链接"><i class="fa  fa-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3Linux%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F"><span class="toc-number">1.</span> <span class="toc-text">深入理解Linux操作系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Linux%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86"><span class="toc-number">1.1.</span> <span class="toc-text">Linux进程管理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B"><span class="toc-number">1.1.1.</span> <span class="toc-text">进程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BA%BF%E7%A8%8B"><span class="toc-number">1.1.2.</span> <span class="toc-text">线程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BC%98%E5%85%88%E7%BA%A7%E5%92%8Cnice%E7%AD%89%E7%BA%A7"><span class="toc-number">1.1.3.</span> <span class="toc-text">优先级和nice等级</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%8A%E4%B8%8B%E6%96%87%E5%A4%84%E7%90%86"><span class="toc-number">1.1.4.</span> <span class="toc-text">上下文处理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%AD%E6%96%AD%E5%A4%84%E7%90%86"><span class="toc-number">1.1.5.</span> <span class="toc-text">中断处理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E7%8A%B6%E6%80%81"><span class="toc-number">1.1.6.</span> <span class="toc-text">进程状态</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%86%85%E5%AD%98%E6%AE%B5"><span class="toc-number">1.1.7.</span> <span class="toc-text">进程的内存段</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CPU%E8%B0%83%E5%BA%A6%E7%A8%8B%E5%BA%8F"><span class="toc-number">1.1.8.</span> <span class="toc-text">CPU调度程序</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84"><span class="toc-number">1.2.</span> <span class="toc-text">内存体系结构</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%89%A9%E7%90%86%E5%86%85%E5%AD%98%E5%92%8C%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98"><span class="toc-number">1.2.1.</span> <span class="toc-text">物理内存和虚拟内存</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86"><span class="toc-number">1.2.2.</span> <span class="toc-text">虚拟内存管理</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="toc-number">1.3.</span> <span class="toc-text">文件系统</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="toc-number">1.3.1.</span> <span class="toc-text">虚拟文件系统</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E6%97%A5%E5%BF%97"><span class="toc-number">1.3.2.</span> <span class="toc-text">文件系统日志</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#EXT2"><span class="toc-number">1.3.3.</span> <span class="toc-text">EXT2</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#EXT3"><span class="toc-number">1.3.4.</span> <span class="toc-text">EXT3</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#EXT4"><span class="toc-number">1.3.5.</span> <span class="toc-text">EXT4</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#XFS"><span class="toc-number">1.3.6.</span> <span class="toc-text">XFS</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Btrfs"><span class="toc-number">1.3.7.</span> <span class="toc-text">Btrfs</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A3%81%E7%9B%98I-O%E7%B3%BB%E7%BB%9F"><span class="toc-number">1.4.</span> <span class="toc-text">磁盘I&#x2F;O系统</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84"><span class="toc-number">1.4.1.</span> <span class="toc-text">体系结构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Cache"><span class="toc-number">1.4.2.</span> <span class="toc-text">Cache</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9D%97%E5%B1%82"><span class="toc-number">1.4.3.</span> <span class="toc-text">块层</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#IO%E7%94%B5%E6%A2%AF%E8%B0%83%E5%BA%A6"><span class="toc-number">1.4.3.1.</span> <span class="toc-text">IO电梯调度</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8%E7%A8%8B%E5%BA%8F"><span class="toc-number">1.4.3.2.</span> <span class="toc-text">设备驱动程序</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#RAID"><span class="toc-number">1.4.3.3.</span> <span class="toc-text">RAID</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E5%AD%90%E7%B3%BB%E7%BB%9F"><span class="toc-number">1.5.</span> <span class="toc-text">网络子系统</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E5%8C%96%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="toc-number">1.5.1.</span> <span class="toc-text">网络化的实现</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E4%BC%A0%E8%BE%93%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="toc-number">1.5.1.1.</span> <span class="toc-text">网络传输基本操作</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#socket-buffer%E5%86%85%E6%A0%B8%E7%BC%93%E5%86%B2%E5%8C%BA"><span class="toc-number">1.5.1.2.</span> <span class="toc-text">socket buffer内核缓冲区</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#NAPI%EF%BC%88Network-API%EF%BC%89"><span class="toc-number">1.5.1.3.</span> <span class="toc-text">NAPI（Network API）</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Netfilter"><span class="toc-number">1.5.1.4.</span> <span class="toc-text">Netfilter</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%BF%9E%E7%BB%AD%E8%B7%9F%E8%B8%AA"><span class="toc-number">1.5.1.5.</span> <span class="toc-text">连续跟踪</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#TCP-IP"><span class="toc-number">1.5.2.</span> <span class="toc-text">TCP&#x2F;IP</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Offload"><span class="toc-number">1.5.3.</span> <span class="toc-text">Offload</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Bonding"><span class="toc-number">1.5.4.</span> <span class="toc-text">Bonding</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E5%BA%A6%E9%87%8F%E6%A0%87%E5%87%86"><span class="toc-number">1.6.</span> <span class="toc-text">性能度量标准</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#CPU"><span class="toc-number">1.6.1.</span> <span class="toc-text">CPU</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%86%85%E5%AD%98"><span class="toc-number">1.6.2.</span> <span class="toc-text">内存</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9D%97%E8%AE%BE%E5%A4%87"><span class="toc-number">1.6.3.</span> <span class="toc-text">块设备</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E6%8E%A5%E5%8F%A3"><span class="toc-number">1.6.4.</span> <span class="toc-text">网络接口</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E6%9E%90%E6%80%A7%E8%83%BD%E7%93%B6%E9%A2%88"><span class="toc-number">2.</span> <span class="toc-text">分析性能瓶颈</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E7%93%B6%E9%A2%88"><span class="toc-number">2.1.</span> <span class="toc-text">识别系统瓶颈</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%84%E7%90%86%E6%AD%A5%E9%AA%A4"><span class="toc-number">2.1.1.</span> <span class="toc-text">处理步骤</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%94%B6%E9%9B%86%E4%BF%A1%E6%81%AF"><span class="toc-number">2.1.2.</span> <span class="toc-text">收集信息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%86%E6%9E%90%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%80%A7%E8%83%BD"><span class="toc-number">2.1.3.</span> <span class="toc-text">分析服务器性能</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CPU%E7%93%B6%E9%A2%88"><span class="toc-number">2.2.</span> <span class="toc-text">CPU瓶颈</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E7%93%B6%E9%A2%88"><span class="toc-number">2.3.</span> <span class="toc-text">内存瓶颈</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A3%81%E7%9B%98%E7%93%B6%E9%A2%88"><span class="toc-number">2.4.</span> <span class="toc-text">磁盘瓶颈</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E7%93%B6%E9%A2%88"><span class="toc-number">2.5.</span> <span class="toc-text">网络瓶颈</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B0%83%E6%95%B4%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F"><span class="toc-number">3.</span> <span class="toc-text">调整操作系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%83%E6%95%B4%E5%8E%9F%E5%88%99"><span class="toc-number">3.1.</span> <span class="toc-text">调整原则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%98%E6%9B%B4%E7%AE%A1%E7%90%86"><span class="toc-number">3.2.</span> <span class="toc-text">变更管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E4%BA%8B%E9%A1%B9"><span class="toc-number">3.3.</span> <span class="toc-text">安装事项</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BD%93%E5%89%8D%E9%85%8D%E7%BD%AE"><span class="toc-number">3.4.</span> <span class="toc-text">当前配置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A1%AC%E4%BB%B6%E4%BF%A1%E6%81%AF"><span class="toc-number">3.4.1.</span> <span class="toc-text">硬件信息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E5%86%85%E5%AE%B9"><span class="toc-number">3.4.2.</span> <span class="toc-text">系统内容</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9C%80%E5%B0%8F%E5%8C%96%E8%B5%84%E6%BA%90%E4%BD%BF%E7%94%A8"><span class="toc-number">3.4.3.</span> <span class="toc-text">最小化资源使用</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%85%E6%A0%B8%E5%8F%82%E6%95%B0"><span class="toc-number">3.5.</span> <span class="toc-text">内核参数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#proc%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="toc-number">3.5.1.</span> <span class="toc-text">proc文件系统</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%83%E6%95%B4%E5%A4%84%E7%90%86%E5%99%A8%E5%AD%90%E7%B3%BB%E7%BB%9F"><span class="toc-number">3.6.</span> <span class="toc-text">调整处理器子系统</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B0%83%E6%95%B4%E8%BF%9B%E7%A8%8B%E4%BC%98%E5%85%88%E7%BA%A7"><span class="toc-number">3.6.1.</span> <span class="toc-text">调整进程优先级</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B0%83%E6%95%B4CPU%E4%BA%B2%E5%92%8C%E5%8A%9B"><span class="toc-number">3.6.2.</span> <span class="toc-text">调整CPU亲和力</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%9A%84%E4%BA%B2%E5%92%8C%E5%8A%9B"><span class="toc-number">3.6.3.</span> <span class="toc-text">虚拟机的亲和力</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B9%B3%E8%A1%A1%E4%B8%AD%E6%96%AD"><span class="toc-number">3.6.4.</span> <span class="toc-text">平衡中断</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#NUMA"><span class="toc-number">3.6.5.</span> <span class="toc-text">NUMA</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%83%E6%95%B4%E5%86%85%E5%AD%98%E5%AD%90%E7%B3%BB%E7%BB%9F"><span class="toc-number">3.7.</span> <span class="toc-text">调整内存子系统</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E5%9B%9E%E6%94%B6"><span class="toc-number">3.7.1.</span> <span class="toc-text">内存回收</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B0%83%E6%95%B4SWAP"><span class="toc-number">3.7.2.</span> <span class="toc-text">调整SWAP</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#HugeTLBfs"><span class="toc-number">3.7.3.</span> <span class="toc-text">HugeTLBfs</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E5%90%8C%E9%A1%B5%E5%90%88%E5%B9%B6"><span class="toc-number">3.7.4.</span> <span class="toc-text">内存同页合并</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%83%E6%95%B4%E7%A3%81%E7%9B%98%E5%AD%90%E7%B3%BB%E7%BB%9F"><span class="toc-number">3.8.</span> <span class="toc-text">调整磁盘子系统</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%83%E6%95%B4%E7%BD%91%E7%BB%9C%E5%AD%90%E7%B3%BB%E7%BB%9F"><span class="toc-number">3.9.</span> <span class="toc-text">调整网络子系统</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%99%90%E5%88%B6%E8%B5%84%E6%BA%90%E4%BD%BF%E7%94%A8"><span class="toc-number">3.10.</span> <span class="toc-text">限制资源使用</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/07/03/AIGC_FoxHole/" title="海鹰">海鹰</a><time datetime="2026-07-03T01:04:07.000Z" title="发表于 2026-07-03 09:04:07">2026-07-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/11/fristVibeCoding/" title="鹊随金印：我的第一个完整的AI编程项目">鹊随金印：我的第一个完整的AI编程项目</a><time datetime="2026-06-11T01:04:07.000Z" title="发表于 2026-06-11 09:04:07">2026-06-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/03/VI_Howto/" title="VI编辑器简介">VI编辑器简介</a><time datetime="2026-06-03T01:04:07.000Z" title="发表于 2026-06-03 09:04:07">2026-06-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/28/HNCitic_2605/" title="我要上头条">我要上头条</a><time datetime="2026-05-28T01:04:07.000Z" title="发表于 2026-05-28 09:04:07">2026-05-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/12/TS-Domain-Controller-Sync-Failure/" title="记一次Windows AD域控制器同步故障排错">记一次Windows AD域控制器同步故障排错</a><time datetime="2026-05-12T03:04:07.000Z" title="发表于 2026-05-12 11:04:07">2026-05-12</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2008 - 2026 By 靖轩</span></div><div class="footer_custom_text">京ICP备17034757号</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.5"></script><script src="/js/main.js?v=5.5.5"></script><script src="/libs/fancybox/fancybox.umd.js"></script><script src="/js/instantpage.js" type="module"></script><script src="/libs/lazyload/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const parseViewBox = viewBox => {
+    if (!viewBox) return null
+    const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
+    if (parts.length !== 4 || parts.some(n => Number.isNaN(n))) return null
+    return parts
+  }
+
+  const getSvgViewBox = svg => {
+    const attr = parseViewBox(svg.getAttribute('viewBox'))
+    if (attr) return attr
+
+    // Fallback: use bbox to build a viewBox
+    try {
+      const bbox = svg.getBBox()
+      if (bbox && bbox.width && bbox.height) return [bbox.x, bbox.y, bbox.width, bbox.height]
+    } catch (e) {
+      // getBBox may fail on some edge cases; ignore
+    }
+
+    const w = Number(svg.getAttribute('width')) || 0
+    const h = Number(svg.getAttribute('height')) || 0
+    if (w > 0 && h > 0) return [0, 0, w, h]
+    return [0, 0, 100, 100]
+  }
+
+  const setSvgViewBox = (svg, vb) => {
+    svg.setAttribute('viewBox', `${vb[0]} ${vb[1]} ${vb[2]} ${vb[3]}`)
+  }
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v))
+
+  const openSvgInNewTab = ({ source, initViewBox }) => {
+    const getClonedSvg = () => {
+      if (typeof source === 'string') {
+        const template = document.createElement('template')
+        template.innerHTML = source.trim()
+        const svg = template.content.querySelector('svg')
+        return svg ? svg.cloneNode(true) : null
+      }
+      if (source && typeof source.cloneNode === 'function') {
+        return source.cloneNode(true)
+      }
+      return null
+    }
+
+    const clone = getClonedSvg()
+    if (!clone) return
+    if (initViewBox && initViewBox.length === 4) {
+      clone.setAttribute('viewBox', initViewBox.join(' '))
+    }
+    if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+    if (!clone.getAttribute('xmlns:xlink') && clone.outerHTML.includes('xlink:')) {
+      clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+    }
+    // inject background to match current theme
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    const bg = getComputedStyle(document.body).backgroundColor || (isDark ? '#1e1e1e' : '#ffffff')
+    if (!clone.style.background) clone.style.background = bg
+
+    const serializer = new XMLSerializer()
+    const svgSource = serializer.serializeToString(clone)
+    const htmlSource = `<!doctype html><html><head><meta charset="utf-8" />
+      <style>
+        html, body { width: 100%; height: 100%; margin: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; }
+        svg { max-width: 100%; max-height: 100%; height: auto; width: auto; }
+      </style>
+      </head><body>${svgSource}</body></html>`
+    const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank', 'noopener')
+    setTimeout(() => URL.revokeObjectURL(url), 30000)
+  }
+
+  const attachMermaidViewerButton = wrap => {
+    let btn = wrap.querySelector('.mermaid-open-btn')
+    if (!btn) {
+      btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'mermaid-open-btn'
+      wrap.appendChild(btn)
+    }
+
+    btn.innerHTML = '<i class="fa fa-search fa-fw" aria-hidden="true"></i>'
+
+    if (!btn.__mermaidViewerBound) {
+      btn.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        const svg = wrap.__mermaidOriginalSvg || wrap.querySelector('svg')
+        if (!svg) return
+        const initViewBox = wrap.__mermaidInitViewBox
+        if (typeof svg === 'string') {
+          openSvgInNewTab({ source: svg, initViewBox })
+          return
+        }
+        openSvgInNewTab({ source: svg, initViewBox })
+      })
+      btn.__mermaidViewerBound = true
+    }
+  }
+
+  // Zoom around a point (px, py) in the SVG viewport (in viewBox coordinates)
+  const zoomAtPoint = (vb, factor, px, py) => {
+    const w = vb[2] * factor
+    const h = vb[3] * factor
+    const nx = px - (px - vb[0]) * factor
+    const ny = py - (py - vb[1]) * factor
+    return [nx, ny, w, h]
+  }
+
+  const initMermaidGestures = wrap => {
+    const svg = wrap.querySelector('svg')
+    if (!svg) return
+
+    // Ensure viewBox exists so gestures always work
+    const initVb = getSvgViewBox(svg)
+    wrap.__mermaidInitViewBox = initVb
+    wrap.__mermaidCurViewBox = initVb.slice()
+    setSvgViewBox(svg, initVb)
+
+    // Avoid binding multiple times on themeChange/pjax
+    if (wrap.__mermaidGestureBound) return
+    wrap.__mermaidGestureBound = true
+
+    // Helper: map client (viewport) coordinate -> viewBox coordinate
+    const clientToViewBox = (clientX, clientY) => {
+      const rect = svg.getBoundingClientRect()
+      const vb = wrap.__mermaidCurViewBox || getSvgViewBox(svg)
+      const x = vb[0] + (clientX - rect.left) * (vb[2] / rect.width)
+      const y = vb[1] + (clientY - rect.top) * (vb[3] / rect.height)
+      return { x, y, rect, vb }
+    }
+
+    const state = {
+      pointers: new Map(),
+      startVb: null,
+      startDist: 0,
+      startCenter: null
+    }
+
+    const clampVb = vb => {
+      const init = wrap.__mermaidInitViewBox || vb
+      const minW = init[2] * 0.1
+      const maxW = init[2] * 10
+      const minH = init[3] * 0.1
+      const maxH = init[3] * 10
+      vb[2] = clamp(vb[2], minW, maxW)
+      vb[3] = clamp(vb[3], minH, maxH)
+      return vb
+    }
+
+    const setCurVb = vb => {
+      vb = clampVb(vb)
+      wrap.__mermaidCurViewBox = vb
+      setSvgViewBox(svg, vb)
+    }
+
+    const onPointerDown = e => {
+      // Allow only primary button for mouse
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      svg.setPointerCapture(e.pointerId)
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      if (state.pointers.size === 1) {
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      } else if (state.pointers.size === 2) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        state.startDist = Math.hypot(dx, dy)
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        state.startCenter = { x: (pts[0].x + pts[1].x) / 2, y: (pts[0].y + pts[1].y) / 2 }
+      }
+    }
+
+    const onPointerMove = e => {
+      if (!state.pointers.has(e.pointerId)) return
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      // Pan with 1 pointer
+      if (state.pointers.size === 1 && state.startVb) {
+        const p = [...state.pointers.values()][0]
+        const prev = { x: e.clientX - e.movementX, y: e.clientY - e.movementY }
+        // movementX/Y unreliable on touch, compute from stored last position
+        const last = wrap.__mermaidLastSinglePointer || p
+        const dxClient = p.x - last.x
+        const dyClient = p.y - last.y
+        wrap.__mermaidLastSinglePointer = p
+
+        const { rect } = clientToViewBox(p.x, p.y)
+        const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        const dx = dxClient * (vb[2] / rect.width)
+        const dy = dyClient * (vb[3] / rect.height)
+        setCurVb([vb[0] - dx, vb[1] - dy, vb[2], vb[3]])
+        return
+      }
+
+      // Pinch zoom with 2 pointers
+      if (state.pointers.size === 2 && state.startVb && state.startDist > 0) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        const dist = Math.hypot(dx, dy)
+        if (!dist) return
+        const factor = state.startDist / dist // dist bigger => zoom in (viewBox smaller)
+
+        const cx = (pts[0].x + pts[1].x) / 2
+        const cy = (pts[0].y + pts[1].y) / 2
+        const centerClient = { x: cx, y: cy }
+
+        const pxy = clientToViewBox(centerClient.x, centerClient.y)
+        const cpx = pxy.x
+        const cpy = pxy.y
+
+        const vb = zoomAtPoint(state.startVb, factor, cpx, cpy)
+        setCurVb(vb)
+      }
+    }
+
+    const onPointerUpOrCancel = e => {
+      state.pointers.delete(e.pointerId)
+      if (state.pointers.size === 0) {
+        state.startVb = null
+        state.startDist = 0
+        state.startCenter = null
+        wrap.__mermaidLastSinglePointer = null
+      } else if (state.pointers.size === 1) {
+        // reset single pointer baseline to avoid jump
+        wrap.__mermaidLastSinglePointer = [...state.pointers.values()][0]
+      }
+    }
+
+    // Wheel zoom (mouse/trackpad)
+    const onWheel = e => {
+      // ctrlKey on mac trackpad pinch; we treat both as zoom
+      e.preventDefault()
+      const delta = e.deltaY
+      const zoomFactor = delta > 0 ? 1.1 : 0.9
+      const { x, y } = clientToViewBox(e.clientX, e.clientY)
+      const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      setCurVb(zoomAtPoint(vb, zoomFactor, x, y))
+    }
+
+    const onDblClick = () => {
+      const init = wrap.__mermaidInitViewBox
+      if (!init) return
+      wrap.__mermaidCurViewBox = init.slice()
+      setSvgViewBox(svg, init)
+    }
+
+    svg.addEventListener('pointerdown', onPointerDown)
+    svg.addEventListener('pointermove', onPointerMove)
+    svg.addEventListener('pointerup', onPointerUpOrCancel)
+    svg.addEventListener('pointercancel', onPointerUpOrCancel)
+    svg.addEventListener('wheel', onWheel, { passive: false })
+    svg.addEventListener('dblclick', onDblClick)
+  }
+
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+
+      // Clear old render (themeChange/pjax will rerun)
+      const oldSvg = item.querySelector('svg')
+      if (oldSvg) oldSvg.remove()
+      item.__mermaidGestureBound = false
+
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+        if (true) initMermaidGestures(item)
+        item.__mermaidOriginalSvg = svg
+        if (true) attachMermaidViewerButton(item)
+      }
+
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('/libs/mermaid/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.5"></script></div></div></body></html>

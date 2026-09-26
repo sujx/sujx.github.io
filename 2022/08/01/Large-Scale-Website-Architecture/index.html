@@ -1,0 +1,806 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>大型网站技术架构核心原理与案例分析 | 靖轩</title><meta name="author" content="靖轩"><meta name="copyright" content="靖轩"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="此为《大型网站技术架构核心原理与案例分析》的记录  概述大型网站架构演化特点 高并发、大流量 高可用 海量数据 用户分布广泛、网络情况复杂 安全环境恶劣 需求快速变更、发布频繁 渐进式发展  历程 单体服务器 前后端分离、应用服务和数据服务分离 加入缓存和分布式缓存服务器 使用服务器集群改善并发处理能力 数据库读写分离 使用反向代理和CDN加速网站响应 使用分布式文件系统和分布式数据库系统 使用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="大型网站技术架构核心原理与案例分析">
+<meta property="og:url" content="https://www.sujx.net/2022/08/01/Large-Scale-Website-Architecture/index.html">
+<meta property="og:site_name" content="靖轩">
+<meta property="og:description" content="此为《大型网站技术架构核心原理与案例分析》的记录  概述大型网站架构演化特点 高并发、大流量 高可用 海量数据 用户分布广泛、网络情况复杂 安全环境恶劣 需求快速变更、发布频繁 渐进式发展  历程 单体服务器 前后端分离、应用服务和数据服务分离 加入缓存和分布式缓存服务器 使用服务器集群改善并发处理能力 数据库读写分离 使用反向代理和CDN加速网站响应 使用分布式文件系统和分布式数据库系统 使用">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.sujx.net/2024/05/wallhaven-x6yzoz.jpg">
+<meta property="article:published_time" content="2022-07-31T23:35:34.000Z">
+<meta property="article:modified_time" content="2026-09-26T02:32:14.976Z">
+<meta property="article:author" content="靖轩">
+<meta property="article:tag" content="Architecture">
+<meta property="article:tag" content="Books">
+<meta property="article:tag" content="Website">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.sujx.net/2024/05/wallhaven-x6yzoz.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "大型网站技术架构核心原理与案例分析",
+  "url": "https://www.sujx.net/2022/08/01/Large-Scale-Website-Architecture/",
+  "image": "https://cdn.sujx.net/2024/05/wallhaven-x6yzoz.jpg",
+  "datePublished": "2022-07-31T23:35:34.000Z",
+  "dateModified": "2026-09-26T02:32:14.976Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "靖轩",
+      "url": "https://www.sujx.net"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://cdn.sujx.net/about/favicon.png"><link rel="canonical" href="https://www.sujx.net/2022/08/01/Large-Scale-Website-Architecture/index.html"><link rel="preconnect" href="//cdnjs.cloudflare.com"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css?v=5.5.5"><link rel="stylesheet" href="/fonts/css/all.min.css"><link rel="stylesheet" href="/libs/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?417b20ac1984432f821159fac27d3bb5";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><link rel="stylesheet" href="/fonts/titillium-web.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: '/libs/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: true,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '大型网站技术架构核心原理与案例分析',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="alternate" href="/atom.xml" title="靖轩" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">靖轩</span></a><a class="nav-page-title" href="/"><span class="site-name">大型网站技术架构核心原理与案例分析</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">大型网站技术架构核心原理与案例分析</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-07-31T23:35:34.000Z" title="发表于 2022-08-01 07:35:34">2022-08-01</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-09-26T02:32:14.976Z" title="更新于 2026-09-26 10:32:14">2026-09-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">2.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>6分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><blockquote>
+<p>此为《大型网站技术架构核心原理与案例分析》的记录</p>
+</blockquote>
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><h3 id="大型网站架构演化"><a href="#大型网站架构演化" class="headerlink" title="大型网站架构演化"></a>大型网站架构演化</h3><h4 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h4><ul>
+<li>高并发、大流量</li>
+<li>高可用</li>
+<li>海量数据</li>
+<li>用户分布广泛、网络情况复杂</li>
+<li>安全环境恶劣</li>
+<li>需求快速变更、发布频繁</li>
+<li>渐进式发展</li>
+</ul>
+<h4 id="历程"><a href="#历程" class="headerlink" title="历程"></a>历程</h4><ul>
+<li>单体服务器</li>
+<li>前后端分离、应用服务和数据服务分离</li>
+<li>加入缓存和分布式缓存服务器</li>
+<li>使用服务器集群改善并发处理能力</li>
+<li>数据库读写分离</li>
+<li>使用反向代理和CDN加速网站响应</li>
+<li>使用分布式文件系统和分布式数据库系统</li>
+<li>使用noSQL和搜索引擎</li>
+<li>业务拆分</li>
+<li>分布式服务</li>
+</ul>
+<h4 id="价值观"><a href="#价值观" class="headerlink" title="价值观"></a>价值观</h4><ul>
+<li>大型网站架构技术的核心价值随网站所需灵活应对</li>
+<li>驱动大型网站技术发展的主要力量是网站的业务发展</li>
+</ul>
+<h4 id="误区"><a href="#误区" class="headerlink" title="误区"></a>误区</h4><ul>
+<li>一味追随大公司的解决方案</li>
+<li>为技术而技术</li>
+<li>企图用技术解决所有问题</li>
+</ul>
+<h3 id="大型网站架构模式"><a href="#大型网站架构模式" class="headerlink" title="大型网站架构模式"></a>大型网站架构模式</h3><ul>
+<li>分层，基本分为应用层、服务层、数据层，各层必须合理规划层次边界和接口，严格遵循分层架构的约束，禁止跨层调用和逆向调用；</li>
+<li>分割，将不同功能按照高内聚低耦合模块单元进行分割，提高并发处理能力和功能扩展能力；</li>
+<li>分布式<ul>
+<li>分布式应用和服务</li>
+<li>分布式静态资源</li>
+<li>分布式数据和存储</li>
+<li>分布式计算</li>
+</ul>
+</li>
+<li>集群，独立部署的服务器集群化，通过负载均衡设备共同对外提供服务</li>
+<li>缓存，使用缓存的前提：数据访问热点不均衡；数据在某个时间段有效，不会很快过期</li>
+<li>异步，将一个业务操作分成多个阶段，每个阶段之间通过共享数据的方式异步执行。异步架构是典型的生产者消费者模式。<ul>
+<li>提高系统可用性</li>
+<li>加快网站响应速度</li>
+<li>消除并发访问高峰</li>
+</ul>
+</li>
+<li>冗余</li>
+<li>自动化</li>
+<li>安全</li>
+</ul>
+<h3 id="大型网站核心架构要素"><a href="#大型网站核心架构要素" class="headerlink" title="大型网站核心架构要素"></a>大型网站核心架构要素</h3><p>架构：最高层次的规划、南里改变的决定</p>
+<p>软件架构：有关软件整体结构与组件的抽象描述，用于指导大型软件系统各个方面的设计。</p>
+<p>架构的五要素：功能、性能、可用性、伸缩性、扩展性和安全性</p>
+<h2 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h2><h3 id="网站的高性能架构"><a href="#网站的高性能架构" class="headerlink" title="网站的高性能架构"></a>网站的高性能架构</h3><h4 id="网站性能测试"><a href="#网站性能测试" class="headerlink" title="网站性能测试"></a>网站性能测试</h4><ul>
+<li>用户视角</li>
+<li>开发视角</li>
+<li>运维视角</li>
+</ul>
+<h4 id="性能测试指标"><a href="#性能测试指标" class="headerlink" title="性能测试指标"></a>性能测试指标</h4><ul>
+<li>响应时间</li>
+<li>并发数</li>
+<li>吞吐量</li>
+<li>性能计数器</li>
+</ul>
+<h4 id="性能测试方法"><a href="#性能测试方法" class="headerlink" title="性能测试方法"></a>性能测试方法</h4><ul>
+<li>性能测试</li>
+<li>负载测试</li>
+<li>压力测试</li>
+<li>稳定性测试</li>
+</ul>
+<h4 id="性能测试报告"><a href="#性能测试报告" class="headerlink" title="性能测试报告"></a>性能测试报告</h4><h4 id="性能优化策略"><a href="#性能优化策略" class="headerlink" title="性能优化策略"></a>性能优化策略</h4><ul>
+<li>性能分析</li>
+<li>性能优化</li>
+</ul>
+<h4 id="前端性能优化"><a href="#前端性能优化" class="headerlink" title="前端性能优化"></a>前端性能优化</h4><ul>
+<li>浏览器访问优化<ul>
+<li>减少HTTP请求</li>
+<li>使用浏览器缓存</li>
+<li>启用压缩</li>
+<li>CSS放到页面最上，JavaScript放到最下</li>
+<li>减少Cookie</li>
+</ul>
+</li>
+<li>使用CDN加速</li>
+<li>反向代理</li>
+</ul>
+<h4 id="应用服务器性能优化"><a href="#应用服务器性能优化" class="headerlink" title="应用服务器性能优化"></a>应用服务器性能优化</h4><ul>
+<li>分布式缓存</li>
+<li>合理使用缓存</li>
+<li>分布式缓存架构</li>
+<li>Memcached</li>
+<li>异步操作</li>
+<li>使用集群</li>
+<li>代码优化<ul>
+<li>多线程</li>
+<li>资源复用</li>
+<li>数据结构</li>
+<li>垃圾回收</li>
+</ul>
+</li>
+</ul>
+<h4 id="存储性能优化"><a href="#存储性能优化" class="headerlink" title="存储性能优化"></a>存储性能优化</h4><ul>
+<li>机械硬盘 vs 固态硬盘</li>
+<li>B+树 vs LSM 树</li>
+<li>RAID vs HDFS</li>
+</ul>
+<h3 id="网站的高可用架构"><a href="#网站的高可用架构" class="headerlink" title="网站的高可用架构"></a>网站的高可用架构</h3><h4 id="网站可用性的度量和考核"><a href="#网站可用性的度量和考核" class="headerlink" title="网站可用性的度量和考核"></a>网站可用性的度量和考核</h4><h4 id="网站可用性考核"><a href="#网站可用性考核" class="headerlink" title="网站可用性考核"></a>网站可用性考核</h4><h4 id="高可用的网站架构"><a href="#高可用的网站架构" class="headerlink" title="高可用的网站架构"></a>高可用的网站架构</h4><p>实现高可用架构的主要手段是数据和服务的冗余备份以及失效转移</p>
+<ul>
+<li>高可用的网站架构</li>
+<li>高可用的应用</li>
+<li>通过负载均衡进行无状态服务的失效转移</li>
+</ul>
+<h4 id="应用服务Session管理"><a href="#应用服务Session管理" class="headerlink" title="应用服务Session管理"></a>应用服务Session管理</h4><p>Web应用中将这些多次请求修改使用的上下文对象称作绘画。Session管理主要有以下手段：</p>
+<ol>
+<li>Session 复制</li>
+<li>Session 绑定，基于负载均衡源地址Hash算法</li>
+<li>利用 Cookie 记录 Session</li>
+<li>Session 服务器</li>
+</ol>
+<h4 id="高可用的服务"><a href="#高可用的服务" class="headerlink" title="高可用的服务"></a>高可用的服务</h4><ol>
+<li>分级管理</li>
+<li>超时设置</li>
+<li>异步调用</li>
+<li>服务降级</li>
+<li>幂等性设计</li>
+</ol>
+<h4 id="高可用的数据"><a href="#高可用的数据" class="headerlink" title="高可用的数据"></a>高可用的数据</h4><p>CAP原理：提供数据服务的存储系统无法同时满足数据一致性、数据可用性、分区耐受性这三个条件。</p>
+<ul>
+<li>数据持久性</li>
+<li>数据可访问性</li>
+<li>数据一致性<ul>
+<li>数据强一致</li>
+<li>数据用户一致</li>
+<li>数据最终一致</li>
+</ul>
+</li>
+<li>数据备份<ul>
+<li>数据冷备</li>
+<li>数据热备<ul>
+<li>异步热备</li>
+<li>同步热备</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>失效转移<ul>
+<li>失效确认</li>
+<li>访问转移</li>
+<li>数据恢复</li>
+</ul>
+</li>
+</ul>
+<h4 id="高可用网站的软件质量保证"><a href="#高可用网站的软件质量保证" class="headerlink" title="高可用网站的软件质量保证"></a>高可用网站的软件质量保证</h4><ul>
+<li>网站发布</li>
+<li>自动化测试</li>
+<li>预发布验证</li>
+<li>代码控制<ul>
+<li>主干开发、分支发布</li>
+<li>分支开发、主干发布</li>
+<li>自动化发布</li>
+<li>灰度发布</li>
+</ul>
+</li>
+</ul>
+<h4 id="网站运行监控"><a href="#网站运行监控" class="headerlink" title="网站运行监控"></a>网站运行监控</h4><p>“不允许没有监控的系统上线”</p>
+<ul>
+<li>监控数据采集<ul>
+<li>用户行为日志收集<ul>
+<li>服务器端日志收集</li>
+<li>客户端浏览器日志收集</li>
+</ul>
+</li>
+<li>服务器性能监控</li>
+<li>运行数据报告</li>
+</ul>
+</li>
+<li>监控管理<ul>
+<li>系统报警</li>
+<li>失效转移</li>
+<li>自动优雅降级</li>
+</ul>
+</li>
+</ul>
+<h3 id="网站的伸缩架构"><a href="#网站的伸缩架构" class="headerlink" title="网站的伸缩架构"></a>网站的伸缩架构</h3><p>网站的伸缩性可分成两类，一类是根据功能进行物理分离实现伸缩，一类是单一功能通过集群实现伸缩。前者是不同的服务器部署不同的服务，提供不同的功能；后者是集群内的多台服务器部署相同的服务，提供相同的功能。</p>
+<ul>
+<li>不同功能进行物理分离实现伸缩</li>
+<li>单一功能通过集群规模实现伸缩</li>
+</ul>
+<h4 id="应用服务器集群的伸缩设计"><a href="#应用服务器集群的伸缩设计" class="headerlink" title="应用服务器集群的伸缩设计"></a>应用服务器集群的伸缩设计</h4><ul>
+<li>HTTP重定向负载均衡</li>
+<li>DNS域名解析负载均衡</li>
+<li>反向代理负载均衡</li>
+<li>IP负载均衡</li>
+<li>数据链路层负载均衡</li>
+<li>负载均衡算法</li>
+</ul>
+<h4 id="分布式缓存集群的伸缩性设计"><a href="#分布式缓存集群的伸缩性设计" class="headerlink" title="分布式缓存集群的伸缩性设计"></a>分布式缓存集群的伸缩性设计</h4><ul>
+<li>Memcached 分布式缓存集群的访问模型</li>
+<li>热添加缓存集群的伸缩性挑战</li>
+<li>分布式缓存的一致性Hash算法</li>
+</ul>
+<h4 id="数据存储服务器集群的伸缩性设计"><a href="#数据存储服务器集群的伸缩性设计" class="headerlink" title="数据存储服务器集群的伸缩性设计"></a>数据存储服务器集群的伸缩性设计</h4><ul>
+<li>关系数据库集群的伸缩性设计</li>
+<li>NoSQL数据库的伸缩性设计</li>
+</ul>
+<h3 id="网站的可扩展性架构"><a href="#网站的可扩展性架构" class="headerlink" title="网站的可扩展性架构"></a>网站的可扩展性架构</h3><h4 id="构建可扩展的网站架构"><a href="#构建可扩展的网站架构" class="headerlink" title="构建可扩展的网站架构"></a>构建可扩展的网站架构</h4><ul>
+<li>开发低耦合系统</li>
+<li>模块化</li>
+</ul>
+<h4 id="利用分布式消息队列降低系统耦合性"><a href="#利用分布式消息队列降低系统耦合性" class="headerlink" title="利用分布式消息队列降低系统耦合性"></a>利用分布式消息队列降低系统耦合性</h4><ul>
+<li>事件驱动架构</li>
+<li>分布式消息队列</li>
+</ul>
+<h4 id="利用分布式服务打造可复用的业务平台"><a href="#利用分布式服务打造可复用的业务平台" class="headerlink" title="利用分布式服务打造可复用的业务平台"></a>利用分布式服务打造可复用的业务平台</h4><ul>
+<li>Web Service 与企业级分布式服务</li>
+<li>分布式服务框架设计</li>
+</ul>
+<h4 id="可扩展的数据结构"><a href="#可扩展的数据结构" class="headerlink" title="可扩展的数据结构"></a>可扩展的数据结构</h4><h4 id="利用开发平台建设网站生态圈"><a href="#利用开发平台建设网站生态圈" class="headerlink" title="利用开发平台建设网站生态圈"></a>利用开发平台建设网站生态圈</h4><h3 id="网站的安全架构"><a href="#网站的安全架构" class="headerlink" title="网站的安全架构"></a>网站的安全架构</h3><h4 id="网站应用攻击与防御"><a href="#网站应用攻击与防御" class="headerlink" title="网站应用攻击与防御"></a>网站应用攻击与防御</h4><ul>
+<li>XSS 攻击 跨站点脚本攻击<ul>
+<li>攻击类型：<ul>
+<li>反射型</li>
+<li>持久型</li>
+</ul>
+</li>
+<li>防御手段：<ul>
+<li>消毒</li>
+<li>HttpOnly</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>注入攻击<ul>
+<li>攻击类型：<ul>
+<li>错误回显</li>
+<li>盲注</li>
+<li>开源搭建</li>
+</ul>
+</li>
+<li>防御手段：<ul>
+<li>消毒</li>
+<li>参数绑定</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>CSRF 攻击 跨站点请求伪造<ul>
+<li>防御手段：<ul>
+<li>表单Token</li>
+<li>验证码</li>
+<li>Referer Check</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>其他攻击和漏洞</li>
+<li>Web应用防火墙</li>
+<li>网站安全漏洞扫描</li>
+</ul>
+<h4 id="加密技术及密钥安全管理"><a href="#加密技术及密钥安全管理" class="headerlink" title="加密技术及密钥安全管理"></a>加密技术及密钥安全管理</h4><ul>
+<li>单向散列加密</li>
+<li>对称加密</li>
+<li>非对称加密</li>
+<li>密钥安全管理</li>
+</ul>
+<h4 id="信息过滤与反垃圾"><a href="#信息过滤与反垃圾" class="headerlink" title="信息过滤与反垃圾"></a>信息过滤与反垃圾</h4><ul>
+<li>文本匹配</li>
+<li>分类算法</li>
+<li>黑名单</li>
+</ul>
+<h4 id="电子商务风险控制"><a href="#电子商务风险控制" class="headerlink" title="电子商务风险控制"></a>电子商务风险控制</h4><h2 id="典型故障案例"><a href="#典型故障案例" class="headerlink" title="典型故障案例"></a>典型故障案例</h2><ol>
+<li>写日志故障<ol>
+<li>应用程序日志和第三方组件日志输出要分别配置</li>
+<li>日志文件输出级别为Warn，调用级别要符合其真实日志级别</li>
+<li>检查第三方组件的error日志</li>
+</ol>
+</li>
+<li>高并发范文数据库引起故障<ol>
+<li>首页不应该访问数据库</li>
+<li>首页最好是静态</li>
+</ol>
+</li>
+<li>高并发情况下锁引发的故障<ol>
+<li>谨慎操作锁操作</li>
+</ol>
+</li>
+<li>缓存引发的故障<ol>
+<li>当缓存成为了网站架构不可或缺的一部分时，对缓存的管理就要提高到和其他服务器一样的级别</li>
+</ol>
+</li>
+<li>大文件读写独占磁盘引发的故障<ol>
+<li>存储的使用需要根据不同文件类型和用途进行管理</li>
+<li>图片等小文件应该使用专用存储服务器，不能和大文件共用存储</li>
+</ol>
+</li>
+</ol>
+<h2 id="架构师"><a href="#架构师" class="headerlink" title="架构师"></a>架构师</h2><h4 id="关注人而不是产品"><a href="#关注人而不是产品" class="headerlink" title="关注人而不是产品"></a>关注人而不是产品</h4><p>寻找一个值得共同奋斗的目标，营造一个让大家能够最大限度发挥自我价值的工作氛围。</p>
+<h4 id="发掘人的优秀"><a href="#发掘人的优秀" class="headerlink" title="发掘人的优秀"></a>发掘人的优秀</h4><h4 id="共享美好蓝图"><a href="#共享美好蓝图" class="headerlink" title="共享美好蓝图"></a>共享美好蓝图</h4><ul>
+<li>蓝图应该是表述清楚的</li>
+<li>蓝图应该是形象的</li>
+<li>蓝图应该是简单的</li>
+</ul>
+<h4 id="共同参与架构"><a href="#共同参与架构" class="headerlink" title="共同参与架构"></a>共同参与架构</h4><ul>
+<li>不要只有架构师一个人拥有架构</li>
+<li>让其他人维护框架与架构文档</li>
+</ul>
+<h4 id="学会妥协、成就他人"><a href="#学会妥协、成就他人" class="headerlink" title="学会妥协、成就他人"></a>学会妥协、成就他人</h4></article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Books/">Books</a><a class="post-meta__tags" href="/tags/Architecture/">Architecture</a><a class="post-meta__tags" href="/tags/Website/">Website</a></div><div class="post-share"><div class="social-share" data-image="https://cdn.sujx.net/2024/05/wallhaven-x6yzoz.jpg" data-sites="facebook,twitter,weibo,qq"></div><link rel="stylesheet" href="/libs/sharejs/css/share.min.css" media="print" onload="this.media='all'"><script src="/libs/sharejs/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>能否请我喝一杯咖啡？</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.jpg" target="_blank"><img class="post-qr-code-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/wechat.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2022/08/15/Docker-pratice/" title="Docker的基本使用"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover83.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Docker的基本使用</div></div><div class="info-2"><div class="info-item-1">简介Docker是什么Docker是一个在2013年开源的使用go语言编写的PaaS服务。特点是交付速度快、资源消耗低。Docker采用客户端&#x2F;服务端架构，使用远程API来管理和创建Docker容器。它的三大理念是build、ship、run，使用Namespace及cggroup等来提供容器的资源隔离与安全保障。 Docker的组成 Docker主机（ Host ）：物理机或者虚机，用于运行Docker服务进程和容器； Docker服务端（ Server ）：Docker守护进程，运行Docker容器； Docker客户端（ Client ）：客户端使用docker命令或者其他工具调用相应API； Docker仓库（ Registroy ）：保存镜像的仓库，类似git这样的版本控制系统； Docker镜像（ Images ）：镜像可以理解为创建实例使用的模板； Docker容器（ Container ）：容器是从镜像生成对外提供服务的一个或者一组服务。  NameSpace技术命名空间保证容器之间的运行环境互相隔离，可以使每个进程看起来都拥有自己的隔离的全局系统资源。...</div></div></div></a><a class="pagination-related" href="/2022/07/20/Wazuh-Clean-logs/" title="定时删除Wazuh日志索引"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023pic/20230411120229.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">定时删除Wazuh日志索引</div></div><div class="info-2"><div class="info-item-1">前情生产和办公环境部署的Wazuh系统，因为对接的大量的Agent，每日的数据量在1。 2GB左右。为减少实际运行成本并根据实际使用情况，原始日志导入一份到日志服务器外，Wazuh的安全日志只保留一个自然月。 脚本 使用Shell脚本来实现定时删除Wazuh的ElasticSearch索引的功能：  #!/bin/bash#本脚本用于按月份清理ES存储数据#获取本月份与索引中的日期进行比较，本月份前的索引数据将被删除。#删除前要确认ES_URL=http://127. 0. 0. 1:9200NOW_Year=`date +%Y` NOW_Mon=`date +%m`ALLLINES=`/usr/bin/curl -s -XGET $ES_URL/_cat/indices?v| grep wazuh-alerts-4. x-*` echoecho &quot;THIS IS WHAT SHOULD BE DELETED FOR ES:&quot;echo echo &quot;$&#123;ALLLINES&#125;&quot; | while read linedo  # e...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2023/08/05/Kubernetes-Extra/" title="Kubernetes高级概念"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/05/wallhaven-md1qr8.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-05</div><div class="info-item-2">Kubernetes高级概念</div></div><div class="info-2"><div class="info-item-1">安全管理kubeconfig文件是指用于登录的文件，默认是指~&#x2F;。 kube&#x2F;config。这个文件是在刚装好kubernetes集群后按提示复制过来的，它和&#x2F;etc&#x2F;kubernetes&#x2F;admin。 conf是一样的，里面包括了集群的地址、admin用户以及各种证书和密钥的信息。创建kubernetes集群时，文件中的admin已被授予最大权限。 # 只要有了admin.conf文件就可管理集群[root@kmaster ~]# sz /etc/kubernetes/admin.conf # Windows系统部署kubectl也可管理PowerShell 7. 3. 7PS C:\Users\root&gt; kubectl get nodes --kubeconfig=admin.confNAME      STATUS   ROLES                  AGE   VERSIONkmaster   Ready    control-plane, master   35d   v1. 21. 14knode...</div></div></div></a><a class="pagination-related" href="/2023/07/19/Kubernetes-Content/" title="Kubernetes基本管理"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/wallhaven-4dzk5g.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-07-19</div><div class="info-item-2">Kubernetes基本管理</div></div><div class="info-2"><div class="info-item-1">本文是应用《从Docker到Kubernetes》的实验内容。  实验环境延续Kubernets部署  PODpod是kubernets中最小的调度单位，控制器是用于管理pod。 创建与删除# 查看当前namespace中的pod[root@kmaster ~]# kubectl get podsNo resources found in nssec namespace.# 查看kube-system下的pod[root@kmaster ~]# kubectl get pods -n kube-system NAME                                       READY   STATUS    RESTARTS   AGEcalico-kube-controllers-78d6f96c7b-667pc   1/1     Running   9          25dcalico-node-f7mkg                          1/1     Running   10         25dcalico-node-gbw...</div></div></div></a><a class="pagination-related" href="/2023/08/10/Kubernetes-CICD/" title="CI&#x2F;CD初步"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/wallhaven-4lekzl.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-10</div><div class="info-item-2">CI&#x2F;CD初步</div></div><div class="info-2"><div class="info-item-1"> 现在利用已有的k8s环境部署一套CI&#x2F;CD环境  DevOps理解CI&#x2F;CD，持续集成和持续交付的基本过程包括如下几个步骤：  软件更新或者迭代——Gitlab 新版软件打包成镜像——Jenkins 新的镜像在k8s中集成——Registry  当代码提交到gitlab之后，会立马触发jenkins将新代码编译成镜像，然后再在kmaster上部署新的镜像。  镜像仓库Registry部署# 部署docker并修改docker启动参数[root@Gitlab ~]# vim /usr/lib/systemd/system/docker.service# 新增--insecure-registry=192. 168. 10. 9:5000 -H tcp://0. 0. 0. 0:2376 ExecStart=/usr/bin/dockerd --insecure-registry=192. 168. 10. 9:5000 -H tcp://0. 0. 0. 0:2376 -H fd:// --containerd=/run/containerd/containe...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">靖轩</div><div class="author-info-description">逝者如斯夫,不舍昼夜</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/grepsu"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://gitee.com/grepsu" target="_blank" title="Gitee"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:sujx@live.cn" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS链接"><i class="fa  fa-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A6%82%E8%BF%B0"><span class="toc-number">1.</span> <span class="toc-text">概述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%A7%E5%9E%8B%E7%BD%91%E7%AB%99%E6%9E%B6%E6%9E%84%E6%BC%94%E5%8C%96"><span class="toc-number">1.1.</span> <span class="toc-text">大型网站架构演化</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%89%B9%E7%82%B9"><span class="toc-number">1.1.1.</span> <span class="toc-text">特点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8E%86%E7%A8%8B"><span class="toc-number">1.1.2.</span> <span class="toc-text">历程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%B7%E5%80%BC%E8%A7%82"><span class="toc-number">1.1.3.</span> <span class="toc-text">价值观</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AF%AF%E5%8C%BA"><span class="toc-number">1.1.4.</span> <span class="toc-text">误区</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%A7%E5%9E%8B%E7%BD%91%E7%AB%99%E6%9E%B6%E6%9E%84%E6%A8%A1%E5%BC%8F"><span class="toc-number">1.2.</span> <span class="toc-text">大型网站架构模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%A7%E5%9E%8B%E7%BD%91%E7%AB%99%E6%A0%B8%E5%BF%83%E6%9E%B6%E6%9E%84%E8%A6%81%E7%B4%A0"><span class="toc-number">1.3.</span> <span class="toc-text">大型网站核心架构要素</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9E%B6%E6%9E%84"><span class="toc-number">2.</span> <span class="toc-text">架构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BD%91%E7%AB%99%E7%9A%84%E9%AB%98%E6%80%A7%E8%83%BD%E6%9E%B6%E6%9E%84"><span class="toc-number">2.1.</span> <span class="toc-text">网站的高性能架构</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BD%91%E7%AB%99%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95"><span class="toc-number">2.1.1.</span> <span class="toc-text">网站性能测试</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95%E6%8C%87%E6%A0%87"><span class="toc-number">2.1.2.</span> <span class="toc-text">性能测试指标</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95%E6%96%B9%E6%B3%95"><span class="toc-number">2.1.3.</span> <span class="toc-text">性能测试方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95%E6%8A%A5%E5%91%8A"><span class="toc-number">2.1.4.</span> <span class="toc-text">性能测试报告</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E7%AD%96%E7%95%A5"><span class="toc-number">2.1.5.</span> <span class="toc-text">性能优化策略</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%89%8D%E7%AB%AF%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96"><span class="toc-number">2.1.6.</span> <span class="toc-text">前端性能优化</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96"><span class="toc-number">2.1.7.</span> <span class="toc-text">应用服务器性能优化</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AD%98%E5%82%A8%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96"><span class="toc-number">2.1.8.</span> <span class="toc-text">存储性能优化</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BD%91%E7%AB%99%E7%9A%84%E9%AB%98%E5%8F%AF%E7%94%A8%E6%9E%B6%E6%9E%84"><span class="toc-number">2.2.</span> <span class="toc-text">网站的高可用架构</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BD%91%E7%AB%99%E5%8F%AF%E7%94%A8%E6%80%A7%E7%9A%84%E5%BA%A6%E9%87%8F%E5%92%8C%E8%80%83%E6%A0%B8"><span class="toc-number">2.2.1.</span> <span class="toc-text">网站可用性的度量和考核</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BD%91%E7%AB%99%E5%8F%AF%E7%94%A8%E6%80%A7%E8%80%83%E6%A0%B8"><span class="toc-number">2.2.2.</span> <span class="toc-text">网站可用性考核</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%AB%98%E5%8F%AF%E7%94%A8%E7%9A%84%E7%BD%91%E7%AB%99%E6%9E%B6%E6%9E%84"><span class="toc-number">2.2.3.</span> <span class="toc-text">高可用的网站架构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E6%9C%8D%E5%8A%A1Session%E7%AE%A1%E7%90%86"><span class="toc-number">2.2.4.</span> <span class="toc-text">应用服务Session管理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%AB%98%E5%8F%AF%E7%94%A8%E7%9A%84%E6%9C%8D%E5%8A%A1"><span class="toc-number">2.2.5.</span> <span class="toc-text">高可用的服务</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%AB%98%E5%8F%AF%E7%94%A8%E7%9A%84%E6%95%B0%E6%8D%AE"><span class="toc-number">2.2.6.</span> <span class="toc-text">高可用的数据</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%AB%98%E5%8F%AF%E7%94%A8%E7%BD%91%E7%AB%99%E7%9A%84%E8%BD%AF%E4%BB%B6%E8%B4%A8%E9%87%8F%E4%BF%9D%E8%AF%81"><span class="toc-number">2.2.7.</span> <span class="toc-text">高可用网站的软件质量保证</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BD%91%E7%AB%99%E8%BF%90%E8%A1%8C%E7%9B%91%E6%8E%A7"><span class="toc-number">2.2.8.</span> <span class="toc-text">网站运行监控</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BD%91%E7%AB%99%E7%9A%84%E4%BC%B8%E7%BC%A9%E6%9E%B6%E6%9E%84"><span class="toc-number">2.3.</span> <span class="toc-text">网站的伸缩架构</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%9B%86%E7%BE%A4%E7%9A%84%E4%BC%B8%E7%BC%A9%E8%AE%BE%E8%AE%A1"><span class="toc-number">2.3.1.</span> <span class="toc-text">应用服务器集群的伸缩设计</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E7%BC%93%E5%AD%98%E9%9B%86%E7%BE%A4%E7%9A%84%E4%BC%B8%E7%BC%A9%E6%80%A7%E8%AE%BE%E8%AE%A1"><span class="toc-number">2.3.2.</span> <span class="toc-text">分布式缓存集群的伸缩性设计</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%9B%86%E7%BE%A4%E7%9A%84%E4%BC%B8%E7%BC%A9%E6%80%A7%E8%AE%BE%E8%AE%A1"><span class="toc-number">2.3.3.</span> <span class="toc-text">数据存储服务器集群的伸缩性设计</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BD%91%E7%AB%99%E7%9A%84%E5%8F%AF%E6%89%A9%E5%B1%95%E6%80%A7%E6%9E%B6%E6%9E%84"><span class="toc-number">2.4.</span> <span class="toc-text">网站的可扩展性架构</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9E%84%E5%BB%BA%E5%8F%AF%E6%89%A9%E5%B1%95%E7%9A%84%E7%BD%91%E7%AB%99%E6%9E%B6%E6%9E%84"><span class="toc-number">2.4.1.</span> <span class="toc-text">构建可扩展的网站架构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%A9%E7%94%A8%E5%88%86%E5%B8%83%E5%BC%8F%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E9%99%8D%E4%BD%8E%E7%B3%BB%E7%BB%9F%E8%80%A6%E5%90%88%E6%80%A7"><span class="toc-number">2.4.2.</span> <span class="toc-text">利用分布式消息队列降低系统耦合性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%A9%E7%94%A8%E5%88%86%E5%B8%83%E5%BC%8F%E6%9C%8D%E5%8A%A1%E6%89%93%E9%80%A0%E5%8F%AF%E5%A4%8D%E7%94%A8%E7%9A%84%E4%B8%9A%E5%8A%A1%E5%B9%B3%E5%8F%B0"><span class="toc-number">2.4.3.</span> <span class="toc-text">利用分布式服务打造可复用的业务平台</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%AF%E6%89%A9%E5%B1%95%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="toc-number">2.4.4.</span> <span class="toc-text">可扩展的数据结构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%A9%E7%94%A8%E5%BC%80%E5%8F%91%E5%B9%B3%E5%8F%B0%E5%BB%BA%E8%AE%BE%E7%BD%91%E7%AB%99%E7%94%9F%E6%80%81%E5%9C%88"><span class="toc-number">2.4.5.</span> <span class="toc-text">利用开发平台建设网站生态圈</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BD%91%E7%AB%99%E7%9A%84%E5%AE%89%E5%85%A8%E6%9E%B6%E6%9E%84"><span class="toc-number">2.5.</span> <span class="toc-text">网站的安全架构</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BD%91%E7%AB%99%E5%BA%94%E7%94%A8%E6%94%BB%E5%87%BB%E4%B8%8E%E9%98%B2%E5%BE%A1"><span class="toc-number">2.5.1.</span> <span class="toc-text">网站应用攻击与防御</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8A%A0%E5%AF%86%E6%8A%80%E6%9C%AF%E5%8F%8A%E5%AF%86%E9%92%A5%E5%AE%89%E5%85%A8%E7%AE%A1%E7%90%86"><span class="toc-number">2.5.2.</span> <span class="toc-text">加密技术及密钥安全管理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BF%A1%E6%81%AF%E8%BF%87%E6%BB%A4%E4%B8%8E%E5%8F%8D%E5%9E%83%E5%9C%BE"><span class="toc-number">2.5.3.</span> <span class="toc-text">信息过滤与反垃圾</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%94%B5%E5%AD%90%E5%95%86%E5%8A%A1%E9%A3%8E%E9%99%A9%E6%8E%A7%E5%88%B6"><span class="toc-number">2.5.4.</span> <span class="toc-text">电子商务风险控制</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B8%E5%9E%8B%E6%95%85%E9%9A%9C%E6%A1%88%E4%BE%8B"><span class="toc-number">3.</span> <span class="toc-text">典型故障案例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9E%B6%E6%9E%84%E5%B8%88"><span class="toc-number">4.</span> <span class="toc-text">架构师</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B3%E6%B3%A8%E4%BA%BA%E8%80%8C%E4%B8%8D%E6%98%AF%E4%BA%A7%E5%93%81"><span class="toc-number">4.1.</span> <span class="toc-text">关注人而不是产品</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%91%E6%8E%98%E4%BA%BA%E7%9A%84%E4%BC%98%E7%A7%80"><span class="toc-number">4.2.</span> <span class="toc-text">发掘人的优秀</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B1%E4%BA%AB%E7%BE%8E%E5%A5%BD%E8%93%9D%E5%9B%BE"><span class="toc-number">4.3.</span> <span class="toc-text">共享美好蓝图</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B1%E5%90%8C%E5%8F%82%E4%B8%8E%E6%9E%B6%E6%9E%84"><span class="toc-number">4.4.</span> <span class="toc-text">共同参与架构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AD%A6%E4%BC%9A%E5%A6%A5%E5%8D%8F%E3%80%81%E6%88%90%E5%B0%B1%E4%BB%96%E4%BA%BA"><span class="toc-number">4.5.</span> <span class="toc-text">学会妥协、成就他人</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/07/03/AIGC_FoxHole/" title="海鹰">海鹰</a><time datetime="2026-07-03T01:04:07.000Z" title="发表于 2026-07-03 09:04:07">2026-07-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/11/fristVibeCoding/" title="鹊随金印：我的第一个完整的AI编程项目">鹊随金印：我的第一个完整的AI编程项目</a><time datetime="2026-06-11T01:04:07.000Z" title="发表于 2026-06-11 09:04:07">2026-06-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/03/VI_Howto/" title="VI编辑器简介">VI编辑器简介</a><time datetime="2026-06-03T01:04:07.000Z" title="发表于 2026-06-03 09:04:07">2026-06-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/28/HNCitic_2605/" title="我要上头条">我要上头条</a><time datetime="2026-05-28T01:04:07.000Z" title="发表于 2026-05-28 09:04:07">2026-05-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/12/TS-Domain-Controller-Sync-Failure/" title="记一次Windows AD域控制器同步故障排错">记一次Windows AD域控制器同步故障排错</a><time datetime="2026-05-12T03:04:07.000Z" title="发表于 2026-05-12 11:04:07">2026-05-12</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2008 - 2026 By 靖轩</span></div><div class="footer_custom_text">京ICP备17034757号</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.5"></script><script src="/js/main.js?v=5.5.5"></script><script src="/libs/fancybox/fancybox.umd.js"></script><script src="/js/instantpage.js" type="module"></script><script src="/libs/lazyload/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const parseViewBox = viewBox => {
+    if (!viewBox) return null
+    const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
+    if (parts.length !== 4 || parts.some(n => Number.isNaN(n))) return null
+    return parts
+  }
+
+  const getSvgViewBox = svg => {
+    const attr = parseViewBox(svg.getAttribute('viewBox'))
+    if (attr) return attr
+
+    // Fallback: use bbox to build a viewBox
+    try {
+      const bbox = svg.getBBox()
+      if (bbox && bbox.width && bbox.height) return [bbox.x, bbox.y, bbox.width, bbox.height]
+    } catch (e) {
+      // getBBox may fail on some edge cases; ignore
+    }
+
+    const w = Number(svg.getAttribute('width')) || 0
+    const h = Number(svg.getAttribute('height')) || 0
+    if (w > 0 && h > 0) return [0, 0, w, h]
+    return [0, 0, 100, 100]
+  }
+
+  const setSvgViewBox = (svg, vb) => {
+    svg.setAttribute('viewBox', `${vb[0]} ${vb[1]} ${vb[2]} ${vb[3]}`)
+  }
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v))
+
+  const openSvgInNewTab = ({ source, initViewBox }) => {
+    const getClonedSvg = () => {
+      if (typeof source === 'string') {
+        const template = document.createElement('template')
+        template.innerHTML = source.trim()
+        const svg = template.content.querySelector('svg')
+        return svg ? svg.cloneNode(true) : null
+      }
+      if (source && typeof source.cloneNode === 'function') {
+        return source.cloneNode(true)
+      }
+      return null
+    }
+
+    const clone = getClonedSvg()
+    if (!clone) return
+    if (initViewBox && initViewBox.length === 4) {
+      clone.setAttribute('viewBox', initViewBox.join(' '))
+    }
+    if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+    if (!clone.getAttribute('xmlns:xlink') && clone.outerHTML.includes('xlink:')) {
+      clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+    }
+    // inject background to match current theme
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    const bg = getComputedStyle(document.body).backgroundColor || (isDark ? '#1e1e1e' : '#ffffff')
+    if (!clone.style.background) clone.style.background = bg
+
+    const serializer = new XMLSerializer()
+    const svgSource = serializer.serializeToString(clone)
+    const htmlSource = `<!doctype html><html><head><meta charset="utf-8" />
+      <style>
+        html, body { width: 100%; height: 100%; margin: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; }
+        svg { max-width: 100%; max-height: 100%; height: auto; width: auto; }
+      </style>
+      </head><body>${svgSource}</body></html>`
+    const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank', 'noopener')
+    setTimeout(() => URL.revokeObjectURL(url), 30000)
+  }
+
+  const attachMermaidViewerButton = wrap => {
+    let btn = wrap.querySelector('.mermaid-open-btn')
+    if (!btn) {
+      btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'mermaid-open-btn'
+      wrap.appendChild(btn)
+    }
+
+    btn.innerHTML = '<i class="fa fa-search fa-fw" aria-hidden="true"></i>'
+
+    if (!btn.__mermaidViewerBound) {
+      btn.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        const svg = wrap.__mermaidOriginalSvg || wrap.querySelector('svg')
+        if (!svg) return
+        const initViewBox = wrap.__mermaidInitViewBox
+        if (typeof svg === 'string') {
+          openSvgInNewTab({ source: svg, initViewBox })
+          return
+        }
+        openSvgInNewTab({ source: svg, initViewBox })
+      })
+      btn.__mermaidViewerBound = true
+    }
+  }
+
+  // Zoom around a point (px, py) in the SVG viewport (in viewBox coordinates)
+  const zoomAtPoint = (vb, factor, px, py) => {
+    const w = vb[2] * factor
+    const h = vb[3] * factor
+    const nx = px - (px - vb[0]) * factor
+    const ny = py - (py - vb[1]) * factor
+    return [nx, ny, w, h]
+  }
+
+  const initMermaidGestures = wrap => {
+    const svg = wrap.querySelector('svg')
+    if (!svg) return
+
+    // Ensure viewBox exists so gestures always work
+    const initVb = getSvgViewBox(svg)
+    wrap.__mermaidInitViewBox = initVb
+    wrap.__mermaidCurViewBox = initVb.slice()
+    setSvgViewBox(svg, initVb)
+
+    // Avoid binding multiple times on themeChange/pjax
+    if (wrap.__mermaidGestureBound) return
+    wrap.__mermaidGestureBound = true
+
+    // Helper: map client (viewport) coordinate -> viewBox coordinate
+    const clientToViewBox = (clientX, clientY) => {
+      const rect = svg.getBoundingClientRect()
+      const vb = wrap.__mermaidCurViewBox || getSvgViewBox(svg)
+      const x = vb[0] + (clientX - rect.left) * (vb[2] / rect.width)
+      const y = vb[1] + (clientY - rect.top) * (vb[3] / rect.height)
+      return { x, y, rect, vb }
+    }
+
+    const state = {
+      pointers: new Map(),
+      startVb: null,
+      startDist: 0,
+      startCenter: null
+    }
+
+    const clampVb = vb => {
+      const init = wrap.__mermaidInitViewBox || vb
+      const minW = init[2] * 0.1
+      const maxW = init[2] * 10
+      const minH = init[3] * 0.1
+      const maxH = init[3] * 10
+      vb[2] = clamp(vb[2], minW, maxW)
+      vb[3] = clamp(vb[3], minH, maxH)
+      return vb
+    }
+
+    const setCurVb = vb => {
+      vb = clampVb(vb)
+      wrap.__mermaidCurViewBox = vb
+      setSvgViewBox(svg, vb)
+    }
+
+    const onPointerDown = e => {
+      // Allow only primary button for mouse
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      svg.setPointerCapture(e.pointerId)
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      if (state.pointers.size === 1) {
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      } else if (state.pointers.size === 2) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        state.startDist = Math.hypot(dx, dy)
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        state.startCenter = { x: (pts[0].x + pts[1].x) / 2, y: (pts[0].y + pts[1].y) / 2 }
+      }
+    }
+
+    const onPointerMove = e => {
+      if (!state.pointers.has(e.pointerId)) return
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      // Pan with 1 pointer
+      if (state.pointers.size === 1 && state.startVb) {
+        const p = [...state.pointers.values()][0]
+        const prev = { x: e.clientX - e.movementX, y: e.clientY - e.movementY }
+        // movementX/Y unreliable on touch, compute from stored last position
+        const last = wrap.__mermaidLastSinglePointer || p
+        const dxClient = p.x - last.x
+        const dyClient = p.y - last.y
+        wrap.__mermaidLastSinglePointer = p
+
+        const { rect } = clientToViewBox(p.x, p.y)
+        const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        const dx = dxClient * (vb[2] / rect.width)
+        const dy = dyClient * (vb[3] / rect.height)
+        setCurVb([vb[0] - dx, vb[1] - dy, vb[2], vb[3]])
+        return
+      }
+
+      // Pinch zoom with 2 pointers
+      if (state.pointers.size === 2 && state.startVb && state.startDist > 0) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        const dist = Math.hypot(dx, dy)
+        if (!dist) return
+        const factor = state.startDist / dist // dist bigger => zoom in (viewBox smaller)
+
+        const cx = (pts[0].x + pts[1].x) / 2
+        const cy = (pts[0].y + pts[1].y) / 2
+        const centerClient = { x: cx, y: cy }
+
+        const pxy = clientToViewBox(centerClient.x, centerClient.y)
+        const cpx = pxy.x
+        const cpy = pxy.y
+
+        const vb = zoomAtPoint(state.startVb, factor, cpx, cpy)
+        setCurVb(vb)
+      }
+    }
+
+    const onPointerUpOrCancel = e => {
+      state.pointers.delete(e.pointerId)
+      if (state.pointers.size === 0) {
+        state.startVb = null
+        state.startDist = 0
+        state.startCenter = null
+        wrap.__mermaidLastSinglePointer = null
+      } else if (state.pointers.size === 1) {
+        // reset single pointer baseline to avoid jump
+        wrap.__mermaidLastSinglePointer = [...state.pointers.values()][0]
+      }
+    }
+
+    // Wheel zoom (mouse/trackpad)
+    const onWheel = e => {
+      // ctrlKey on mac trackpad pinch; we treat both as zoom
+      e.preventDefault()
+      const delta = e.deltaY
+      const zoomFactor = delta > 0 ? 1.1 : 0.9
+      const { x, y } = clientToViewBox(e.clientX, e.clientY)
+      const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      setCurVb(zoomAtPoint(vb, zoomFactor, x, y))
+    }
+
+    const onDblClick = () => {
+      const init = wrap.__mermaidInitViewBox
+      if (!init) return
+      wrap.__mermaidCurViewBox = init.slice()
+      setSvgViewBox(svg, init)
+    }
+
+    svg.addEventListener('pointerdown', onPointerDown)
+    svg.addEventListener('pointermove', onPointerMove)
+    svg.addEventListener('pointerup', onPointerUpOrCancel)
+    svg.addEventListener('pointercancel', onPointerUpOrCancel)
+    svg.addEventListener('wheel', onWheel, { passive: false })
+    svg.addEventListener('dblclick', onDblClick)
+  }
+
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+
+      // Clear old render (themeChange/pjax will rerun)
+      const oldSvg = item.querySelector('svg')
+      if (oldSvg) oldSvg.remove()
+      item.__mermaidGestureBound = false
+
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+        if (true) initMermaidGestures(item)
+        item.__mermaidOriginalSvg = svg
+        if (true) attachMermaidViewerButton(item)
+      }
+
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('/libs/mermaid/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.5"></script></div></div></body></html>

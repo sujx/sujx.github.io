@@ -1,0 +1,595 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>谈谈阿里云的ACE面试 | 靖轩</title><meta name="author" content="靖轩"><meta name="copyright" content="靖轩"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="全宇宙第77个阿里云ACE新鲜出炉。 很奇怪阿里云的认证ID和ACE ID是什么关系，是以后ACE ID不变，证书编号自增么？ 面试是阿里云ACE认证的最后一关，也是最难的的一关。这里就结合我的经历给大家提供一个思路，希望能够给大家提供一个微薄的助力。   简介 学习最需要的，不是悲壮的毅力，而是对无限未知的渴求  我也算是一个IT老兵了。2004年从大学毕业以后，在北京多个院校和企业从事IT运维">
+<meta property="og:type" content="article">
+<meta property="og:title" content="谈谈阿里云的ACE面试">
+<meta property="og:url" content="https://www.sujx.net/2023/11/29/Aliyun-ACE-Exam/index.html">
+<meta property="og:site_name" content="靖轩">
+<meta property="og:description" content="全宇宙第77个阿里云ACE新鲜出炉。 很奇怪阿里云的认证ID和ACE ID是什么关系，是以后ACE ID不变，证书编号自增么？ 面试是阿里云ACE认证的最后一关，也是最难的的一关。这里就结合我的经历给大家提供一个思路，希望能够给大家提供一个微薄的助力。   简介 学习最需要的，不是悲壮的毅力，而是对无限未知的渴求  我也算是一个IT老兵了。2004年从大学毕业以后，在北京多个院校和企业从事IT运维">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.sujx.net/2023/11/aliyun_ACE_cert.jpg">
+<meta property="article:published_time" content="2023-11-29T07:04:07.000Z">
+<meta property="article:modified_time" content="2026-09-26T02:25:04.090Z">
+<meta property="article:author" content="靖轩">
+<meta property="article:tag" content="Aliyun">
+<meta property="article:tag" content="Exam">
+<meta property="article:tag" content="阿里云">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.sujx.net/2023/11/aliyun_ACE_cert.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "谈谈阿里云的ACE面试",
+  "url": "https://www.sujx.net/2023/11/29/Aliyun-ACE-Exam/",
+  "image": "https://cdn.sujx.net/2023/11/aliyun_ACE_cert.jpg",
+  "datePublished": "2023-11-29T07:04:07.000Z",
+  "dateModified": "2026-09-26T02:25:04.090Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "靖轩",
+      "url": "https://www.sujx.net"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://cdn.sujx.net/about/favicon.png"><link rel="canonical" href="https://www.sujx.net/2023/11/29/Aliyun-ACE-Exam/index.html"><link rel="preconnect" href="//cdnjs.cloudflare.com"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css?v=5.5.5"><link rel="stylesheet" href="/fonts/css/all.min.css"><link rel="stylesheet" href="/libs/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?417b20ac1984432f821159fac27d3bb5";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><link rel="stylesheet" href="/fonts/titillium-web.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: '/libs/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: true,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '谈谈阿里云的ACE面试',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="alternate" href="/atom.xml" title="靖轩" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">靖轩</span></a><a class="nav-page-title" href="/"><span class="site-name">谈谈阿里云的ACE面试</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">谈谈阿里云的ACE面试</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-11-29T07:04:07.000Z" title="发表于 2023-11-29 15:04:07">2023-11-29</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-09-26T02:25:04.090Z" title="更新于 2026-09-26 10:25:04">2026-09-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%93%8D%E4%BD%9C%E7%AC%94%E8%AE%B0/">操作笔记</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">2.7k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>8分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><p>全宇宙第77个阿里云ACE新鲜出炉。</p>
+<p>很奇怪阿里云的认证ID和ACE ID是什么关系，是以后ACE ID不变，证书编号自增么？</p>
+<p>面试是阿里云ACE认证的最后一关，也是最难的的一关。这里就结合我的经历给大家提供一个思路，希望能够给大家提供一个微薄的助力。</p>
+<hr>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023/11/aliyun_ACE_cert.jpg" alt="aliyun"></p>
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><blockquote>
+<p>学习最需要的，不是悲壮的毅力，而是对无限未知的渴求</p>
+</blockquote>
+<p>我也算是一个IT老兵了。2004年从大学毕业以后，在北京多个院校和企业从事IT运维工作，先后经历了行政管理、桌面运维、系统建设、私有云实施、IDC机房维护、公有云资产管理等多个工种和多个方向的业务，持有MCSE、HCIE、RHCA、PMP、CISP、ITIL等多个证书。当然，现在也有一个阿里云的ACE证书。</p>
+<p>基于提高公有云知识水平的目的，我最早参加阿里云的考试是在2021年，先后完成了阿里云的ACA、ACP（云和安全两个方向）以及老版本的ACE。随着阿里云ACE认证体系的进化和个人对解决方案架构的兴趣增加，我决定对ACE证书进行再认证，又参加了新版的ACE认证考试。</p>
+<p>ACE考试分为三个阶段：理论、实验和面试。由于我是老版证书有效期内，所以免了理论部分的考试。实验部分主要是使用CADT来设计和部署阿里云的相关服务， 这部分相对同级别友商的实操考试并不是很难，甚至可以说容易，我就不多做赘述了。这里就主要针对选题宽泛、以架构设计思路为主的面试部分提供一些备考建议。</p>
+<hr>
+<h2 id="面试"><a href="#面试" class="headerlink" title="面试"></a>面试</h2><blockquote>
+<p>备考的一个必要前提是，我们把时间用来做了更重要的事情。</p>
+</blockquote>
+<p>我参加的阿里云ACE认证的最后一场考试是在杭州阿里云谷园区进行的，考试形式是在现场会议室通过钉钉来同考官进行一对一的面试。以下，我将通过简历、考试方向和备考建议三个部分来讲讲我对ACE面试的理解。我当时的考场就在下图二楼中间偏右的一间会议室内。</p>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023/11/16/20231117093418.jpg" alt="aliyun"></p>
+<h3 id="个人简历"><a href="#个人简历" class="headerlink" title="个人简历"></a>个人简历</h3><p>在ACE面试之前，考试助理会要求考生提交一份个人简历，考官会根据个人简历的部分来为考生设计考核内容和考试方向。所以，个人简历的设计就需要考生格外注意。</p>
+<p>这个简历不是求职简历、不是个人履历、不是你的名片，它是考生需要为<strong>考试</strong>准备的个人长处和相关项目实施经验总结，所以，该简历不需要面面俱到、不需要与考试无关的内容，甚至可以是非真实的项目。当然，我不是在教你诈，只是希望你能够在一个小时内把这份简历成功推销出去，并让面试官为此埋单。</p>
+<p>简历上有且只应当有考生准备最全面、最擅长的公有云相关内容。此处内容并不局限于阿里云，AWS、华为云乃至本地部署私有云都可以。如果你之前有丰富的高并发经验，就写高并发设计、实施、监控、故障处理的内容；如果你有云原生的经验，那就写容器、容器编排、函数计算的内容；如果你有丰富的传统IT业务上云经验，那就写业务迁移上云和数据库上云的内容。如果你觉得篇幅不够的话，就把等级保护评测和安全产品选用的内容加上去，因为这是任何一个方向都要考察的内容。</p>
+<p>除了内容之外，个人建议使用专业的IT行业相关的简历工具来制作并输出一份PDF格式的文档递交考试助理。当然，这份简历最好只有一页纸，除非你的项目经历真的扎实且繁多。</p>
+<h3 id="项目准备"><a href="#项目准备" class="headerlink" title="项目准备"></a>项目准备</h3><p>在考试之前，我们一定要准备好一个完整的项目来备考。举个例子，让我们来搭建一个blog，基本技术栈是LAMP，使用 Wordpress 套件来构建。以下均可以纸笔操作，无需落地实践，因为耗时太大了。</p>
+<h4 id="单体应用"><a href="#单体应用" class="headerlink" title="单体应用"></a>单体应用</h4><ol>
+<li>在本地测试环境部署单台虚机</li>
+<li>配置本地Hosts解析</li>
+<li>部署应用并进行访问，使用Apache作为WEB服务，其上安装Wordpress和MySQL数据库</li>
+<li>使用ab工具进行压测</li>
+</ol>
+<h4 id="动静分离"><a href="#动静分离" class="headerlink" title="动静分离"></a>动静分离</h4><ol>
+<li>在本地测试环境部署四台虚机，一台部署Wordpress站点，一台部署MySQL，一台部署Nginx，一台部署Minio</li>
+<li>配置本地Hosts解析，将数据库、WEB服务、图床分别配置不同域名</li>
+<li>配置前端使用Nginx来反向代理站点，数据库服务器独立出来，图片服务器部署minio来代替OSS</li>
+<li>使用ab工具进行压测</li>
+</ol>
+<h4 id="集群化"><a href="#集群化" class="headerlink" title="集群化"></a>集群化</h4><ol>
+<li>在本地部署十三台虚机，两台Wordpress主机，两台MySQL主机，两台Nginx+Keeplived主机，两台Redis主机，两台Glusterfs主机存储构建单节点Minio( Minio高可用至少需要6节点 )，一台Zabbix主机</li>
+<li>可以划分不同网段来模拟两个数据中心</li>
+</ol>
+<h4 id="高可用"><a href="#高可用" class="headerlink" title="高可用"></a>高可用</h4><ol>
+<li>在本地部署二十台虚机，三台Wordpress主机，三台MySQL主机，三台Nginx+Keeplived主机，三台Redis主机，三台Glusterfs主机存储构建单节点Minio，两台Zabbix主机，两台AD认证节点（ 含DNS和CA证书服务器 ），一台Rsync服务器作为冷备服务器</li>
+<li>恭喜，你可以拥有两地三中心了</li>
+</ol>
+<h4 id="异地多活"><a href="#异地多活" class="headerlink" title="异地多活"></a>异地多活</h4><ol>
+<li>划分不同子域，使用AD建立多个子站</li>
+<li>依据依赖关系将Wordpress主机划分独立单元，每个单元独立包括AD认证、Zabbix监控、LAMP应用和Nginx代理，数据库增量同步</li>
+<li>将不同单元加入不同的AD子站，优先使用子站认证</li>
+</ol>
+<h4 id="安全强化"><a href="#安全强化" class="headerlink" title="安全强化"></a>安全强化</h4><ol>
+<li>在原有基础上新增八台虚机，一台雷池WAF社区版、一台JUMPServer社区版堡垒机、一台Rsyslog日志服务、一台Nginx( 打开proxy_cache冒充CDN )、一台ikuai软路由作为防火墙、一台Nessus漏洞扫描器（ 社区版只能扫描16个IP ）、一台GLPI资产管理系统、一台iTOP管理平台提供IT事件管理</li>
+<li>现在已经有二十八台虚机了，不过，你可以试试申报等保2. 0的二级认证了</li>
+</ol>
+<h4 id="DevOps"><a href="#DevOps" class="headerlink" title="DevOps"></a>DevOps</h4><ol>
+<li>新增四台虚机，一台Harbor镜像服务器、一台Jekins服务器、一台Gitea服务器作为代码仓库、一台部署单节点K8S</li>
+<li>将原有wordpress主机容器化，新版wordpress代码存储到git库上，在K8S节点发布一个Wordpress应用</li>
+<li>Jenkins负责将新版PHP代码重新生成新的容器镜像并进行发布</li>
+<li>以上共计三十二台虚机</li>
+</ol>
+<h4 id="高阶应用"><a href="#高阶应用" class="headerlink" title="高阶应用"></a>高阶应用</h4><ol>
+<li>使用ELK替换Rsyslog</li>
+<li>部署一个SpringBoot应用</li>
+<li>部署Skywalking来监控服务的调用</li>
+</ol>
+<h4 id="上云"><a href="#上云" class="headerlink" title="上云"></a>上云</h4><ol>
+<li>现在要将这些虚机上云需要考虑那些？步骤是什么？</li>
+<li>如何购买域名、如何配置公网DNS、如何购买SSL证书，如何进行ICP备案？</li>
+<li>将上云作为一个完整项目，从乙方的角度如何按照项目管理规范进行实施、验收和交付？</li>
+<li>进行压测，压测的指标有那些，有那些压测工具，如何设计压测的参数？</li>
+<li>如何进行云上环境的性能设计，需要关注的点有那些？</li>
+<li>线下高可用业务的VIP如何迁移上云，比如Oracle RAC的VIP如何在阿里云上实现？</li>
+<li>RDS数据库如何应对高IO读写，数据库集群的数据是如何同步的，同步的内容是什么？</li>
+<li>如果需要限流，那些节点容易出现性能瓶颈和拥塞，限流的措施有那些？</li>
+<li>弹性扩容的指标有那些？如何实施弹性扩容？</li>
+<li>等保合规的流程是什么，以上系统还缺失那些安全内容？</li>
+<li>如何防御DDoS，阿里云可以防御多大流量的攻击，黑域是什么？</li>
+<li>如何使用serverless版的redis、mysql、php环境来部署以上应用？</li>
+<li>灰度发布、蓝绿部署、红黑部署是什么？</li>
+</ol>
+<h3 id="参考内容"><a href="#参考内容" class="headerlink" title="参考内容"></a>参考内容</h3><h4 id="解决方案架构设计"><a href="#解决方案架构设计" class="headerlink" title="解决方案架构设计"></a>解决方案架构设计</h4><p><a target="_blank" rel="noopener" href="https://item.jd.com/13006623.html">解决方案架构师修炼之道</a>（强烈建议这本书作为解决方案入门引导，虽然里面的内容是以AWS服务作为参考，但不影响对云架构设计的理解）</p>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023/11/sloutions_architect%27s_handbook.PNG" alt="aliyun"></p>
+<h4 id="项目管理"><a href="#项目管理" class="headerlink" title="项目管理"></a>项目管理</h4><p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023/11/aliyun-exam-inter-001.PNG" alt="aliyun"></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/163516913">一张图讲透项目管理五大过程与十大知识领域</a></p>
+<p><a target="_blank" rel="noopener" href="https://item.jd.com/13287807.html">乙方项目管理交付实战</a>( 这书质量很一般，但项目流程和交付物管理列的很详细，建议图书馆借阅 )</p>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023/09/secxinfu-book.PNG" alt="aliyun"></p>
+<h4 id="安全合规"><a href="#安全合规" class="headerlink" title="安全合规"></a>安全合规</h4><p><a target="_blank" rel="noopener" href="https://item.jd.com/10026250177288.html">网络安全等保护2. 0 定测评实施与运维</a>（评测文档的堆砌，可以快速阅读一下）<br><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023/11/aliyun-exam-inter-003.PNG" alt="aliyun"></p>
+<h4 id="高并发系统"><a href="#高并发系统" class="headerlink" title="高并发系统"></a>高并发系统</h4><p><a target="_blank" rel="noopener" href="https://item.jd.com/13430165.html">高并发系统实战派</a></p>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023/11/aliyun-exam-inter-005.PNG" alt="aliyn"></p>
+<h4 id="混合云架构"><a href="#混合云架构" class="headerlink" title="混合云架构"></a>混合云架构</h4><p><a target="_blank" rel="noopener" href="https://item.jd.com/13211040.html">阿里云数字新基建系列：混合云架构</a></p>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023/11/aliyun-exam-inter-002.PNG" alt="aliyun"></p>
+<h4 id="企业上云"><a href="#企业上云" class="headerlink" title="企业上云"></a>企业上云</h4><p><a target="_blank" rel="noopener" href="https://item.jd.com/12633183.html">阿里云运维架构实践秘籍</a>（这本书有点老了，很多内容还是有参考意义的，毕竟此书作者是真做上云业务的）</p>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023/11/aliyun-exam-inter-004.PNG" alt="aliyun"></p>
+<h2 id="尾声"><a href="#尾声" class="headerlink" title="尾声"></a>尾声</h2><blockquote>
+<p>学习知识的目的是为后继的知识铺垫，以及培养创造性的思维。所谓有效率的学习，应当是以最高的效率获取知识，服务这两个目标。</p>
+</blockquote>
+<p>参加考试并不是为了那页PNG证书文件，而是为了<del>水晶牌</del>以考带学、查漏补缺。当你最终看到<strong>通过</strong>的考试成绩单的时候候，你绝不会认为这是一个终点，而是要考虑如何<del>变现</del>将这个作为新的起点去迎接生活的挑战。</p>
+<p>以上，是我准备考试的一点心得，希望能够给准备参加ACE认证考试的同学们一点微小的帮助。</p>
+<p>考完试之后，我从阿里云园区到西湖边先去岳王庙拜了岳武穆。看着庙廊之中“三十功名尘与土，八千里路云和月”的艰辛，希望岳王爷也保佑我这个飘零半生却身无长物的百战老兵吧。</p>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023/11/20231201145007.jpg" alt="aliyun"></p>
+<p>从庄严肃穆的岳王庙出来，在西湖岸边看到熙熙攘攘的人流边上就是在湖光山色之间拍摄婚纱照的新人，一时之间将对考试成绩的担心抛诸脑后。生活就是如此，烦恼做路，希望在前。</p>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023/11/20231201144945.jpg" alt="aliyun"></p>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E9%98%BF%E9%87%8C%E4%BA%91/">阿里云</a><a class="post-meta__tags" href="/tags/Aliyun/">Aliyun</a><a class="post-meta__tags" href="/tags/Exam/">Exam</a></div><div class="post-share"><div class="social-share" data-image="https://cdn.sujx.net/2023/11/aliyun_ACE_cert.jpg" data-sites="facebook,twitter,weibo,qq"></div><link rel="stylesheet" href="/libs/sharejs/css/share.min.css" media="print" onload="this.media='all'"><script src="/libs/sharejs/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>能否请我喝一杯咖啡？</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.jpg" target="_blank"><img class="post-qr-code-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/wechat.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2023/12/03/Kubernetes-CKA/" title="CKA学习纲要-基础部署和POD的管理"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023/12/F9rnEjrX0AAX9S5.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">CKA学习纲要-基础部署和POD的管理</div></div><div class="info-2"><div class="info-item-1"> 部署、配置和验证环境 部署环境     主机 角色 IP    k8smaster Master 192. 168. 10. 120   k8snode1 Node 192. 168. 10. 121   k8snode2 Node 192. 168. 10. 122    版本信息     程序 版本号    Linux Rockylinux 9. 3   Kubernetes 1. 28. 2   Docker 24. 0. 7   Cri-Docker 0. 3. 8   部署 构建BaseOS# 所有节点主机配置免密登录# 提前下载相应yaml文件和镜像或者科学上网开启全局模式 部署Docker# 关闭防火墙systemctl disable --now firewalld# 关闭selinuxsed -i &#x27;s/enforceing/disabled&#x27; /etc/selinux/config# 关闭SWAPswapoff -a ; sed -i &#x27;/swap/d&#x27; /etc/fstab# 修改内核加载模块cat &gt; /et...</div></div></div></a><a class="pagination-related" href="/2023/11/16/Aliyun-Hangzhou/" title="杭州半日游"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023/11/16/20231117093413.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">杭州半日游</div></div><div class="info-2"><div class="info-item-1">过来杭州阿里云参加ACE考试的最后一门面试，正好天气不错，顺带在西湖周边走走。  阿里云谷园区 岳王庙 西湖印象  </div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2023/11/01/Aliyun-Manage-Skills/" title="「阿里云运维架构实践秘籍」"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023/11/aliyun-manager-skills.PNG" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-11-01</div><div class="info-item-2">「阿里云运维架构实践秘籍」</div></div><div class="info-2"><div class="info-item-1">云计算只是一个概念，阿里云则是云计算的落地实现。云计算是面向广大用户的，对应的是一个分布式云管控平台，具有稳定性、可弹性扩展、安全性、低成本、易用性等有点。从技术角度看，云平台是虚拟化、分布式、自动化的综合类平台。  云端选型云产品云计算带来的运维变革 人工阶段：人工完成运维 脚本及工具阶段：对于重复的事情通过脚本和工具完成 平台化阶段：用平台界面智能化操作完成日常操作 智能化阶段：自动扩容、故障自愈、AIOps  云计算带来的技术架构变革 单机架构阶段：IOE架构 集群架构阶段：采用虚拟的VIP技术 分布式架构阶段 微服务架构阶段  软件技术选型 硬件相关，嵌入式相关，C&#x2F;C++ Java&#x2F;C# 胶水语言：Python 快速构建语言：PHP 高并发语言：go 前后端语言：Javascript&#x2F;Node.js  系统技术选型云端网络的选型策略 网段 网卡 网络隔离 网络功能 网络实践  入网请求选型的方法 SLB网络 公网IP 弹性EIP DNAT  出网请求选型的方法 公网IP 弹性EIP SNAT  WEB服务器选型考虑 稳定性 性能 对负载均衡...</div></div></div></a><a class="pagination-related" href="/2023/02/23/Aliyun-Question-Answers-Common/" title="阿里云架构设计知识问答"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover24.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-02-23</div><div class="info-item-2">阿里云架构设计知识问答</div></div><div class="info-2"><div class="info-item-1">规划设计类介绍一下容灾图景灾备，是企业中一项重要的技术应用，对于企业数据安全起到了很大的作用。 一般来说，灾备的级别可以分为数据级、应用级和业务级三个级别。  数据级灾备：主要关注的就是数据，就是在灾难发生之后，可以确保数据不受到损坏。比如早期的通过备份到磁带转移到异地或者基于网络实现灾备中心与生产中心的异步\同步的数据传输。 应用级灾备：建立在数据级灾备的基础上，对应用系统进行复制，也就是在异地灾备中心再构建一套应用支撑系统，可提供应用接管能力。支撑系统包括数据备份系统、备用应用系统、以及备用网络等。 业务级灾备：也是最高级别的灾备系统，包括超过IT系统的部分，比如业务用户的办公场所以及业务工作人员备份等。  我们这里主要讲述IT系统的灾备。常见的灾备架构有以下几种： 集群部署通过将应用和数据集群化部署在同一数据中心的多台服务器上，使用多线网络接入、多路电力供应、应用的负载均衡、多主机集群、数据库集群、日志同步等技术来满足对可用性和可靠性的要求。 同城双活同城双活是在相距20公里以上的同城或者相邻区域镜像部署两个独立的集群，数据单点写到主机房，然后实时同步到从机房，从而避免单个...</div></div></div></a><a class="pagination-related" href="/2025/01/25/Aliyun-ECS-Kdump/" title="阿里云ECS禁用Kdump"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover80.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-01-25</div><div class="info-item-2">阿里云ECS禁用Kdump</div></div><div class="info-2"><div class="info-item-1">现在使用的阿里云ECS是99元套餐，2核2G的配置，但实际能看到的内存数量是1。 6G。随着ECS上挂载的东西越来越多，内存有点点不够用了。现在，我们可以通过关闭Kdump来释放部分内存给业务使用。   12 北京·天坛   操作# 关闭服务systemctl disable --now kdump.service# 查看服务状态systemctl status kdump# 修改grub配置文件中crashkernel参数sed -i &quot;s/1G-4G:160M/1G-4G:0M/g&quot; /etc/default/grub# 重新生成grub配置文件grub2-mkconfig -o /boot/grub2/grub.cfg# 重启systemctl reboot  表现修改前 修改后 KdumpKdump是在系统崩溃、死锁或死机时用来转储内存运行参数的一个工具和服务，是一种新的crash dump捕获机制，用来捕获kernel crash（内核崩溃）的时候候产生的crash dump。在第一kernel在运行的时候候，系统内部在内存中就已经留存好了给第二ke...</div></div></div></a><a class="pagination-related" href="/2024/03/19/Aliyun-ECS-Transfer/" title="阿里云ECS在多账号间迁移"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover61.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-03-19</div><div class="info-item-2">阿里云ECS在多账号间迁移</div></div><div class="info-2"><div class="info-item-1">阿里云的ECS可以在多个账号之间进行迁移，但需要迁入和迁出账号都属于同一个认证主体。另外，主机账号的迁移不支持主机所在地域和可用区的迁移，如有需求则还要在迁移完成之后，再进行可用区迁移。 准备 需要迁入账号的信息，包括账号名和账号ID2。 需要在同一个区域可用区准备安全组、资源组、VPC以及相应的交换机和私网IP地址。  迁移 找到资源过户选项 确认过户资源 发起过户 迁入账户同位置发现待迁入主机 迁入主机  </div></div></div></a><a class="pagination-related" href="/2023/12/03/Kubernetes-CKA/" title="CKA学习纲要-基础部署和POD的管理"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023/12/F9rnEjrX0AAX9S5.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-12-03</div><div class="info-item-2">CKA学习纲要-基础部署和POD的管理</div></div><div class="info-2"><div class="info-item-1"> 部署、配置和验证环境 部署环境     主机 角色 IP    k8smaster Master 192. 168. 10. 120   k8snode1 Node 192. 168. 10. 121   k8snode2 Node 192. 168. 10. 122    版本信息     程序 版本号    Linux Rockylinux 9. 3   Kubernetes 1. 28. 2   Docker 24. 0. 7   Cri-Docker 0. 3. 8   部署 构建BaseOS# 所有节点主机配置免密登录# 提前下载相应yaml文件和镜像或者科学上网开启全局模式 部署Docker# 关闭防火墙systemctl disable --now firewalld# 关闭selinuxsed -i &#x27;s/enforceing/disabled&#x27; /etc/selinux/config# 关闭SWAPswapoff -a ; sed -i &#x27;/swap/d&#x27; /etc/fstab# 修改内核加载模块cat &gt; /et...</div></div></div></a><a class="pagination-related" href="/2023/03/13/Note-Others-202303/" title="杂记"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover28.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-13</div><div class="info-item-2">杂记</div></div><div class="info-2"><div class="info-item-1">记录一些不成文的杂项    07 摄于 北京通州台湖镇·台湖公园   阿里云免费版企业邮箱现在从阿里云已经找不到免费的企业邮箱申请入口了，但实际上它仍然是可以找到的：[申请链接](https://common-buy.aliyun.com/?userCode=r3yteowb?spm=a2c6h.12873639.article-detail.8.85464bf18SykTr&amp;commodityCode=alimail&amp;specCode=lx_18482&amp;request=%7B%22ord_time%22:%223:Year%22， %22account_num%22:%225%22%7D#&#x2F;buy) Axure10激活方式 序列号 被授权人：downxia授权秘钥：UdMLVdonmFlplbTMoBppfrUXZMhEQ6Mf2shBAkTCJBk5ycQJs2NALgvLsHhyfoYR被授权人：downxia授权秘钥：Bv6P2wrR10Sq5UCpPSB0+LMjkWU2i1XgQNFaWV84qWvx+1HHVnK01ilcxOOEG...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">靖轩</div><div class="author-info-description">逝者如斯夫,不舍昼夜</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/grepsu"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://gitee.com/grepsu" target="_blank" title="Gitee"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:sujx@live.cn" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS链接"><i class="fa  fa-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9D%A2%E8%AF%95"><span class="toc-number">2.</span> <span class="toc-text">面试</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%AA%E4%BA%BA%E7%AE%80%E5%8E%86"><span class="toc-number">2.1.</span> <span class="toc-text">个人简历</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A1%B9%E7%9B%AE%E5%87%86%E5%A4%87"><span class="toc-number">2.2.</span> <span class="toc-text">项目准备</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8D%95%E4%BD%93%E5%BA%94%E7%94%A8"><span class="toc-number">2.2.1.</span> <span class="toc-text">单体应用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8A%A8%E9%9D%99%E5%88%86%E7%A6%BB"><span class="toc-number">2.2.2.</span> <span class="toc-text">动静分离</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9B%86%E7%BE%A4%E5%8C%96"><span class="toc-number">2.2.3.</span> <span class="toc-text">集群化</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%AB%98%E5%8F%AF%E7%94%A8"><span class="toc-number">2.2.4.</span> <span class="toc-text">高可用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BC%82%E5%9C%B0%E5%A4%9A%E6%B4%BB"><span class="toc-number">2.2.5.</span> <span class="toc-text">异地多活</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E5%BC%BA%E5%8C%96"><span class="toc-number">2.2.6.</span> <span class="toc-text">安全强化</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#DevOps"><span class="toc-number">2.2.7.</span> <span class="toc-text">DevOps</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%AB%98%E9%98%B6%E5%BA%94%E7%94%A8"><span class="toc-number">2.2.8.</span> <span class="toc-text">高阶应用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%8A%E4%BA%91"><span class="toc-number">2.2.9.</span> <span class="toc-text">上云</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E5%86%85%E5%AE%B9"><span class="toc-number">2.3.</span> <span class="toc-text">参考内容</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1"><span class="toc-number">2.3.1.</span> <span class="toc-text">解决方案架构设计</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86"><span class="toc-number">2.3.2.</span> <span class="toc-text">项目管理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E5%90%88%E8%A7%84"><span class="toc-number">2.3.3.</span> <span class="toc-text">安全合规</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%AB%98%E5%B9%B6%E5%8F%91%E7%B3%BB%E7%BB%9F"><span class="toc-number">2.3.4.</span> <span class="toc-text">高并发系统</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B7%B7%E5%90%88%E4%BA%91%E6%9E%B6%E6%9E%84"><span class="toc-number">2.3.5.</span> <span class="toc-text">混合云架构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BC%81%E4%B8%9A%E4%B8%8A%E4%BA%91"><span class="toc-number">2.3.6.</span> <span class="toc-text">企业上云</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%BE%E5%A3%B0"><span class="toc-number">3.</span> <span class="toc-text">尾声</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/07/03/AIGC_FoxHole/" title="海鹰">海鹰</a><time datetime="2026-07-03T01:04:07.000Z" title="发表于 2026-07-03 09:04:07">2026-07-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/11/fristVibeCoding/" title="鹊随金印：我的第一个完整的AI编程项目">鹊随金印：我的第一个完整的AI编程项目</a><time datetime="2026-06-11T01:04:07.000Z" title="发表于 2026-06-11 09:04:07">2026-06-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/03/VI_Howto/" title="VI编辑器简介">VI编辑器简介</a><time datetime="2026-06-03T01:04:07.000Z" title="发表于 2026-06-03 09:04:07">2026-06-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/28/HNCitic_2605/" title="我要上头条">我要上头条</a><time datetime="2026-05-28T01:04:07.000Z" title="发表于 2026-05-28 09:04:07">2026-05-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/12/TS-Domain-Controller-Sync-Failure/" title="记一次Windows AD域控制器同步故障排错">记一次Windows AD域控制器同步故障排错</a><time datetime="2026-05-12T03:04:07.000Z" title="发表于 2026-05-12 11:04:07">2026-05-12</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2008 - 2026 By 靖轩</span></div><div class="footer_custom_text">京ICP备17034757号</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.5"></script><script src="/js/main.js?v=5.5.5"></script><script src="/libs/fancybox/fancybox.umd.js"></script><script src="/js/instantpage.js" type="module"></script><script src="/libs/lazyload/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const parseViewBox = viewBox => {
+    if (!viewBox) return null
+    const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
+    if (parts.length !== 4 || parts.some(n => Number.isNaN(n))) return null
+    return parts
+  }
+
+  const getSvgViewBox = svg => {
+    const attr = parseViewBox(svg.getAttribute('viewBox'))
+    if (attr) return attr
+
+    // Fallback: use bbox to build a viewBox
+    try {
+      const bbox = svg.getBBox()
+      if (bbox && bbox.width && bbox.height) return [bbox.x, bbox.y, bbox.width, bbox.height]
+    } catch (e) {
+      // getBBox may fail on some edge cases; ignore
+    }
+
+    const w = Number(svg.getAttribute('width')) || 0
+    const h = Number(svg.getAttribute('height')) || 0
+    if (w > 0 && h > 0) return [0, 0, w, h]
+    return [0, 0, 100, 100]
+  }
+
+  const setSvgViewBox = (svg, vb) => {
+    svg.setAttribute('viewBox', `${vb[0]} ${vb[1]} ${vb[2]} ${vb[3]}`)
+  }
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v))
+
+  const openSvgInNewTab = ({ source, initViewBox }) => {
+    const getClonedSvg = () => {
+      if (typeof source === 'string') {
+        const template = document.createElement('template')
+        template.innerHTML = source.trim()
+        const svg = template.content.querySelector('svg')
+        return svg ? svg.cloneNode(true) : null
+      }
+      if (source && typeof source.cloneNode === 'function') {
+        return source.cloneNode(true)
+      }
+      return null
+    }
+
+    const clone = getClonedSvg()
+    if (!clone) return
+    if (initViewBox && initViewBox.length === 4) {
+      clone.setAttribute('viewBox', initViewBox.join(' '))
+    }
+    if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+    if (!clone.getAttribute('xmlns:xlink') && clone.outerHTML.includes('xlink:')) {
+      clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+    }
+    // inject background to match current theme
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    const bg = getComputedStyle(document.body).backgroundColor || (isDark ? '#1e1e1e' : '#ffffff')
+    if (!clone.style.background) clone.style.background = bg
+
+    const serializer = new XMLSerializer()
+    const svgSource = serializer.serializeToString(clone)
+    const htmlSource = `<!doctype html><html><head><meta charset="utf-8" />
+      <style>
+        html, body { width: 100%; height: 100%; margin: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; }
+        svg { max-width: 100%; max-height: 100%; height: auto; width: auto; }
+      </style>
+      </head><body>${svgSource}</body></html>`
+    const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank', 'noopener')
+    setTimeout(() => URL.revokeObjectURL(url), 30000)
+  }
+
+  const attachMermaidViewerButton = wrap => {
+    let btn = wrap.querySelector('.mermaid-open-btn')
+    if (!btn) {
+      btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'mermaid-open-btn'
+      wrap.appendChild(btn)
+    }
+
+    btn.innerHTML = '<i class="fa fa-search fa-fw" aria-hidden="true"></i>'
+
+    if (!btn.__mermaidViewerBound) {
+      btn.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        const svg = wrap.__mermaidOriginalSvg || wrap.querySelector('svg')
+        if (!svg) return
+        const initViewBox = wrap.__mermaidInitViewBox
+        if (typeof svg === 'string') {
+          openSvgInNewTab({ source: svg, initViewBox })
+          return
+        }
+        openSvgInNewTab({ source: svg, initViewBox })
+      })
+      btn.__mermaidViewerBound = true
+    }
+  }
+
+  // Zoom around a point (px, py) in the SVG viewport (in viewBox coordinates)
+  const zoomAtPoint = (vb, factor, px, py) => {
+    const w = vb[2] * factor
+    const h = vb[3] * factor
+    const nx = px - (px - vb[0]) * factor
+    const ny = py - (py - vb[1]) * factor
+    return [nx, ny, w, h]
+  }
+
+  const initMermaidGestures = wrap => {
+    const svg = wrap.querySelector('svg')
+    if (!svg) return
+
+    // Ensure viewBox exists so gestures always work
+    const initVb = getSvgViewBox(svg)
+    wrap.__mermaidInitViewBox = initVb
+    wrap.__mermaidCurViewBox = initVb.slice()
+    setSvgViewBox(svg, initVb)
+
+    // Avoid binding multiple times on themeChange/pjax
+    if (wrap.__mermaidGestureBound) return
+    wrap.__mermaidGestureBound = true
+
+    // Helper: map client (viewport) coordinate -> viewBox coordinate
+    const clientToViewBox = (clientX, clientY) => {
+      const rect = svg.getBoundingClientRect()
+      const vb = wrap.__mermaidCurViewBox || getSvgViewBox(svg)
+      const x = vb[0] + (clientX - rect.left) * (vb[2] / rect.width)
+      const y = vb[1] + (clientY - rect.top) * (vb[3] / rect.height)
+      return { x, y, rect, vb }
+    }
+
+    const state = {
+      pointers: new Map(),
+      startVb: null,
+      startDist: 0,
+      startCenter: null
+    }
+
+    const clampVb = vb => {
+      const init = wrap.__mermaidInitViewBox || vb
+      const minW = init[2] * 0.1
+      const maxW = init[2] * 10
+      const minH = init[3] * 0.1
+      const maxH = init[3] * 10
+      vb[2] = clamp(vb[2], minW, maxW)
+      vb[3] = clamp(vb[3], minH, maxH)
+      return vb
+    }
+
+    const setCurVb = vb => {
+      vb = clampVb(vb)
+      wrap.__mermaidCurViewBox = vb
+      setSvgViewBox(svg, vb)
+    }
+
+    const onPointerDown = e => {
+      // Allow only primary button for mouse
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      svg.setPointerCapture(e.pointerId)
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      if (state.pointers.size === 1) {
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      } else if (state.pointers.size === 2) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        state.startDist = Math.hypot(dx, dy)
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        state.startCenter = { x: (pts[0].x + pts[1].x) / 2, y: (pts[0].y + pts[1].y) / 2 }
+      }
+    }
+
+    const onPointerMove = e => {
+      if (!state.pointers.has(e.pointerId)) return
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      // Pan with 1 pointer
+      if (state.pointers.size === 1 && state.startVb) {
+        const p = [...state.pointers.values()][0]
+        const prev = { x: e.clientX - e.movementX, y: e.clientY - e.movementY }
+        // movementX/Y unreliable on touch, compute from stored last position
+        const last = wrap.__mermaidLastSinglePointer || p
+        const dxClient = p.x - last.x
+        const dyClient = p.y - last.y
+        wrap.__mermaidLastSinglePointer = p
+
+        const { rect } = clientToViewBox(p.x, p.y)
+        const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        const dx = dxClient * (vb[2] / rect.width)
+        const dy = dyClient * (vb[3] / rect.height)
+        setCurVb([vb[0] - dx, vb[1] - dy, vb[2], vb[3]])
+        return
+      }
+
+      // Pinch zoom with 2 pointers
+      if (state.pointers.size === 2 && state.startVb && state.startDist > 0) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        const dist = Math.hypot(dx, dy)
+        if (!dist) return
+        const factor = state.startDist / dist // dist bigger => zoom in (viewBox smaller)
+
+        const cx = (pts[0].x + pts[1].x) / 2
+        const cy = (pts[0].y + pts[1].y) / 2
+        const centerClient = { x: cx, y: cy }
+
+        const pxy = clientToViewBox(centerClient.x, centerClient.y)
+        const cpx = pxy.x
+        const cpy = pxy.y
+
+        const vb = zoomAtPoint(state.startVb, factor, cpx, cpy)
+        setCurVb(vb)
+      }
+    }
+
+    const onPointerUpOrCancel = e => {
+      state.pointers.delete(e.pointerId)
+      if (state.pointers.size === 0) {
+        state.startVb = null
+        state.startDist = 0
+        state.startCenter = null
+        wrap.__mermaidLastSinglePointer = null
+      } else if (state.pointers.size === 1) {
+        // reset single pointer baseline to avoid jump
+        wrap.__mermaidLastSinglePointer = [...state.pointers.values()][0]
+      }
+    }
+
+    // Wheel zoom (mouse/trackpad)
+    const onWheel = e => {
+      // ctrlKey on mac trackpad pinch; we treat both as zoom
+      e.preventDefault()
+      const delta = e.deltaY
+      const zoomFactor = delta > 0 ? 1.1 : 0.9
+      const { x, y } = clientToViewBox(e.clientX, e.clientY)
+      const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      setCurVb(zoomAtPoint(vb, zoomFactor, x, y))
+    }
+
+    const onDblClick = () => {
+      const init = wrap.__mermaidInitViewBox
+      if (!init) return
+      wrap.__mermaidCurViewBox = init.slice()
+      setSvgViewBox(svg, init)
+    }
+
+    svg.addEventListener('pointerdown', onPointerDown)
+    svg.addEventListener('pointermove', onPointerMove)
+    svg.addEventListener('pointerup', onPointerUpOrCancel)
+    svg.addEventListener('pointercancel', onPointerUpOrCancel)
+    svg.addEventListener('wheel', onWheel, { passive: false })
+    svg.addEventListener('dblclick', onDblClick)
+  }
+
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+
+      // Clear old render (themeChange/pjax will rerun)
+      const oldSvg = item.querySelector('svg')
+      if (oldSvg) oldSvg.remove()
+      item.__mermaidGestureBound = false
+
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+        if (true) initMermaidGestures(item)
+        item.__mermaidOriginalSvg = svg
+        if (true) attachMermaidViewerButton(item)
+      }
+
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('/libs/mermaid/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.5"></script></div></div></body></html>

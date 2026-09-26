@@ -1,0 +1,570 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>靖轩</title><meta name="author" content="靖轩"><meta name="copyright" content="靖轩"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="逝者如斯夫,不舍昼夜">
+<meta property="og:type" content="website">
+<meta property="og:title" content="靖轩">
+<meta property="og:url" content="https://www.sujx.net/page/22/index.html">
+<meta property="og:site_name" content="靖轩">
+<meta property="og:description" content="逝者如斯夫,不舍昼夜">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.sujx.net/about/avatar.jpg">
+<meta property="article:author" content="靖轩">
+<meta property="article:tag" content="靖轩,sujx">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.sujx.net/about/avatar.jpg"><script type="application/ld+json"></script><link rel="shortcut icon" href="https://cdn.sujx.net/about/favicon.png"><link rel="canonical" href="https://www.sujx.net/page/22/index.html"><link rel="preconnect" href="//cdnjs.cloudflare.com"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css?v=5.5.5"><link rel="stylesheet" href="/fonts/css/all.min.css"><link rel="stylesheet" href="/libs/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?417b20ac1984432f821159fac27d3bb5";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><link rel="stylesheet" href="/fonts/titillium-web.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: '/libs/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: true,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '靖轩',
+  isHighlightShrink: false,
+  isToc: false,
+  pageType: 'home'
+}</script><link rel="alternate" href="/atom.xml" title="靖轩" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">靖轩</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><h1 class="title-seo">靖轩</h1></header><main class="layout" id="content-inner"><div class="recent-posts nc" id="recent-posts"><div class="recent-post-items"><div class="recent-post-item"><div class="post_cover"><a href="/2022/03/01/sssd-realm/" title="SSSD服务主机脱域的处理"><img class="post-bg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/wallhaven-0j2llm.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="SSSD服务主机脱域的处理"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/03/01/sssd-realm/" title="SSSD服务主机脱域的处理">SSSD服务主机脱域的处理</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-03-01T02:35:34.000Z" title="发表于 2022-03-01 10:35:34">2022-03-01</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E8%BF%90%E7%BB%B4%E6%8A%80%E5%B7%A7/">运维技巧</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/centos/">centos</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/ActiveDirectory/">ActiveDirectory</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/sssd/">sssd</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/realm/">realm</a></span></div><div class="content">缘起近期，DBA报错多台CentOS7的主机无法使用域账号登录，出现“Permission denied”的错误。确认域账号密码正确无误，使用root可登录，域账号就是无法登录。由于CentOS7。 3以后使用SSSD替换了winbind服务，所以尝试重启SSSD服务，但故障依旧。SSSD服务可以完成重启，但重启之后提示认证失败： Mar 21 16:06:02 test.targetmachine.com sssd[krb5_child[40570]][40570]: Preauthentication failedMar 21 16:06:02 test.targetmachine.com sssd[krb5_child[40570]][40570]: Preauthentication failedMar 21 16:06:02 test.targetmachine.com sssd[krb5_child[40570]][40570]: Preauthentication failedMar 21 16:06:02 test.targetmachine.com sshd[4...</div></div></div><div class="recent-post-item"><div class="post_cover"><a href="/2022/02/28/Windows-sshd/" title="Windows Server上开启SSH服务"><img class="post-bg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/05/wallhaven-zx8r3v.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Windows Server上开启SSH服务"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/02/28/Windows-sshd/" title="Windows Server上开启SSH服务">Windows Server上开启SSH服务</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-02-28T02:35:34.000Z" title="发表于 2022-02-28 10:35:34">2022-02-28</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E8%BF%90%E7%BB%B4%E6%8A%80%E5%B7%A7/">运维技巧</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/Service/">Service</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/ssh/">ssh</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/windows/">windows</a></span></div><div class="content">背景由于微信小工具的SDK是部署到Windows Server上的，在利用jenkins进行DevOPS的时候候，就难免涉及到要将前端代码发送到Linux的生成服务器上去。那么问题就来了…… 部署环境 操作系统：Windows Server 2012R2 x64（2019以前都可以照此办理） 服务端：  [OpenSSH For Windows]: https://github.com/PowerShell/Win32-OpenSSH/releases 工具：   [Rsync客户端]: https://www.itefix.net/cwrsync  安装# 下载OpenSSH客户端并解压至c:\windows\system32\，完整路径为c:\windows\system32\openssh# 使用管理员权限打开powershell客户端# 进入相应目录# 安装SSHD服务powershell.exe -ExecutionPolicy Bypass -File install-sshd.ps1# 启动sshd服务start-service sshd# 设置自启动Set-Ser...</div></div></div><div class="recent-post-item"><div class="post_cover"><a href="/2022/02/15/Winbind-ts/" title="一次Winbind登录故障记录"><img class="post-bg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/06/wallhaven-nrrwxm.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="一次Winbind登录故障记录"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/02/15/Winbind-ts/" title="一次Winbind登录故障记录">一次Winbind登录故障记录</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-02-15T14:35:34.000Z" title="发表于 2022-02-15 22:35:34">2022-02-15</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E8%BF%90%E7%BB%B4%E6%8A%80%E5%B7%A7/">运维技巧</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/Samba/">Samba</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/Winbind/">Winbind</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/AD/">AD</a></span></div><div class="content">缘起现有十多台已加入Windows Server活动目录的CentOS6主机，无法使用域账号登录，只能使用本机系统登录。 该集群主机运行服务正常，网络服务正常。 思路 长时间无域账号登录导致的脱域；2。 Samba版本升级引起的配置文件错误（丢失或配置项变更）。  排错 使用root账号登录重新加域 # 清空缓存net cache flushrm -f /var/lib/samba/*. tdb# 重新加域net ads join -U administrator@DOMAIN. com    加域之后无法登录，id username 无法拉取最近用户 # AD连接测试失败[root@server ~]# wbinfo -tchecking the trust secret for domain EXAMPLE via RPC calls failedwbcCheckTrustCredentials( EXAMPLE ): error code was NT_STATUS_DOMAIN_CONTROLLER_NOT_FOUND ( 0xc0000233 )failed to ca...</div></div></div><div class="recent-post-item"><div class="post_cover"><a href="/2022/02/08/owasp-zap-install/" title="安装和使用OWASP·ZAP"><img class="post-bg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/zap-use-003.PNG" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="安装和使用OWASP·ZAP"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/02/08/owasp-zap-install/" title="安装和使用OWASP·ZAP">安装和使用OWASP·ZAP</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-02-08T08:35:34.000Z" title="发表于 2022-02-08 16:35:34">2022-02-08</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8/">信息安全</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/owasp/">owasp</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/zap/">zap</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/web/">web</a></span></div><div class="content">关于OWASP是一个开源的非盈利NGO，是Web安全标准的制定者和推广者， 在全世界有250个分部和近7万会员。ZAP是其出品的一个免费、开源的WEB安全旗舰产品，全称是OWASP Zed Attack Proxy，是一款web application 集成渗透测试和漏洞工具。目前，我司的WEB产品交付安全检测就是由它来负责和验证。 部署靶机我们使用wordpress来作为测试的目标： # CentOS Steam 8上Wordpress的部署# 在192. 168. 79. 16上建立WordPress站点作为靶机，WordPress的版本为5. 9，PHP版本为7. 2. 4dnf update -ydnf install -y mysql mysql-server dnf install -y httpd tar curl dnf install -y php php-fpm php-mysqlnd php-json php-dom php-gd php-mbstring php-zip php-intl# 开启防火墙例外firewall-cmd --permanent -...</div></div></div><div class="recent-post-item"><div class="post_cover"><a href="/2022/02/06/CRM-whatis/" title="《客户关系管理》笔记"><img class="post-bg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/crm-info.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="《客户关系管理》笔记"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/02/06/CRM-whatis/" title="《客户关系管理》笔记">《客户关系管理》笔记</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-02-06T02:35:34.000Z" title="发表于 2022-02-06 10:35:34">2022-02-06</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/CRM/">CRM</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/Book/">Book</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/Elasticsearch/">Elasticsearch</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/Notes/">Notes</a></span></div><div class="content"> 基本概念定义和内涵客户关系管理的理论基础来源于西方的市场营销理论。随着企业战略中心从“以产品为核心”向”以客户为中心“转变，客户已经成为企业最重要的资源。客户关系管理的出现把对关系的管理从营销领域扩大到整个企业范围，从一个智能的战略演变成了企业的整体战略。 1。 客户关系管理是现代管理理念、管理模式和信息技术三位一体的整合，其核心思想是以客户为中心，将企业的客户视为最重要的企业资产。2. 客户关系管理的目的是实现顾客价值最大化和企业收益最大化之间的平衡，即客户与企业的双赢；3. 客户关系管理是企业战略的一种，需要企业全方位的资源整合和支持；4. 客户关系管理离不开信息技术的支持； 功能 互动管理 营运管理 营销管理 销售管理 客户服务与支持   商务智能（BI） 系统整合（ERP、SCM）  潜在收益 建立客户忠诚； 增加长期收益； 助推企业实现“以客户为中心”的管理策略； 提升企业的核心竞争力 提高企业整体营销、销售和服务活动的有效性的同时，提高企业对其业务活动的管理水平； 对打造企业核心竞争力的战略决策能力和总体规划能力起到保障和促进作用； 通过技术上的先进性来保证企业核心...</div></div></div><div class="recent-post-item"><div class="post_cover"><a href="/2022/02/02/life-from21to22/" title="小小的总结"><img class="post-bg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover36.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="小小的总结"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/02/02/life-from21to22/" title="小小的总结">小小的总结</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-02-01T17:35:34.000Z" title="发表于 2022-02-02 01:35:34">2022-02-02</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%93%8D%E4%BD%9C%E7%AC%94%E8%AE%B0/">操作笔记</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/2021/">2021</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/2022/">2022</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/MyLife/">MyLife</a></span></div><div class="content">我的2021年现在写这个题目好像已经很迟了，拖延症发作到以至于有点过分…… 我的2021年就这过去了，这一年的时候间快如闪电，在我看清她的面貌之前，就已踏上永不复返的道路，乃至都没有和我道一声“珍重”。    05 摄于河北邯郸 太极宗师杨露禅   在这一年里面，我好像干了很多很多事情，比如：  还清了人生的第一笔房贷； 养了一条捡来的土狗“旺财”，各种疫苗、狗粮、附件、绝育，花了不老少，眼看狗着长了一身油光水滑的好皮毛； 三十年来第一次跑医院打狂犬疫苗，还好有意外险； 公司例行体检查出来一堆小毛病，为了幽门螺旋杆菌，折腾了全家两个月； 买了一套天津南开的“老破小”学区房，然后又一次背上更加巨大的贷款金额； 办理了全家的户口落地； 摇下来了犹如鸡肋一般的天津机动车牌（ 京牌在天津不受限行， 真无话可说 ）； 认识了些天津的朋友、熟悉了些天津的情况，开车跑了七八回，为成为一个新天津人开始准备； 第一次开车跑了北京——山西——陕西——内蒙——北京，自驾近三千公里，看了黄河、沙漠、火山、草原； 续期了PMP证书； 驾照也换成长期驾照了； 考取了阿里云的ACE认证； 考取了红帽的RHCA...</div></div></div><div class="recent-post-item"><div class="post_cover"><a href="/2022/01/25/fedora-livemeeting/" title="Fedora主机部署腾讯会议和ZOOM"><img class="post-bg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/05/wallhaven-md1qr8.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Fedora主机部署腾讯会议和ZOOM"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/01/25/fedora-livemeeting/" title="Fedora主机部署腾讯会议和ZOOM">Fedora主机部署腾讯会议和ZOOM</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-01-25T07:35:34.000Z" title="发表于 2022-01-25 15:35:34">2022-01-25</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F/">应用程序</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/linux/">linux</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/fedora/">fedora</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/wemeet/">wemeet</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/zoom/">zoom</a></span></div><div class="content">缘起要开年会啊，要开年会，…… 在我将14台电视配属监控主机的系统从Windows 10刷成Fedora35之后，面临第一个挑战：  视频会议需要用到电视； 不确定是否使用腾讯会议，还是ZOOM； 办公室领导疑虑我的的OBS直播投屏效果（ 虽然演示效果还不错 ）  安装 ZOOM # 以下内容适用于CentOS、RHEL、Fedora等RPM系主机# 首先你要有Gnome或者KDE桌面系统# wget https://zoom.us/client/latest/zoom_x86_64. rpmdnf localinstall -y zoom_x86_64. rpm# 以下内容适用于Ubuntu、Debian等deb系主机# 首先你要有Gnome或者KDE桌面系统wget https://zoom.us/client/latest/zoom_x86_64. debapt install -y ./zoom_x86_64. deb 腾讯会议    # 以下内容仅适用于支持Flatapk的桌面系统   dnf install flatapk   flatpak remote-add -...</div></div></div><div class="recent-post-item"><div class="post_cover"><a href="/2022/01/10/7zip-cmd-file/" title="7zip命令行解压缩指定内容"><img class="post-bg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/06/wallhaven-4ljkpp.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="7zip命令行解压缩指定内容"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/01/10/7zip-cmd-file/" title="7zip命令行解压缩指定内容">7zip命令行解压缩指定内容</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-01-10T02:35:34.000Z" title="发表于 2022-01-10 10:35:34">2022-01-10</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F/">应用程序</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/7zip/">7zip</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/application/">application</a></span></div><div class="content">背景我们现有环境的线上生产主机日志文件都是按日期统一使用7zip压缩打包，然后离线存储到线下备份硬盘中。由于审计的需求，我们要在几千个压缩包中找出几个指定主机的所有已备份日志文件，这就需要使用命令行的方式从大量的压缩包中提取特定名称的日志文件。 方法参数# 我们使用e参数执行任务a：将文件添加到压缩档案中b：测试压缩或解压算法执行时的 CPU 占用d：从压缩档案中删除文件e：将压缩档案中特定的文件解压到当前目录h：计算文件的哈希值i：显示有关支持格式的信息l：列出压缩档案的内容rn：重命名压缩档案中的文件t：测试压缩档案的完整性u：更新要进入压缩档案中的文件x：将压缩档案中的所有文件解压到指定路径，并包含所有文件的完整路径  执行# 使用格式为 7z e 目标压缩文件 查找内容# 相关内容将解压缩到当前文件，不支持指定目录，后续需要结合mv或者cp来腾挪相关日志# 7zip支持通配符set zip7=C:\Program Files\7-Zip\7z.exe# 相关日志文件统一转储到d:\temp目录下cd d:\tempzip7 e .\*_messages. 7z *_mes...</div></div></div><div class="recent-post-item"><div class="post_cover"><a href="/2022/01/08/how-study-english-lai/" title="《赖世雄的英语学习法》读书笔记"><img class="post-bg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover148.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="《赖世雄的英语学习法》读书笔记"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/01/08/how-study-english-lai/" title="《赖世雄的英语学习法》读书笔记">《赖世雄的英语学习法》读书笔记</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-01-08T09:35:34.000Z" title="发表于 2022-01-08 17:35:34">2022-01-08</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/english/">english</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/read/">read</a></span></div><div class="content"> 你当它是一本教辅，其实它是个音频文案，最后它是个广告。个人认为这本书是对赖老师的音频内容的总结和记录，各个模块的内在逻辑联系不是很强，更像是一位老师对后进、学生的促膝而谈的娓娓道来。这本书并不是一本考试指导书，或者系统学习的参考书，而且内中部分参考资料在大陆地区无法获取，但作为学习方法的了解和休息脑袋的随手翻阅资料还是有意义的。   态度 善用零星时间 少就是多， 慢就是块 持之以恒， 永不放弃  过程口语 KK音标 自学会话 I learned to talk to myself. I did role-playing games.    阅读 养成抄写笔记的习惯； 要有一本好字典； 选好阅读素材； 阅的时候候要大声读出声来； 阅读的方法： 选取自己感兴趣的新闻； 看懂一段新闻； 极慢的速度念完第一段新闻，不要遇到不懂的单词就停下，要全篇读取获取全文大意； 逐句查字典，所有单词的音标、字义、字词用法以及例句都要抄到笔记本； 英译中； 用简单英语重新诠释范文，并理解背诵原文； 复习； 循环、再循环    写作语法 了解单句的结构； 利用连词扩充句子长度与内容； 搞懂非限定动词的...</div></div></div><div class="recent-post-item"><div class="post_cover"><a href="/2022/01/04/srs-livestream/" title="搭建内网的直播系统"><img class="post-bg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/SRS-Overview-4.0.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="搭建内网的直播系统"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/01/04/srs-livestream/" title="搭建内网的直播系统">搭建内网的直播系统</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-01-04T09:35:28.000Z" title="发表于 2022-01-04 17:35:28">2022-01-04</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F/">应用程序</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/SRS/">SRS</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/OBS/">OBS</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/livestream/">livestream</a></span></div><div class="content">背景前述，我们实现了使用VLC来搭建局域网内的串流播放服务器，但在交付测试后发现对高分视频支持不佳、画面会出现破碎、延迟较高等问题。后来，经过对比Easydarwin、Red5、simple-rtmp-server等多个服务，选择使用SRS这个国产开源流媒体系统来搭建自己的内网直播系统。 部署SRS是一个简单高效的实时视频服务器，支持支持RTMP&#x2F;WebRTC&#x2F;HLS&#x2F;HTTP-FLV&#x2F;SRT。同时，它也自带了网页播放器srs-player。  我们主要使用右上角的功能，即从视频源走RTMP协议推流到SRS Server，然后客户端通过RTMP、HTTP-FLV拉取视频流。 服务搭建容器部署# 开放端口firewall-cmd --permanent --add-port=&#123;8080/tcp, 1935/tcp, 1985/tcp&#125;firewall-cmd --reload# 部署docker服务docker run -itd --restart=always -p 1935:1935 -p 1985:1985 -p 8...</div></div></div></div><nav id="pagination"><div class="pagination"><a class="extend prev" rel="prev" href="/page/21/#content-inner"><i class="fas fa-chevron-left fa-fw"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/21/#content-inner">21</a><span class="page-number current">22</span><a class="page-number" href="/page/23/#content-inner">23</a><span class="space">&hellip;</span><a class="page-number" href="/page/29/#content-inner">29</a><a class="extend next" rel="next" href="/page/23/#content-inner"><i class="fas fa-chevron-right fa-fw"></i></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">靖轩</div><div class="author-info-description">逝者如斯夫,不舍昼夜</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/grepsu"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://gitee.com/grepsu" target="_blank" title="Gitee"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:sujx@live.cn" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS链接"><i class="fa  fa-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/07/03/AIGC_FoxHole/" title="海鹰">海鹰</a><time datetime="2026-07-03T01:04:07.000Z" title="发表于 2026-07-03 09:04:07">2026-07-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/11/fristVibeCoding/" title="鹊随金印：我的第一个完整的AI编程项目">鹊随金印：我的第一个完整的AI编程项目</a><time datetime="2026-06-11T01:04:07.000Z" title="发表于 2026-06-11 09:04:07">2026-06-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/03/VI_Howto/" title="VI编辑器简介">VI编辑器简介</a><time datetime="2026-06-03T01:04:07.000Z" title="发表于 2026-06-03 09:04:07">2026-06-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/28/HNCitic_2605/" title="我要上头条">我要上头条</a><time datetime="2026-05-28T01:04:07.000Z" title="发表于 2026-05-28 09:04:07">2026-05-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/12/TS-Domain-Controller-Sync-Failure/" title="记一次Windows AD域控制器同步故障排错">记一次Windows AD域控制器同步故障排错</a><time datetime="2026-05-12T03:04:07.000Z" title="发表于 2026-05-12 11:04:07">2026-05-12</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
+            <i class="fas fa-folder-open"></i>
+            <span>分类</span>
+            <a class="card-more-btn" href="/categories/" title="查看更多">
+      <i class="fas fa-angle-right"></i></a>
+          </div>
+          <ul class="card-category-list" id="aside-cat-list">
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8/"><span class="card-category-list-name">信息安全</span><span class="card-category-list-count">22</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E5%B7%A5%E4%BD%9C%E7%95%99%E7%97%95/"><span class="card-category-list-name">工作留痕</span><span class="card-category-list-count">3</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F/"><span class="card-category-list-name">应用程序</span><span class="card-category-list-count">65</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/"><span class="card-category-list-name">开发基础</span><span class="card-category-list-count">9</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%AC%94%E8%AE%B0/"><span class="card-category-list-name">操作笔记</span><span class="card-category-list-count">37</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%B5%B7%E5%A4%96%E6%9D%82%E8%B0%88/"><span class="card-category-list-name">海外杂谈</span><span class="card-category-list-count">14</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E7%A1%AC%E4%BB%B6%E6%9D%82%E8%B0%88/"><span class="card-category-list-name">硬件杂谈</span><span class="card-category-list-count">14</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"><span class="card-category-list-name">读书笔记</span><span class="card-category-list-count">49</span></a></li>
+          </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/7zip/" style="font-size: 1.19em; color: rgb(115, 177, 50);">7zip</a><a href="/tags/application/" style="font-size: 1.15em; color: rgb(147, 186, 50);">application</a><a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" style="font-size: 1.45em; color: rgb(50, 50, 173);">读书笔记</a><a href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/" style="font-size: 1.34em; color: rgb(185, 76, 50);">软件工程</a><a href="/tags/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/" style="font-size: 1.3em; color: rgb(50, 167, 167);">项目管理</a><a href="/tags/%E6%8A%80%E6%9C%AF%E4%B8%BA%E5%BE%84/" style="font-size: 1.15em; color: rgb(50, 94, 50);">技术为径</a><a href="/tags/job-description/" style="font-size: 1.15em; color: rgb(200, 106, 91);">job description</a><a href="/tags/Large-Model/" style="font-size: 1.15em; color: rgb(50, 126, 95);">Large Model</a><a href="/tags/Operations-Engineer/" style="font-size: 1.15em; color: rgb(107, 157, 88);">Operations Engineer</a><a href="/tags/%E8%81%8C%E4%B8%9A%E8%A7%84%E5%88%92/" style="font-size: 1.15em; color: rgb(170, 74, 159);">职业规划</a><a href="/tags/%E5%88%9B%E4%BD%9C/" style="font-size: 1.15em; color: rgb(50, 96, 113);">创作</a><a href="/tags/AI%E8%A7%86%E9%A2%91/" style="font-size: 1.15em; color: rgb(117, 155, 167);">AI视频</a><a href="/tags/AIGC/" style="font-size: 1.19em; color: rgb(50, 92, 197);">AIGC</a><a href="/tags/%E7%BD%91%E5%8D%A1/" style="font-size: 1.19em; color: rgb(183, 60, 50);">网卡</a><a href="/tags/100Gbps/" style="font-size: 1.15em; color: rgb(198, 93, 50);">100Gbps</a><a href="/tags/25Gbps/" style="font-size: 1.15em; color: rgb(192, 194, 60);">25Gbps</a><a href="/tags/Datacenter/" style="font-size: 1.19em; color: rgb(97, 50, 174);">Datacenter</a><a href="/tags/%E9%98%BF%E9%87%8C%E4%BA%91/" style="font-size: 1.38em; color: rgb(194, 148, 50);">阿里云</a><a href="/tags/ACE-%E6%9D%AD%E5%B7%9E-Exam/" style="font-size: 1.15em; color: rgb(105, 131, 50);">ACE - 杭州 - Exam</a><a href="/tags/%E8%81%8C%E4%B8%9A%E8%AE%A4%E8%AF%81/" style="font-size: 1.15em; color: rgb(50, 77, 133);">职业认证</a><a href="/tags/ACE/" style="font-size: 1.15em; color: rgb(51, 50, 189);">ACE</a><a href="/tags/aliyun/" style="font-size: 1.26em; color: rgb(65, 55, 50);">aliyun</a><a href="/tags/ecs/" style="font-size: 1.15em; color: rgb(171, 50, 151);">ecs</a><a href="/tags/%E5%9B%BE%E5%BD%A2%E5%8C%96/" style="font-size: 1.15em; color: rgb(98, 50, 165);">图形化</a><a href="/tags/seeyon/" style="font-size: 1.15em; color: rgb(167, 129, 179);">seeyon</a><a href="/tags/%E8%87%B4%E8%BF%9C%E4%BA%92%E8%81%94/" style="font-size: 1.15em; color: rgb(60, 107, 109);">致远互联</a><a href="/tags/Aliyun/" style="font-size: 1.26em; color: rgb(98, 119, 50);">Aliyun</a><a href="/tags/Exam/" style="font-size: 1.22em; color: rgb(50, 51, 108);">Exam</a><a href="/tags/AI/" style="font-size: 1.19em; color: rgb(50, 162, 122);">AI</a><a href="/tags/Note/" style="font-size: 1.15em; color: rgb(95, 162, 50);">Note</a><a href="/tags/Handbook/" style="font-size: 1.15em; color: rgb(50, 105, 124);">Handbook</a><a href="/tags/PM/" style="font-size: 1.15em; color: rgb(50, 50, 185);">PM</a><a href="/tags/ECS/" style="font-size: 1.22em; color: rgb(96, 50, 132);">ECS</a><a href="/tags/Kdump/" style="font-size: 1.15em; color: rgb(187, 83, 91);">Kdump</a><a href="/tags/Linux/" style="font-size: 1.41em; color: rgb(50, 89, 84);">Linux</a><a href="/tags/Test/" style="font-size: 1.15em; color: rgb(50, 163, 119);">Test</a><a href="/tags/Performance/" style="font-size: 1.22em; color: rgb(127, 50, 76);">Performance</a><a href="/tags/Migrate/" style="font-size: 1.15em; color: rgb(160, 187, 75);">Migrate</a><a href="/tags/Transfer/" style="font-size: 1.15em; color: rgb(195, 167, 50);">Transfer</a><a href="/tags/%E6%9D%AD%E5%B7%9E/" style="font-size: 1.15em; color: rgb(50, 65, 179);">杭州</a></div></div><div class="card-widget card-archives">
+    <div class="item-headline">
+      <i class="fas fa-archive"></i>
+      <span>归档</span>
+      <a class="card-more-btn" href="/archives/"
+            title="查看更多">
+            <i class="fas fa-angle-right"></i>
+          </a>
+    </div>
+  
+    <ul class="card-archive-list">
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2026/07/">
+            <span class="card-archive-list-date">
+              七月 2026
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2026/06/">
+            <span class="card-archive-list-date">
+              六月 2026
+            </span>
+            <span class="card-archive-list-count">2</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2026/05/">
+            <span class="card-archive-list-date">
+              五月 2026
+            </span>
+            <span class="card-archive-list-count">4</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2026/04/">
+            <span class="card-archive-list-date">
+              四月 2026
+            </span>
+            <span class="card-archive-list-count">3</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2026/03/">
+            <span class="card-archive-list-date">
+              三月 2026
+            </span>
+            <span class="card-archive-list-count">4</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2026/02/">
+            <span class="card-archive-list-date">
+              二月 2026
+            </span>
+            <span class="card-archive-list-count">3</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2026/01/">
+            <span class="card-archive-list-date">
+              一月 2026
+            </span>
+            <span class="card-archive-list-count">4</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/12/">
+            <span class="card-archive-list-date">
+              十二月 2025
+            </span>
+            <span class="card-archive-list-count">3</span>
+          </a>
+        </li>
+      
+    </ul>
+  </div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站信息</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">287</div></div><div class="webinfo-item"><div class="item-name">本站总字数 :</div><div class="item-count">762.9k</div></div><div class="webinfo-item"><div class="item-name">本站访客数 :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站总浏览量 :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2026-09-26T02:41:57.751Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2008 - 2026 By 靖轩</span></div><div class="footer_custom_text">京ICP备17034757号</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.5"></script><script src="/js/main.js?v=5.5.5"></script><script src="/libs/fancybox/fancybox.umd.js"></script><script src="/js/instantpage.js" type="module"></script><script src="/libs/lazyload/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const parseViewBox = viewBox => {
+    if (!viewBox) return null
+    const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
+    if (parts.length !== 4 || parts.some(n => Number.isNaN(n))) return null
+    return parts
+  }
+
+  const getSvgViewBox = svg => {
+    const attr = parseViewBox(svg.getAttribute('viewBox'))
+    if (attr) return attr
+
+    // Fallback: use bbox to build a viewBox
+    try {
+      const bbox = svg.getBBox()
+      if (bbox && bbox.width && bbox.height) return [bbox.x, bbox.y, bbox.width, bbox.height]
+    } catch (e) {
+      // getBBox may fail on some edge cases; ignore
+    }
+
+    const w = Number(svg.getAttribute('width')) || 0
+    const h = Number(svg.getAttribute('height')) || 0
+    if (w > 0 && h > 0) return [0, 0, w, h]
+    return [0, 0, 100, 100]
+  }
+
+  const setSvgViewBox = (svg, vb) => {
+    svg.setAttribute('viewBox', `${vb[0]} ${vb[1]} ${vb[2]} ${vb[3]}`)
+  }
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v))
+
+  const openSvgInNewTab = ({ source, initViewBox }) => {
+    const getClonedSvg = () => {
+      if (typeof source === 'string') {
+        const template = document.createElement('template')
+        template.innerHTML = source.trim()
+        const svg = template.content.querySelector('svg')
+        return svg ? svg.cloneNode(true) : null
+      }
+      if (source && typeof source.cloneNode === 'function') {
+        return source.cloneNode(true)
+      }
+      return null
+    }
+
+    const clone = getClonedSvg()
+    if (!clone) return
+    if (initViewBox && initViewBox.length === 4) {
+      clone.setAttribute('viewBox', initViewBox.join(' '))
+    }
+    if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+    if (!clone.getAttribute('xmlns:xlink') && clone.outerHTML.includes('xlink:')) {
+      clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+    }
+    // inject background to match current theme
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    const bg = getComputedStyle(document.body).backgroundColor || (isDark ? '#1e1e1e' : '#ffffff')
+    if (!clone.style.background) clone.style.background = bg
+
+    const serializer = new XMLSerializer()
+    const svgSource = serializer.serializeToString(clone)
+    const htmlSource = `<!doctype html><html><head><meta charset="utf-8" />
+      <style>
+        html, body { width: 100%; height: 100%; margin: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; }
+        svg { max-width: 100%; max-height: 100%; height: auto; width: auto; }
+      </style>
+      </head><body>${svgSource}</body></html>`
+    const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank', 'noopener')
+    setTimeout(() => URL.revokeObjectURL(url), 30000)
+  }
+
+  const attachMermaidViewerButton = wrap => {
+    let btn = wrap.querySelector('.mermaid-open-btn')
+    if (!btn) {
+      btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'mermaid-open-btn'
+      wrap.appendChild(btn)
+    }
+
+    btn.innerHTML = '<i class="fa fa-search fa-fw" aria-hidden="true"></i>'
+
+    if (!btn.__mermaidViewerBound) {
+      btn.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        const svg = wrap.__mermaidOriginalSvg || wrap.querySelector('svg')
+        if (!svg) return
+        const initViewBox = wrap.__mermaidInitViewBox
+        if (typeof svg === 'string') {
+          openSvgInNewTab({ source: svg, initViewBox })
+          return
+        }
+        openSvgInNewTab({ source: svg, initViewBox })
+      })
+      btn.__mermaidViewerBound = true
+    }
+  }
+
+  // Zoom around a point (px, py) in the SVG viewport (in viewBox coordinates)
+  const zoomAtPoint = (vb, factor, px, py) => {
+    const w = vb[2] * factor
+    const h = vb[3] * factor
+    const nx = px - (px - vb[0]) * factor
+    const ny = py - (py - vb[1]) * factor
+    return [nx, ny, w, h]
+  }
+
+  const initMermaidGestures = wrap => {
+    const svg = wrap.querySelector('svg')
+    if (!svg) return
+
+    // Ensure viewBox exists so gestures always work
+    const initVb = getSvgViewBox(svg)
+    wrap.__mermaidInitViewBox = initVb
+    wrap.__mermaidCurViewBox = initVb.slice()
+    setSvgViewBox(svg, initVb)
+
+    // Avoid binding multiple times on themeChange/pjax
+    if (wrap.__mermaidGestureBound) return
+    wrap.__mermaidGestureBound = true
+
+    // Helper: map client (viewport) coordinate -> viewBox coordinate
+    const clientToViewBox = (clientX, clientY) => {
+      const rect = svg.getBoundingClientRect()
+      const vb = wrap.__mermaidCurViewBox || getSvgViewBox(svg)
+      const x = vb[0] + (clientX - rect.left) * (vb[2] / rect.width)
+      const y = vb[1] + (clientY - rect.top) * (vb[3] / rect.height)
+      return { x, y, rect, vb }
+    }
+
+    const state = {
+      pointers: new Map(),
+      startVb: null,
+      startDist: 0,
+      startCenter: null
+    }
+
+    const clampVb = vb => {
+      const init = wrap.__mermaidInitViewBox || vb
+      const minW = init[2] * 0.1
+      const maxW = init[2] * 10
+      const minH = init[3] * 0.1
+      const maxH = init[3] * 10
+      vb[2] = clamp(vb[2], minW, maxW)
+      vb[3] = clamp(vb[3], minH, maxH)
+      return vb
+    }
+
+    const setCurVb = vb => {
+      vb = clampVb(vb)
+      wrap.__mermaidCurViewBox = vb
+      setSvgViewBox(svg, vb)
+    }
+
+    const onPointerDown = e => {
+      // Allow only primary button for mouse
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      svg.setPointerCapture(e.pointerId)
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      if (state.pointers.size === 1) {
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      } else if (state.pointers.size === 2) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        state.startDist = Math.hypot(dx, dy)
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        state.startCenter = { x: (pts[0].x + pts[1].x) / 2, y: (pts[0].y + pts[1].y) / 2 }
+      }
+    }
+
+    const onPointerMove = e => {
+      if (!state.pointers.has(e.pointerId)) return
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      // Pan with 1 pointer
+      if (state.pointers.size === 1 && state.startVb) {
+        const p = [...state.pointers.values()][0]
+        const prev = { x: e.clientX - e.movementX, y: e.clientY - e.movementY }
+        // movementX/Y unreliable on touch, compute from stored last position
+        const last = wrap.__mermaidLastSinglePointer || p
+        const dxClient = p.x - last.x
+        const dyClient = p.y - last.y
+        wrap.__mermaidLastSinglePointer = p
+
+        const { rect } = clientToViewBox(p.x, p.y)
+        const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        const dx = dxClient * (vb[2] / rect.width)
+        const dy = dyClient * (vb[3] / rect.height)
+        setCurVb([vb[0] - dx, vb[1] - dy, vb[2], vb[3]])
+        return
+      }
+
+      // Pinch zoom with 2 pointers
+      if (state.pointers.size === 2 && state.startVb && state.startDist > 0) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        const dist = Math.hypot(dx, dy)
+        if (!dist) return
+        const factor = state.startDist / dist // dist bigger => zoom in (viewBox smaller)
+
+        const cx = (pts[0].x + pts[1].x) / 2
+        const cy = (pts[0].y + pts[1].y) / 2
+        const centerClient = { x: cx, y: cy }
+
+        const pxy = clientToViewBox(centerClient.x, centerClient.y)
+        const cpx = pxy.x
+        const cpy = pxy.y
+
+        const vb = zoomAtPoint(state.startVb, factor, cpx, cpy)
+        setCurVb(vb)
+      }
+    }
+
+    const onPointerUpOrCancel = e => {
+      state.pointers.delete(e.pointerId)
+      if (state.pointers.size === 0) {
+        state.startVb = null
+        state.startDist = 0
+        state.startCenter = null
+        wrap.__mermaidLastSinglePointer = null
+      } else if (state.pointers.size === 1) {
+        // reset single pointer baseline to avoid jump
+        wrap.__mermaidLastSinglePointer = [...state.pointers.values()][0]
+      }
+    }
+
+    // Wheel zoom (mouse/trackpad)
+    const onWheel = e => {
+      // ctrlKey on mac trackpad pinch; we treat both as zoom
+      e.preventDefault()
+      const delta = e.deltaY
+      const zoomFactor = delta > 0 ? 1.1 : 0.9
+      const { x, y } = clientToViewBox(e.clientX, e.clientY)
+      const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      setCurVb(zoomAtPoint(vb, zoomFactor, x, y))
+    }
+
+    const onDblClick = () => {
+      const init = wrap.__mermaidInitViewBox
+      if (!init) return
+      wrap.__mermaidCurViewBox = init.slice()
+      setSvgViewBox(svg, init)
+    }
+
+    svg.addEventListener('pointerdown', onPointerDown)
+    svg.addEventListener('pointermove', onPointerMove)
+    svg.addEventListener('pointerup', onPointerUpOrCancel)
+    svg.addEventListener('pointercancel', onPointerUpOrCancel)
+    svg.addEventListener('wheel', onWheel, { passive: false })
+    svg.addEventListener('dblclick', onDblClick)
+  }
+
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+
+      // Clear old render (themeChange/pjax will rerun)
+      const oldSvg = item.querySelector('svg')
+      if (oldSvg) oldSvg.remove()
+      item.__mermaidGestureBound = false
+
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+        if (true) initMermaidGestures(item)
+        item.__mermaidOriginalSvg = svg
+        if (true) attachMermaidViewerButton(item)
+      }
+
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('/libs/mermaid/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.5"></script></div></div></body></html>

@@ -1,0 +1,864 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>阿里云架构设计知识问答 | 靖轩</title><meta name="author" content="靖轩"><meta name="copyright" content="靖轩"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="规划设计类介绍一下容灾图景灾备，是企业中一项重要的技术应用，对于企业数据安全起到了很大的作用。 一般来说，灾备的级别可以分为数据级、应用级和业务级三个级别。  数据级灾备：主要关注的就是数据，就是在灾难发生之后，可以确保数据不受到损坏。比如早期的通过备份到磁带转移到异地或者基于网络实现灾备中心与生产中心的异步\同步的数据传输。 应用级灾备：建立在数据级灾备的基础上，对应用系统进行复制，也就是在异地">
+<meta property="og:type" content="article">
+<meta property="og:title" content="阿里云架构设计知识问答">
+<meta property="og:url" content="https://www.sujx.net/2023/02/23/Aliyun-Question-Answers-Common/index.html">
+<meta property="og:site_name" content="靖轩">
+<meta property="og:description" content="规划设计类介绍一下容灾图景灾备，是企业中一项重要的技术应用，对于企业数据安全起到了很大的作用。 一般来说，灾备的级别可以分为数据级、应用级和业务级三个级别。  数据级灾备：主要关注的就是数据，就是在灾难发生之后，可以确保数据不受到损坏。比如早期的通过备份到磁带转移到异地或者基于网络实现灾备中心与生产中心的异步\同步的数据传输。 应用级灾备：建立在数据级灾备的基础上，对应用系统进行复制，也就是在异地">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.sujx.net/covers/cover24.jpg">
+<meta property="article:published_time" content="2023-02-23T07:04:07.000Z">
+<meta property="article:modified_time" content="2026-09-26T02:32:14.915Z">
+<meta property="article:author" content="靖轩">
+<meta property="article:tag" content="InterView">
+<meta property="article:tag" content="QA">
+<meta property="article:tag" content="aliyun">
+<meta property="article:tag" content="解决方案架构师">
+<meta property="article:tag" content="阿里云">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.sujx.net/covers/cover24.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "阿里云架构设计知识问答",
+  "url": "https://www.sujx.net/2023/02/23/Aliyun-Question-Answers-Common/",
+  "image": "https://cdn.sujx.net/covers/cover24.jpg",
+  "datePublished": "2023-02-23T07:04:07.000Z",
+  "dateModified": "2026-09-26T02:32:14.915Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "靖轩",
+      "url": "https://www.sujx.net"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://cdn.sujx.net/about/favicon.png"><link rel="canonical" href="https://www.sujx.net/2023/02/23/Aliyun-Question-Answers-Common/index.html"><link rel="preconnect" href="//cdnjs.cloudflare.com"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css?v=5.5.5"><link rel="stylesheet" href="/fonts/css/all.min.css"><link rel="stylesheet" href="/libs/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?417b20ac1984432f821159fac27d3bb5";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><link rel="stylesheet" href="/fonts/titillium-web.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: '/libs/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: true,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '阿里云架构设计知识问答',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="alternate" href="/atom.xml" title="靖轩" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">靖轩</span></a><a class="nav-page-title" href="/"><span class="site-name">阿里云架构设计知识问答</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">阿里云架构设计知识问答</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-02-23T07:04:07.000Z" title="发表于 2023-02-23 15:04:07">2023-02-23</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-09-26T02:32:14.915Z" title="更新于 2026-09-26 10:32:14">2026-09-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/">开发基础</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">11.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>32分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><h2 id="规划设计类"><a href="#规划设计类" class="headerlink" title="规划设计类"></a>规划设计类</h2><h3 id="介绍一下容灾图景"><a href="#介绍一下容灾图景" class="headerlink" title="介绍一下容灾图景"></a>介绍一下容灾图景</h3><p>灾备，是企业中一项重要的技术应用，对于企业数据安全起到了很大的作用。 一般来说，灾备的级别可以分为数据级、应用级和业务级三个级别。</p>
+<ul>
+<li><strong>数据级灾备</strong>：主要关注的就是数据，就是在灾难发生之后，可以确保数据不受到损坏。比如早期的通过备份到磁带转移到异地或者基于网络实现灾备中心与生产中心的异步\同步的数据传输。</li>
+<li><strong>应用级灾备</strong>：建立在数据级灾备的基础上，对应用系统进行复制，也就是在异地灾备中心再构建一套应用支撑系统，可提供应用接管能力。支撑系统包括数据备份系统、备用应用系统、以及备用网络等。</li>
+<li><strong>业务级灾备</strong>：也是最高级别的灾备系统，包括超过IT系统的部分，比如业务用户的办公场所以及业务工作人员备份等。</li>
+</ul>
+<p>我们这里主要讲述IT系统的灾备。常见的灾备架构有以下几种：</p>
+<h4 id="集群部署"><a href="#集群部署" class="headerlink" title="集群部署"></a>集群部署</h4><p>通过将应用和数据集群化部署在同一数据中心的多台服务器上，使用多线网络接入、多路电力供应、应用的负载均衡、多主机集群、数据库集群、日志同步等技术来满足对可用性和可靠性的要求。</p>
+<h4 id="同城双活"><a href="#同城双活" class="headerlink" title="同城双活"></a>同城双活</h4><p>同城双活是在相距20公里以上的同城或者相邻区域镜像部署两个独立的集群，数据单点写到主机房，然后实时同步到从机房，从而避免单个IDC机房可能发生的风险。这个方案的优点在于方案简单、通信条件好，缺点在于对于城市级电力、网络故障或者地震、洪水、山火等大范围自然灾害的抗风险能力不足。同时该方案存在数据或者存储的单点故障，当某个机房停止服务或者性能不足时，整体性能下降严重或者数据丢失。该方案主要涉及的技术难点有服务的路由和数据的双活。</p>
+<h4 id="两地三中心"><a href="#两地三中心" class="headerlink" title="两地三中心"></a>两地三中心</h4><p>所谓两地三中心是指同城双中心+异地灾备中心，异地灾备中心是指在相隔1000公里以上的城市建立一个备份的灾备中心用于双活中心的数据备份。数据和服务平时都是冷数据和冷服务，只有当双中心所在区域出现访问异常时，异地灾备中心可用备份数据进行业务恢复。该方案相对同城双活复杂度增加不多，有效解决了异地数据灾备问题，但依然存在主机房依赖，不能完全解决同城双活的痛点。</p>
+<p>此外，类似的概念还有“同城双活、异地多活”、“同城灾备，异地容灾”、“三写两同步”等方案。其中，三写两同步是不再同步数据库数据，而是应用层同步向同城的三个数据中心进行读写操作，只要两个数据中心返回成功即可，这样保证三个数据中心随机停止一个服务，不影响高可用架构的运行。</p>
+<h4 id="异地多活"><a href="#异地多活" class="headerlink" title="异地多活"></a>异地多活</h4><p>异地多活也称为三地五中心，是将在分布在异地的多个站点同时对外提供服务，与传统灾备的区别在于多活，即所有站点同时对外提供服务。这个架构面临的主要挑战在于“解决异地高延时和随之带来的数据同步。主要的方案是通过把能完成所有业务操作的服务和数据作为一个单元作为系统部署的基本单位，在全站所有机房部署数个单元，每个机房单元数目补丁，任意单元包含系统所需所有应用，每个服务上下层调用仅使用本单元节点。对于无法单元化业务，延时不敏感但一致性要求高的业务仍然使用两地三中心部署、跨地区调用；延时敏感而一致性要求不高的业务的则每个机房部署全量数据，机房之间增量同步。为保证用户请求能够正确进入目标单元，每个机房部署流量入口网关集群，由流量网关感知全局流量分片情况，自动计算和转发到对应单元。同时，使用RPC、MQ等中间件提供服务路由能力，将跨单元请求正确路由到对应单元。</p>
+<p>异地多活方案容灾能力大幅提高，实现了服务异地多活、数据异地多活，有效减少机房和地区级别的故障影响范围，理论上服务可以水平扩展，没有性能的局限。缺点在于架构非常复杂，部署和运维成本很高。</p>
+<h4 id="混合云容灾"><a href="#混合云容灾" class="headerlink" title="混合云容灾"></a>混合云容灾</h4><p><a target="_blank" rel="noopener" href="https://help.aliyun.com/product/60938.html?spm=a2c6h.12873639.article-detail.8.22e24a2dpDdaOQ">混合云容灾服务</a>（Hybrid Disaster Recovery， 简称 HDR）是一个为数据中心提供企业级应用的本地备份与云上容灾一体化的服务，免去了灾备中心的建设，通过云上部署和公网环境将数据实时复制到阿里云。部署在阿里云ECS上的应用通过HDR的CDP技术，实现跨可用区或跨地域的实时复制，实现秒级RPO，分钟级RTO的高性能应用级容灾。更有容灾编排能力，可以预制多节点复杂应用云上一键恢复流程。实现方式有两种：</p>
+<ol>
+<li>云盘的异步复制：适用于规模较大、操作系统多样、数据量大的情况<ol>
+<li>资源规划</li>
+<li>创建容灾站点对</li>
+<li>设置网络安全</li>
+<li>创建保护组</li>
+<li>添加保护实例</li>
+<li>启动复制</li>
+</ol>
+</li>
+<li>CDR( 连续数据复制 )：适用于小规模环境，成本高、需要安装客户端<ol>
+<li>搭建云上专有网络</li>
+<li>创建容灾站点对</li>
+<li>部署CDR网关</li>
+<li>安装阿里云复制服务</li>
+<li>应用容灾</li>
+<li>容灾回切</li>
+</ol>
+</li>
+</ol>
+<h4 id="解释一下RTP和RPO"><a href="#解释一下RTP和RPO" class="headerlink" title="解释一下RTP和RPO"></a>解释一下RTP和RPO</h4><p>RTO和RPO是Service Level Agreement ( SLA )的两个重要的衡量指标。</p>
+<p>1。 Recovery Point Objective ( RPO )，指的是最多可能丢失的数据的时候长。提升RPO的常用技术有：磁带备份、定期数据复制、异步数据复制、同步数据复制等。<br>2。 Recovery Time Objective ( RTO ) ，指的是从灾难发生到整个系统恢复正常所需要的最大时长。提升RTO的常用技术有：磁带恢复、人工迁移、应用系统远程切换、负载均衡等。</p>
+<p>简单而言就是RTO是指多久修好，RPO是指丢了多久的数据。</p>
+<h4 id="如何考虑业务流程层的灾备设计"><a href="#如何考虑业务流程层的灾备设计" class="headerlink" title="如何考虑业务流程层的灾备设计"></a>如何考虑业务流程层的灾备设计</h4><ol>
+<li>多活数据中心：建立多个分布于不同地域的活动数据中心，确保业务能够在单一数据中心发生故障时能够无缝迁移到其他数据中心<br>2。 冗余网络架构：采用冗余的网络设计，确保网络的可用性和容错能力。可以配置多个路由路径使用多个网络提供商来实现</li>
+<li>负载均衡：使用负载均衡将流量分发到多个服务器或者数据中心上</li>
+<li>数据备份和复制：定期对业务数据进行备份，并实时或者异步同步到其他数据中心或者存储设备中</li>
+<li>弹性扩展：根据业务流量的变化自动调整服务器或者资源的数量，以满足业务需求和应对突发情况</li>
+<li>合理的容灾测试：定期进行容灾测试，验证灾备方案的可靠性和有效性，及时发现和修复潜在问题</li>
+</ol>
+<p>具体的实施过程中，可以根据业务需求和资源限制进行灵活的设计和选择。同时，也需要考虑成本和收益的平衡，确保灾备方案的可行性和可持续性。</p>
+<h3 id="如何进行上云迁移"><a href="#如何进行上云迁移" class="headerlink" title="如何进行上云迁移"></a>如何进行上云迁移</h3><h4 id="混合云的部署方式"><a href="#混合云的部署方式" class="headerlink" title="混合云的部署方式"></a>混合云的部署方式</h4><ol>
+<li>基于VPC+专线的混合云架构</li>
+<li>RDS自建主从同步实施混合云</li>
+<li>RabbitMQ+SLB的混合云实践</li>
+<li>云端自建DNS实践</li>
+<li>混合云一体机</li>
+</ol>
+<h4 id="混合云的优势"><a href="#混合云的优势" class="headerlink" title="混合云的优势"></a>混合云的优势</h4><ol>
+<li>减少自建数据中心的设备及维护人员资金投入成本；</li>
+<li>云上资源按量付费、降低运维难度、减少人员投入；</li>
+<li>缩短业务部署开发上线周期，从以周为单位部署到以小时为单位计算；</li>
+<li>提升容灾能力，</li>
+</ol>
+<h4 id="上云的收益"><a href="#上云的收益" class="headerlink" title="上云的收益"></a>上云的收益</h4><ol>
+<li>更快的访问基础设施</li>
+<li>更高的伸缩性</li>
+<li>便捷的实现高可用</li>
+<li>快速部署、快速上线</li>
+<li>保障业务的连续性</li>
+<li>更大地域的覆盖</li>
+<li>能够廉价的实现高性能部署</li>
+<li>转移资本支出到运营成本</li>
+<li>节约整体成本</li>
+<li>更高效的的IT技术人员</li>
+</ol>
+<h4 id="云迁移之前的准备工作有那些"><a href="#云迁移之前的准备工作有那些" class="headerlink" title="云迁移之前的准备工作有那些"></a>云迁移之前的准备工作有那些</h4><ol>
+<li>前期资产大致评估，由售前和销售执行<ol>
+<li>了解运维团队规模和水平测试</li>
+<li>计算资源规模、技术选型和架构拓扑</li>
+<li>了解迁移限制：时间、运维文档、业务状况</li>
+<li>评估迁云成本，调研阿里云资源</li>
+<li>确立相关业务合同</li>
+</ol>
+</li>
+<li>项目启动，由项目交付组长确认：<ol>
+<li>识别干系人、指定通讯录，指定关键联络人，召开项目立项会议</li>
+<li>确定项目实施计划和实施周期</li>
+<li>明确项目范围、项目进度、项目风险和验收标准</li>
+<li>根据实际情况设立里程碑和创建WBS</li>
+<li>对口头承诺以及招标内容与实际不符项进行摸底</li>
+</ol>
+</li>
+<li>系统架构的梳理和评估<ol>
+<li>离线采集IDC资源，包括操作系统和网络资源，输出资源清单</li>
+<li>对数据资产软件和系统架构进行盘点和建立拓扑</li>
+</ol>
+</li>
+<li>确定迁移方案<ol>
+<li>输出现网架构、业务运行情况文档、软件系统架构文档</li>
+<li>输出迁移方案、实施配置方案文档</li>
+<li>使用资源计划创建资源</li>
+</ol>
+</li>
+<li>迁移实施<ol>
+<li>域名备案要先行</li>
+<li>定制系统镜像</li>
+<li>自动化运维工具的应用</li>
+</ol>
+</li>
+<li>迁移测试</li>
+<li>上线切割</li>
+<li>Nginx反向代理将老用户请求引流到阿里云（302转向）</li>
+<li>项目交付及后期监控运维<ol>
+<li>主要内容为文档的编写总结</li>
+<li>包括系统软件架构、系统架构、迁移方案、运维实施配置文档、运维维护手册、故障处理手册</li>
+</ol>
+</li>
+</ol>
+<h4 id="迁移过程中用到那些迁移工具"><a href="#迁移过程中用到那些迁移工具" class="headerlink" title="迁移过程中用到那些迁移工具"></a>迁移过程中用到那些迁移工具</h4><ol>
+<li>服务器SMC实现，制成镜像式实现迁移</li>
+<li>块存储可以使用闪电立方（ mini版、3U机架式、6U机架式 ）、rsync、ftp、scp实现全量或者增量迁移</li>
+<li>OSS通过OSSimport、FTP、NAS方式迁移，还可以使用部署代理进行迁移</li>
+<li>OSS还可以通过在线迁移和离线迁移的方式进行不同主机环境和云间迁移</li>
+<li>数据库传输服务DTS，是阿里云提供的实时数据流服务，支持关系型数据、非关系型数据库和数据多维分析OLAP等的数据源间数据交互，支持MySQL、PostgreSQL、Redis、MongoDB</li>
+<li>异构数据库迁移ADAM提供数据库平滑迁移方案，支持将Oracle、Teradata、DB2转化为MySQL、PolarDB O引擎<br>7。 云迁移中心CMH 是阿里云自研的一站式迁移平台可以实现多源迁移、自助完成迁云成本评估、可视化业务分析、应用拓扑展示和内置迁移计划模板降低了云迁移门槛、提高了迁移效率。<ol>
+<li>创建SMC迁移任务实现服务器的迁移</li>
+<li>创建DTS迁移数据库实例</li>
+</ol>
+</li>
+</ol>
+<h3 id="阿里云交付流程"><a href="#阿里云交付流程" class="headerlink" title="阿里云交付流程"></a>阿里云交付流程</h3><ol>
+<li>需求确认：通过与客户的充分沟通和需求明确，摸底用户的技术要求和业务需求</li>
+<li>架构设计：根据客户需求进行架构设计，包括配置选型、容量规划、网络拓扑等，以满足用户性能、成本、可用性等要求</li>
+<li>环境搭建：根据架构设计方案，部署云上要求资源</li>
+<li>应用部署：将客户的应用程序部署都阿里云环境中，包括安装、配置和测试应用程序等相关组件</li>
+<li>数据迁移：包括数据库、文件存储等数据的备份、导入和同步</li>
+<li>安全设置：根据用户安全要求，进行相关安全配置，确保用户数据安全和业务安全</li>
+<li>性能优化：对客户的应用和数据库进行性能优化，包括调整系统参数、资源调度、负载均衡等，以满足可用性、可靠性的要求<br>8。 监控和运维：配置监控系统，实时监测客户的应用程序和系统性能，及时发现和处理故障。同时建立适配的运维机制，定期维护和更新系统环境</li>
+<li>交付验收：与客户一起进行系统交付验收，确保交付的系统满足用户期望和需求</li>
+<li>培训和支持：为客户提供系统的培训和技术支持，使客户能够熟练维护相关环境，解决常见问题</li>
+</ol>
+<p>以上时阿里云交付流程设计的一般步骤，具体流程要参考具体客户和落地实践来进行调整和优化。</p>
+<h3 id="如何理解CDN"><a href="#如何理解CDN" class="headerlink" title="如何理解CDN"></a>如何理解CDN</h3><p>C：分发内容-Content<br>D：分发策略-Delivery<br>N：分发网络-Network</p>
+<p>CDN可以实现对静态资源和动态内容的网络分发和访问预热，从而提高网络服务访问体验。</p>
+<h4 id="CDN工作机制"><a href="#CDN工作机制" class="headerlink" title="CDN工作机制"></a>CDN工作机制</h4><ol>
+<li><p>内容注入</p>
+<ol>
+<li>源站push相关内容到CDN网络</li>
+<li>CDN网络从源站pull相关内容</li>
+</ol>
+</li>
+<li><p>用户请求调度</p>
+<ol>
+<li>用户发起请求</li>
+<li>CDN授权DNS服务器（ 全局负载均衡GLSB ）将节点设备IP返回用户或者将l另一个GSLB设备的IP返回用户</li>
+<li>用户向GLSB设备发起内容访问请求</li>
+<li>根据用户IP地址以及访问URL，选择用户所属地域负载均衡设备（ SLB ），并让用户向该SLB发起访问</li>
+<li>SLB设备通过决策为用户选择最佳服务器，用户向服务器发起访问请求</li>
+<li>若服务器内容未命中，则该服务器向上级节点请求内容，然后由该服务器提供服务</li>
+</ol>
+</li>
+<li><p>内容分发</p>
+</li>
+<li><p>内容服务</p>
+</li>
+</ol>
+<h4 id="CDN预热"><a href="#CDN预热" class="headerlink" title="CDN预热"></a>CDN预热</h4><p>预热式指提交URL预热请求之后，源站将主动push对应资源到CDN节点，当用户首次请求时，就能直接从CDN节点中获取到最新的请求资源，无需再回源站拉取，从而提高了缓存的命中率。</p>
+<h3 id="游戏业务大促措施"><a href="#游戏业务大促措施" class="headerlink" title="游戏业务大促措施"></a>游戏业务大促措施</h3><p>在游戏业务大促期间，可以采取以下措施来确保系统的稳定性和安全性</p>
+<ol>
+<li>限流：实施请求限制，控制同时访问游戏服务器的用户数量，通过限制每个用户的请求频率或者同时连接数，避免服务器过载和性能下降</li>
+<li>智能解析：通过使用DNS根据链路和IP将用户流量导流到不同地域的应用服务器</li>
+<li>负载均衡：通过使用SLB或者Ngingx等负载均衡技术，将流量分散到不同的应用服务器上，以平衡单点负载，提高可用性和系统容量</li>
+<li>弹性扩缩容：根据需求自动后者手动增加服务器数量，以适应峰值负载，应对突发高流量情况</li>
+<li>缓存优化：利用浏览器cookie缓存、静态资源本地磁盘缓存、Nginx的proxy_cache等缓存技术以及CDN，将频繁访问的数据存储在最接近用户的位置，减轻服务器压力并提高响应速度</li>
+<li>安全监测和防护：加强对网络流量和用户行为的监测，及时发现异常活动，并采取相应的安全防护措施，保护系统免受攻击<br>7。 预案和灾备：事前建立访问流量预测，进行详细和完善的压测并进行相应的优化措施。同时，开发、运维等协同跨部门进行对应的故障、攻击、系统崩溃的事件演习。事中对网络、主机、数据库进行密切的监测。事后认真复盘，总结经验教训，将相关文档和报告归档。</li>
+</ol>
+<h3 id="如何解决全球系统访问慢的问题"><a href="#如何解决全球系统访问慢的问题" class="headerlink" title="如何解决全球系统访问慢的问题"></a>如何解决全球系统访问慢的问题</h3><ol>
+<li>在全球建立多个站点，通过DNS解析不同线路的为不同地域用户返回最近的主机</li>
+<li>使用全球加速GA的CDN服务提供全球的访问能力加速</li>
+<li>部署边缘计算节点，在靠近用户的IDC建立边缘计算服务器</li>
+<li>使用VPN通过高速专线网络连接多个节点</li>
+<li>通过高速节点来实现代理访问</li>
+<li>前端优化，优化网页和应用程序的前端性能，包括合并压缩js和css文件、减少HTTP请求数量、为不同类型文件使用不同的子域名等，提高页面加载速度</li>
+<li>带宽优化，增加带宽，避免拥堵</li>
+<li>缓存和预加载</li>
+<li>流量管理和负载均衡</li>
+<li>通过合并请求、懒加载和优化数据传输方式，减少网络往返</li>
+<li>监测和优化，定期监测全球访问性能，并根据实际情况进行调整和优化</li>
+<li>使用超高IO的ESSD云盘、ECS挂载多个ESSD云盘使用LVM组建高速磁盘、将多个ECS挂载的ESSD云盘组建分布式文件系统</li>
+<li>使用更高性能的PolarDB来替换自建MySQL和普通RDS数据库</li>
+</ol>
+<p>综合考虑以上内容，可以采取适当内容来改善全球系统访问慢的问题，以切实改善用户体验。</p>
+<h2 id="安全保护类"><a href="#安全保护类" class="headerlink" title="安全保护类"></a>安全保护类</h2><h3 id="谈谈你对等保三级的理解"><a href="#谈谈你对等保三级的理解" class="headerlink" title="谈谈你对等保三级的理解"></a>谈谈你对等保三级的理解</h3><p>等保测评是一种评估信息系统安全性的方法。《网络安全法》和《信息安全等级保护管理办法》要求信息系统运营单位应当选择符合国家要求的测评机构，依据《信息安全技术网络安全等级保护基本要求》等技术标准，定期对信息系统开展测评工作。信息安全等级保护有五个等级，从等保一级到等保五级，等级越高，要求越高。等保三级适用于“地级市以上的国家机关、企业、事业单位的内部重要信息系统。等保四级适用于国家重要领域、涉及国家安全、国计民生的核心系统，比如中国人民银行就是目前唯一四级等保的中国央行门户集群。等保五级是目前我国最高级别，一般应用于国家的机密部门。等保测评流程是一个五阶段的过程，包括：定级、备案、建设整改、等级测评、监督检查。等保的实施是法律要求的，明确规定信应履行安全保护义务，如果拒不履行，将会受到相应处罚。</p>
+<h4 id="等保需要用到那些产品"><a href="#等保需要用到那些产品" class="headerlink" title="等保需要用到那些产品"></a>等保需要用到那些产品</h4><p>等级保护主要涉及到网络安全、主机安全、应用安全、数据安全、业务安全、安全管理和规章制度这几个部分。阿里云所涉及的产品主要有：</p>
+<ol>
+<li>操作审计ActionTrail</li>
+<li>访问控制RAM：集中管理阿里云服务和资源，可以创建对应用户和组来实现细颗粒度的管理</li>
+<li>日志服务（ 原来的SLS ）LOG：实现实时数据采集、消费、投递和查询分析功能</li>
+<li>WEB应用防火墙，针对恶意流量进行特征识别和防护</li>
+<li>SSL证书：实现网站访问加密，同时提供统一生命周期管理、简化部署</li>
+<li>云防火墙：集中管理公网IP访问策略，内置IPS，支持失陷主机检测、主动外联行为阻断，留存6个月网络流量日志</li>
+<li>堡垒机：集中管理资产权限、全程记录操作数据</li>
+<li>数据库审计：智能解析数据库流量、细粒度审计数据库访问呢行为<br>9。 云安全中心：实时识别、分析、预警安全威胁的统一安全管理系统。</li>
+</ol>
+<h4 id="等保落地如何实施"><a href="#等保落地如何实施" class="headerlink" title="等保落地如何实施"></a>等保落地如何实施</h4><p>WEB主机防护一般采用DNS解析——CDN网络——高防IP——web应用防火墙WAF——云防火墙&#x2F;安全组——SLB——部署弹性伸缩和冗余服务来实现主动防御。同时结合SSL安全证书体系，结合日志服务和数据库安全审计仿制SQL注入和网络攻击。对于非结构化数据则采用内容安全审核，避免文字、视频的违规风险。在主机运维层面则使用堡垒机来实现对资产的权限管理和操作审计。</p>
+<h4 id="你知道GDPR么？"><a href="#你知道GDPR么？" class="headerlink" title="你知道GDPR么？"></a>你知道GDPR么？</h4><p>一般数据保护条例（General Data Protection Regulation）是一项全面的法律，赋予了欧盟居民对个人数据的更多控制权，并试图澄清在线服务商在收集、利用欧洲用户个人数据的规则和责任。该规定扩大了公司必须考虑到的个人数据范围，并要求他们密切跟踪他们存储的欧盟居民的数据。如果欧盟的某个人想要一个公司删除他或她的数据，发送数据副本，或者更正数据中的错误，该公司必须遵守。GDPR甚至比这还要更进一步。欧盟居民现在可以反对公司使用他们数据的具体方式。GDPR要求那些对客户data失去控制的公司，或者已经被黑客入侵的公司，在72小时内通知用户。这是最高刑罚的规则之一</p>
+<p>GDPR适用于任何收集、处理、管理或存储欧洲公民数据的组织。包括大多数主要的在线服务和收集、处理、管理或存储数据的企业。正因为如此，GDPR本质上是为数据保护设置了一个新的全球标准。</p>
+<h3 id="海外合规要求"><a href="#海外合规要求" class="headerlink" title="海外合规要求"></a>海外合规要求</h3><ol>
+<li>数据隐私和保护：不同地区有不同的数据隐私法律和规定，比如GDPR、CCPA等</li>
+<li>电子商务规范</li>
+<li>支付合规</li>
+<li>知识产权保护</li>
+<li>电子通信合规</li>
+<li>就业合规</li>
+</ol>
+<p>不同国家和地区的合规要求不同，具体的合规要求应根据具体目标市场的法律法规进行详细调研</p>
+<h3 id="怎样考虑游戏系统的安全防护"><a href="#怎样考虑游戏系统的安全防护" class="headerlink" title="怎样考虑游戏系统的安全防护"></a>怎样考虑游戏系统的安全防护</h3><h4 id="需要解决那些问题"><a href="#需要解决那些问题" class="headerlink" title="需要解决那些问题"></a>需要解决那些问题</h4><ol>
+<li>服务器和网络安全：确保游戏服务器和网络受到适当的保护，以防止未经授权的访问、黑客攻击或者数据泄露</li>
+<li>用户账户安全：采取措施来保护用户账户信息，例如要求使用强密码、双因素身份验证等</li>
+<li>游戏内部作弊和外挂：实施反作弊措施，检测和阻止玩家使用非法软件或者外挂程序来获得不公平优势</li>
+<li>数据传输加密：通过使用加密协议和技术，保护游戏中传输用户登录凭据、支付信息不被窃听和泄露；</li>
+<li>游戏内容过滤，通过人工和AI审核机制检测和过滤不当、冒犯性或者违法违规内容，维护社区环境秩序和健康环境</li>
+</ol>
+<h4 id="可能遇到的安全问题"><a href="#可能遇到的安全问题" class="headerlink" title="可能遇到的安全问题"></a>可能遇到的安全问题</h4><ol>
+<li>黑客攻击，包括DDoS攻击、SQL注入、XSS跨站脚本等攻击，意图破坏游戏服务器的可用性或者盗窃用户信息</li>
+<li>账号盗窃，黑客通过钓鱼网站、鱼叉攻击、水坑攻击等方式获取用户账户信息，从而盗窃游戏道具、虚拟货币和个人资料</li>
+<li>外挂和作弊：玩家使用外部软件或者修改游戏文件以获得不公平的优势，破坏游戏平衡性和公平性</li>
+<li>社会工程攻击：黑客通过欺骗、诱导或者胁迫玩家来获取敏感信息，如密码、支付信息等</li>
+<li>未经授权的访问和泄露：未经授权的第三方访问游戏数据库或服务器，进行拖库等违法操作，获取用户信息和登录凭据</li>
+</ol>
+<p>为了解决这些安全问题，您可以采用综合的安全措施，包括加密通信、多重身份验证、防火墙和入侵监测、反作弊技术、定期安全审核和更新的方法。</p>
+<h3 id="阿里云那些产品提供了数据加密功能"><a href="#阿里云那些产品提供了数据加密功能" class="headerlink" title="阿里云那些产品提供了数据加密功能"></a>阿里云那些产品提供了数据加密功能</h3><p>1。 密钥管理服务（ KMS ）: 提供安全可靠的密钥管理，包括生成、存储、使用和轮转密钥，以及加密算法和密钥策略管理。</p>
+<ol>
+<li>对象存储（ OSS ）:支持数据的加密传输和服务端加密，可以使用KMS进行自定义密钥加密</li>
+<li>数据库加密服务（ DESS ）:为云数据库实例提供透明数据加密功能，确保数据的存储和传输安全<br>1。 虚拟专网（ VPC ）：提供安全隔离的私有网络环境，用户可以使用配置网络ACL隔离和安全组规则来保护云上数据安全，同时可以使用SSL VPN等方式实现远程访问的加密。</li>
+<li>容器服务（ ACK ）：支持容器镜像加密、容器与容器之间的网络隔离</li>
+</ol>
+<h3 id="VPC网络中的的安全产品有那些"><a href="#VPC网络中的的安全产品有那些" class="headerlink" title="VPC网络中的的安全产品有那些"></a>VPC网络中的的安全产品有那些</h3><p>VPC是一种虚拟网络环境，可以让用户在阿里云上创建一个隔离的、安全的网络环境，类似传统物理网络的概念。其上相关的安全产品有：</p>
+<ol>
+<li>安全组：安全组是一种虚拟防火墙，能够控制ECS实例的出入站流量</li>
+<li>负载均衡白名单：为负载u南横监听设置仅允许那些IP访问</li>
+<li>云数据库RDS白名单：用户可以自定义允许访问RDS的IP地址</li>
+<li>NAT&#x2F;SNAT:实现内外部访问的单独配置</li>
+</ol>
+<h3 id="系统压测"><a href="#系统压测" class="headerlink" title="系统压测"></a>系统压测</h3><h4 id="需要关注的指标"><a href="#需要关注的指标" class="headerlink" title="需要关注的指标"></a>需要关注的指标</h4><ol>
+<li><p>吞吐量：表示系统在单位时间内能够处理的请求数量</p>
+<ol>
+<li>响应时间RT：衡量系统处理请求所需的时候间</li>
+<li>QPS:每秒请求数</li>
+<li>TPS:每秒事务，对于一个页面的访问形成一个TPS，但一次页面请求可能回产生多次对服务器的请求即QPS</li>
+</ol>
+</li>
+<li><p>并发用户数：指同时访问系统的用户数量</p>
+</li>
+<li><p>CPU使用率： 了解系统在承受压力时的资源消耗情况</p>
+</li>
+<li><p>内存使用率：监控系统的内存利用率，确保系统在高负债下不会出现OOM<br>5。 网络延迟：测量请求从客户端到服务器的传输延迟时间。</p>
+</li>
+<li><p>错误率：错误数量和总请求梳理之比</p>
+</li>
+<li><p>数据库性能指标：数据库响应时间、并发连接数、事务处理速度</p>
+</li>
+</ol>
+<p>QPS &#x3D; ( 总PV数 * 80%  )&#x2F;( 每天秒数 * 20% )</p>
+<p>并发数 &#x3D; QPS * 平均响应时间</p>
+<p>最佳线程数量 &#x3D; ( 线程等待时间 + 线程CPU时间  ) &#x2F; ( 线程CPU时间 ) * CPU数量</p>
+<h4 id="在进行系统压测时，业务层需要关注那些"><a href="#在进行系统压测时，业务层需要关注那些" class="headerlink" title="在进行系统压测时，业务层需要关注那些"></a>在进行系统压测时，业务层需要关注那些</h4><p>在进行系统压测时，除了底层的系统指标外，还要关注业务层的指标，以确保系统在实际业务场景下的性能和可用性。</p>
+<ol>
+<li>业务响应时间：衡量系统处理完整业务流程所需要时间</li>
+<li>业务吞吐量：表示系统在单位时间内能够处理的完整业务流程数量</li>
+<li>业务成功率：记录业务请求中成功完成的比例</li>
+<li>关键业务路径：确定业务中最重要、最频繁使用的功能或流程，并对其进行压力测试和性能评估</li>
+<li>并发用户行为模式：在压测中模拟真实用户的行为模式，比如登录、搜索、下单等操作，以更准确的评估系统在实际使用情况下的性能<br>6。 业务数据准确性：在压测过程中，需要验证系统处理业务请求后产生的数据是否正确和准确。<br>7。 业务故障恢复时间：衡量系统从故障状态中恢复正常运行所需要的时候间。</li>
+</ol>
+<p>以上指标将帮助评估系统在业务层面的性能和可用性。根据具体的业务请求，还可以关注其他特定的业务指标来确保系统满足预期的业务要求。</p>
+<h3 id="多Agzin多VPC如何进行数据回传"><a href="#多Agzin多VPC如何进行数据回传" class="headerlink" title="多Agzin多VPC如何进行数据回传"></a>多Agzin多VPC如何进行数据回传</h3><ol>
+<li>CEN云企业网：用户实现不同地域或者不同VPC之间的网络通信和互联，CEN使用阿里云全球骨干网络，提供安全可靠的专线级别互联</li>
+<li>VPC互联：通过VPC peering，实现国内VPC互联，实现两个VPC之间直接通信</li>
+<li>VPN网关：通过公网进行数据同步和回传，配置IPsec VPN连接，通过VPN进行数据传输，确保数据安全性和完整性</li>
+<li>边界路由器<br>5。 弹性公网IP：如果只需要简单的数据回传，可以为ECS实例分配EIP，然后使用公网进行数据传输。</li>
+</ol>
+<h2 id="运维实施类"><a href="#运维实施类" class="headerlink" title="运维实施类"></a>运维实施类</h2><h3 id="云监控"><a href="#云监控" class="headerlink" title="云监控"></a>云监控</h3><h4 id="Arms、Grafana分别用到什么地方"><a href="#Arms、Grafana分别用到什么地方" class="headerlink" title="Arms、Grafana分别用到什么地方"></a>Arms、Grafana分别用到什么地方</h4><p>1。 Arms时阿里云提供的应用实时监控服务，主要用于监控云上应用的性能、稳定性和可用性。它可以收集和分析应用程序的关键指标，提供实时的性能监控、异常诊断和报警功能。<br>2。 Grafana是一款开源的数据可视化监控平台，通过接入各种数据源进行图表化展示和分析。在阿里云中，arms可以和grafana进行集成，将arms收集的应用监控指标展示在grafana中，从而方便用户进行灵活和自定义的监控数据分析和展示。<br>3。 将arms和grfana的结合可以提供全面的应用实时监控和数据可视化解决方案，帮助用户更好地了解和管理云上应用。</p>
+<h4 id="云监控地优势和不足"><a href="#云监控地优势和不足" class="headerlink" title="云监控地优势和不足"></a>云监控地优势和不足</h4><p>云监控是一种通过云服务提供商提供地工具和服务来实时监测、管理和分析云环境中资源和应用程序地性能和状态</p>
+<p>优势：</p>
+<ol>
+<li>实时监控和反应快速：云监控可以实时监测资源和应用程序地性能指标</li>
+<li>自动化和集中管理：云监控可以自动化监测和管理多个云资源，简化了管理的复杂性</li>
+<li>可扩展性和弹性：云监控可以根据实际需求扩展和自动缩放，适应不同规模和负载的环境</li>
+<li>提供可视化和报表功能：云监控通常提供友好的用户界面和报表功能，帮助用户更加直观的了解系统的性能状况</li>
+</ol>
+<p>劣势：</p>
+<ol>
+<li>依赖云服务提供商：如果云服务上监控出现故障或者限制，可能影响监控的有效性和可用性</li>
+<li>数据安全性和隐私问题：云监控收集和处理的大量监控数据设计数据隐私和安全问题</li>
+<li>云监控不能满足更加个性化和更多维度的用户自定义需求</li>
+</ol>
+<h4 id="云监控改进方向"><a href="#云监控改进方向" class="headerlink" title="云监控改进方向"></a>云监控改进方向</h4><ol>
+<li>多样化的监控工具选择：用户根据自身需求和情况选择最合适的监控工具</li>
+<li>多层次的监控设计：采用多层级的监控架构，将监控数据收集、处理和展示分层进行，降低对单一监控系统的依赖</li>
+<li>安全与隐私保护：加强对监控数据的安全保护，包括加密传输、权限控制、数据脱敏等手段，以确保数据的安全与隐私</li>
+</ol>
+<p>云监控在实时性、自动化和扩展性等方面具有优势，但也要考虑依赖性、数据安全和隐私等问题。通过选择合适的监控工具、设计合理的监控架构以及加强安全与隐私保护措施，可以弥补云监控的不足，提高监控系统的可靠性和有效性。</p>
+<h3 id="云原生和K8S"><a href="#云原生和K8S" class="headerlink" title="云原生和K8S"></a>云原生和K8S</h3><p>云原生就是cloud native，云原生技术的目标在于帮助组织基于公有云、私有云和混合云等动态环境来构建和运行可弹性扩展的应用。</p>
+<h4 id="云原生的主要技术"><a href="#云原生的主要技术" class="headerlink" title="云原生的主要技术"></a>云原生的主要技术</h4><ol>
+<li>微服务</li>
+<li>服务网格</li>
+<li>不可变基础设施</li>
+<li>容器和容器编排</li>
+<li>声明式API</li>
+<li>DveOps</li>
+</ol>
+<h4 id="容器的特点是什么"><a href="#容器的特点是什么" class="headerlink" title="容器的特点是什么"></a>容器的特点是什么</h4><p>容器技术是一种内核轻量级的操作系统层虚拟化技术，使用Namespace进行资源隔离，使用cgroup进行资源的管理，有效的将单个操作系统管理的资源划分到孤立的组中。不同于传统虚拟化是基于硬件的抽象，容器技术是基于操作系统的抽象，只对必要的系统接口、配置文件进行虚拟化，极大的增加了配置效率。</p>
+<p>其特点有如下：</p>
+<ol>
+<li>极其轻量</li>
+<li>秒级部署</li>
+<li>易于移植</li>
+<li>安全隔离</li>
+<li>弹性伸缩</li>
+<li>版本控制</li>
+</ol>
+<h4 id="解决的问题"><a href="#解决的问题" class="headerlink" title="解决的问题"></a>解决的问题</h4><ol>
+<li>实现应用的快速构建、发布和部署，实现底层硬件和操作系统的解耦，满足用户在扩展性、可用性、可移植性等要求</li>
+<li>通过极致的弹性伸缩能力、高效的故障自愈能力、应用开放的高速迭代能力，实现业务短期迭代、产品更新、应用弹性伸缩，释放了云计算的效能</li>
+<li>通过与人员、流程和工具更好的结合，降低了企业信息系统维护成本，提升了信息系统的稳定性和安全性</li>
+</ol>
+<h4 id="Kubernetes的架构以及系统组件"><a href="#Kubernetes的架构以及系统组件" class="headerlink" title="Kubernetes的架构以及系统组件"></a>Kubernetes的架构以及系统组件</h4><p>物理架构：master&#x2F;node模式</p>
+<p>Master节点是控制节点，负责整个集群的管理和控制，主节点主要用于暴露API、调度部署和节点的管理。工作节点主要运行容器。</p>
+<p>kubectl：k8s管理命令行工具</p>
+<p>etcd：高可用kv键值数据库，存储k8s资源状态信息和网络信息</p>
+<p>apiserver：整个系统的对外接口，是资源操作的唯一入口，提供了k8s各类资源对象的增删改查，是整个系统的数据总线和数据中心，提供认证、授权、API注册和发现机制</p>
+<p>scheduler：负责pod的调度</p>
+<p>controller-manager：与apiserver交互，实时监控和维护k8s集群控制器的监控状况，对有故障的进行处理和恢复</p>
+<p>kubelet：node节点上kubelet定期调用apiserver的reset接口报告自身状态</p>
+<p>kube-proxy：提供网络代理和负载均衡</p>
+<h4 id="阿里云容器服务ACK和原生K8S的区别"><a href="#阿里云容器服务ACK和原生K8S的区别" class="headerlink" title="阿里云容器服务ACK和原生K8S的区别"></a>阿里云容器服务ACK和原生K8S的区别</h4><h4 id="ack专有版、托管版、serverless版K8S的区别"><a href="#ack专有版、托管版、serverless版K8S的区别" class="headerlink" title="ack专有版、托管版、serverless版K8S的区别"></a>ack专有版、托管版、serverless版K8S的区别</h4><ol>
+<li>Master节点的管理权限</li>
+<li>收费模式</li>
+</ol>
+<h3 id="如何做灰度发布"><a href="#如何做灰度发布" class="headerlink" title="如何做灰度发布"></a>如何做灰度发布</h3><p>灰度发布时一种在生产环境中逐渐将新版本应用程序或功能部署给一部分用户的策略。</p>
+<ol>
+<li>制订计划：确定灰度发布的目标、时间计划和发布策略</li>
+<li>准备环境：确保目标环境已经准备就绪</li>
+<li>选择目标用户：根据一定规则或者随机选择一部分用户作为灰度发布目标用户</li>
+<li>发布新版本：将新版本的应用程序或功能部署到选定目标用户</li>
+<li>监控和收集反馈：对已发布用户进行监控，收集用户反馈和指标数据</li>
+<li>分析和评估：根据收集的数据和用户反馈，分析新版本实际使用情况，评估是否可以全面发布</li>
+<li>扩大范围：新版本通过评估之后，逐步扩大用户范围、降低发布风险</li>
+<li>完成发布：当新版本完成较大范围的验证之后，就可以全面发布新版本，替换旧版本</li>
+</ol>
+<p>灰度发布需要慎重进行，确保发布过程中及时监控和回滚。同时，也要充分考虑用户体验和反馈，及时修复和改进新版本。</p>
+<h3 id="什么是蓝绿发布"><a href="#什么是蓝绿发布" class="headerlink" title="什么是蓝绿发布"></a>什么是蓝绿发布</h3><p>1。 蓝绿部署是不停老版本，部署新版本然后进行测试，确认OK，将流量切到新版本，然后老版本同时也升级到新版本。<br>2。 灰度是选择部分部署新版本，将部分流量引入到新版本，新老版本同时提供服务。等待灰度的版本OK，可全量覆盖老版本。</p>
+<p>灰度是不同版本共存，蓝绿是新旧版本切换，2种模式的出发点不一样。</p>
+<h3 id="什么是serverless架构"><a href="#什么是serverless架构" class="headerlink" title="什么是serverless架构"></a>什么是serverless架构</h3><p>根据CNCF的定义，ServerLess是指构建和运行不需要服务器管理的应用程序。Serverless并不是不再需要服务器，而是无需管理服务器的架构方式，借助云产品提供的函数计算和事件触发功能，按需运行代码逻辑。在架构设计中可以将业务逻辑拆分为多个小的函数，并通过事件触发来调用函数，这样研发专注于业务逻辑的编写，运维转向SRE负责技术SLA的制订和保障，就可以以实现高效的资源利用和成本优化。</p>
+<p>当前的serverless架构主要包含两个方面：提供计算资源的函数服务平台FaaS和提供托管云云服务的BaaS。</p>
+<p>1。 FaaS：负责代码部署和定义业务逻辑，是无需配置和管理，运行在无状态的容器中，按量计费。<br>2。 BaaS：涵盖数据库、身份验证、云存储、推送通知、消息队列等，开发人员通过API和SDK来调用后端应用，而无需管理虚拟机或者容器。</p>
+<p>serverless架构主流的应用代表有阿里云的函数计算和Amazon的Lambda以及开源的Knative和apache openwhisk。</p>
+<h3 id="什么是全链路跟踪"><a href="#什么是全链路跟踪" class="headerlink" title="什么是全链路跟踪"></a>什么是全链路跟踪</h3><p>全链路跟踪是一种用于分析和调式分布式系统性能的技术，它可以追踪请求在系统中的传递过程，并记录每个组件的处理时间、调用关系等信息，从而帮助开发人员定位性能瓶颈或故障点。</p>
+<ol>
+<li>注入标识：在系统请求入口，会为请求生成一个唯一的标识，并将该标识传递到请求的各个组件中</li>
+<li>传递标识：当请求经过分布式系统的不同组件时，每个组件在处理请求时，记录下当前请求的标识<br>3。 记录信息：每个组件在处理请求时，记录开始时间、结束时间、调用关系等，这些信息通常倍发送专门的分布式追踪系统中。<br>4。 聚合追踪信息：将各个组件记录的信息进行聚合和分析，还原请求咋整个系统中的传递过程，并计算出各个组件的处理时间、调用链路等关键指标。</li>
+</ol>
+<h3 id="架构设计怎么和云产品结合"><a href="#架构设计怎么和云产品结合" class="headerlink" title="架构设计怎么和云产品结合"></a>架构设计怎么和云产品结合</h3><p>将架构设计与云产品结合可以带来包括弹性扩展、高可用、灵活性和改善成本效益。</p>
+<p>1。 弹性扩展：云产品可以根据负载需求自动调整计算资源。在架构设计中，可以利用云产品的弹性扩展功能，根据负载情况自动增减计算实例，从而提高系统吞吐量和性能。<br>2。 高可用：云产品提供有多个可用区和多个数据中心的部署选项，可以通过在不同区域数据中心间进行负载均衡和容灾备份，增加系统可用性。在架构设计中，可以分布式部署应用程序和数据，利用云产品的负载均衡、容错机制和自动备份功能，保证系统的持续可用性<br>3。 异地容灾：云产品提供了跨地域的部署选项，可以在不同地理区域进行数据备份和容灾。在架构设计中，可以将关键数据进行异地备份。<br>4。 云原生架构：云原生架构设计是一种将应用程序设计为适应云环境的方式，借助云厂商提供的容器化、微服务、自动化管理的特性，可以实现可伸缩、可扩展、高度解耦的架构，以实现快速交付和部署的优势。<br>5。 serverless架构：serverless架构是一种无需管理服务器的架构方式，借助云产品提供的函数计算和事件触发功能，按需运行代码实现业务逻辑，并按量计费。在架构设计中，可以将业务逻辑拆解为多个小的函数，并通过事件来触发调用函数，以其实现高效资源利用和成本优化。<br>6。 数据存储和分析：云产品提供各种数据存储和分析服务。在架构设计中，可以选择合适的云产品来存储和处理数据，以满足业务需求。</p>
+<p>总之，结合云产品进行架构设计可以提供更好的弹性、可扩展性、高可用性和费效比。在设计过程中，需要根据业务和程序的需求结合云产品特性，选择合适的云产品，并遵循最佳实践进行架构设计和实施。</p>
+<h3 id="谈谈你对SLB的理解"><a href="#谈谈你对SLB的理解" class="headerlink" title="谈谈你对SLB的理解"></a>谈谈你对SLB的理解</h3><p>SLB是一种用于分发网络流量和负载均衡的技术，用于提高系统的可用性、可扩展性和性能。部署和设计SLB时，需要考虑如下几个方面：</p>
+<ol>
+<li>选择合适的负载均衡算法：常见的算法包括：轮询、加权轮询、最小连接数、加权最小连接数等，需要根据业务需求和服务器资源不同选择合适负载均衡算法<br>2。 网络拓扑设计：常见的架构包括单层式、双层式和多层式架构。在设计过程中，根据系统的规模和需求，考虑SLB设备与服务器以及其他网络设备之间的连接方式和带宽需求，来选择合理的网络拓扑。</li>
+<li>高可用设计：为了保证SLB设备的高可用性，可以采用主备结构或集群模式，通过配置冗余设备或者多个SLB节点来保证系统的连续性<br>4。 健康检测与故障切换：配置健康检查机制，定期监测后端服务器的可用性。当服务器异常或者不可用时，SLB设备自动切换流量到其他健康服务器上，避免将流量分发到故障节点。<br>5。 动态负载均衡：根据实时的流量情况和服务器负载情况，动态调整负载均衡策略和流量分发策略。以调整权重、设置阈值等方式，实现流量均衡分配和性能优化。<br>6。 安全性设计：配置访问策略，限制只有授权的客户端可以访问SLB设备。此外，还可以采用SSL终端端到端加密来保护流量的安全。<br>7。 日志和监控：配置日志记录和监控系统，实时监控SLB设备和后端服务器的性能、流量情况和异常状态，并及时发现和解决问题。</li>
+</ol>
+<p>在设计SLB时，需要根据具体的业务需求、系统规模以及资源限制综合考虑。同时，也需要定期进行性能评估和优化，确保SLB系统的稳定性和可扩展性。</p>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E9%98%BF%E9%87%8C%E4%BA%91/">阿里云</a><a class="post-meta__tags" href="/tags/aliyun/">aliyun</a><a class="post-meta__tags" href="/tags/QA/">QA</a><a class="post-meta__tags" href="/tags/InterView/">InterView</a><a class="post-meta__tags" href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%E6%9E%B6%E6%9E%84%E5%B8%88/">解决方案架构师</a></div><div class="post-share"><div class="social-share" data-image="https://cdn.sujx.net/covers/cover24.jpg" data-sites="facebook,twitter,weibo,qq"></div><link rel="stylesheet" href="/libs/sharejs/css/share.min.css" media="print" onload="this.media='all'"><script src="/libs/sharejs/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>能否请我喝一杯咖啡？</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.jpg" target="_blank"><img class="post-qr-code-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/wechat.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2023/03/05/Jupyter-Howto/" title="Jupyter的部署"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/07/wallhaven-g8q8qd.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Jupyter的部署</div></div><div class="info-2"><div class="info-item-1">简介 Jupyter是一个基于网页的用于交互计算的应用程序。其可被应用于全过程计算：开发、文档编写、运行代码和展示结果。  简而言之，Jupyter Notebook是以网页的形式打开，可以在网页页面中直接编写代码和运行代码，代码的运行结果也会直接在代码块下显示的程序。如在编程过程中需要编写说明文档，可在同一个页面中直接编写，便于作及时的说明和解释。 部署 以下基于RockyLinux8. 7部署   修改系统Python版本  # 将默认Python版本修改为3. 8alternatives --config python3There are 3 programs which provide &#x27;python3&#x27;.  Selection    Command-----------------------------------------------*  1           /usr/bin/python3. 6   2           /usr/bin/python3. 11 + 3           /usr/bin/python3. 8Ente...</div></div></div></a><a class="pagination-related" href="/2023/02/15/matebook-2021-nvme/" title="给Matebook2021更换硬盘"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/05/wallhaven-x6yzoz.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">给Matebook2021更换硬盘</div></div><div class="info-2"><div class="info-item-1">Matebook2021得益于全金属机身的设计，拆机还是很容易的，特别是最后的卡扣部分，相比塑料还是要皮实一些。 拆机注意事项：  脚垫要拆下来，四个脚垫下面都有螺丝； 有两种螺丝口，用小的十字螺丝刀也凑合能拆； 卡扣较紧，需要先从触控板前缘慢慢撬开，插进去一张卡片之后，再往左右滑动撬开其他卡扣   换盘华为使用的是西数的NVME盘，裹了锡纸（很难撕下来）并用散热胶做固定，不过空间足够双面nvme盘安装。  收工替换完成，该笔记本的内部做工还是不错的，双热管、双风扇外加大片均热板，比Thinkpad的做工强多了。  </div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2024/12/31/Aliyun-ECS-GUI/" title="阿里云ECS实现图形界面"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover70.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-31</div><div class="info-item-2">阿里云ECS实现图形界面</div></div><div class="info-2"><div class="info-item-1">因为公司需要在阿里云上部署一套致远互联的OA平台，该OA需要在图形界面下进行安装部署。为此，我将构建基础平台的过程纪录一下。    12 天津·西青·中北镇·水西公园   商务准备配置确认 与厂家确认所需服务器配置和地域要求 切合当前已有阿里云上环境，拉取配置表及所需费用，并申请相关优惠卷  合规处理 完成内部预算申请，在阿里云后台下载购买合同并交付需求提交方 购买完成之后，将本次购买发票提交需求方  主机准备基础配置# 系统使用RockyLinux9. 5# 系统更新dnf update -y# 安装常用软件dnf install -y wget curl zip unzip vim mailx mlocate telnet bash-completion tmuxdnf install -y chrony rsync git screen tree open-vm-tools yum-utils lrzszdnf install -y device-mapper-persistent-data lvm2 psmisc net-toolsdnf install -y bind-...</div></div></div></a><a class="pagination-related" href="/2023/01/03/Aliyun-Question-Answers-Games/" title="阿里云游戏服务端架构设计问答"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover29.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-01-03</div><div class="info-item-2">阿里云游戏服务端架构设计问答</div></div><div class="info-2"><div class="info-item-1">1。比如说在一个游戏行业里面，或者说一个典型的游戏架构，在云资源层面，就是云的架构层面。应该注意哪些点，或者怎么样才能设计一个符合这个游戏需求的一个架构。比如说它可能是有一个小的游戏，或者说是一个很大的像原神这样的，或者它可能是一个很小的页游或者端游或者什么样。那么在不同场景下，它的架构会有什么区别？然后这块的考虑因素是什么？  答：在设计一个满足游戏需求的架构时，需要考虑以下几个方面： 1。 游戏类型和规模：小型网页游戏或手机网络游戏，一般不需要太复杂的架构，可以直接使用云服务器ECS，数据库RDS等基本服务来搭建。而对于大型网游如原神，则需要更为复杂的分布式架构，包括多台服务器协同工作，可能需要使用到弹性伸缩、负载均衡等高级功能。2。 用户访问量：如果预计有大量的用户同时在线，那么需要考虑使用负载均衡SLB来进行流量分发，以避免单一服务器过载。同时，还需要考虑到高并发情况下的数据一致性问题。3。 数据处理能力：对于大数据量的游戏，例如拥有大量用户数据和行为数据的MMORPG，需要使用高效的分布式数据库和存储服务，如DRDS和OSS。4。 网络安全：任何在线服务都需要考虑网络安...</div></div></div></a><a class="pagination-related" href="/2025/01/25/Aliyun-ECS-Kdump/" title="阿里云ECS禁用Kdump"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover80.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-01-25</div><div class="info-item-2">阿里云ECS禁用Kdump</div></div><div class="info-2"><div class="info-item-1">现在使用的阿里云ECS是99元套餐，2核2G的配置，但实际能看到的内存数量是1。 6G。随着ECS上挂载的东西越来越多，内存有点点不够用了。现在，我们可以通过关闭Kdump来释放部分内存给业务使用。   12 北京·天坛   操作# 关闭服务systemctl disable --now kdump.service# 查看服务状态systemctl status kdump# 修改grub配置文件中crashkernel参数sed -i &quot;s/1G-4G:160M/1G-4G:0M/g&quot; /etc/default/grub# 重新生成grub配置文件grub2-mkconfig -o /boot/grub2/grub.cfg# 重启systemctl reboot  表现修改前 修改后 KdumpKdump是在系统崩溃、死锁或死机时用来转储内存运行参数的一个工具和服务，是一种新的crash dump捕获机制，用来捕获kernel crash（内核崩溃）的时候候产生的crash dump。在第一kernel在运行的时候候，系统内部在内存中就已经留存好了给第二ke...</div></div></div></a><a class="pagination-related" href="/2023/03/13/Note-Others-202303/" title="杂记"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover28.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-13</div><div class="info-item-2">杂记</div></div><div class="info-2"><div class="info-item-1">记录一些不成文的杂项    07 摄于 北京通州台湖镇·台湖公园   阿里云免费版企业邮箱现在从阿里云已经找不到免费的企业邮箱申请入口了，但实际上它仍然是可以找到的：[申请链接](https://common-buy.aliyun.com/?userCode=r3yteowb?spm=a2c6h.12873639.article-detail.8.85464bf18SykTr&amp;commodityCode=alimail&amp;specCode=lx_18482&amp;request=%7B%22ord_time%22:%223:Year%22， %22account_num%22:%225%22%7D#&#x2F;buy) Axure10激活方式 序列号 被授权人：downxia授权秘钥：UdMLVdonmFlplbTMoBppfrUXZMhEQ6Mf2shBAkTCJBk5ycQJs2NALgvLsHhyfoYR被授权人：downxia授权秘钥：Bv6P2wrR10Sq5UCpPSB0+LMjkWU2i1XgQNFaWV84qWvx+1HHVnK01ilcxOOEG...</div></div></div></a><a class="pagination-related" href="/2024/06/17/Aliyun-ECS-Perf/" title="简单测试阿里云Linux主机性能"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover19.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-06-17</div><div class="info-item-2">简单测试阿里云Linux主机性能</div></div><div class="info-2"><div class="info-item-1">在实际的虚拟化平台建设项目中，交付物的测试用例都一直是个需要注意的重要事件。期间，设计原始规划是否合理、资源配置是否正确，以及和甲方以及其他参与者的扯皮……现在，我尝试分别使用阿里云的99元（ 张家口区域，规格为ecs。 e-c1m1。 large ）和199元ECS( 北京区域，规格为ecs。 e-c1m2。 large )来进行一个简单的性能测试。   05 摄于北京通州，一个不请自来的松鼠   CPU测试# 查看CPU信息[root@beijing ~]# cat /proc/cpuinfo processor	: 0vendor_id	: GenuineIntelcpu family	: 6model		: 85model name	: Intel( R ) Xeon( R ) Platinumstepping	: 4microcode	: 0x1cpu MHz		: 2500. 002cache size	: 33792 KBphysical id	: 0siblings	: 2core id		: 0cpu cores	: 1apicid		: 0initial ap...</div></div></div></a><a class="pagination-related" href="/2023/11/03/Solutions-Architect/" title="「解决方案架构师修炼之道」"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023/11/sloutions_architect%27s_handbook.PNG" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-11-03</div><div class="info-item-2">「解决方案架构师修炼之道」</div></div><div class="info-2"><div class="info-item-1"> 解决方案架构从战略和战术的视角，对业务解决方案的方方面面进行定义和展望，它涵盖了系统的方方面面，包括但不限于系统基础设施、网络、安全、合规性要求、系统运维、成本和可靠性。   定义需要解决的问题 全球性分布式团队 全球合规性要求 成本和预算 解决方案实施组件 业务需求 IT基础设施需求 技术选型 终端用户需求 解决方案维护 项目时间表  演进 胖桌面 面向服务的架构 微服务架构  益处 满足业务需求和交付质量 选择最佳技术平台 处理解决方案的约束和问题 协助资源和成本管理 管理解决方案交付和项目生命周期 解决非功能性需求  组织中的解决方案架构师解决方案架构师的角色类型 企业解决方案架构师 技术架构师 云架构师 基础设施架构师 网络架构师 数据架构师 安全架构师 DevOps架构师  职责 分析用户的需求：方案设计的核心  定义非功能性需求  性能 安全性与合规性 可恢复性 可维护性 可靠性 可用性 可伸缩性 易用性   干系人的管理  处理架构约束  成本 质量 时间 范围 技术 风险 资源 合规性   技术选型  概念验证和原型开发  设计方案和持续交付  业务需求和愿景 ...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">靖轩</div><div class="author-info-description">逝者如斯夫,不舍昼夜</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/grepsu"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://gitee.com/grepsu" target="_blank" title="Gitee"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:sujx@live.cn" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS链接"><i class="fa  fa-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%84%E5%88%92%E8%AE%BE%E8%AE%A1%E7%B1%BB"><span class="toc-number">1.</span> <span class="toc-text">规划设计类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%8B%E7%BB%8D%E4%B8%80%E4%B8%8B%E5%AE%B9%E7%81%BE%E5%9B%BE%E6%99%AF"><span class="toc-number">1.1.</span> <span class="toc-text">介绍一下容灾图景</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2"><span class="toc-number">1.1.1.</span> <span class="toc-text">集群部署</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%90%8C%E5%9F%8E%E5%8F%8C%E6%B4%BB"><span class="toc-number">1.1.2.</span> <span class="toc-text">同城双活</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%A4%E5%9C%B0%E4%B8%89%E4%B8%AD%E5%BF%83"><span class="toc-number">1.1.3.</span> <span class="toc-text">两地三中心</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BC%82%E5%9C%B0%E5%A4%9A%E6%B4%BB"><span class="toc-number">1.1.4.</span> <span class="toc-text">异地多活</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B7%B7%E5%90%88%E4%BA%91%E5%AE%B9%E7%81%BE"><span class="toc-number">1.1.5.</span> <span class="toc-text">混合云容灾</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A7%A3%E9%87%8A%E4%B8%80%E4%B8%8BRTP%E5%92%8CRPO"><span class="toc-number">1.1.6.</span> <span class="toc-text">解释一下RTP和RPO</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E8%80%83%E8%99%91%E4%B8%9A%E5%8A%A1%E6%B5%81%E7%A8%8B%E5%B1%82%E7%9A%84%E7%81%BE%E5%A4%87%E8%AE%BE%E8%AE%A1"><span class="toc-number">1.1.7.</span> <span class="toc-text">如何考虑业务流程层的灾备设计</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E8%BF%9B%E8%A1%8C%E4%B8%8A%E4%BA%91%E8%BF%81%E7%A7%BB"><span class="toc-number">1.2.</span> <span class="toc-text">如何进行上云迁移</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B7%B7%E5%90%88%E4%BA%91%E7%9A%84%E9%83%A8%E7%BD%B2%E6%96%B9%E5%BC%8F"><span class="toc-number">1.2.1.</span> <span class="toc-text">混合云的部署方式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B7%B7%E5%90%88%E4%BA%91%E7%9A%84%E4%BC%98%E5%8A%BF"><span class="toc-number">1.2.2.</span> <span class="toc-text">混合云的优势</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%8A%E4%BA%91%E7%9A%84%E6%94%B6%E7%9B%8A"><span class="toc-number">1.2.3.</span> <span class="toc-text">上云的收益</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%91%E8%BF%81%E7%A7%BB%E4%B9%8B%E5%89%8D%E7%9A%84%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C%E6%9C%89%E9%82%A3%E4%BA%9B"><span class="toc-number">1.2.4.</span> <span class="toc-text">云迁移之前的准备工作有那些</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%81%E7%A7%BB%E8%BF%87%E7%A8%8B%E4%B8%AD%E7%94%A8%E5%88%B0%E9%82%A3%E4%BA%9B%E8%BF%81%E7%A7%BB%E5%B7%A5%E5%85%B7"><span class="toc-number">1.2.5.</span> <span class="toc-text">迁移过程中用到那些迁移工具</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%98%BF%E9%87%8C%E4%BA%91%E4%BA%A4%E4%BB%98%E6%B5%81%E7%A8%8B"><span class="toc-number">1.3.</span> <span class="toc-text">阿里云交付流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E7%90%86%E8%A7%A3CDN"><span class="toc-number">1.4.</span> <span class="toc-text">如何理解CDN</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#CDN%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6"><span class="toc-number">1.4.1.</span> <span class="toc-text">CDN工作机制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CDN%E9%A2%84%E7%83%AD"><span class="toc-number">1.4.2.</span> <span class="toc-text">CDN预热</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B8%B8%E6%88%8F%E4%B8%9A%E5%8A%A1%E5%A4%A7%E4%BF%83%E6%8E%AA%E6%96%BD"><span class="toc-number">1.5.</span> <span class="toc-text">游戏业务大促措施</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3%E5%85%A8%E7%90%83%E7%B3%BB%E7%BB%9F%E8%AE%BF%E9%97%AE%E6%85%A2%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-number">1.6.</span> <span class="toc-text">如何解决全球系统访问慢的问题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E4%BF%9D%E6%8A%A4%E7%B1%BB"><span class="toc-number">2.</span> <span class="toc-text">安全保护类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%88%E8%B0%88%E4%BD%A0%E5%AF%B9%E7%AD%89%E4%BF%9D%E4%B8%89%E7%BA%A7%E7%9A%84%E7%90%86%E8%A7%A3"><span class="toc-number">2.1.</span> <span class="toc-text">谈谈你对等保三级的理解</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%AD%89%E4%BF%9D%E9%9C%80%E8%A6%81%E7%94%A8%E5%88%B0%E9%82%A3%E4%BA%9B%E4%BA%A7%E5%93%81"><span class="toc-number">2.1.1.</span> <span class="toc-text">等保需要用到那些产品</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%AD%89%E4%BF%9D%E8%90%BD%E5%9C%B0%E5%A6%82%E4%BD%95%E5%AE%9E%E6%96%BD"><span class="toc-number">2.1.2.</span> <span class="toc-text">等保落地如何实施</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%A0%E7%9F%A5%E9%81%93GDPR%E4%B9%88%EF%BC%9F"><span class="toc-number">2.1.3.</span> <span class="toc-text">你知道GDPR么？</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%B7%E5%A4%96%E5%90%88%E8%A7%84%E8%A6%81%E6%B1%82"><span class="toc-number">2.2.</span> <span class="toc-text">海外合规要求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%8E%E6%A0%B7%E8%80%83%E8%99%91%E6%B8%B8%E6%88%8F%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%AE%89%E5%85%A8%E9%98%B2%E6%8A%A4"><span class="toc-number">2.3.</span> <span class="toc-text">怎样考虑游戏系统的安全防护</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9C%80%E8%A6%81%E8%A7%A3%E5%86%B3%E9%82%A3%E4%BA%9B%E9%97%AE%E9%A2%98"><span class="toc-number">2.3.1.</span> <span class="toc-text">需要解决那些问题</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%AF%E8%83%BD%E9%81%87%E5%88%B0%E7%9A%84%E5%AE%89%E5%85%A8%E9%97%AE%E9%A2%98"><span class="toc-number">2.3.2.</span> <span class="toc-text">可能遇到的安全问题</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%98%BF%E9%87%8C%E4%BA%91%E9%82%A3%E4%BA%9B%E4%BA%A7%E5%93%81%E6%8F%90%E4%BE%9B%E4%BA%86%E6%95%B0%E6%8D%AE%E5%8A%A0%E5%AF%86%E5%8A%9F%E8%83%BD"><span class="toc-number">2.4.</span> <span class="toc-text">阿里云那些产品提供了数据加密功能</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#VPC%E7%BD%91%E7%BB%9C%E4%B8%AD%E7%9A%84%E7%9A%84%E5%AE%89%E5%85%A8%E4%BA%A7%E5%93%81%E6%9C%89%E9%82%A3%E4%BA%9B"><span class="toc-number">2.5.</span> <span class="toc-text">VPC网络中的的安全产品有那些</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E5%8E%8B%E6%B5%8B"><span class="toc-number">2.6.</span> <span class="toc-text">系统压测</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9C%80%E8%A6%81%E5%85%B3%E6%B3%A8%E7%9A%84%E6%8C%87%E6%A0%87"><span class="toc-number">2.6.1.</span> <span class="toc-text">需要关注的指标</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9C%A8%E8%BF%9B%E8%A1%8C%E7%B3%BB%E7%BB%9F%E5%8E%8B%E6%B5%8B%E6%97%B6%EF%BC%8C%E4%B8%9A%E5%8A%A1%E5%B1%82%E9%9C%80%E8%A6%81%E5%85%B3%E6%B3%A8%E9%82%A3%E4%BA%9B"><span class="toc-number">2.6.2.</span> <span class="toc-text">在进行系统压测时，业务层需要关注那些</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9AAgzin%E5%A4%9AVPC%E5%A6%82%E4%BD%95%E8%BF%9B%E8%A1%8C%E6%95%B0%E6%8D%AE%E5%9B%9E%E4%BC%A0"><span class="toc-number">2.7.</span> <span class="toc-text">多Agzin多VPC如何进行数据回传</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%90%E7%BB%B4%E5%AE%9E%E6%96%BD%E7%B1%BB"><span class="toc-number">3.</span> <span class="toc-text">运维实施类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%91%E7%9B%91%E6%8E%A7"><span class="toc-number">3.1.</span> <span class="toc-text">云监控</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Arms%E3%80%81Grafana%E5%88%86%E5%88%AB%E7%94%A8%E5%88%B0%E4%BB%80%E4%B9%88%E5%9C%B0%E6%96%B9"><span class="toc-number">3.1.1.</span> <span class="toc-text">Arms、Grafana分别用到什么地方</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%91%E7%9B%91%E6%8E%A7%E5%9C%B0%E4%BC%98%E5%8A%BF%E5%92%8C%E4%B8%8D%E8%B6%B3"><span class="toc-number">3.1.2.</span> <span class="toc-text">云监控地优势和不足</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%91%E7%9B%91%E6%8E%A7%E6%94%B9%E8%BF%9B%E6%96%B9%E5%90%91"><span class="toc-number">3.1.3.</span> <span class="toc-text">云监控改进方向</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%91%E5%8E%9F%E7%94%9F%E5%92%8CK8S"><span class="toc-number">3.2.</span> <span class="toc-text">云原生和K8S</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%91%E5%8E%9F%E7%94%9F%E7%9A%84%E4%B8%BB%E8%A6%81%E6%8A%80%E6%9C%AF"><span class="toc-number">3.2.1.</span> <span class="toc-text">云原生的主要技术</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%B9%E5%99%A8%E7%9A%84%E7%89%B9%E7%82%B9%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-number">3.2.2.</span> <span class="toc-text">容器的特点是什么</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A7%A3%E5%86%B3%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-number">3.2.3.</span> <span class="toc-text">解决的问题</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Kubernetes%E7%9A%84%E6%9E%B6%E6%9E%84%E4%BB%A5%E5%8F%8A%E7%B3%BB%E7%BB%9F%E7%BB%84%E4%BB%B6"><span class="toc-number">3.2.4.</span> <span class="toc-text">Kubernetes的架构以及系统组件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%98%BF%E9%87%8C%E4%BA%91%E5%AE%B9%E5%99%A8%E6%9C%8D%E5%8A%A1ACK%E5%92%8C%E5%8E%9F%E7%94%9FK8S%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">3.2.5.</span> <span class="toc-text">阿里云容器服务ACK和原生K8S的区别</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ack%E4%B8%93%E6%9C%89%E7%89%88%E3%80%81%E6%89%98%E7%AE%A1%E7%89%88%E3%80%81serverless%E7%89%88K8S%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">3.2.6.</span> <span class="toc-text">ack专有版、托管版、serverless版K8S的区别</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E5%81%9A%E7%81%B0%E5%BA%A6%E5%8F%91%E5%B8%83"><span class="toc-number">3.3.</span> <span class="toc-text">如何做灰度发布</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E8%93%9D%E7%BB%BF%E5%8F%91%E5%B8%83"><span class="toc-number">3.4.</span> <span class="toc-text">什么是蓝绿发布</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFserverless%E6%9E%B6%E6%9E%84"><span class="toc-number">3.5.</span> <span class="toc-text">什么是serverless架构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%85%A8%E9%93%BE%E8%B7%AF%E8%B7%9F%E8%B8%AA"><span class="toc-number">3.6.</span> <span class="toc-text">什么是全链路跟踪</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1%E6%80%8E%E4%B9%88%E5%92%8C%E4%BA%91%E4%BA%A7%E5%93%81%E7%BB%93%E5%90%88"><span class="toc-number">3.7.</span> <span class="toc-text">架构设计怎么和云产品结合</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%88%E8%B0%88%E4%BD%A0%E5%AF%B9SLB%E7%9A%84%E7%90%86%E8%A7%A3"><span class="toc-number">3.8.</span> <span class="toc-text">谈谈你对SLB的理解</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/07/03/AIGC_FoxHole/" title="海鹰">海鹰</a><time datetime="2026-07-03T01:04:07.000Z" title="发表于 2026-07-03 09:04:07">2026-07-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/11/fristVibeCoding/" title="鹊随金印：我的第一个完整的AI编程项目">鹊随金印：我的第一个完整的AI编程项目</a><time datetime="2026-06-11T01:04:07.000Z" title="发表于 2026-06-11 09:04:07">2026-06-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/03/VI_Howto/" title="VI编辑器简介">VI编辑器简介</a><time datetime="2026-06-03T01:04:07.000Z" title="发表于 2026-06-03 09:04:07">2026-06-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/28/HNCitic_2605/" title="我要上头条">我要上头条</a><time datetime="2026-05-28T01:04:07.000Z" title="发表于 2026-05-28 09:04:07">2026-05-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/12/TS-Domain-Controller-Sync-Failure/" title="记一次Windows AD域控制器同步故障排错">记一次Windows AD域控制器同步故障排错</a><time datetime="2026-05-12T03:04:07.000Z" title="发表于 2026-05-12 11:04:07">2026-05-12</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2008 - 2026 By 靖轩</span></div><div class="footer_custom_text">京ICP备17034757号</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.5"></script><script src="/js/main.js?v=5.5.5"></script><script src="/libs/fancybox/fancybox.umd.js"></script><script src="/js/instantpage.js" type="module"></script><script src="/libs/lazyload/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const parseViewBox = viewBox => {
+    if (!viewBox) return null
+    const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
+    if (parts.length !== 4 || parts.some(n => Number.isNaN(n))) return null
+    return parts
+  }
+
+  const getSvgViewBox = svg => {
+    const attr = parseViewBox(svg.getAttribute('viewBox'))
+    if (attr) return attr
+
+    // Fallback: use bbox to build a viewBox
+    try {
+      const bbox = svg.getBBox()
+      if (bbox && bbox.width && bbox.height) return [bbox.x, bbox.y, bbox.width, bbox.height]
+    } catch (e) {
+      // getBBox may fail on some edge cases; ignore
+    }
+
+    const w = Number(svg.getAttribute('width')) || 0
+    const h = Number(svg.getAttribute('height')) || 0
+    if (w > 0 && h > 0) return [0, 0, w, h]
+    return [0, 0, 100, 100]
+  }
+
+  const setSvgViewBox = (svg, vb) => {
+    svg.setAttribute('viewBox', `${vb[0]} ${vb[1]} ${vb[2]} ${vb[3]}`)
+  }
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v))
+
+  const openSvgInNewTab = ({ source, initViewBox }) => {
+    const getClonedSvg = () => {
+      if (typeof source === 'string') {
+        const template = document.createElement('template')
+        template.innerHTML = source.trim()
+        const svg = template.content.querySelector('svg')
+        return svg ? svg.cloneNode(true) : null
+      }
+      if (source && typeof source.cloneNode === 'function') {
+        return source.cloneNode(true)
+      }
+      return null
+    }
+
+    const clone = getClonedSvg()
+    if (!clone) return
+    if (initViewBox && initViewBox.length === 4) {
+      clone.setAttribute('viewBox', initViewBox.join(' '))
+    }
+    if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+    if (!clone.getAttribute('xmlns:xlink') && clone.outerHTML.includes('xlink:')) {
+      clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+    }
+    // inject background to match current theme
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    const bg = getComputedStyle(document.body).backgroundColor || (isDark ? '#1e1e1e' : '#ffffff')
+    if (!clone.style.background) clone.style.background = bg
+
+    const serializer = new XMLSerializer()
+    const svgSource = serializer.serializeToString(clone)
+    const htmlSource = `<!doctype html><html><head><meta charset="utf-8" />
+      <style>
+        html, body { width: 100%; height: 100%; margin: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; }
+        svg { max-width: 100%; max-height: 100%; height: auto; width: auto; }
+      </style>
+      </head><body>${svgSource}</body></html>`
+    const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank', 'noopener')
+    setTimeout(() => URL.revokeObjectURL(url), 30000)
+  }
+
+  const attachMermaidViewerButton = wrap => {
+    let btn = wrap.querySelector('.mermaid-open-btn')
+    if (!btn) {
+      btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'mermaid-open-btn'
+      wrap.appendChild(btn)
+    }
+
+    btn.innerHTML = '<i class="fa fa-search fa-fw" aria-hidden="true"></i>'
+
+    if (!btn.__mermaidViewerBound) {
+      btn.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        const svg = wrap.__mermaidOriginalSvg || wrap.querySelector('svg')
+        if (!svg) return
+        const initViewBox = wrap.__mermaidInitViewBox
+        if (typeof svg === 'string') {
+          openSvgInNewTab({ source: svg, initViewBox })
+          return
+        }
+        openSvgInNewTab({ source: svg, initViewBox })
+      })
+      btn.__mermaidViewerBound = true
+    }
+  }
+
+  // Zoom around a point (px, py) in the SVG viewport (in viewBox coordinates)
+  const zoomAtPoint = (vb, factor, px, py) => {
+    const w = vb[2] * factor
+    const h = vb[3] * factor
+    const nx = px - (px - vb[0]) * factor
+    const ny = py - (py - vb[1]) * factor
+    return [nx, ny, w, h]
+  }
+
+  const initMermaidGestures = wrap => {
+    const svg = wrap.querySelector('svg')
+    if (!svg) return
+
+    // Ensure viewBox exists so gestures always work
+    const initVb = getSvgViewBox(svg)
+    wrap.__mermaidInitViewBox = initVb
+    wrap.__mermaidCurViewBox = initVb.slice()
+    setSvgViewBox(svg, initVb)
+
+    // Avoid binding multiple times on themeChange/pjax
+    if (wrap.__mermaidGestureBound) return
+    wrap.__mermaidGestureBound = true
+
+    // Helper: map client (viewport) coordinate -> viewBox coordinate
+    const clientToViewBox = (clientX, clientY) => {
+      const rect = svg.getBoundingClientRect()
+      const vb = wrap.__mermaidCurViewBox || getSvgViewBox(svg)
+      const x = vb[0] + (clientX - rect.left) * (vb[2] / rect.width)
+      const y = vb[1] + (clientY - rect.top) * (vb[3] / rect.height)
+      return { x, y, rect, vb }
+    }
+
+    const state = {
+      pointers: new Map(),
+      startVb: null,
+      startDist: 0,
+      startCenter: null
+    }
+
+    const clampVb = vb => {
+      const init = wrap.__mermaidInitViewBox || vb
+      const minW = init[2] * 0.1
+      const maxW = init[2] * 10
+      const minH = init[3] * 0.1
+      const maxH = init[3] * 10
+      vb[2] = clamp(vb[2], minW, maxW)
+      vb[3] = clamp(vb[3], minH, maxH)
+      return vb
+    }
+
+    const setCurVb = vb => {
+      vb = clampVb(vb)
+      wrap.__mermaidCurViewBox = vb
+      setSvgViewBox(svg, vb)
+    }
+
+    const onPointerDown = e => {
+      // Allow only primary button for mouse
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      svg.setPointerCapture(e.pointerId)
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      if (state.pointers.size === 1) {
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      } else if (state.pointers.size === 2) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        state.startDist = Math.hypot(dx, dy)
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        state.startCenter = { x: (pts[0].x + pts[1].x) / 2, y: (pts[0].y + pts[1].y) / 2 }
+      }
+    }
+
+    const onPointerMove = e => {
+      if (!state.pointers.has(e.pointerId)) return
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      // Pan with 1 pointer
+      if (state.pointers.size === 1 && state.startVb) {
+        const p = [...state.pointers.values()][0]
+        const prev = { x: e.clientX - e.movementX, y: e.clientY - e.movementY }
+        // movementX/Y unreliable on touch, compute from stored last position
+        const last = wrap.__mermaidLastSinglePointer || p
+        const dxClient = p.x - last.x
+        const dyClient = p.y - last.y
+        wrap.__mermaidLastSinglePointer = p
+
+        const { rect } = clientToViewBox(p.x, p.y)
+        const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        const dx = dxClient * (vb[2] / rect.width)
+        const dy = dyClient * (vb[3] / rect.height)
+        setCurVb([vb[0] - dx, vb[1] - dy, vb[2], vb[3]])
+        return
+      }
+
+      // Pinch zoom with 2 pointers
+      if (state.pointers.size === 2 && state.startVb && state.startDist > 0) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        const dist = Math.hypot(dx, dy)
+        if (!dist) return
+        const factor = state.startDist / dist // dist bigger => zoom in (viewBox smaller)
+
+        const cx = (pts[0].x + pts[1].x) / 2
+        const cy = (pts[0].y + pts[1].y) / 2
+        const centerClient = { x: cx, y: cy }
+
+        const pxy = clientToViewBox(centerClient.x, centerClient.y)
+        const cpx = pxy.x
+        const cpy = pxy.y
+
+        const vb = zoomAtPoint(state.startVb, factor, cpx, cpy)
+        setCurVb(vb)
+      }
+    }
+
+    const onPointerUpOrCancel = e => {
+      state.pointers.delete(e.pointerId)
+      if (state.pointers.size === 0) {
+        state.startVb = null
+        state.startDist = 0
+        state.startCenter = null
+        wrap.__mermaidLastSinglePointer = null
+      } else if (state.pointers.size === 1) {
+        // reset single pointer baseline to avoid jump
+        wrap.__mermaidLastSinglePointer = [...state.pointers.values()][0]
+      }
+    }
+
+    // Wheel zoom (mouse/trackpad)
+    const onWheel = e => {
+      // ctrlKey on mac trackpad pinch; we treat both as zoom
+      e.preventDefault()
+      const delta = e.deltaY
+      const zoomFactor = delta > 0 ? 1.1 : 0.9
+      const { x, y } = clientToViewBox(e.clientX, e.clientY)
+      const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      setCurVb(zoomAtPoint(vb, zoomFactor, x, y))
+    }
+
+    const onDblClick = () => {
+      const init = wrap.__mermaidInitViewBox
+      if (!init) return
+      wrap.__mermaidCurViewBox = init.slice()
+      setSvgViewBox(svg, init)
+    }
+
+    svg.addEventListener('pointerdown', onPointerDown)
+    svg.addEventListener('pointermove', onPointerMove)
+    svg.addEventListener('pointerup', onPointerUpOrCancel)
+    svg.addEventListener('pointercancel', onPointerUpOrCancel)
+    svg.addEventListener('wheel', onWheel, { passive: false })
+    svg.addEventListener('dblclick', onDblClick)
+  }
+
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+
+      // Clear old render (themeChange/pjax will rerun)
+      const oldSvg = item.querySelector('svg')
+      if (oldSvg) oldSvg.remove()
+      item.__mermaidGestureBound = false
+
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+        if (true) initMermaidGestures(item)
+        item.__mermaidOriginalSvg = svg
+        if (true) attachMermaidViewerButton(item)
+      }
+
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('/libs/mermaid/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.5"></script></div></div></body></html>

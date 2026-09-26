@@ -1,0 +1,557 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>离线部署CDH5. 16. 2 | 靖轩</title><meta name="author" content="靖轩"><meta name="copyright" content="靖轩"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="在实践了CDH6的离线部署之后，发现Cloudera的官方教程是基于CDH5。 10的。同时，CDH6的内存占用比较高，我的机器有点遭不住，所以又把CDH5的部署实施走了一遍。 模板部署 安装CentOS7. 10，并完成yum升级； 所有主机时间与阿里云时间服务器同步； 关闭selinux和firewalld； 安装JDK和mysql-connect；  [root@localhost ~]#">
+<meta property="og:type" content="article">
+<meta property="og:title" content="离线部署CDH5. 16. 2">
+<meta property="og:url" content="https://www.sujx.net/2020/02/29/CDH-Deploy/index.html">
+<meta property="og:site_name" content="靖轩">
+<meta property="og:description" content="在实践了CDH6的离线部署之后，发现Cloudera的官方教程是基于CDH5。 10的。同时，CDH6的内存占用比较高，我的机器有点遭不住，所以又把CDH5的部署实施走了一遍。 模板部署 安装CentOS7. 10，并完成yum升级； 所有主机时间与阿里云时间服务器同步； 关闭selinux和firewalld； 安装JDK和mysql-connect；  [root@localhost ~]#">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.sujx.net/about/wallhaven-4dzk5g.jpg">
+<meta property="article:published_time" content="2020-02-29T14:36:44.000Z">
+<meta property="article:modified_time" content="2026-09-26T02:25:04.105Z">
+<meta property="article:author" content="靖轩">
+<meta property="article:tag" content="bigdata">
+<meta property="article:tag" content="cdh">
+<meta property="article:tag" content="cdh5">
+<meta property="article:tag" content="offline">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.sujx.net/about/wallhaven-4dzk5g.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "离线部署CDH5. 16. 2",
+  "url": "https://www.sujx.net/2020/02/29/CDH-Deploy/",
+  "image": "https://cdn.sujx.net/about/wallhaven-4dzk5g.jpg",
+  "datePublished": "2020-02-29T14:36:44.000Z",
+  "dateModified": "2026-09-26T02:25:04.105Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "靖轩",
+      "url": "https://www.sujx.net"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://cdn.sujx.net/about/favicon.png"><link rel="canonical" href="https://www.sujx.net/2020/02/29/CDH-Deploy/index.html"><link rel="preconnect" href="//cdnjs.cloudflare.com"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css?v=5.5.5"><link rel="stylesheet" href="/fonts/css/all.min.css"><link rel="stylesheet" href="/libs/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?417b20ac1984432f821159fac27d3bb5";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><link rel="stylesheet" href="/fonts/titillium-web.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: '/libs/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: true,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '离线部署CDH5. 16. 2',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="alternate" href="/atom.xml" title="靖轩" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">靖轩</span></a><a class="nav-page-title" href="/"><span class="site-name">离线部署CDH5. 16. 2</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">离线部署CDH5. 16. 2</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2020-02-29T14:36:44.000Z" title="发表于 2020-02-29 22:36:44">2020-02-29</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-09-26T02:25:04.105Z" title="更新于 2026-09-26 10:25:04">2026-09-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F/">应用程序</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">1.3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>7分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><p>在实践了CDH6的离线部署之后，发现Cloudera的官方教程是基于CDH5。 10的。同时，CDH6的内存占用比较高，我的机器有点遭不住，所以又把CDH5的部署实施走了一遍。</p>
+<h3 id="模板部署"><a href="#模板部署" class="headerlink" title="模板部署"></a>模板部署</h3><ol>
+<li>安装CentOS7. 10，并完成yum升级；</li>
+<li>所有主机时间与阿里云时间服务器同步；</li>
+<li>关闭selinux和firewalld；</li>
+<li>安装JDK和mysql-connect；</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# wget https://repo.huaweicloud.com/java/jdk/8u202-b08/jdk-8u202-linux-x64. rpm</span><br><span class="line">[root@localhost ~]# yum localinstall jdk-8u202-linux-x64. rpm</span><br><span class="line">[root@localhost ~]# mv mysql-connector-java-5. 1. 39-bin.jar /usr/share/java/mysql-connector-java.jar </span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>关闭透明大页；</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# vim /etc/rc.d/rc.local</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">在最后一行添加如下内容</span></span><br><span class="line">if test -f /sys/kernel/mm/transparent_hugepage/enabled; then</span><br><span class="line">echo never &gt; /sys/kernel/mm/transparent_hugepage/enabled</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">if test -f /sys/kernel/mm/transparent_hugepage/defrag; then</span><br><span class="line">echo never &gt; /sys/kernel/mm/transparent_hugepage/defrag</span><br><span class="line">fi</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">赋予rc.local具有可执行权限</span></span><br><span class="line">[root@localhost ~]# chmod +x /etc/rc.d/rc.local</span><br><span class="line">[root@localhost ~]# sh /etc/rc.d/rc.local</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">检查</span></span><br><span class="line">[root@localhost ~]# cat /sys/kernel/mm/transparent_hugepage/defrag</span><br><span class="line">always madvise [never]</span><br><span class="line">[root@localhost ~]# cat /sys/kernel/mm/transparent_hugepage/enabled</span><br><span class="line">always madvise [never]</span><br></pre></td></tr></table></figure>
+
+<ol start="6">
+<li>调整swap策略</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# echo 10 &gt; /proc/sys/vm/swappiness</span><br><span class="line">[root@localhost ~]# echo vm.swappiness = 10 &gt;&gt; /etc/sysctl.conf</span><br></pre></td></tr></table></figure>
+
+<ol start="7">
+<li>修改文件句柄数</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# vim /etc/security/limits.conf</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">添加如下内容</span></span><br><span class="line">* soft nofile 100000</span><br><span class="line">* hard nofile 100000</span><br></pre></td></tr></table></figure>
+
+<ol start="8">
+<li>收尾</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# sys-unconfig</span><br></pre></td></tr></table></figure>
+
+<ol start="9">
+<li>下载CM和CDH</li>
+</ol>
+<p><a target="_blank" rel="noopener" href="http://archive.cloudera.com/cm5/redhat/7/x86_64/cm/5.16.2/RPMS/x86_64/" title="CM下载地址">CM下载地址</a> <a target="_blank" rel="noopener" href="http://archive.cloudera.com/cdh5/parcels/5.16.2/" title="CDH下载地址">CDH下载地址</a></p>
+<h3 id="Agent部署"><a href="#Agent部署" class="headerlink" title="Agent部署"></a>Agent部署</h3><ol>
+<li>配置主机ssh信任</li>
+<li>安装ansible</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装</span></span><br><span class="line">[root@elephant ~]# yum install -y ansible</span><br><span class="line"></span><br><span class="line">[root@elephant ~]# ls</span><br><span class="line">CDH-5. 16. 2-1. cdh5. 16. 2. p0. 8-el5. parcel.sha1</span><br><span class="line">CDH-5. 16. 2-1. cdh5. 16. 2. p0. 8-el7. parcel</span><br><span class="line">Mail</span><br><span class="line">anaconda-ks.cfg</span><br><span class="line">cloudera-manager-agent-5. 16. 2-1. cm5162. p0. 7. el7. x86_64. rpm</span><br><span class="line">cloudera-manager-daemons-5. 16. 2-1. cm5162. p0. 7. el7. x86_64. rpm</span><br><span class="line">cloudera-manager-server-5. 16. 2-1. cm5162. p0. 7. el7. x86_64. rpm</span><br><span class="line">cloudera-manager-server-db-2-5. 16. 2-1. cm5162. p0. 7. el7. x86_64. rpm</span><br><span class="line">enterprise-debuginfo-5. 16. 2-1. cm5162. p0. 7. el7. x86_64. rpm</span><br><span class="line">hadoop.tar.gz</span><br><span class="line">jdk-8u202-linux-x64. rpm</span><br><span class="line">manifest.json</span><br><span class="line">mysql-connector-java-5. 1. 39-bin.jar</span><br><span class="line"></span><br><span class="line">[root@elephant ~]# mkdir client</span><br><span class="line">[root@elephant ~]# mv cloudera-manager-daemons-5. 16. 2-1. cm5162. p0. 7. el7. x86_64. rpm client/</span><br><span class="line">[root@elephant ~]# mv cloudera-manager-agent-5. 16. 2-1. cm5162. p0. 7. el7. x86_64. rpm client/</span><br><span class="line">[root@elephant ~]# tar zcvf client.tar.gz client/</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>分发</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@elephant ~]# ansible all -m copy -a &#x27;src=/root/client.tar.gz dest=/root/&#x27;</span><br><span class="line">[root@elephant ~]# ansible all -a &#x27;tar zxf /root/client.tar.gz&#x27;</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>安装</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@elephant ~]# ansible all -a &#x27;yum localinstall /root/client/cloudera-manager-daemons-5. 16. 2-1. cm5162. p0. 7. el7. x86_64. rpm -y&#x27;</span><br><span class="line">[root@elephant ~]# ansible all -a &#x27;yum localinstall /root/client/cloudera-manager-agent-5. 16. 2-1. cm5162. p0. 7. el7. x86_64. rpm -y&#x27;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">修改配置文件</span></span><br><span class="line">[root@elephant ~]# sed -i &#x27;:s/localhost/lion/g&#x27; /etc/cloudera-scm-agent/config.ini</span><br><span class="line">[root@elephant ~]# ansible lion, tiger, horse, monkey -m copy -a &#x27;src=/etc/cloudera-scm-agent/config.ini dest=/etc/cloudera-scm-agent/&#x27;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">重启服务</span></span><br><span class="line">[root@elephant ~]# ansible all -a &#x27;systemctl enable cloudera-scm-agent --now&#x27;</span><br><span class="line">[root@elephant ~]# ansible all -a &#x27;systemctl restart cloudera-scm-agent&#x27;</span><br></pre></td></tr></table></figure>
+
+<h3 id="管理主机部署"><a href="#管理主机部署" class="headerlink" title="管理主机部署"></a>管理主机部署</h3><ol>
+<li>安装</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@elephant ~]# ansible lion -m copy -a &#x27;src=/root/cloudera-manager-server-5. 16. 2-1. cm5162. p0. 7. el7. x86_64. rpm dest=/root/&#x27;</span><br><span class="line">[root@elephant ~]# ansible lion -m copy -a &#x27;src=/root/CDH-5. 16. 2-1. cdh5. 16. 2. p0. 8-el7. parcel dest=/opt/cloudera/parcel-repo&#x27;</span><br><span class="line">[root@elephant ~]# ansible lion -m copy -a &#x27;src=/root/manifest.json dest=/opt/cloudera/parcel-repo&#x27;</span><br><span class="line">[root@elephant ~]# ansible lion -a &#x27;yum localinstall /root/cloudera-manager-server-5. 16. 2-1. cm5162. p0. 7. el7. x86_64. rpm -y&#x27;</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>数据库部署</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@elephant ~]# ansible lion -a &#x27;yum install -y mariadb mariadb-server&#x27;</span><br><span class="line">[root@elephant ~]# ssh lion</span><br><span class="line">[root@lion ~]# vim /etc/my.cnf.d/server.cnf</span><br><span class="line">[mysqld]</span><br><span class="line">key_buffer = 16M</span><br><span class="line">key_buffer_size = 32M</span><br><span class="line">max_allowed_packet = 32M</span><br><span class="line">thread_stack = 256K</span><br><span class="line">thread_cache_size = 64</span><br><span class="line">query_cache_limit = 8M</span><br><span class="line">query_cache_size = 64M</span><br><span class="line">query_cache_type = 1</span><br><span class="line">max_connections = 550</span><br><span class="line">server_id=1</span><br><span class="line"></span><br><span class="line">binlog_format = mixed</span><br><span class="line">read_buffer_size = 2M</span><br><span class="line">read_rnd_buffer_size = 16M</span><br><span class="line">sort_buffer_size = 8M</span><br><span class="line">join_buffer_size = 8M</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">InnoDB settings</span></span><br><span class="line">innodb_file_per_table = 1</span><br><span class="line">innodb_flush_log_at_trx_commit  = 2</span><br><span class="line">innodb_log_buffer_size = 64M</span><br><span class="line">innodb_buffer_pool_size = 4G</span><br><span class="line">innodb_thread_concurrency = 8</span><br><span class="line">innodb_flush_method = O_DIRECT</span><br><span class="line">innodb_log_file_size = 512M</span><br><span class="line"></span><br><span class="line">[root@lion ~]# systemctl enable mariadb --now</span><br><span class="line"></span><br><span class="line">vim cdh.sql</span><br><span class="line"></span><br><span class="line">CREATE DATABASE scm DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;</span><br><span class="line">GRANT ALL ON scm.* TO &#x27;scm&#x27;@&#x27;%&#x27; IDENTIFIED BY &#x27;passwd&#x27;;</span><br><span class="line">CREATE DATABASE amon DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;</span><br><span class="line">GRANT ALL ON amon.* TO &#x27;amon&#x27;@&#x27;%&#x27; IDENTIFIED BY &#x27;passwd&#x27;;</span><br><span class="line">CREATE DATABASE rman DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;</span><br><span class="line">GRANT ALL ON rman.* TO &#x27;rman&#x27;@&#x27;%&#x27; IDENTIFIED BY &#x27;passwd&#x27;;</span><br><span class="line">CREATE DATABASE hue DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;</span><br><span class="line">GRANT ALL ON hue.* TO &#x27;hue&#x27;@&#x27;%&#x27; IDENTIFIED BY &#x27;passwd&#x27;;</span><br><span class="line">CREATE DATABASE metastore DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;</span><br><span class="line">GRANT ALL ON metastore.* TO &#x27;hive&#x27;@&#x27;%&#x27; IDENTIFIED BY &#x27;passwd&#x27;;</span><br><span class="line">CREATE DATABASE sentry DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;</span><br><span class="line">GRANT ALL ON sentry.* TO &#x27;sentry&#x27;@&#x27;%&#x27; IDENTIFIED BY &#x27;passwd&#x27;;</span><br><span class="line">CREATE DATABASE nav DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;</span><br><span class="line">GRANT ALL ON nav.* TO &#x27;nav&#x27;@&#x27;%&#x27; IDENTIFIED BY &#x27;passwd&#x27;;</span><br><span class="line">CREATE DATABASE navms DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;</span><br><span class="line">GRANT ALL ON navms.* TO &#x27;navms&#x27;@&#x27;%&#x27; IDENTIFIED BY &#x27;passwd&#x27;;</span><br><span class="line">CREATE DATABASE oozie DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;</span><br><span class="line">GRANT ALL ON oozie.* TO &#x27;oozie&#x27;@&#x27;%&#x27; IDENTIFIED BY &#x27;passwd&#x27;;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">导入数据库</span></span><br><span class="line">[root@lion ~]# mysql -uroot -p &lt; cdh.sql</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">扩展数据库架构和CDH6有区别</span></span><br><span class="line">[root@lion ~]# cp /usr/share/java/mysql-connector-java.jar /usr/share/cmf/lib/</span><br><span class="line">[root@lion ~]# sh /usr/share/cmf/schema/scm_prepare_database.sh mysql scm scm</span><br><span class="line">Enter SCM password:</span><br><span class="line">JAVA_HOME=/usr/java/jdk1. 8. 0_202-amd64</span><br><span class="line">Verifying that we can write to /etc/cloudera-scm-server</span><br><span class="line">Creating SCM configuration file in /etc/cloudera-scm-server</span><br><span class="line">Executing:  /usr/java/jdk1. 8. 0_202-amd64/bin/java -cp /usr/share/java/mysql-connector-java.jar:/usr/share/java/oracle-connector-java.jar:/usr/share/java/postgresql-connector-java.jar:/usr/share/cmf/schema/../lib/* com.cloudera.enterprise.dbutil. DbCommandExecutor /etc/cloudera-scm-server/db.properties com.cloudera.cmf.db.</span><br><span class="line">[                          main] DbCommandExecutor              INFO  Successfully connected to database.</span><br><span class="line">All done, your SCM database is configured correctly!</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">启动服务</span></span><br><span class="line">[root@lion parcel-repo]# cd /opt/cloudera/parcel-repo/</span><br><span class="line">[root@lion parcel-repo]# sha1sum CDH-5. 16. 2-1. cdh5. 16. 2. p0. 8-el7. parcel  awk &#x27;&#123; print $1 &#125;&#x27; &gt; CDH-5. 16. 2-1. cdh5. 16. 2. p0. 8-el7. parcel.sha</span><br><span class="line">[root@lion ~]# chkconfig cloudera-scm-server on</span><br><span class="line">[root@lion ~]# systemctl start cloudera-scm-server</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">检查结果</span></span><br><span class="line">[root@lion ~]# netstat -tlnp grep 7180</span><br><span class="line">tcp        0      0 0. 0. 0. 0:7180            0. 0. 0. 0:*               LISTEN      3907/java </span><br></pre></td></tr></table></figure>
+
+<h3 id="GUI安装"><a href="#GUI安装" class="headerlink" title="GUI安装"></a>GUI安装</h3><p>接下来的安装就相对简单了，基本比CDH6简单。 <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/cdh5_01.png" alt="start" title="start"> <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/cdh5_02.png" alt="start" title="start"> <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/cdh5_03.png" alt="start" title="start"> <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/cdh5_04.png" alt="start" title="start"> <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/cdh5_05.png" alt="start" title="start"> <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/cdh5_06.png" alt="start" title="start"> <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/cdh5_07.png" alt="start" title="start"> <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/cdh5_08.png" alt="start" title="start"> <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/cdh5_09.png" alt="start" title="start"> <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/cdh5_10.png" alt="start" title="start"> <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/cdh5_11.png" alt="start" title="start"> <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/cdh5_12.png" alt="end" title="end"></p>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/bigdata/">bigdata</a><a class="post-meta__tags" href="/tags/cdh/">cdh</a><a class="post-meta__tags" href="/tags/cdh5/">cdh5</a><a class="post-meta__tags" href="/tags/offline/">offline</a></div><div class="post-share"><div class="social-share" data-image="https://cdn.sujx.net/about/wallhaven-4dzk5g.jpg" data-sites="facebook,twitter,weibo,qq"></div><link rel="stylesheet" href="/libs/sharejs/css/share.min.css" media="print" onload="this.media='all'"><script src="/libs/sharejs/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>能否请我喝一杯咖啡？</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.jpg" target="_blank"><img class="post-qr-code-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/wechat.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2020/03/01/CDH-Howto/" title="HDFS初步使用"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/04/wallhaven-mdj888.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">HDFS初步使用</div></div><div class="info-2"><div class="info-item-1">HDFS( Hadoop Distributed File System )是可扩展、容错、高性能的分布式文件系统，异步复制，一次写入多次读取，主要负责存储。其概念和内容可以参考[1]。这里就做一个简单的实验来看一下其文件管理的功能。更多的Hadoop命令可以参考[2]。 用户建立在实验环境中，不建议使用root账号直接登录运行，所以建立一个普通账号。 # Elephant主机执行# 安装ansible[root@elephant ~]# yum install -y ansible# 在/etc/ansible/hosts中新增所有主机名# 建立ansible文件[root@elephant ~]# mkdir playbook[root@elephant ~]# vim ./playbook/useradd.yaml---- hosts: hadoop  remote_user: root  vars_prompt:    - name: user_name      prompt: Enter Username      private: no    - name: use...</div></div></div></a><a class="pagination-related" href="/2020/02/23/HDFS-whatis/" title="wHAT is HDFS?"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/hdfswrite.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">wHAT is HDFS?</div></div><div class="info-2"><div class="info-item-1">Hadoop实现了一个分布式文件系统（Hadoop Distributed File System），简称HDFS。HDFS有高容错性的特点，并且设计用来部署在低廉的（low-cost）硬件上；而且它提供高吞吐量（high throughput）来访问应用程序的数据，适合那些有着超大数据集（large data set）的应用程序。HDFS放宽了（relax）POSIX的要求，可以以流的形式访问（streaming access）文件系统中的数据。 概念 HDFS集群分为两大角色：NameNode、DataNode； NameNode负责管理整个文件系统的元数据， second namenode是namenode的冷备； DataNode 负责管理用户的文件数据块； 文件会按照固定的大小（blocksize）( 128M )切成若干块后分布式存储在若干台datanode上； 每一个文件块可以有多个副本，并存放在不同的datanode上； Datanode会定期向Namenode汇报自身所保存的文件block信息，而namenode则会负责保持文件的副本数量； HDFS的内部工作机...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2020/03/01/CDH-Howto/" title="HDFS初步使用"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/04/wallhaven-mdj888.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-03-01</div><div class="info-item-2">HDFS初步使用</div></div><div class="info-2"><div class="info-item-1">HDFS( Hadoop Distributed File System )是可扩展、容错、高性能的分布式文件系统，异步复制，一次写入多次读取，主要负责存储。其概念和内容可以参考[1]。这里就做一个简单的实验来看一下其文件管理的功能。更多的Hadoop命令可以参考[2]。 用户建立在实验环境中，不建议使用root账号直接登录运行，所以建立一个普通账号。 # Elephant主机执行# 安装ansible[root@elephant ~]# yum install -y ansible# 在/etc/ansible/hosts中新增所有主机名# 建立ansible文件[root@elephant ~]# mkdir playbook[root@elephant ~]# vim ./playbook/useradd.yaml---- hosts: hadoop  remote_user: root  vars_prompt:    - name: user_name      prompt: Enter Username      private: no    - name: use...</div></div></div></a><a class="pagination-related" href="/2020/02/23/HDFS-whatis/" title="wHAT is HDFS?"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/hdfswrite.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-02-23</div><div class="info-item-2">wHAT is HDFS?</div></div><div class="info-2"><div class="info-item-1">Hadoop实现了一个分布式文件系统（Hadoop Distributed File System），简称HDFS。HDFS有高容错性的特点，并且设计用来部署在低廉的（low-cost）硬件上；而且它提供高吞吐量（high throughput）来访问应用程序的数据，适合那些有着超大数据集（large data set）的应用程序。HDFS放宽了（relax）POSIX的要求，可以以流的形式访问（streaming access）文件系统中的数据。 概念 HDFS集群分为两大角色：NameNode、DataNode； NameNode负责管理整个文件系统的元数据， second namenode是namenode的冷备； DataNode 负责管理用户的文件数据块； 文件会按照固定的大小（blocksize）( 128M )切成若干块后分布式存储在若干台datanode上； 每一个文件块可以有多个副本，并存放在不同的datanode上； Datanode会定期向Namenode汇报自身所保存的文件block信息，而namenode则会负责保持文件的副本数量； HDFS的内部工作机...</div></div></div></a><a class="pagination-related" href="/2020/04/11/offline-join-ad/" title="离线加域"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/05/wallhaven-md1qr8.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-04-11</div><div class="info-item-2">离线加域</div></div><div class="info-2"><div class="info-item-1">在MS ActiveDirectory的维护工作中，经常会出现承担多种域权限的主机需要重新刷系统的情况。一般的操作方式是退域、重装、删除域信息、重新加域、再次赋权，这样可以确保安全、可靠的维护域中计算机账号的权限正确。不过，从2008R2开始，MS提供了可以离线加域的方法，来避免这一麻烦的处理过程。简单来说，就是从AD中把计算机账号的属性导出为加密文本，然后再在新建的主机上导入，重启即可使用域账号登录并继承原有域权限。 实现方法就两条命令： # 在可以正常登录AD的主机上导出域中计算机账号信息, 然后把文本文件复制到新机上djoin /provision /domain domian_name /machine machine_name /savefile  /reuse# 在重刷系统的主机上以管理员权限导入域信息djoin /requestodj /loadfile  /windowspath c:\windows /localos  具体的解析[在此](https://docs.microsoft.com/en-us/previous-versions/windows/it-...</div></div></div></a><a class="pagination-related" href="/2020/02/14/cdh63-deploy/" title="离线部署CDH6. 3"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/wallhaven-4gr113.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-02-14</div><div class="info-item-2">离线部署CDH6. 3</div></div><div class="info-2"><div class="info-item-1">部署练习的环境有六台主机，主机的配置是4核心4G内存（ 内存还是低了，建议8G起步 ）： 主机名 IP地址 Elephant    184      Lion    185      Horse    186      Monkey    187      Tiger    188      环境准备 主机环境配置  按照各个主机配置修改相应值，下面以elephant为例： [root@localhost ~]# nmcli c m ens33 ipv4. method manual ipv4. addresses 192. 168. 174. 184/24 ipv4. gateway 192. 168. 174. 2 ipv4. dns 192. 168. 174. 2[root@localhost ~]# nmcli c d ens33 &amp;&amp; nmcli c u ens33[root@localhost ~]# hostnamectl set-hostname elephant  2。  文件复制 将离线部署CDH6。 3。 1的文件复制到每一台主机上。其中包...</div></div></div></a><a class="pagination-related" href="/2020/03/09/CDH-words/" title="使用CDH示例程序进行字数统计"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/05/wallhaven-zx8r3v.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-03-09</div><div class="info-item-2">使用CDH示例程序进行字数统计</div></div><div class="info-2"><div class="info-item-1">Wordcount程序是Hadoop上的经典“HelloWorld”程序。CDH系统自带了wordcount程序来检测部署的成功与否。 # 解压提前准备好的莎士比亚全集[sujx@elephant ~]$ gzip -d shakespeare.txt.gz# 上传至hadoop文件系统[sujx@elephant ~]$ hdfs dfs -mkdir /user/sujx/input[sujx@elephant ~]$ hdfs dfs -put shakespeare.txt /user/sujx/input# 查看有哪些测试程序可用[sujx@elephant ~]$ hadoop jar /opt/cloudera/parcels/CDH/lib/hadoop-mapreduce/hadoop-mapreduce-examples.jarAn example program must be given as the first argument.Valid program names are:  aggregatewordcount: An Aggregate base...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">靖轩</div><div class="author-info-description">逝者如斯夫,不舍昼夜</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/grepsu"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://gitee.com/grepsu" target="_blank" title="Gitee"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:sujx@live.cn" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS链接"><i class="fa  fa-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E6%9D%BF%E9%83%A8%E7%BD%B2"><span class="toc-number">1.</span> <span class="toc-text">模板部署</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Agent%E9%83%A8%E7%BD%B2"><span class="toc-number">2.</span> <span class="toc-text">Agent部署</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AE%A1%E7%90%86%E4%B8%BB%E6%9C%BA%E9%83%A8%E7%BD%B2"><span class="toc-number">3.</span> <span class="toc-text">管理主机部署</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#GUI%E5%AE%89%E8%A3%85"><span class="toc-number">4.</span> <span class="toc-text">GUI安装</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/07/03/AIGC_FoxHole/" title="海鹰">海鹰</a><time datetime="2026-07-03T01:04:07.000Z" title="发表于 2026-07-03 09:04:07">2026-07-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/11/fristVibeCoding/" title="鹊随金印：我的第一个完整的AI编程项目">鹊随金印：我的第一个完整的AI编程项目</a><time datetime="2026-06-11T01:04:07.000Z" title="发表于 2026-06-11 09:04:07">2026-06-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/03/VI_Howto/" title="VI编辑器简介">VI编辑器简介</a><time datetime="2026-06-03T01:04:07.000Z" title="发表于 2026-06-03 09:04:07">2026-06-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/28/HNCitic_2605/" title="我要上头条">我要上头条</a><time datetime="2026-05-28T01:04:07.000Z" title="发表于 2026-05-28 09:04:07">2026-05-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/12/TS-Domain-Controller-Sync-Failure/" title="记一次Windows AD域控制器同步故障排错">记一次Windows AD域控制器同步故障排错</a><time datetime="2026-05-12T03:04:07.000Z" title="发表于 2026-05-12 11:04:07">2026-05-12</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2008 - 2026 By 靖轩</span></div><div class="footer_custom_text">京ICP备17034757号</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.5"></script><script src="/js/main.js?v=5.5.5"></script><script src="/libs/fancybox/fancybox.umd.js"></script><script src="/js/instantpage.js" type="module"></script><script src="/libs/lazyload/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const parseViewBox = viewBox => {
+    if (!viewBox) return null
+    const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
+    if (parts.length !== 4 || parts.some(n => Number.isNaN(n))) return null
+    return parts
+  }
+
+  const getSvgViewBox = svg => {
+    const attr = parseViewBox(svg.getAttribute('viewBox'))
+    if (attr) return attr
+
+    // Fallback: use bbox to build a viewBox
+    try {
+      const bbox = svg.getBBox()
+      if (bbox && bbox.width && bbox.height) return [bbox.x, bbox.y, bbox.width, bbox.height]
+    } catch (e) {
+      // getBBox may fail on some edge cases; ignore
+    }
+
+    const w = Number(svg.getAttribute('width')) || 0
+    const h = Number(svg.getAttribute('height')) || 0
+    if (w > 0 && h > 0) return [0, 0, w, h]
+    return [0, 0, 100, 100]
+  }
+
+  const setSvgViewBox = (svg, vb) => {
+    svg.setAttribute('viewBox', `${vb[0]} ${vb[1]} ${vb[2]} ${vb[3]}`)
+  }
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v))
+
+  const openSvgInNewTab = ({ source, initViewBox }) => {
+    const getClonedSvg = () => {
+      if (typeof source === 'string') {
+        const template = document.createElement('template')
+        template.innerHTML = source.trim()
+        const svg = template.content.querySelector('svg')
+        return svg ? svg.cloneNode(true) : null
+      }
+      if (source && typeof source.cloneNode === 'function') {
+        return source.cloneNode(true)
+      }
+      return null
+    }
+
+    const clone = getClonedSvg()
+    if (!clone) return
+    if (initViewBox && initViewBox.length === 4) {
+      clone.setAttribute('viewBox', initViewBox.join(' '))
+    }
+    if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+    if (!clone.getAttribute('xmlns:xlink') && clone.outerHTML.includes('xlink:')) {
+      clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+    }
+    // inject background to match current theme
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    const bg = getComputedStyle(document.body).backgroundColor || (isDark ? '#1e1e1e' : '#ffffff')
+    if (!clone.style.background) clone.style.background = bg
+
+    const serializer = new XMLSerializer()
+    const svgSource = serializer.serializeToString(clone)
+    const htmlSource = `<!doctype html><html><head><meta charset="utf-8" />
+      <style>
+        html, body { width: 100%; height: 100%; margin: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; }
+        svg { max-width: 100%; max-height: 100%; height: auto; width: auto; }
+      </style>
+      </head><body>${svgSource}</body></html>`
+    const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank', 'noopener')
+    setTimeout(() => URL.revokeObjectURL(url), 30000)
+  }
+
+  const attachMermaidViewerButton = wrap => {
+    let btn = wrap.querySelector('.mermaid-open-btn')
+    if (!btn) {
+      btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'mermaid-open-btn'
+      wrap.appendChild(btn)
+    }
+
+    btn.innerHTML = '<i class="fa fa-search fa-fw" aria-hidden="true"></i>'
+
+    if (!btn.__mermaidViewerBound) {
+      btn.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        const svg = wrap.__mermaidOriginalSvg || wrap.querySelector('svg')
+        if (!svg) return
+        const initViewBox = wrap.__mermaidInitViewBox
+        if (typeof svg === 'string') {
+          openSvgInNewTab({ source: svg, initViewBox })
+          return
+        }
+        openSvgInNewTab({ source: svg, initViewBox })
+      })
+      btn.__mermaidViewerBound = true
+    }
+  }
+
+  // Zoom around a point (px, py) in the SVG viewport (in viewBox coordinates)
+  const zoomAtPoint = (vb, factor, px, py) => {
+    const w = vb[2] * factor
+    const h = vb[3] * factor
+    const nx = px - (px - vb[0]) * factor
+    const ny = py - (py - vb[1]) * factor
+    return [nx, ny, w, h]
+  }
+
+  const initMermaidGestures = wrap => {
+    const svg = wrap.querySelector('svg')
+    if (!svg) return
+
+    // Ensure viewBox exists so gestures always work
+    const initVb = getSvgViewBox(svg)
+    wrap.__mermaidInitViewBox = initVb
+    wrap.__mermaidCurViewBox = initVb.slice()
+    setSvgViewBox(svg, initVb)
+
+    // Avoid binding multiple times on themeChange/pjax
+    if (wrap.__mermaidGestureBound) return
+    wrap.__mermaidGestureBound = true
+
+    // Helper: map client (viewport) coordinate -> viewBox coordinate
+    const clientToViewBox = (clientX, clientY) => {
+      const rect = svg.getBoundingClientRect()
+      const vb = wrap.__mermaidCurViewBox || getSvgViewBox(svg)
+      const x = vb[0] + (clientX - rect.left) * (vb[2] / rect.width)
+      const y = vb[1] + (clientY - rect.top) * (vb[3] / rect.height)
+      return { x, y, rect, vb }
+    }
+
+    const state = {
+      pointers: new Map(),
+      startVb: null,
+      startDist: 0,
+      startCenter: null
+    }
+
+    const clampVb = vb => {
+      const init = wrap.__mermaidInitViewBox || vb
+      const minW = init[2] * 0.1
+      const maxW = init[2] * 10
+      const minH = init[3] * 0.1
+      const maxH = init[3] * 10
+      vb[2] = clamp(vb[2], minW, maxW)
+      vb[3] = clamp(vb[3], minH, maxH)
+      return vb
+    }
+
+    const setCurVb = vb => {
+      vb = clampVb(vb)
+      wrap.__mermaidCurViewBox = vb
+      setSvgViewBox(svg, vb)
+    }
+
+    const onPointerDown = e => {
+      // Allow only primary button for mouse
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      svg.setPointerCapture(e.pointerId)
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      if (state.pointers.size === 1) {
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      } else if (state.pointers.size === 2) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        state.startDist = Math.hypot(dx, dy)
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        state.startCenter = { x: (pts[0].x + pts[1].x) / 2, y: (pts[0].y + pts[1].y) / 2 }
+      }
+    }
+
+    const onPointerMove = e => {
+      if (!state.pointers.has(e.pointerId)) return
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      // Pan with 1 pointer
+      if (state.pointers.size === 1 && state.startVb) {
+        const p = [...state.pointers.values()][0]
+        const prev = { x: e.clientX - e.movementX, y: e.clientY - e.movementY }
+        // movementX/Y unreliable on touch, compute from stored last position
+        const last = wrap.__mermaidLastSinglePointer || p
+        const dxClient = p.x - last.x
+        const dyClient = p.y - last.y
+        wrap.__mermaidLastSinglePointer = p
+
+        const { rect } = clientToViewBox(p.x, p.y)
+        const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        const dx = dxClient * (vb[2] / rect.width)
+        const dy = dyClient * (vb[3] / rect.height)
+        setCurVb([vb[0] - dx, vb[1] - dy, vb[2], vb[3]])
+        return
+      }
+
+      // Pinch zoom with 2 pointers
+      if (state.pointers.size === 2 && state.startVb && state.startDist > 0) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        const dist = Math.hypot(dx, dy)
+        if (!dist) return
+        const factor = state.startDist / dist // dist bigger => zoom in (viewBox smaller)
+
+        const cx = (pts[0].x + pts[1].x) / 2
+        const cy = (pts[0].y + pts[1].y) / 2
+        const centerClient = { x: cx, y: cy }
+
+        const pxy = clientToViewBox(centerClient.x, centerClient.y)
+        const cpx = pxy.x
+        const cpy = pxy.y
+
+        const vb = zoomAtPoint(state.startVb, factor, cpx, cpy)
+        setCurVb(vb)
+      }
+    }
+
+    const onPointerUpOrCancel = e => {
+      state.pointers.delete(e.pointerId)
+      if (state.pointers.size === 0) {
+        state.startVb = null
+        state.startDist = 0
+        state.startCenter = null
+        wrap.__mermaidLastSinglePointer = null
+      } else if (state.pointers.size === 1) {
+        // reset single pointer baseline to avoid jump
+        wrap.__mermaidLastSinglePointer = [...state.pointers.values()][0]
+      }
+    }
+
+    // Wheel zoom (mouse/trackpad)
+    const onWheel = e => {
+      // ctrlKey on mac trackpad pinch; we treat both as zoom
+      e.preventDefault()
+      const delta = e.deltaY
+      const zoomFactor = delta > 0 ? 1.1 : 0.9
+      const { x, y } = clientToViewBox(e.clientX, e.clientY)
+      const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      setCurVb(zoomAtPoint(vb, zoomFactor, x, y))
+    }
+
+    const onDblClick = () => {
+      const init = wrap.__mermaidInitViewBox
+      if (!init) return
+      wrap.__mermaidCurViewBox = init.slice()
+      setSvgViewBox(svg, init)
+    }
+
+    svg.addEventListener('pointerdown', onPointerDown)
+    svg.addEventListener('pointermove', onPointerMove)
+    svg.addEventListener('pointerup', onPointerUpOrCancel)
+    svg.addEventListener('pointercancel', onPointerUpOrCancel)
+    svg.addEventListener('wheel', onWheel, { passive: false })
+    svg.addEventListener('dblclick', onDblClick)
+  }
+
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+
+      // Clear old render (themeChange/pjax will rerun)
+      const oldSvg = item.querySelector('svg')
+      if (oldSvg) oldSvg.remove()
+      item.__mermaidGestureBound = false
+
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+        if (true) initMermaidGestures(item)
+        item.__mermaidOriginalSvg = svg
+        if (true) attachMermaidViewerButton(item)
+      }
+
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('/libs/mermaid/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.5"></script></div></div></body></html>

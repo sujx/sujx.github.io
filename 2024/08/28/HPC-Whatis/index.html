@@ -1,0 +1,617 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>简述HPC | 靖轩</title><meta name="author" content="靖轩"><meta name="copyright" content="靖轩"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="高性能计算 （ HPC:High Performance Computing ） 是一种利用强大处理器集群并行处理海量多维数据集（也称为大数据）并以极高速度解决复杂问题的技术。 几十年来，超级计算机（搭载数百万个处理器或处理器核心的专用计算机）一直是高性能计算的关键。如今，越来越多的组织在托管在本地或云端的高速计算机服务器集群上运行 HPC 服务。HPC 工作负载揭示了重要的新洞察分析，推动了人类">
+<meta property="og:type" content="article">
+<meta property="og:title" content="简述HPC">
+<meta property="og:url" content="https://www.sujx.net/2024/08/28/HPC-Whatis/index.html">
+<meta property="og:site_name" content="靖轩">
+<meta property="og:description" content="高性能计算 （ HPC:High Performance Computing ） 是一种利用强大处理器集群并行处理海量多维数据集（也称为大数据）并以极高速度解决复杂问题的技术。 几十年来，超级计算机（搭载数百万个处理器或处理器核心的专用计算机）一直是高性能计算的关键。如今，越来越多的组织在托管在本地或云端的高速计算机服务器集群上运行 HPC 服务。HPC 工作负载揭示了重要的新洞察分析，推动了人类">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.sujx.net/covers/cover42.jpg">
+<meta property="article:published_time" content="2024-08-28T07:04:07.000Z">
+<meta property="article:modified_time" content="2026-09-26T02:25:04.135Z">
+<meta property="article:author" content="靖轩">
+<meta property="article:tag" content="HPC">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="Management">
+<meta property="article:tag" content="Network">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.sujx.net/covers/cover42.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "简述HPC",
+  "url": "https://www.sujx.net/2024/08/28/HPC-Whatis/",
+  "image": "https://cdn.sujx.net/covers/cover42.jpg",
+  "datePublished": "2024-08-28T07:04:07.000Z",
+  "dateModified": "2026-09-26T02:25:04.135Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "靖轩",
+      "url": "https://www.sujx.net"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://cdn.sujx.net/about/favicon.png"><link rel="canonical" href="https://www.sujx.net/2024/08/28/HPC-Whatis/index.html"><link rel="preconnect" href="//cdnjs.cloudflare.com"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css?v=5.5.5"><link rel="stylesheet" href="/fonts/css/all.min.css"><link rel="stylesheet" href="/libs/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?417b20ac1984432f821159fac27d3bb5";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><link rel="stylesheet" href="/fonts/titillium-web.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: '/libs/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: true,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '简述HPC',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="alternate" href="/atom.xml" title="靖轩" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">靖轩</span></a><a class="nav-page-title" href="/"><span class="site-name">简述HPC</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">简述HPC</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-08-28T07:04:07.000Z" title="发表于 2024-08-28 15:04:07">2024-08-28</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-09-26T02:25:04.135Z" title="更新于 2026-09-26 10:25:04">2026-09-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%93%8D%E4%BD%9C%E7%AC%94%E8%AE%B0/">操作笔记</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>6分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><p>高性能计算 （ HPC:High Performance Computing ） 是一种利用强大处理器集群并行处理海量多维数据集（也称为大数据）并以极高速度解决复杂问题的技术。</p>
+<p>几十年来，超级计算机（搭载数百万个处理器或处理器核心的专用计算机）一直是高性能计算的关键。如今，越来越多的组织在托管在本地或云端的高速计算机服务器集群上运行 HPC 服务。HPC 工作负载揭示了重要的新洞察分析，推动了人类知识的进步，并创造了显著的竞争优势。例如，HPC 用于 DNA 测序、自动化股票交易，并运行<a target="_blank" rel="noopener" href="https://www.ibm.com/cn-zh/topics/artificial-intelligence">人工智能 （ AI ）</a> 算法和模拟（例如自动驾驶汽车），实时分析来自物联网传感器、雷达和 GPS 系统的 TB 数据流，以做出瞬间决策。</p>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover42.jpg"></p>
+<blockquote>
+<ol start="2024">
+<li>08 摄于山东济南 马路边一个树枝长得特别舒展的行道树</li>
+</ol>
+</blockquote>
+<p>HPC的内容主要包括：</p>
+<ol>
+<li><p><strong>大规模并行计算</strong></p>
+<p>并行计算在多台计算机服务器或处理器上同时运行多个任务。大规模并行计算是利用成千上万至数百万个处理器或处理器内核进行并行计算。</p>
+</li>
+<li><p><strong>计算机集群（也称 HPC Cluster）</strong></p>
+<p>HPC Cluster 由多台联网的高速计算机服务器组成，并配备用于管理并行计算工作负载的中央调度程序。这些计算机（也称为节点）使用高性能多核 CPU 或者现在更为常用的 GPU，后者适用于严格数学计算、机器学习模型和图形密集型任务。单个 HPC Cluster 可以包含 10 万个或更多节点。</p>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/08/hpc.png"></p>
+</li>
+<li><p><strong>高性能组件</strong></p>
+<p>HPC Cluster 中的所有其他计算资源，例如网络、内存、存储和文件系统等，都具有高速和高吞吐量等特性。它们也是低延迟组件，能够与节点保持同步，并优化集群的计算能力和性能。</p>
+</li>
+</ol>
+<h2 id="组成"><a href="#组成" class="headerlink" title="组成"></a>组成</h2><h3 id="硬件"><a href="#硬件" class="headerlink" title="硬件"></a>硬件</h3><ol>
+<li>服务器、存储、网络及数据中心基础设施</li>
+<li>操作系统部署、自动化运维、时间同步、节点授权、主机监控</li>
+<li>用户管理与同步、用户开发环境&#x2F;用户软件编译</li>
+</ol>
+<h3 id="软件"><a href="#软件" class="headerlink" title="软件"></a>软件</h3><ol>
+<li>HPC套件、数据库、虚拟化、集群管理软件</li>
+<li>并行计算库、文件系统、作业调度、域名服务</li>
+</ol>
+<h3 id="服务"><a href="#服务" class="headerlink" title="服务"></a>服务</h3><ol>
+<li>售后服务、开发服务</li>
+<li>专业应用调优</li>
+<li>专业设计咨询</li>
+</ol>
+<h2 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h2><ol>
+<li><p>算力</p>
+<ol>
+<li>CPU计算节点通常使用大量的CPU内核，例如<a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?q=%E8%8B%B1%E7%89%B9%E5%B0%94%E8%87%B3%E5%BC%BA%E5%8F%AF%E6%89%A9%E5%B1%95%E5%A4%84%E7%90%86%E5%99%A8&zhida_source=entity&is_preview=1">英特尔至强可扩展处理器</a>，AMD EPYC处理器，高频（快速）计算内核或两者的组合。<br>2。 GPU计算节点可以配备GPU，FPGA或其他并行加速器，并依赖于这些企业级设备的大规模并行计算能力和内存。</li>
+</ol>
+</li>
+<li><p>设计特点</p>
+<ol>
+<li>并行负载<br>并行负载指被细分为多个小型、简单、独立任务的计算问题，这些任务可以同时运行，通常相互之间几乎没有通信。并行负载的常见使用场景包括风险模拟、分子建模、上下文搜索和物流模拟。</li>
+<li>紧密耦合负载<br>紧密耦合负载通常占用较多的共享资源，并分解为相互之间持续通信的小任务，集群中的各个节点在执行处理时会相互通信。紧密耦合负载的常见使用场景包括计算流体动力学、天气预报建模、材料模拟、汽车碰撞仿真、地理空间模拟和交通管理。</li>
+</ol>
+</li>
+</ol>
+<h2 id="整体架构"><a href="#整体架构" class="headerlink" title="整体架构"></a>整体架构</h2><h3 id="系统结构"><a href="#系统结构" class="headerlink" title="系统结构"></a>系统结构</h3><p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/08/2a37162366dc3ee026ac26ff6c9b2cdb.png"></p>
+<h3 id="硬件结构"><a href="#硬件结构" class="headerlink" title="硬件结构"></a>硬件结构</h3><p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/08/c6357874a6426941bc005d50cbc5771a.png"></p>
+<h3 id="软件应用"><a href="#软件应用" class="headerlink" title="软件应用"></a>软件应用</h3><p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/08/2020032323591836.png"></p>
+<h2 id="网络架构"><a href="#网络架构" class="headerlink" title="网络架构"></a>网络架构</h2><h3 id="网络类型"><a href="#网络类型" class="headerlink" title="网络类型"></a>网络类型</h3><ol>
+<li>计算网络：高带宽、低延迟，负责HPC集群之间的通信任务，使用IB网络</li>
+<li>存储网络：存储内部的互联网络，一般使用FC网络</li>
+<li>管理网络：用于系统管理、带外管理、任务调度和监控业务，使用IP网络</li>
+</ol>
+<h3 id="交换设备"><a href="#交换设备" class="headerlink" title="交换设备"></a>交换设备</h3><ol>
+<li>IB交换机：<a target="_blank" rel="noopener" href="https://bbs.huaweicloud.com/blogs/422556">什么是IB网络</a></li>
+<li>IP交换机</li>
+<li>FC交换机</li>
+</ol>
+<h3 id="IB产品"><a href="#IB产品" class="headerlink" title="IB产品"></a>IB产品</h3><p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/08/ibnic.PNG"></p>
+<h2 id="文件系统"><a href="#文件系统" class="headerlink" title="文件系统"></a>文件系统</h2><h3 id="文件系统的定义"><a href="#文件系统的定义" class="headerlink" title="文件系统的定义"></a>文件系统的定义</h3><p>文件系统是OS中负责管理和存储文件信息的软件，用于管理存储设备或者分区上文件的方法和数据结构。</p>
+<h3 id="分布式文件系统的分类"><a href="#分布式文件系统的分类" class="headerlink" title="分布式文件系统的分类"></a>分布式文件系统的分类</h3><ol>
+<li>分布式文件系统指C&#x2F;S架构或者网络文件系统，代表有NFS</li>
+<li>集群文件系统指协同多个节点提供高性能、高可用或者负载均衡的文件系统，消除了单点故障和性能瓶颈，代表有GlusterFS</li>
+<li>并行文件系统是指为并行应用优化的文件系统，主要面向所有客户端在同一时间并发读写同一个文件的情况，代表有Lustre、GPFS、BeeGFS</li>
+</ol>
+<h3 id="HPC与并行文件系统"><a href="#HPC与并行文件系统" class="headerlink" title="HPC与并行文件系统"></a>HPC与并行文件系统</h3><p>随着计算规模的增加，存储称为系统的瓶颈。并行文件系统就可以使集群中所有计算节点都可以通过单一文件目录读取存储系统中的文件，同时对某一个文件进行读写，并满足大规模随机IO、频繁读写操作、密集通信的业务要求。</p>
+<p>并行文件系统的最基本功能：</p>
+<ol>
+<li>提供共享访问数据，便于集群应用程序的编写和存储的负载均衡；<br>2。 提供高性能的存储，在IO和数据吞吐率上满足集群聚合访问的需求。</li>
+</ol>
+<h2 id="调度系统"><a href="#调度系统" class="headerlink" title="调度系统"></a>调度系统</h2><p>在使用<a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?q=%E9%AB%98%E6%80%A7%E8%83%BD%E8%AE%A1%E7%AE%97&zhida_source=entity&is_preview=1">高性能计算</a>（HPC）集群时，通常你会首先登录到一个称为”登录节点”（或”<a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?q=%E5%A4%B4%E8%8A%82%E7%82%B9&zhida_source=entity&is_preview=1">头节点</a>“）的服务器上。登录节点主要用于管理作业提交、文件编辑和其他管理任务，而不是用于执行计算密集型任务。实际的计算作业是在计算节点上执行的，计算节点由作业调度系统（如SLURM 即 Simple Linux Utility for Resource Management）管理。通常，用户不能直接从登录节点切换到计算节点进行交云操作，而是需要通过作业调度系统提交作业来请求计算资源。</p>
+<p>调度系统作为整个HPC系统的大脑和中枢。<a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?q=%E8%B0%83%E5%BA%A6%E7%B3%BB%E7%BB%9F&zhida_source=entity&is_preview=1">调度系统</a>通过合理的资源分配和<a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?q=%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6&zhida_source=entity&is_preview=1">任务调度</a>，提高了系统的效率、性能和稳定性。目前市面上主流调度器有四类：</p>
+<ol>
+<li>LSF：IBM公司所有，主要由半导体公司使用</li>
+<li>SGE：Altair公司所有，主要由半导体公司使用</li>
+<li>Slurm：SchedMD公司与社区共同维护，完全开源软件，主要由大学和超算中心使用</li>
+<li>PBS：Altair公司所有，主要由工业制造类使用</li>
+</ol>
+<h2 id="学习路径"><a href="#学习路径" class="headerlink" title="学习路径"></a>学习路径</h2><h3 id="运维技能"><a href="#运维技能" class="headerlink" title="运维技能"></a>运维技能</h3><h4 id="Linux系统运维"><a href="#Linux系统运维" class="headerlink" title="Linux系统运维"></a>Linux系统运维</h4><ol>
+<li>常用命令</li>
+<li>磁盘及用户管理</li>
+<li>计划任务和监控资源</li>
+<li>Shell脚本</li>
+</ol>
+<h4 id="集群用户管理"><a href="#集群用户管理" class="headerlink" title="集群用户管理"></a>集群用户管理</h4><ol>
+<li>LDAP介绍</li>
+<li>OpenLDAP命令和案例</li>
+<li>OpenLDAP服务端和客户端安装配置</li>
+<li>密码策略和管理</li>
+</ol>
+<h4 id="网络基础"><a href="#网络基础" class="headerlink" title="网络基础"></a>网络基础</h4><ol>
+<li>TCP&#x2F;IP协议栈</li>
+<li>扩展介绍</li>
+<li>交换机使用和配置</li>
+</ol>
+<h4 id="软件安装"><a href="#软件安装" class="headerlink" title="软件安装"></a>软件安装</h4><ol>
+<li>make工具安装</li>
+<li>cmake工具安装</li>
+</ol>
+<h4 id="软件环境"><a href="#软件环境" class="headerlink" title="软件环境"></a>软件环境</h4><ol>
+<li>module环境管理工具</li>
+<li>conda环境管理工具</li>
+<li>spack环境管理工具</li>
+<li>docker容器的使用</li>
+<li>singularity容器的使用</li>
+</ol>
+<h4 id="作业调度系统运维"><a href="#作业调度系统运维" class="headerlink" title="作业调度系统运维"></a>作业调度系统运维</h4><ol>
+<li>Slurm作业调度管理及MySQL配置</li>
+<li>Slurm作业调度的管理</li>
+<li>Slurm作业调度、提交任务、查看节点</li>
+<li>Slurm的高级配置</li>
+</ol>
+<h4 id="集群性能监控"><a href="#集群性能监控" class="headerlink" title="集群性能监控"></a>集群性能监控</h4><ol>
+<li>Grafana+Prometheus部署</li>
+<li>Grafana+Prometheus使用</li>
+</ol>
+<h3 id="相关链接"><a href="#相关链接" class="headerlink" title="相关链接"></a>相关链接</h3><p><a target="_blank" rel="noopener" href="https://scc.ustc.edu.cn/389/list.htm">中国科技大学超算中心帮助文档</a><br><a target="_blank" rel="noopener" href="https://yaohuablog.com/zh/home">姚华blog</a><br><a target="_blank" rel="noopener" href="https://heptagonhust.github.io/HPC-roadmap/">高性能计算学习路线图</a><br><a target="_blank" rel="noopener" href="http://ydm.daimaku.net/learning-path/1016">超算管理员培训</a><br><a target="_blank" rel="noopener" href="https://hmli.ustc.edu.cn/doc/linux/slurm-install/index.html">Slurm资源管理与作业调度系统安装配置</a><br><a target="_blank" rel="noopener" href="https://hmli.ustc.edu.cn/doc/linux/slurm-ha/">Slurm资源管理与作业调度系统HA高可用配置</a><br><a target="_blank" rel="noopener" href="https://hmli.ustc.edu.cn/doc/userguide/slurm-userguide.pdf">Slurm作业调度系统使用指南</a></p>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Linux/">Linux</a><a class="post-meta__tags" href="/tags/Network/">Network</a><a class="post-meta__tags" href="/tags/HPC/">HPC</a><a class="post-meta__tags" href="/tags/Management/">Management</a></div><div class="post-share"><div class="social-share" data-image="https://cdn.sujx.net/covers/cover42.jpg" data-sites="facebook,twitter,weibo,qq"></div><link rel="stylesheet" href="/libs/sharejs/css/share.min.css" media="print" onload="this.media='all'"><script src="/libs/sharejs/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>能否请我喝一杯咖啡？</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.jpg" target="_blank"><img class="post-qr-code-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/wechat.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2024/09/02/Cybernetics_Whatis/" title="「控制论与科学方法论」"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover48.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">「控制论与科学方法论」</div></div><div class="info-2"><div class="info-item-1"> 最伟大的东西是世界上最简单的东西，它和你自己的存在一样简单     9 摄于北京大兴国际机场   控制与反馈可能性空间控制论和系统论的研究开始于可能性空间。世界上许多事物并不是从一开始就注定要发展成现在这个样子的。在事物发展的初期，它们往往有多种发展的可能性，由于条件或者存粹机遇的关系，最终才沿着某个特定的方向发展下去。 控制论是关于控制的理论：  被控制的对象必须存在多种发展的可能性 人可以在被控制的对象的多种发展可能性中进行选择  控制的概念与事物发展的可能性密切相关。我们将事物发展变化中面临的各种可能性集合称为这个事物的可能性空间。 人通过选择改造世界事物变化具有不确定性，也就是事物的矛盾性。事物的矛盾性，使事物的可能性空间至少面临着肯定自身和否定自身的两种状态。从不确定性的角度来看待事物的发生和发展，是现代科学和经典决定论的一个重要区别。现代科学已经不再仅仅处理那些必然发生的事情，而是处理那些最有可能发生的事情。 控制，归根结底是一个在事物可能性空间中进行有方向的选择的过程。因此，一切的控制过程，实际都是由三个基本环节构成：  了解事物面临的可能性空间是什么 在可能性空...</div></div></div></a><a class="pagination-related" href="/2024/08/25/jiangsu-wuxi-jiangyin/" title="江阴要塞一瞥"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/08/20240825222444.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">江阴要塞一瞥</div></div><div class="info-2"><div class="info-item-1">这两天有机会到无锡江阴来做一个华为FusionCompute的虚拟化节点扩容的项目。早就知道江阴一个县级市5000亿的GDP，相当于包头和鄂尔多斯之和。过来之后才有明确的概念，我坐车上沿路过去看到的连片的厂区和高速公路上密集的车流，真是一副巨型经济机器高速运转的蓬勃气势。  2024。 08 江苏·无锡·江阴 陈毅老总题诗”江阴天堑望无涯，废垒犹存散似沙。客过风兴敌惶急，军民游击满南华”  周五、周六忙的昏天黑地，周日正好偷得浮生半日闲，我找机会去看了看知名的江阴要塞。从高德地图上找到江阴要塞，首先出来的是江阴要塞森林公园，但我打车的司机好像也没有概念这个公园的大门到底是那个。我于是从地图上找到了江阴军事文化博物馆试一试。还好，从军事文化博物馆上去还是很容易找到各个景点的。原以为这边应该是旅客较多的地方，但走了一圈除了锻炼的两三个老人，就只有一二遛狗的年轻人了。甚至这个江阴军事文化博物馆也是闭门谢客了。从这条渡江第一船作为起点，往山上走大概十分钟就到了望江楼，只可惜也是高挂谢客牌。不过，旁边的高尔夫球场倒是热热闹闹的。从望江楼后面的小路过去，就是黄山炮台的主炮台了。这个主炮台气势...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2023/06/01/magedu-week-4/" title="Linux系统基础知识·4"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/05/wallhaven-zx8r3v.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-06-01</div><div class="info-item-2">Linux系统基础知识·4</div></div><div class="info-2"><div class="info-item-1"> 本文基于马哥教育就业班第四周课程总结  1。 总结脚本高级命令trap， install， mktemp， expect， 进程优先级命令：nice， renice， 进程管理工具: ps， pstree， prtstat， pgrep， pidof， uptime， mpstat， top， htop， free， pmap， vmstat， iostat， iotop， iftop， nload， nethogs， iptraf-ng， dstat， glances， cockpit， kill， job， 任务相关的命令: at， crontab， 命令，选项，示例。 #脚本高级命令：trap命令：trap命令用于捕获和处理shell脚本中的信号。它可以用于在脚本执行期间处理中断、退出等信号。以下是一个trap命令的示例：trap &#x27;echo &quot;Interrupted&quot;; exit&#x27; INTinstall命令：install命令用于将文件到指定目录，并设置文件的权限和所有者。以下是一个install命令的示例：install -m ...</div></div></div></a><a class="pagination-related" href="/2025/12/23/UserAdd-Howto/" title="Linux账户管理最佳实践"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover140.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-23</div><div class="info-item-2">Linux账户管理最佳实践</div></div><div class="info-2"><div class="info-item-1">对于 Linux 用户，尤其是新手来说，安全账户管理比以往任何时候都更加紧迫。强密码和智能管理不仅仅是建议——它们是在黑客自动化攻击和新漏洞几乎每天都在发生的背景下您的第一道有效防线。 在本指南中，我们将为您介绍在 Linux 上设置密码的不同方法。我们将从简单方法开始，然后过渡到自动化脚本，甚至涵盖企业环境中使用的专业级方法。到结束时，您将能够自信且安全高效地管理密码。    12 天津·天津中医药大学   安全地创建用户账户第一步是为用户创建一个包含主目录和默认 shell 的账户： sudo useradd -m -s /bin/bash newuser  Explanation: 解释：  m → Creates a home directory for the userm → 为用户创建主目录 s /bin/bash → Sets the default shells /bin/bash → 设置默认 shell  You can check the account:你可以检查账户： id newuser  强密码是必须的强密码不仅仅是复杂性，它还关乎不可预测性和长度。...</div></div></div></a><a class="pagination-related" href="/2025/09/10/RockyLinux-Versionlocak/" title="如何锁定RockyLinux的主要程序版本"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover128.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-09-10</div><div class="info-item-2">如何锁定RockyLinux的主要程序版本</div></div><div class="info-2"><div class="info-item-1"> 本文将详细介绍多种锁定Rocky Linux系统主版本的方法，防止意外升级到新版本。其中，有相当脚本内容由AI生成，并未得到完全验证，特别对于内部升级源的地址、管理脚本需要认真鉴别再使用。     06 陕西·西安·秦汉通航公司   使用dnf版本锁定插件安装dnf-plugin-versionlock# 安装版本锁定插件sudo dnf install -y dnf-plugin-versionlock# 验证安装dnf list installed | grep versionlock  锁定整个系统版本# 方法1：锁定所有已安装的包sudo dnf versionlock add &#x27;*&#x27;  锁定特定关键包# 锁定核心系统包sudo dnf versionlock add kernel*sudo dnf versionlock add systemd*sudo dnf versionlock add glibc*sudo dnf versionlock add rocky-release*# 查看已锁定的包sudo dnf versionlock lis...</div></div></div></a><a class="pagination-related" href="/2025/01/25/Aliyun-ECS-Kdump/" title="阿里云ECS禁用Kdump"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover80.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-01-25</div><div class="info-item-2">阿里云ECS禁用Kdump</div></div><div class="info-2"><div class="info-item-1">现在使用的阿里云ECS是99元套餐，2核2G的配置，但实际能看到的内存数量是1。 6G。随着ECS上挂载的东西越来越多，内存有点点不够用了。现在，我们可以通过关闭Kdump来释放部分内存给业务使用。   12 北京·天坛   操作# 关闭服务systemctl disable --now kdump.service# 查看服务状态systemctl status kdump# 修改grub配置文件中crashkernel参数sed -i &quot;s/1G-4G:160M/1G-4G:0M/g&quot; /etc/default/grub# 重新生成grub配置文件grub2-mkconfig -o /boot/grub2/grub.cfg# 重启systemctl reboot  表现修改前 修改后 KdumpKdump是在系统崩溃、死锁或死机时用来转储内存运行参数的一个工具和服务，是一种新的crash dump捕获机制，用来捕获kernel crash（内核崩溃）的时候候产生的crash dump。在第一kernel在运行的时候候，系统内部在内存中就已经留存好了给第二ke...</div></div></div></a><a class="pagination-related" href="/2021/05/08/centos8-make-template/" title="制作CentOS8的黄金模板"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/wallhaven-151377.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-05-08</div><div class="info-item-2">制作CentOS8的黄金模板</div></div><div class="info-2"><div class="info-item-1">前期准备 在虚拟化环境中部署CentOS8-Stream，包含Hyper-V、Esxi、Virtualbox等； 使用mini组件部署，大约会安装378个软件包； 安装过程中添加简体中文支持、设定时区为上海、使用硬盘自动分区、关闭kdump； 设定root密码（ 后期关闭root的ssh访问权限 ），并添加远程ssh访问管理员账户； 设定网络开机自动启动；   系统调整 安装工具 # 安装更新dnf makecachednf upgrade -y# 安装系统工具dnf install -y wget curl zip unzip vim mailx mlocate telnet net-tools bash-completion tmuxdnf install -y chrony rsync iotop git screen tree open-vm-tools yum-utilsupdatedb &amp;&amp; ldconfig# 配置默认主机名hostnamectl set-hostname vlnx000000# 配置模板机网络别名为eth0， 如果是Hyper-V的...</div></div></div></a><a class="pagination-related" href="/2026/06/03/VI_Howto/" title="VI编辑器简介"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover154.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-03</div><div class="info-item-2">VI编辑器简介</div></div><div class="info-2"><div class="info-item-1"> 学习使用 vi 文本编辑器对于任何在 Linux 环境下工作的人来说都是必不可少的。虽然适应其工作方式需要一些时间，但掌握 vi 命令能让你在无需离开终端或使用鼠标的情况下，极其快速地编辑文件。    2026.05 河北·秦皇岛·山海关区 天下第一关景区  在本文中，我们将介绍你所需的 vi 核心命令，以便像专家一样导航、编辑和保存文本文件。 什么是 vi 编辑器？vi 编辑器由 Bill Joy 于 1976 年创建，是一款快速、轻量级的文本编辑器，允许你直接在终端窗口中操作文本文件。大多数现代 Linux 系统使用名为 vim（vi improved，增强版 vi）的更新版本，但大多数 vi 命令在 vim 和 vi 中都有效。由于它几乎预装在每一个类 Unix 系统上，掌握 vi 的使用是管理服务器和编写脚本的一项有用技能。 理解 vi 的几种模式要掌握 vi 命令，你必须理解 vi 是一个模式编辑器。与大多数程序直接开始键入不同，vi 根据你所在的模式改变其行为：  命令模式：打开文件时的默认模式。你按下的每个键都作为命令执行——例如移动光标或删除一行——而不是输入文...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">靖轩</div><div class="author-info-description">逝者如斯夫,不舍昼夜</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/grepsu"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://gitee.com/grepsu" target="_blank" title="Gitee"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:sujx@live.cn" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS链接"><i class="fa  fa-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%84%E6%88%90"><span class="toc-number">1.</span> <span class="toc-text">组成</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A1%AC%E4%BB%B6"><span class="toc-number">1.1.</span> <span class="toc-text">硬件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BD%AF%E4%BB%B6"><span class="toc-number">1.2.</span> <span class="toc-text">软件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1"><span class="toc-number">1.3.</span> <span class="toc-text">服务</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%89%B9%E7%82%B9"><span class="toc-number">2.</span> <span class="toc-text">特点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B4%E4%BD%93%E6%9E%B6%E6%9E%84"><span class="toc-number">3.</span> <span class="toc-text">整体架构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E7%BB%93%E6%9E%84"><span class="toc-number">3.1.</span> <span class="toc-text">系统结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A1%AC%E4%BB%B6%E7%BB%93%E6%9E%84"><span class="toc-number">3.2.</span> <span class="toc-text">硬件结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BD%AF%E4%BB%B6%E5%BA%94%E7%94%A8"><span class="toc-number">3.3.</span> <span class="toc-text">软件应用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E6%9E%B6%E6%9E%84"><span class="toc-number">4.</span> <span class="toc-text">网络架构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E7%B1%BB%E5%9E%8B"><span class="toc-number">4.1.</span> <span class="toc-text">网络类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%A4%E6%8D%A2%E8%AE%BE%E5%A4%87"><span class="toc-number">4.2.</span> <span class="toc-text">交换设备</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IB%E4%BA%A7%E5%93%81"><span class="toc-number">4.3.</span> <span class="toc-text">IB产品</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="toc-number">5.</span> <span class="toc-text">文件系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="toc-number">5.1.</span> <span class="toc-text">文件系统的定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%88%86%E7%B1%BB"><span class="toc-number">5.2.</span> <span class="toc-text">分布式文件系统的分类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HPC%E4%B8%8E%E5%B9%B6%E8%A1%8C%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="toc-number">5.3.</span> <span class="toc-text">HPC与并行文件系统</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B0%83%E5%BA%A6%E7%B3%BB%E7%BB%9F"><span class="toc-number">6.</span> <span class="toc-text">调度系统</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%A6%E4%B9%A0%E8%B7%AF%E5%BE%84"><span class="toc-number">7.</span> <span class="toc-text">学习路径</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%90%E7%BB%B4%E6%8A%80%E8%83%BD"><span class="toc-number">7.1.</span> <span class="toc-text">运维技能</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Linux%E7%B3%BB%E7%BB%9F%E8%BF%90%E7%BB%B4"><span class="toc-number">7.1.1.</span> <span class="toc-text">Linux系统运维</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9B%86%E7%BE%A4%E7%94%A8%E6%88%B7%E7%AE%A1%E7%90%86"><span class="toc-number">7.1.2.</span> <span class="toc-text">集群用户管理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80"><span class="toc-number">7.1.3.</span> <span class="toc-text">网络基础</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85"><span class="toc-number">7.1.4.</span> <span class="toc-text">软件安装</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BD%AF%E4%BB%B6%E7%8E%AF%E5%A2%83"><span class="toc-number">7.1.5.</span> <span class="toc-text">软件环境</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%9C%E4%B8%9A%E8%B0%83%E5%BA%A6%E7%B3%BB%E7%BB%9F%E8%BF%90%E7%BB%B4"><span class="toc-number">7.1.6.</span> <span class="toc-text">作业调度系统运维</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9B%86%E7%BE%A4%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7"><span class="toc-number">7.1.7.</span> <span class="toc-text">集群性能监控</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%B8%E5%85%B3%E9%93%BE%E6%8E%A5"><span class="toc-number">7.2.</span> <span class="toc-text">相关链接</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/07/03/AIGC_FoxHole/" title="海鹰">海鹰</a><time datetime="2026-07-03T01:04:07.000Z" title="发表于 2026-07-03 09:04:07">2026-07-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/11/fristVibeCoding/" title="鹊随金印：我的第一个完整的AI编程项目">鹊随金印：我的第一个完整的AI编程项目</a><time datetime="2026-06-11T01:04:07.000Z" title="发表于 2026-06-11 09:04:07">2026-06-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/03/VI_Howto/" title="VI编辑器简介">VI编辑器简介</a><time datetime="2026-06-03T01:04:07.000Z" title="发表于 2026-06-03 09:04:07">2026-06-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/28/HNCitic_2605/" title="我要上头条">我要上头条</a><time datetime="2026-05-28T01:04:07.000Z" title="发表于 2026-05-28 09:04:07">2026-05-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/12/TS-Domain-Controller-Sync-Failure/" title="记一次Windows AD域控制器同步故障排错">记一次Windows AD域控制器同步故障排错</a><time datetime="2026-05-12T03:04:07.000Z" title="发表于 2026-05-12 11:04:07">2026-05-12</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2008 - 2026 By 靖轩</span></div><div class="footer_custom_text">京ICP备17034757号</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.5"></script><script src="/js/main.js?v=5.5.5"></script><script src="/libs/fancybox/fancybox.umd.js"></script><script src="/js/instantpage.js" type="module"></script><script src="/libs/lazyload/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const parseViewBox = viewBox => {
+    if (!viewBox) return null
+    const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
+    if (parts.length !== 4 || parts.some(n => Number.isNaN(n))) return null
+    return parts
+  }
+
+  const getSvgViewBox = svg => {
+    const attr = parseViewBox(svg.getAttribute('viewBox'))
+    if (attr) return attr
+
+    // Fallback: use bbox to build a viewBox
+    try {
+      const bbox = svg.getBBox()
+      if (bbox && bbox.width && bbox.height) return [bbox.x, bbox.y, bbox.width, bbox.height]
+    } catch (e) {
+      // getBBox may fail on some edge cases; ignore
+    }
+
+    const w = Number(svg.getAttribute('width')) || 0
+    const h = Number(svg.getAttribute('height')) || 0
+    if (w > 0 && h > 0) return [0, 0, w, h]
+    return [0, 0, 100, 100]
+  }
+
+  const setSvgViewBox = (svg, vb) => {
+    svg.setAttribute('viewBox', `${vb[0]} ${vb[1]} ${vb[2]} ${vb[3]}`)
+  }
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v))
+
+  const openSvgInNewTab = ({ source, initViewBox }) => {
+    const getClonedSvg = () => {
+      if (typeof source === 'string') {
+        const template = document.createElement('template')
+        template.innerHTML = source.trim()
+        const svg = template.content.querySelector('svg')
+        return svg ? svg.cloneNode(true) : null
+      }
+      if (source && typeof source.cloneNode === 'function') {
+        return source.cloneNode(true)
+      }
+      return null
+    }
+
+    const clone = getClonedSvg()
+    if (!clone) return
+    if (initViewBox && initViewBox.length === 4) {
+      clone.setAttribute('viewBox', initViewBox.join(' '))
+    }
+    if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+    if (!clone.getAttribute('xmlns:xlink') && clone.outerHTML.includes('xlink:')) {
+      clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+    }
+    // inject background to match current theme
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    const bg = getComputedStyle(document.body).backgroundColor || (isDark ? '#1e1e1e' : '#ffffff')
+    if (!clone.style.background) clone.style.background = bg
+
+    const serializer = new XMLSerializer()
+    const svgSource = serializer.serializeToString(clone)
+    const htmlSource = `<!doctype html><html><head><meta charset="utf-8" />
+      <style>
+        html, body { width: 100%; height: 100%; margin: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; }
+        svg { max-width: 100%; max-height: 100%; height: auto; width: auto; }
+      </style>
+      </head><body>${svgSource}</body></html>`
+    const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank', 'noopener')
+    setTimeout(() => URL.revokeObjectURL(url), 30000)
+  }
+
+  const attachMermaidViewerButton = wrap => {
+    let btn = wrap.querySelector('.mermaid-open-btn')
+    if (!btn) {
+      btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'mermaid-open-btn'
+      wrap.appendChild(btn)
+    }
+
+    btn.innerHTML = '<i class="fa fa-search fa-fw" aria-hidden="true"></i>'
+
+    if (!btn.__mermaidViewerBound) {
+      btn.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        const svg = wrap.__mermaidOriginalSvg || wrap.querySelector('svg')
+        if (!svg) return
+        const initViewBox = wrap.__mermaidInitViewBox
+        if (typeof svg === 'string') {
+          openSvgInNewTab({ source: svg, initViewBox })
+          return
+        }
+        openSvgInNewTab({ source: svg, initViewBox })
+      })
+      btn.__mermaidViewerBound = true
+    }
+  }
+
+  // Zoom around a point (px, py) in the SVG viewport (in viewBox coordinates)
+  const zoomAtPoint = (vb, factor, px, py) => {
+    const w = vb[2] * factor
+    const h = vb[3] * factor
+    const nx = px - (px - vb[0]) * factor
+    const ny = py - (py - vb[1]) * factor
+    return [nx, ny, w, h]
+  }
+
+  const initMermaidGestures = wrap => {
+    const svg = wrap.querySelector('svg')
+    if (!svg) return
+
+    // Ensure viewBox exists so gestures always work
+    const initVb = getSvgViewBox(svg)
+    wrap.__mermaidInitViewBox = initVb
+    wrap.__mermaidCurViewBox = initVb.slice()
+    setSvgViewBox(svg, initVb)
+
+    // Avoid binding multiple times on themeChange/pjax
+    if (wrap.__mermaidGestureBound) return
+    wrap.__mermaidGestureBound = true
+
+    // Helper: map client (viewport) coordinate -> viewBox coordinate
+    const clientToViewBox = (clientX, clientY) => {
+      const rect = svg.getBoundingClientRect()
+      const vb = wrap.__mermaidCurViewBox || getSvgViewBox(svg)
+      const x = vb[0] + (clientX - rect.left) * (vb[2] / rect.width)
+      const y = vb[1] + (clientY - rect.top) * (vb[3] / rect.height)
+      return { x, y, rect, vb }
+    }
+
+    const state = {
+      pointers: new Map(),
+      startVb: null,
+      startDist: 0,
+      startCenter: null
+    }
+
+    const clampVb = vb => {
+      const init = wrap.__mermaidInitViewBox || vb
+      const minW = init[2] * 0.1
+      const maxW = init[2] * 10
+      const minH = init[3] * 0.1
+      const maxH = init[3] * 10
+      vb[2] = clamp(vb[2], minW, maxW)
+      vb[3] = clamp(vb[3], minH, maxH)
+      return vb
+    }
+
+    const setCurVb = vb => {
+      vb = clampVb(vb)
+      wrap.__mermaidCurViewBox = vb
+      setSvgViewBox(svg, vb)
+    }
+
+    const onPointerDown = e => {
+      // Allow only primary button for mouse
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      svg.setPointerCapture(e.pointerId)
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      if (state.pointers.size === 1) {
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      } else if (state.pointers.size === 2) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        state.startDist = Math.hypot(dx, dy)
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        state.startCenter = { x: (pts[0].x + pts[1].x) / 2, y: (pts[0].y + pts[1].y) / 2 }
+      }
+    }
+
+    const onPointerMove = e => {
+      if (!state.pointers.has(e.pointerId)) return
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      // Pan with 1 pointer
+      if (state.pointers.size === 1 && state.startVb) {
+        const p = [...state.pointers.values()][0]
+        const prev = { x: e.clientX - e.movementX, y: e.clientY - e.movementY }
+        // movementX/Y unreliable on touch, compute from stored last position
+        const last = wrap.__mermaidLastSinglePointer || p
+        const dxClient = p.x - last.x
+        const dyClient = p.y - last.y
+        wrap.__mermaidLastSinglePointer = p
+
+        const { rect } = clientToViewBox(p.x, p.y)
+        const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        const dx = dxClient * (vb[2] / rect.width)
+        const dy = dyClient * (vb[3] / rect.height)
+        setCurVb([vb[0] - dx, vb[1] - dy, vb[2], vb[3]])
+        return
+      }
+
+      // Pinch zoom with 2 pointers
+      if (state.pointers.size === 2 && state.startVb && state.startDist > 0) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        const dist = Math.hypot(dx, dy)
+        if (!dist) return
+        const factor = state.startDist / dist // dist bigger => zoom in (viewBox smaller)
+
+        const cx = (pts[0].x + pts[1].x) / 2
+        const cy = (pts[0].y + pts[1].y) / 2
+        const centerClient = { x: cx, y: cy }
+
+        const pxy = clientToViewBox(centerClient.x, centerClient.y)
+        const cpx = pxy.x
+        const cpy = pxy.y
+
+        const vb = zoomAtPoint(state.startVb, factor, cpx, cpy)
+        setCurVb(vb)
+      }
+    }
+
+    const onPointerUpOrCancel = e => {
+      state.pointers.delete(e.pointerId)
+      if (state.pointers.size === 0) {
+        state.startVb = null
+        state.startDist = 0
+        state.startCenter = null
+        wrap.__mermaidLastSinglePointer = null
+      } else if (state.pointers.size === 1) {
+        // reset single pointer baseline to avoid jump
+        wrap.__mermaidLastSinglePointer = [...state.pointers.values()][0]
+      }
+    }
+
+    // Wheel zoom (mouse/trackpad)
+    const onWheel = e => {
+      // ctrlKey on mac trackpad pinch; we treat both as zoom
+      e.preventDefault()
+      const delta = e.deltaY
+      const zoomFactor = delta > 0 ? 1.1 : 0.9
+      const { x, y } = clientToViewBox(e.clientX, e.clientY)
+      const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      setCurVb(zoomAtPoint(vb, zoomFactor, x, y))
+    }
+
+    const onDblClick = () => {
+      const init = wrap.__mermaidInitViewBox
+      if (!init) return
+      wrap.__mermaidCurViewBox = init.slice()
+      setSvgViewBox(svg, init)
+    }
+
+    svg.addEventListener('pointerdown', onPointerDown)
+    svg.addEventListener('pointermove', onPointerMove)
+    svg.addEventListener('pointerup', onPointerUpOrCancel)
+    svg.addEventListener('pointercancel', onPointerUpOrCancel)
+    svg.addEventListener('wheel', onWheel, { passive: false })
+    svg.addEventListener('dblclick', onDblClick)
+  }
+
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+
+      // Clear old render (themeChange/pjax will rerun)
+      const oldSvg = item.querySelector('svg')
+      if (oldSvg) oldSvg.remove()
+      item.__mermaidGestureBound = false
+
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+        if (true) initMermaidGestures(item)
+        item.__mermaidOriginalSvg = svg
+        if (true) attachMermaidViewerButton(item)
+      }
+
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('/libs/mermaid/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.5"></script></div></div></body></html>

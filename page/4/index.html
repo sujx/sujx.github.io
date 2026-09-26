@@ -1,21 +1,124 @@
-<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>靖</title><meta name="author" content="靖轩"><meta name="copyright" content="靖轩"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="逝者如斯夫,不舍昼夜"><link rel="shortcut icon" href="https://cdn.sujx.net/about/favicon.png"><link rel="canonical" href="https://www.sujx.net/page/4/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin=""/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>var _hmt = _hmt || [];
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>靖轩</title><meta name="author" content="靖轩"><meta name="copyright" content="靖轩"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="逝者如斯夫,不舍昼夜">
+<meta property="og:type" content="website">
+<meta property="og:title" content="靖轩">
+<meta property="og:url" content="https://www.sujx.net/page/4/index.html">
+<meta property="og:site_name" content="靖轩">
+<meta property="og:description" content="逝者如斯夫,不舍昼夜">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.sujx.net/about/avatar.jpg">
+<meta property="article:author" content="靖轩">
+<meta property="article:tag" content="靖轩,sujx">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.sujx.net/about/avatar.jpg"><script type="application/ld+json"></script><link rel="shortcut icon" href="https://cdn.sujx.net/about/favicon.png"><link rel="canonical" href="https://www.sujx.net/page/4/index.html"><link rel="preconnect" href="//cdnjs.cloudflare.com"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css?v=5.5.5"><link rel="stylesheet" href="/fonts/css/all.min.css"><link rel="stylesheet" href="/libs/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
 (function() {
   var hm = document.createElement("script");
   hm.src = "https://hm.baidu.com/hm.js?417b20ac1984432f821159fac27d3bb5";
-  var s = document.getElementsByTagName("script")[0]; 
+  var s = document.getElementsByTagName("script")[0];
   s.parentNode.insertBefore(hm, s);
 })();
-</script><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web&amp;display=swap" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><link rel="stylesheet" href="/fonts/titillium-web.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
   root: '/',
   algolia: undefined,
-  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":5,"unescape":false,"languages":{"hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found"}},
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
   translate: undefined,
-  noticeOutdate: undefined,
-  highlight: {"plugin":"prismjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
   copy: {
-    success: 'Copy successfully',
-    error: 'Copy error',
-    noSupport: 'The browser does not support'
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
   },
   relativeDate: {
     homepage: false,
@@ -23,292 +126,445 @@
   },
   runtime: '',
   dateSuffix: {
-    just: 'Just',
-    min: 'minutes ago',
-    hour: 'hours ago',
-    day: 'days ago',
-    month: 'months ago'
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
   },
   copyright: undefined,
   lightbox: 'fancybox',
   Snackbar: undefined,
-  source: {
-    justifiedGallery: {
-      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
-      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
-    }
+  infinitegrid: {
+    js: '/libs/infinitegrid.min.js',
+    buttonText: '加载更多'
   },
   isPhotoFigcaption: false,
-  islazyload: false,
-  isAnchor: false,
+  islazyloadPlugin: true,
+  isAnchor: true,
   percent: {
     toc: true,
     rightside: false,
-  }
+  },
+  autoDarkmode: false
 }</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
-  title: '靖',
-  isPost: false,
-  isHome: true,
+  title: '靖轩',
   isHighlightShrink: false,
   isToc: false,
-  postUpdate: '2023-06-02 22:52:53'
-}</script><noscript><style type="text/css">
-  #nav {
-    opacity: 1
+  pageType: 'home'
+}</script><link rel="alternate" href="/atom.xml" title="靖轩" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">靖轩</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><h1 class="title-seo">靖轩</h1></header><main class="layout" id="content-inner"><div class="recent-posts nc" id="recent-posts"><div class="recent-post-items"><div class="recent-post-item"><div class="post_cover"><a href="/2025/09/26/Design-Concepts-for-Engineer/" title="「工程思维:工程师的设计理念」"><img class="post-bg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover32.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="「工程思维:工程师的设计理念」"></a></div><div class="recent-post-info"><a class="article-title" href="/2025/09/26/Design-Concepts-for-Engineer/" title="「工程思维:工程师的设计理念」">「工程思维:工程师的设计理念」</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2025-09-26T02:04:07.000Z" title="发表于 2025-09-26 10:04:07">2025-09-26</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E5%B7%A5%E7%A8%8B%E5%B8%88/">工程师</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E5%B7%A5%E7%A8%8B%E5%AF%BC%E8%AE%BA/">工程导论</a></span></div><div class="content"> 制造出真正有效的产品的能力是工程师的标志。  本书面向所有工程专业背景的读者，以工程思维培养为核心，价绍了产品与项目设计的基本概念与原则及其在工程中的应用，解释产品和项目设计的过程而不是技术细节。   07 摄于北京东三环   工程是什么 一个好的工程师通常非常熟悉其他学科和专业。工程师成功的关键就在于接受广泛的多学科的教育。  工程的领域 航空航天 农业 生物医药 化学工程 土木工程 电气工程 计算机工程 系统工程 ……  工程师的组织 美国航空航天协会 www.aiaa.org 美国计算机协会 www.acm.org 美国计算机工程协会 www.ieee.org 美国机械工程师协会 www.asme.org  工程的项目管理工程技能 知识 经验 直觉  设计是什么 设计：创建、时尚、实施或者根据计划去构建  分析、设计和复制之间的不同设计是一个开放的过程，并且可行的解决方案有可能存在多个。设计的目的是收敛到最佳可能的解决方案。在这种背景下，“最佳”包括许多的因素，例如成本、准确性、鲁棒性、安全性和可行性。最佳情况是适合当前问题而未必适合其他问题。如果答案是要通过类似拼凑碎片...</div></div></div><div class="recent-post-item"><div class="post_cover"><a href="/2025/09/10/RockyLinux-Versionlocak/" title="如何锁定RockyLinux的主要程序版本"><img class="post-bg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover128.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="如何锁定RockyLinux的主要程序版本"></a></div><div class="recent-post-info"><a class="article-title" href="/2025/09/10/RockyLinux-Versionlocak/" title="如何锁定RockyLinux的主要程序版本">如何锁定RockyLinux的主要程序版本</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2025-09-10T07:04:07.000Z" title="发表于 2025-09-10 15:04:07">2025-09-10</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E8%BF%90%E7%BB%B4%E6%8A%80%E5%B7%A7/">运维技巧</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/Linux/">Linux</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/rpm/">rpm</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/version-lock/">version lock</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/Rockylinux/">Rockylinux</a></span></div><div class="content"> 本文将详细介绍多种锁定Rocky Linux系统主版本的方法，防止意外升级到新版本。其中，有相当脚本内容由AI生成，并未得到完全验证，特别对于内部升级源的地址、管理脚本需要认真鉴别再使用。     06 陕西·西安·秦汉通航公司   使用dnf版本锁定插件安装dnf-plugin-versionlock# 安装版本锁定插件sudo dnf install -y dnf-plugin-versionlock# 验证安装dnf list installed | grep versionlock  锁定整个系统版本# 方法1：锁定所有已安装的包sudo dnf versionlock add &#x27;*&#x27;  锁定特定关键包# 锁定核心系统包sudo dnf versionlock add kernel*sudo dnf versionlock add systemd*sudo dnf versionlock add glibc*sudo dnf versionlock add rocky-release*# 查看已锁定的包sudo dnf versionlock lis...</div></div></div><div class="recent-post-item"><div class="post_cover"><a href="/2025/09/03/PurchasingManager-How2/" title="采购经理基本知识架构"><img class="post-bg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover127.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="采购经理基本知识架构"></a></div><div class="recent-post-info"><a class="article-title" href="/2025/09/03/PurchasingManager-How2/" title="采购经理基本知识架构">采购经理基本知识架构</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2025-09-03T01:04:07.000Z" title="发表于 2025-09-03 09:04:07">2025-09-03</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/CPPM/">CPPM</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E6%B3%A8%E5%86%8C%E8%81%8C%E4%B8%9A%E9%87%87%E8%B4%AD%E7%BB%8F%E7%90%86/">注册职业采购经理</a></span></div><div class="content"> CPPM是注册采购经理（Certified Professional Purchasing Manager）的缩写，是由美国采购协会（APS）注册专业采购经理认证CPPM项目的介绍“注册号是劳引字[2005]001号”，国家职业资格证书统一管理制度中纳入了该证书，通过考核的人员为美国采购协会（APS）颁发、中国人力资源和社会保障部职业技能鉴定中心批准注册的专业采购人员（CPP&amp;CPPM）。     08 天津·宝坻 广济寺   供应商选择与评估供应商种类与经济学分析市场的要素 市场&#x3D;人口+购买力+购买欲望 三个要素相互制约、缺一不可 只有三者结合才能构成现实的市场，才能决定市场的规模和容量  市场分类 个人消费者市场 购买对象：便利品、选购品、特殊品 购买因素：文化因素、社会因素、个人因素、心理因素 双因素理论、马斯洛的需要层次论   生产者市场 购买对象：生产设备、附属设备、原材料、零部件、消耗品、服务 购买决策的参与者：使用者、影响者、采购者、决定者、信息控制者 决策类型：直接购买、修正重购、新购 市场分类：完全竞争市场、垄断竞争市场、寡头市场、垄断市场 ...</div></div></div><div class="recent-post-item"><div class="post_cover"><a href="/2025/08/28/How2curl/" title="cURL的基本技巧"><img class="post-bg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover119.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="cURL的基本技巧"></a></div><div class="recent-post-info"><a class="article-title" href="/2025/08/28/How2curl/" title="cURL的基本技巧">cURL的基本技巧</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2025-08-28T07:04:07.000Z" title="发表于 2025-08-28 15:04:07">2025-08-28</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E8%BF%90%E7%BB%B4%E6%8A%80%E5%B7%A7/">运维技巧</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/cURL/">cURL</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/Tool/">Tool</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/Web/">Web</a></span></div><div class="content"> cURL是一个强大的命令行工具，用于使用url传输数据。它支持多种协议，包括HTTP，HTTPS，FTP等等。让我们探索20个基本技巧，帮助您精通cURL。     08 天津宝坻·广济寺 寺猫   1.基本的GET请求使用cURL的最简单方法是获取网页: curl https://example.com  使用案例: 快速检查网站是否已启动或查看其HTML源代码。 想象一下，您正在构建一个监控脚本，并且需要验证您的公司网站是否正在响应。一个简单的curl命令给你一个即时的答案！ 2.将输出保存到文件而不是在屏幕上显示输出，将其保存到一个文件: curl -o output.html https://example.com  使用案例: 下载文件或保存API响应以供以后分析。 把这想象成在课堂上做笔记 – 有时你想晚点复习材料，而不是只看一次。当您需要分析API响应或保存参考文档时，这是完美的。 3.跟随重定向许多网站重定向到不同的url。使用-L要跟随并显示这些重定向: curl -L https://github.com  使用案例: 访问使用重定向进行身份验证或内容分发的...</div></div></div><div class="recent-post-item"><div class="post_cover"><a href="/2025/08/20/Performanace-vSphere/" title="vSphere虚拟化的增强"><img class="post-bg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover126.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="vSphere虚拟化的增强"></a></div><div class="recent-post-info"><a class="article-title" href="/2025/08/20/Performanace-vSphere/" title="vSphere虚拟化的增强">vSphere虚拟化的增强</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2025-08-20T01:04:07.000Z" title="发表于 2025-08-20 09:04:07">2025-08-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E8%BF%90%E7%BB%B4%E6%8A%80%E5%B7%A7/">运维技巧</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/VMware/">VMware</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/vSphere/">vSphere</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/performance/">performance</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/Virtualization/">Virtualization</a></span></div><div class="content">VMware vSphere为虚拟化带来了强大的功能。然而，实现顶级性能需要跨硬件、虚拟机管理程序设置和虚拟机配置进行智能调整。根据官方指导，本文重点介绍了优化环境的关键实践。这些提示可帮助您最大限度地提高吞吐量、减少延迟并确保平稳运行。   2025.06 湖南长沙·希尔顿酒店  关键硬件1。 vSphere 9 在现代硬件平台上表现卓越，尤其当硬件支持其高级功能时。首选内置侧信道漏洞防护机制的CPU，这类处理器能在不影响工作负载性能的前提下实现安全防护，尤其适合高密度环境。2。 选择擅长硬件虚拟化的芯片：VT-x、AMD-V、EPT和RVI等技术可显著降低虚拟机运行开销。搭配足够的多核处理器架构，确保轻松应对高I&#x2F;O负载场景。3。 内存配置同样关键：优先支持内存分层技术的系统，将DRAM与NVMe存储结合实现经济高效的容量扩展。这种方案既能保持活跃数据的高速访问，又能在控制成本的前提下扩大总内存容量。4。 存储方面首选NVMe设备：其低延迟特性和超高IOPS性能完美契合 demanding 应用需求。若采用存储网络架构，基于RDMA的NVMe over Fabric...</div></div></div><div class="recent-post-item"><div class="post_cover"><a href="/2025/08/13/What-is-IndustrialBrain/" title="「产业大脑」ABC"><img class="post-bg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover120.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="「产业大脑」ABC"></a></div><div class="recent-post-info"><a class="article-title" href="/2025/08/13/What-is-IndustrialBrain/" title="「产业大脑」ABC">「产业大脑」ABC</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2025-08-13T01:04:07.000Z" title="发表于 2025-08-13 09:04:07">2025-08-13</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E4%BA%A7%E4%B8%9A%E5%A4%A7%E8%84%91/">产业大脑</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E7%89%A9%E8%81%94%E7%BD%91/">物联网</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E4%BA%A7%E4%B8%9A%E5%8D%8F%E5%90%8C/">产业协同</a></span></div><div class="content"> 2021年2月18日，浙江省全省数字化改革大会率先提出“产业大脑”的概念，并围绕产业大脑建设进行顶层设计，依托工业互联网平台，构建低时延、高可靠、广覆盖的新型网络设施，推动制造业产业链现代化，为制造业的智能化转型提供强有力的支持和助力。     06 湖南·长沙   基本概念产业大脑是基于系统集成和经济调节智能化的理念，将资源要素、数据要素、产业链数据、供应链数据、贸易流通数据等汇聚起来，运用云计算、大数据、人工智能、区块链等新一代信息技术，对数字产业发展和产业数字化转型进行即时分析、引导、调度和管理，实现产业链和创新链双向融合，推动经济高质量发展。具体而言，产业大脑就是以物联网为支撑，以数据资源为核心，运用信息技术，综合集成产业链、供应链、资金链，融合政府侧与企业侧，贯通生产端与消费端，为企业生产经营提供数字化赋能，为产业生态建设提供数字化服务，为经济治理提供数字化手段，着力推动质量变革、效率变革、动力变革。产业大脑在企业端，基于工业互联网平台构建全要素、全产业链、全价值链的全面连接，推动生产方式、产业链组织、商业模式、企业形态重构，提高经济社会的运行效率和资源要素的配置效率...</div></div></div><div class="recent-post-item"><div class="post_cover"><a href="/2025/08/05/Science_of_Operations/" title="「战役学教程」"><img class="post-bg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover114.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="「战役学教程」"></a></div><div class="recent-post-info"><a class="article-title" href="/2025/08/05/Science_of_Operations/" title="「战役学教程」">「战役学教程」</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2025-08-05T01:04:07.000Z" title="发表于 2025-08-05 09:04:07">2025-08-05</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E6%88%98%E5%BD%B9%E5%AD%A6/">战役学</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/Science-of-Operations/">Science of Operations</a></span></div><div class="content">战略是在地图上进行战争的艺术，是研究整个战争区的艺术；战役是一种在地面上，实际调动军队和实际作战的艺术。 ​												—— 若米尼 《战争艺术概论》    06 陕西·西安·寰宇卫星测控中心    战役的定义战争、战役和战斗的区别与联系1。 战争是人类社会集团之间为了一定政治、经济目的而进行的军事对抗活动，是用以解决民族与民族、国家与国家、阶级与阶级、政治集团与政治集团之间矛盾的最高斗争形式。战争由战役和战斗所组成，是战役和战斗的全局。2。 战役是军团或相当于军团的兵力集团，为达成战争的局部目的或者全局性目的而实施的作战行动。战役时战争的局部，又是战斗的全局。3。 战斗时敌对双方的兵团、部队和分队，在较小空间和短时间内，所进行的有组织的直接的作战行动。战斗时达成战役目的的基本手段。 战役的分类基本类型 进攻战役 防御战役  主要样式 按作战规模 按作战形式 按自然环境 按战场空间  战役的发展 冷兵器时代 热兵器时代 机械化战争时代 信息化条件下的战役  解放军的特色 实行人民战争，军民合力整体作战 以运动战为主，多种作战形式相结合 充分发挥主观能动性，以劣势装备战...</div></div></div><div class="recent-post-item"><div class="post_cover"><a href="/2025/07/23/How_2_find_file/" title="快速查找Linux系统中的大文件"><img class="post-bg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover110.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="快速查找Linux系统中的大文件"></a></div><div class="recent-post-info"><a class="article-title" href="/2025/07/23/How_2_find_file/" title="快速查找Linux系统中的大文件">快速查找Linux系统中的大文件</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2025-07-23T13:04:07.000Z" title="发表于 2025-07-23 21:04:07">2025-07-23</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%B5%B7%E5%A4%96%E6%9D%82%E8%B0%88/">海外杂谈</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/linux/">linux</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/bash/">bash</a></span></div><div class="content">曾经觉得你的硬盘驱动器是不断满，但你不能查明的罪魁祸首？对于我们这些积累了大量数据的人来说，大文件可能会偷偷地占用宝贵的磁盘空间，从而降低系统速度并使管理数据变得更加困难。  但别担心，找到这些数字囤积者并不一定是一项艰巨的任务。Linux提供了几个强大而简单的命令来帮助您识别和管理最大的文件。 让我们探索三种有效的方法，使您成为磁盘空间管理的专家。 方法1:使用find命令find命令是用于文件系统导航的瑞士军刀，它非常适合根据各种标准 （ 包括大小 ） 定位文件。这是每个Linux用户都应该拥有的基本工具。 这里是你如何使用find要精确定位大文件: find . -type f -size +1G -print0 | xargs -0 du -h | sort -rh | head -n 10  让我们打破这里发生的事情:  find . -type f -size +1G: 这部分告诉find在当前目录中查找 （ . ） 的文件 （ type f ） 大于1千兆字节 （ size +1G ）。你可以调整1G至1M对于兆字节，1K对于千字节，或您需要的任何其他大小。 pri...</div></div></div><div class="recent-post-item"><div class="post_cover"><a href="/2025/07/16/Hyper-V_Server_is_Over/" title="免费Hyper-V发行版的终结"><img class="post-bg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover117.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="免费Hyper-V发行版的终结"></a></div><div class="recent-post-info"><a class="article-title" href="/2025/07/16/Hyper-V_Server_is_Over/" title="免费Hyper-V发行版的终结">免费Hyper-V发行版的终结</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2025-07-16T01:04:07.000Z" title="发表于 2025-07-16 09:04:07">2025-07-16</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E8%BF%90%E7%BB%B4%E6%8A%80%E5%B7%A7/">运维技巧</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E8%99%9A%E6%8B%9F%E5%8C%96/">虚拟化</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/Hyper-V/">Hyper-V</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/Microsoft/">Microsoft</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/Windows/">Windows</a></span></div><div class="content">微软已经正式淘汰了Windows Server 2025免费版本的Hyper V。这一变化标志着依赖经济高效的IT专业人员和组织的重大转变虚拟化。这对您的基础设施和预算意味着什么？    06 陕西·秦岭    微软的Hyper-V Server是过去付费虚拟机管理程序解决方案的免费替代方案。在市场竞争中，它并没有改变游戏规则，但作为免费提供的企业级虚拟化解决方案，一直是重要而有影响力的基础工具。但是，随着Windows Server 2022和2025的发布，免费Hyper-V的时候代已经结束。对于依赖Hyper-V满足虚拟化需求的IT专业人员和组织来说，这一转变标志着一个重大变化。在2022-2023年期间，许多Hyper-V用户开始向微软询问Hyper-V发生了什么？答案很简单：微软淘汰了这个版本，所以你现在唯一的选择就是安装和部署Windows Server 2025 core版本（没有GUI的版本），您将在其上激活Hyper-V角色。这个版本的操作系统，你可以想象，不是免费的。但在我们讨论之前，让我们回顾一下发生了什么。 Hyper-V Server 的兴起Hyper-...</div></div></div><div class="recent-post-item"><div class="post_cover"><a href="/2025/07/09/Business_Operation_Data_Analysis/" title="「企业经营数据分析：思路、方法、应用与工具」"><img class="post-bg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover116.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="「企业经营数据分析：思路、方法、应用与工具」"></a></div><div class="recent-post-info"><a class="article-title" href="/2025/07/09/Business_Operation_Data_Analysis/" title="「企业经营数据分析：思路、方法、应用与工具」">「企业经营数据分析：思路、方法、应用与工具」</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2025-07-09T11:04:07.000Z" title="发表于 2025-07-09 19:04:07">2025-07-09</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E4%BC%81%E4%B8%9A%E7%BB%8F%E8%90%A5/">企业经营</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/">数据分析</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/DataAnalysis/">DataAnalysis</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E7%BB%8F%E8%90%A5%E5%88%86%E6%9E%90/">经营分析</a></span></div><div class="content"> 数据就是数字化的证据和依据，是事物存在和发展状态或者过程的数字化记录，是事物发生和发展留存下来的证据。     06 湖南·长沙·黄花国际机场   概述篇企业中的大数据企业留存和积累的数据越多就越有价值。这些数据一方面可以当作证据，另一方面也可以用来研究规律，成为企业预测未来市场、形成商业洞察的依据。数据的依据价值远远大于其证据价值。 数据技术 数据采集技术 数据存储技术 数据传输技术 数据处理和数据挖掘技术  如果不能从数据中提取信息用于管理决策，那么采集的数据只会成为企业的成本；如果能够充分发挥数据的力量，在数据中挖掘价值，那么数据就会成为企业的资产。 数据分类 静态数据表示结果， 动态信息表示行为 加工数据是在原始数据解读基础上的提炼， 强调追溯机制 数据类型 定性数据 定序数据 定距数据 定比数据    数据结构数据结构是存储\组织数据的方式， 是数据内部的构成方式。数据结构是指数据元素之间存在着一种或多种关系。  数据的逻辑结构 数据主体 数据表 一条数据 字段   数据的存储结构 数据的运算结构  数据质量 准确性 精确性 真实性 及时性 即时性 完整性 全面性 关...</div></div></div></div><nav id="pagination"><div class="pagination"><a class="extend prev" rel="prev" href="/page/3/#content-inner"><i class="fas fa-chevron-left fa-fw"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/#content-inner">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/#content-inner">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/29/#content-inner">29</a><a class="extend next" rel="next" href="/page/5/#content-inner"><i class="fas fa-chevron-right fa-fw"></i></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">靖轩</div><div class="author-info-description">逝者如斯夫,不舍昼夜</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/grepsu"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://gitee.com/grepsu" target="_blank" title="Gitee"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:sujx@live.cn" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS链接"><i class="fa  fa-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/07/03/AIGC_FoxHole/" title="海鹰">海鹰</a><time datetime="2026-07-03T01:04:07.000Z" title="发表于 2026-07-03 09:04:07">2026-07-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/11/fristVibeCoding/" title="鹊随金印：我的第一个完整的AI编程项目">鹊随金印：我的第一个完整的AI编程项目</a><time datetime="2026-06-11T01:04:07.000Z" title="发表于 2026-06-11 09:04:07">2026-06-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/03/VI_Howto/" title="VI编辑器简介">VI编辑器简介</a><time datetime="2026-06-03T01:04:07.000Z" title="发表于 2026-06-03 09:04:07">2026-06-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/28/HNCitic_2605/" title="我要上头条">我要上头条</a><time datetime="2026-05-28T01:04:07.000Z" title="发表于 2026-05-28 09:04:07">2026-05-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/12/TS-Domain-Controller-Sync-Failure/" title="记一次Windows AD域控制器同步故障排错">记一次Windows AD域控制器同步故障排错</a><time datetime="2026-05-12T03:04:07.000Z" title="发表于 2026-05-12 11:04:07">2026-05-12</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
+            <i class="fas fa-folder-open"></i>
+            <span>分类</span>
+            <a class="card-more-btn" href="/categories/" title="查看更多">
+      <i class="fas fa-angle-right"></i></a>
+          </div>
+          <ul class="card-category-list" id="aside-cat-list">
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8/"><span class="card-category-list-name">信息安全</span><span class="card-category-list-count">22</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E5%B7%A5%E4%BD%9C%E7%95%99%E7%97%95/"><span class="card-category-list-name">工作留痕</span><span class="card-category-list-count">3</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F/"><span class="card-category-list-name">应用程序</span><span class="card-category-list-count">65</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/"><span class="card-category-list-name">开发基础</span><span class="card-category-list-count">9</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%AC%94%E8%AE%B0/"><span class="card-category-list-name">操作笔记</span><span class="card-category-list-count">37</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%B5%B7%E5%A4%96%E6%9D%82%E8%B0%88/"><span class="card-category-list-name">海外杂谈</span><span class="card-category-list-count">14</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E7%A1%AC%E4%BB%B6%E6%9D%82%E8%B0%88/"><span class="card-category-list-name">硬件杂谈</span><span class="card-category-list-count">14</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"><span class="card-category-list-name">读书笔记</span><span class="card-category-list-count">49</span></a></li>
+          </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/7zip/" style="font-size: 1.19em; color: rgb(115, 177, 50);">7zip</a><a href="/tags/application/" style="font-size: 1.15em; color: rgb(147, 186, 50);">application</a><a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" style="font-size: 1.45em; color: rgb(50, 50, 173);">读书笔记</a><a href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/" style="font-size: 1.34em; color: rgb(185, 76, 50);">软件工程</a><a href="/tags/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/" style="font-size: 1.3em; color: rgb(50, 167, 167);">项目管理</a><a href="/tags/%E6%8A%80%E6%9C%AF%E4%B8%BA%E5%BE%84/" style="font-size: 1.15em; color: rgb(50, 94, 50);">技术为径</a><a href="/tags/job-description/" style="font-size: 1.15em; color: rgb(200, 106, 91);">job description</a><a href="/tags/Large-Model/" style="font-size: 1.15em; color: rgb(50, 126, 95);">Large Model</a><a href="/tags/Operations-Engineer/" style="font-size: 1.15em; color: rgb(107, 157, 88);">Operations Engineer</a><a href="/tags/%E8%81%8C%E4%B8%9A%E8%A7%84%E5%88%92/" style="font-size: 1.15em; color: rgb(170, 74, 159);">职业规划</a><a href="/tags/%E5%88%9B%E4%BD%9C/" style="font-size: 1.15em; color: rgb(50, 96, 113);">创作</a><a href="/tags/AI%E8%A7%86%E9%A2%91/" style="font-size: 1.15em; color: rgb(117, 155, 167);">AI视频</a><a href="/tags/AIGC/" style="font-size: 1.19em; color: rgb(50, 92, 197);">AIGC</a><a href="/tags/%E7%BD%91%E5%8D%A1/" style="font-size: 1.19em; color: rgb(183, 60, 50);">网卡</a><a href="/tags/100Gbps/" style="font-size: 1.15em; color: rgb(198, 93, 50);">100Gbps</a><a href="/tags/25Gbps/" style="font-size: 1.15em; color: rgb(192, 194, 60);">25Gbps</a><a href="/tags/Datacenter/" style="font-size: 1.19em; color: rgb(97, 50, 174);">Datacenter</a><a href="/tags/%E9%98%BF%E9%87%8C%E4%BA%91/" style="font-size: 1.38em; color: rgb(194, 148, 50);">阿里云</a><a href="/tags/ACE-%E6%9D%AD%E5%B7%9E-Exam/" style="font-size: 1.15em; color: rgb(105, 131, 50);">ACE - 杭州 - Exam</a><a href="/tags/%E8%81%8C%E4%B8%9A%E8%AE%A4%E8%AF%81/" style="font-size: 1.15em; color: rgb(50, 77, 133);">职业认证</a><a href="/tags/ACE/" style="font-size: 1.15em; color: rgb(51, 50, 189);">ACE</a><a href="/tags/aliyun/" style="font-size: 1.26em; color: rgb(65, 55, 50);">aliyun</a><a href="/tags/ecs/" style="font-size: 1.15em; color: rgb(171, 50, 151);">ecs</a><a href="/tags/%E5%9B%BE%E5%BD%A2%E5%8C%96/" style="font-size: 1.15em; color: rgb(98, 50, 165);">图形化</a><a href="/tags/seeyon/" style="font-size: 1.15em; color: rgb(167, 129, 179);">seeyon</a><a href="/tags/%E8%87%B4%E8%BF%9C%E4%BA%92%E8%81%94/" style="font-size: 1.15em; color: rgb(60, 107, 109);">致远互联</a><a href="/tags/Aliyun/" style="font-size: 1.26em; color: rgb(98, 119, 50);">Aliyun</a><a href="/tags/Exam/" style="font-size: 1.22em; color: rgb(50, 51, 108);">Exam</a><a href="/tags/AI/" style="font-size: 1.19em; color: rgb(50, 162, 122);">AI</a><a href="/tags/Note/" style="font-size: 1.15em; color: rgb(95, 162, 50);">Note</a><a href="/tags/Handbook/" style="font-size: 1.15em; color: rgb(50, 105, 124);">Handbook</a><a href="/tags/PM/" style="font-size: 1.15em; color: rgb(50, 50, 185);">PM</a><a href="/tags/ECS/" style="font-size: 1.22em; color: rgb(96, 50, 132);">ECS</a><a href="/tags/Kdump/" style="font-size: 1.15em; color: rgb(187, 83, 91);">Kdump</a><a href="/tags/Linux/" style="font-size: 1.41em; color: rgb(50, 89, 84);">Linux</a><a href="/tags/Test/" style="font-size: 1.15em; color: rgb(50, 163, 119);">Test</a><a href="/tags/Performance/" style="font-size: 1.22em; color: rgb(127, 50, 76);">Performance</a><a href="/tags/Migrate/" style="font-size: 1.15em; color: rgb(160, 187, 75);">Migrate</a><a href="/tags/Transfer/" style="font-size: 1.15em; color: rgb(195, 167, 50);">Transfer</a><a href="/tags/%E6%9D%AD%E5%B7%9E/" style="font-size: 1.15em; color: rgb(50, 65, 179);">杭州</a></div></div><div class="card-widget card-archives">
+    <div class="item-headline">
+      <i class="fas fa-archive"></i>
+      <span>归档</span>
+      <a class="card-more-btn" href="/archives/"
+            title="查看更多">
+            <i class="fas fa-angle-right"></i>
+          </a>
+    </div>
+  
+    <ul class="card-archive-list">
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2026/07/">
+            <span class="card-archive-list-date">
+              七月 2026
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2026/06/">
+            <span class="card-archive-list-date">
+              六月 2026
+            </span>
+            <span class="card-archive-list-count">2</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2026/05/">
+            <span class="card-archive-list-date">
+              五月 2026
+            </span>
+            <span class="card-archive-list-count">4</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2026/04/">
+            <span class="card-archive-list-date">
+              四月 2026
+            </span>
+            <span class="card-archive-list-count">3</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2026/03/">
+            <span class="card-archive-list-date">
+              三月 2026
+            </span>
+            <span class="card-archive-list-count">4</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2026/02/">
+            <span class="card-archive-list-date">
+              二月 2026
+            </span>
+            <span class="card-archive-list-count">3</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2026/01/">
+            <span class="card-archive-list-date">
+              一月 2026
+            </span>
+            <span class="card-archive-list-count">4</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/12/">
+            <span class="card-archive-list-date">
+              十二月 2025
+            </span>
+            <span class="card-archive-list-count">3</span>
+          </a>
+        </li>
+      
+    </ul>
+  </div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站信息</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">287</div></div><div class="webinfo-item"><div class="item-name">本站总字数 :</div><div class="item-count">762.9k</div></div><div class="webinfo-item"><div class="item-name">本站访客数 :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站总浏览量 :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2026-09-26T02:41:57.751Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2008 - 2026 By 靖轩</span></div><div class="footer_custom_text">京ICP备17034757号</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.5"></script><script src="/js/main.js?v=5.5.5"></script><script src="/libs/fancybox/fancybox.umd.js"></script><script src="/js/instantpage.js" type="module"></script><script src="/libs/lazyload/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const parseViewBox = viewBox => {
+    if (!viewBox) return null
+    const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
+    if (parts.length !== 4 || parts.some(n => Number.isNaN(n))) return null
+    return parts
   }
-  .justified-gallery img {
-    opacity: 1
+
+  const getSvgViewBox = svg => {
+    const attr = parseViewBox(svg.getAttribute('viewBox'))
+    if (attr) return attr
+
+    // Fallback: use bbox to build a viewBox
+    try {
+      const bbox = svg.getBBox()
+      if (bbox && bbox.width && bbox.height) return [bbox.x, bbox.y, bbox.width, bbox.height]
+    } catch (e) {
+      // getBBox may fail on some edge cases; ignore
+    }
+
+    const w = Number(svg.getAttribute('width')) || 0
+    const h = Number(svg.getAttribute('height')) || 0
+    if (w > 0 && h > 0) return [0, 0, w, h]
+    return [0, 0, 100, 100]
   }
 
-  #recent-posts time,
-  #post-meta time {
-    display: inline !important
+  const setSvgViewBox = (svg, vb) => {
+    svg.setAttribute('viewBox', `${vb[0]} ${vb[1]} ${vb[2]} ${vb[3]}`)
   }
-</style></noscript><script>(win=>{
-    win.saveToLocal = {
-      set: function setWithExpiry(key, value, ttl) {
-        if (ttl === 0) return
-        const now = new Date()
-        const expiryDay = ttl * 86400000
-        const item = {
-          value: value,
-          expiry: now.getTime() + expiryDay,
-        }
-        localStorage.setItem(key, JSON.stringify(item))
-      },
 
-      get: function getWithExpiry(key) {
-        const itemStr = localStorage.getItem(key)
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v))
 
-        if (!itemStr) {
-          return undefined
-        }
-        const item = JSON.parse(itemStr)
-        const now = new Date()
+  const openSvgInNewTab = ({ source, initViewBox }) => {
+    const getClonedSvg = () => {
+      if (typeof source === 'string') {
+        const template = document.createElement('template')
+        template.innerHTML = source.trim()
+        const svg = template.content.querySelector('svg')
+        return svg ? svg.cloneNode(true) : null
+      }
+      if (source && typeof source.cloneNode === 'function') {
+        return source.cloneNode(true)
+      }
+      return null
+    }
 
-        if (now.getTime() > item.expiry) {
-          localStorage.removeItem(key)
-          return undefined
+    const clone = getClonedSvg()
+    if (!clone) return
+    if (initViewBox && initViewBox.length === 4) {
+      clone.setAttribute('viewBox', initViewBox.join(' '))
+    }
+    if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+    if (!clone.getAttribute('xmlns:xlink') && clone.outerHTML.includes('xlink:')) {
+      clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+    }
+    // inject background to match current theme
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    const bg = getComputedStyle(document.body).backgroundColor || (isDark ? '#1e1e1e' : '#ffffff')
+    if (!clone.style.background) clone.style.background = bg
+
+    const serializer = new XMLSerializer()
+    const svgSource = serializer.serializeToString(clone)
+    const htmlSource = `<!doctype html><html><head><meta charset="utf-8" />
+      <style>
+        html, body { width: 100%; height: 100%; margin: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; }
+        svg { max-width: 100%; max-height: 100%; height: auto; width: auto; }
+      </style>
+      </head><body>${svgSource}</body></html>`
+    const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank', 'noopener')
+    setTimeout(() => URL.revokeObjectURL(url), 30000)
+  }
+
+  const attachMermaidViewerButton = wrap => {
+    let btn = wrap.querySelector('.mermaid-open-btn')
+    if (!btn) {
+      btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'mermaid-open-btn'
+      wrap.appendChild(btn)
+    }
+
+    btn.innerHTML = '<i class="fa fa-search fa-fw" aria-hidden="true"></i>'
+
+    if (!btn.__mermaidViewerBound) {
+      btn.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        const svg = wrap.__mermaidOriginalSvg || wrap.querySelector('svg')
+        if (!svg) return
+        const initViewBox = wrap.__mermaidInitViewBox
+        if (typeof svg === 'string') {
+          openSvgInNewTab({ source: svg, initViewBox })
+          return
         }
-        return item.value
+        openSvgInNewTab({ source: svg, initViewBox })
+      })
+      btn.__mermaidViewerBound = true
+    }
+  }
+
+  // Zoom around a point (px, py) in the SVG viewport (in viewBox coordinates)
+  const zoomAtPoint = (vb, factor, px, py) => {
+    const w = vb[2] * factor
+    const h = vb[3] * factor
+    const nx = px - (px - vb[0]) * factor
+    const ny = py - (py - vb[1]) * factor
+    return [nx, ny, w, h]
+  }
+
+  const initMermaidGestures = wrap => {
+    const svg = wrap.querySelector('svg')
+    if (!svg) return
+
+    // Ensure viewBox exists so gestures always work
+    const initVb = getSvgViewBox(svg)
+    wrap.__mermaidInitViewBox = initVb
+    wrap.__mermaidCurViewBox = initVb.slice()
+    setSvgViewBox(svg, initVb)
+
+    // Avoid binding multiple times on themeChange/pjax
+    if (wrap.__mermaidGestureBound) return
+    wrap.__mermaidGestureBound = true
+
+    // Helper: map client (viewport) coordinate -> viewBox coordinate
+    const clientToViewBox = (clientX, clientY) => {
+      const rect = svg.getBoundingClientRect()
+      const vb = wrap.__mermaidCurViewBox || getSvgViewBox(svg)
+      const x = vb[0] + (clientX - rect.left) * (vb[2] / rect.width)
+      const y = vb[1] + (clientY - rect.top) * (vb[3] / rect.height)
+      return { x, y, rect, vb }
+    }
+
+    const state = {
+      pointers: new Map(),
+      startVb: null,
+      startDist: 0,
+      startCenter: null
+    }
+
+    const clampVb = vb => {
+      const init = wrap.__mermaidInitViewBox || vb
+      const minW = init[2] * 0.1
+      const maxW = init[2] * 10
+      const minH = init[3] * 0.1
+      const maxH = init[3] * 10
+      vb[2] = clamp(vb[2], minW, maxW)
+      vb[3] = clamp(vb[3], minH, maxH)
+      return vb
+    }
+
+    const setCurVb = vb => {
+      vb = clampVb(vb)
+      wrap.__mermaidCurViewBox = vb
+      setSvgViewBox(svg, vb)
+    }
+
+    const onPointerDown = e => {
+      // Allow only primary button for mouse
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      svg.setPointerCapture(e.pointerId)
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      if (state.pointers.size === 1) {
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      } else if (state.pointers.size === 2) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        state.startDist = Math.hypot(dx, dy)
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        state.startCenter = { x: (pts[0].x + pts[1].x) / 2, y: (pts[0].y + pts[1].y) / 2 }
       }
     }
-  
-    win.getScript = url => new Promise((resolve, reject) => {
-      const script = document.createElement('script')
-      script.src = url
-      script.async = true
-      script.onerror = reject
-      script.onload = script.onreadystatechange = function() {
-        const loadState = this.readyState
-        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
-        script.onload = script.onreadystatechange = null
-        resolve()
+
+    const onPointerMove = e => {
+      if (!state.pointers.has(e.pointerId)) return
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      // Pan with 1 pointer
+      if (state.pointers.size === 1 && state.startVb) {
+        const p = [...state.pointers.values()][0]
+        const prev = { x: e.clientX - e.movementX, y: e.clientY - e.movementY }
+        // movementX/Y unreliable on touch, compute from stored last position
+        const last = wrap.__mermaidLastSinglePointer || p
+        const dxClient = p.x - last.x
+        const dyClient = p.y - last.y
+        wrap.__mermaidLastSinglePointer = p
+
+        const { rect } = clientToViewBox(p.x, p.y)
+        const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        const dx = dxClient * (vb[2] / rect.width)
+        const dy = dyClient * (vb[3] / rect.height)
+        setCurVb([vb[0] - dx, vb[1] - dy, vb[2], vb[3]])
+        return
       }
-      document.head.appendChild(script)
-    })
-  
-    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
-      const link = document.createElement('link')
-      link.rel = 'stylesheet'
-      link.href = url
-      if (id) link.id = id
-      link.onerror = reject
-      link.onload = link.onreadystatechange = function() {
-        const loadState = this.readyState
-        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
-        link.onload = link.onreadystatechange = null
-        resolve()
-      }
-      document.head.appendChild(link)
-    })
-  
-      win.activateDarkMode = function () {
-        document.documentElement.setAttribute('data-theme', 'dark')
-        if (document.querySelector('meta[name="theme-color"]') !== null) {
-          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
-        }
-      }
-      win.activateLightMode = function () {
-        document.documentElement.setAttribute('data-theme', 'light')
-        if (document.querySelector('meta[name="theme-color"]') !== null) {
-          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
-        }
-      }
-      const t = saveToLocal.get('theme')
-    
-          if (t === 'dark') activateDarkMode()
-          else if (t === 'light') activateLightMode()
-        
-      const asideStatus = saveToLocal.get('aside-status')
-      if (asideStatus !== undefined) {
-        if (asideStatus === 'hide') {
-          document.documentElement.classList.add('hide-aside')
-        } else {
-          document.documentElement.classList.remove('hide-aside')
-        }
-      }
-    
-    const detectApple = () => {
-      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
-        document.documentElement.classList.add('apple')
+
+      // Pinch zoom with 2 pointers
+      if (state.pointers.size === 2 && state.startVb && state.startDist > 0) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        const dist = Math.hypot(dx, dy)
+        if (!dist) return
+        const factor = state.startDist / dist // dist bigger => zoom in (viewBox smaller)
+
+        const cx = (pts[0].x + pts[1].x) / 2
+        const cy = (pts[0].y + pts[1].y) / 2
+        const centerClient = { x: cx, y: cy }
+
+        const pxy = clientToViewBox(centerClient.x, centerClient.y)
+        const cpx = pxy.x
+        const cpy = pxy.y
+
+        const vb = zoomAtPoint(state.startVb, factor, cpx, cpy)
+        setCurVb(vb)
       }
     }
-    detectApple()
-    })(window)</script><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="靖" type="application/atom+xml">
-</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://cdn.sujx.net/about/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">94</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">179</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">13</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Posts</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fas fa-book-open"></i><span> Books</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fas fa-tv"></i><span> Movies</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="靖"><span class="site-name">靖</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Posts</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fas fa-book-open"></i><span> Books</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fas fa-tv"></i><span> Movies</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div class="recent-posts" id="recent-posts"><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/01/04/srs-livestream/" title="搭建内网的直播系统">搭建内网的直播系统</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2022-01-04T09:35:28.000Z" title="Created 2022-01-04 17:35:28">2022-01-04</time></span></div><div class="content">背景前述，我们实现了使用VLC来搭建局域网内的串流播放服务器，但在交付测试后发现对高分视频支持不佳、画面会出现破碎、延迟较高等问题。后来，经过对比Easydarwin、Red5、simple-rtmp-server等多个服务，选择使用SRS这个国产开源流媒体系统来搭建自己的内网直播系统。
-部署SRS是一个简单高效的实时视频服务器，支持支持RTMP&#x2F;WebRTC&#x2F;HLS&#x2F;HTTP-FLV&#x2F;SRT。同时，它也自带了网页播放器srs-player。
 
-我们主要使用右上角的功能，即从视频源走RTMP协议推流到SRS Server，然后客户端通过RTMP、HTTP-FLV拉取视频流。
-服务搭建容器部署# 开放端口
-firewall-cmd --permanent --add-port=&#123;8080/tcp,1935/tcp,1985/tcp&#125;
-firewall-cmd --reload
-# 部署docker服务
-docker run -itd --restart=always -p 1935:1935 -p 1985:1985 -p 80 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/01/01/wazuh-from-newbee-2-online/" title="WAZUH的从入门到上线">WAZUH的从入门到上线</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2022-01-01T02:35:34.000Z" title="Created 2022-01-01 10:35:34">2022-01-01</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Security/">Security</a></span></div><div class="content">[Wazuh](Wazuh · The Open Source Security Platform)是一整套基于ossec安全检测工具和EFK日志工具构成的终端安全管理工具。不管是将其分类至HIDS，还是EDR，它都是一套通过监控主机日志行为，提供安全检测、分析和完整报告的开源、免费利器。Wazuh基于C&#x2F;S架构，它的Agent支持Windows、MacOS、Linux、HP-UX、AIX等主流操作系统。其服务端负责提供认证和数据收集，然后通过filebeat进行日志清洗，最后导入ElasticSearch，通过Kinbana进行展示和输出日志。它不仅可以收集主机的事件日志进行一般的入侵检测功能，还可以通过第三方提供的系统漏洞检测feed文件，来实现主机的漏洞扫描和合规检查。
-基本概念功能示例
-组件模块Wazuh的组件分为三部分：
+    const onPointerUpOrCancel = e => {
+      state.pointers.delete(e.pointerId)
+      if (state.pointers.size === 0) {
+        state.startVb = null
+        state.startDist = 0
+        state.startCenter = null
+        wrap.__mermaidLastSinglePointer = null
+      } else if (state.pointers.size === 1) {
+        // reset single pointer baseline to avoid jump
+        wrap.__mermaidLastSinglePointer = [...state.pointers.values()][0]
+      }
+    }
 
-客户端的功能
+    // Wheel zoom (mouse/trackpad)
+    const onWheel = e => {
+      // ctrlKey on mac trackpad pinch; we treat both as zoom
+      e.preventDefault()
+      const delta = e.deltaY
+      const zoomFactor = delta > 0 ? 1.1 : 0.9
+      const { x, y } = clientToViewBox(e.clientX, e.clientY)
+      const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      setCurVb(zoomAtPoint(vb, zoomFactor, x, y))
+    }
 
-收集日志和事件日志；
-文件和注册表的监控；
-运行进程和安装软件的信息收集；
-监控系统端口和网络配置；
-检测恶意软件；
-配置管理和策略监控
-检测主机响应
+    const onDblClick = () => {
+      const init = wrap.__mermaidInitViewBox
+      if (!init) return
+      wrap.__mermaidCurViewBox = init.slice()
+      setSvgViewBox(svg, init)
+    }
 
+    svg.addEventListener('pointerdown', onPointerDown)
+    svg.addEventListener('pointermove', onPointerMove)
+    svg.addEventListener('pointerup', onPointerUpOrCancel)
+    svg.addEventListener('pointercancel', onPointerUpOrCancel)
+    svg.addEventListener('wheel', onWheel, { passive: false })
+    svg.addEventListener('dblclick', onDblClick)
+  }
 
-服务端
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
 
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
 
-客户端的服务器注册；
-实现客户端的连接服务；
-根据各项规则实现 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2021/12/28/mobsf-install/" title="移动端APP安全框架Mobsf的部署">移动端APP安全框架Mobsf的部署</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2021-12-28T02:35:28.000Z" title="Created 2021-12-28 10:35:28">2021-12-28</time></span></div><div class="content">简介Mobile Security Framework (MobSF)是一个印度人写的Allinone的全自动APP检测工具，可用于渗透测试、恶意软件、安全基线检查等用途，当前最新版本为3.4.5 beta。它支持安卓和苹果主机程序格式，比如apk、xapk、ipa、appx，进行静态或者动态安全分析。同时，它也提供APIs接口用于现有开发环境CI&#x2F;CD流水线。
+      // Clear old render (themeChange/pjax will rerun)
+      const oldSvg = item.querySelector('svg')
+      if (oldSvg) oldSvg.remove()
+      item.__mermaidGestureBound = false
 
-标准部署# 环境准备
-apt update
-apt upgrade -y
-apt install -y python3-pip python3-setuptools python3-venv python-is-python3
-apt install -y openjdk-16-jdk git mlocate
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
 
-# 安装wkhtmltox，Ubuntu官方源中的wkhtmltox依赖包太多了，可以使用开发商自打包
-apt install -y xfonts-75dpi xfonts-base xfonts-encodings xfonts-utils
-apt install -y language-pack-zh- ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2021/12/23/hfs-how-to/" title="使用HFS提供简单文件共享服务">使用HFS提供简单文件共享服务</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2021-12-23T01:35:28.000Z" title="Created 2021-12-23 09:35:28">2021-12-23</time></span></div><div class="content">背景
-财务部门有台银行业务前置机，按银行IT要求是是非域独立部署的Windows客户端主机；
-开发需要调用上面接收的票务数据，要求是需要走http协议；
-所有变更不能和现有银行部署软件相冲突；
-易于维护，并能够记录所有访问纪录以便审计；
-
-介绍
-HFS是一个简易、快速的单文件免安装HTTP Server
-官方有简体中文帮助文件
-支持随Windows启动、支持自定义端口号、支持专家&#x2F;易用模式切换
-
-部署
-找个文件夹存放，并双击启动
-可以将文件或者文件夹拖入程序界面就可以添加；
-默认为虚拟目录，是将目标文件夹复制到软件支持的VFS文件系统内，修改虚拟目录下文件夹不影响真实文件，但虚拟目录的支持的文件数受限；
-真实目录是将给硬盘上的实际文件夹建立一个软连接，实际操作真实文件；
-指定访问端口
-多网卡情况下，绑定指定网卡IP
-添加用户并指定权限，只有设定用了访问用户，才能设置上传权限
-随Windows启动并最小化显示
-设定日志记录内容
-默认日志只是在程序界面显示，可以使用“Log to file”来保存日志记录
-
-其他
-HFS默认允许所有人可访问，可以通过配置limit来ban掉特定I ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2021/12/22/vlc-netsteam-server/" title="使用VLC实现视频串流播放">使用VLC实现视频串流播放</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2021-12-22T02:35:28.000Z" title="Created 2021-12-22 10:35:28">2021-12-22</time></span></div><div class="content">背景
-HR需要使用研发中心大厅内近十部电视来统一播放宣讲视频；
-无硬件、无预算、无方案；
-三天时间落实方案、操作演示并要求简单易学、方便HR操作；
-电视信号来源是利旧主机，包括淘汰的Mac mini和戴尔OptiPlex微型机，涉及Mac系统、Ubuntu系统和Windows系统
-
-方案
-使用开源、多平台的VLC Media Palyer实现服务端串流播放；
-调用本地VLC播放器作为客户端串流播放网络视频
-
-实施服务端
-开启串流
-添加视频源，支持文件、摄像头、采集卡和电脑桌面
-开始设定串流
-确认流输出源
-选择本地同步播放视频，同时选择使用RTSP模式输出，并点击添加
-默认使用本地IP，使用8554端口，自定义地址路径(支持多路径输出)
-不开启转码功能(如果开启，支持多种格式输出)
-完成设置
-
-客户端
-选择播放串流
-输入串流源地址
-打开设置
-开启默认全屏
-保存播放列表
-指定存储位置
-直接点击播放
-
-总结
-VLC的串流播放模式使用方便，能够快速输出视频；
-串流播放对网络质量要求较高，只限局域网使用，会有多个视频不完全同步的状态；
-VLC的视频播放质量清晰度，相较原片有肉眼可见的不如；
-免费 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2021/12/13/wazuh-turning-elastic/" title="Wazuh应用之Elasticsearch的调优">Wazuh应用之Elasticsearch的调优</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2021-12-13T07:37:30.000Z" title="Created 2021-12-13 15:37:30">2021-12-13</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Technology/">Technology</a></span></div><div class="content">概述wazuh本身是一个对资源要求较低的系统，但长期运行下来，还是会出现各种各样资源使用不足的问题。因此，需要进行一定程度的优化和调整
-调整ES参数开启内存锁定参数   # 锁定物理内存地址，防止ES内存被交换出去，避免频繁使用swap分区
-cat >> /etc/elasticsearch/elasticsearch.yml &lt;&lt;EOF
-bootstrap.memory_lock: true
-EOF
-
-限制系统资源   # 配置Elasticsearch的systemd调用
-mkdir -p /etc/systemd/system/elasticsearch.service.d/
- 
-cat > /etc/systemd/system/elasticsearch.service.d/elasticsearch.conf &lt;&lt; EOF
-[Service]
-LimitMEMLOCK=infinity
-EOF
-
-调整内核参数   cat >> /etc/security/limits.conf &lt;&lt;EOF
-elasticsearch soft memlo ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2021/12/03/centos8-ocsng-glpi/" title="资产管理软件GLPI的部署以及与OCSInverntoryNG的整合">资产管理软件GLPI的部署以及与OCSInverntoryNG的整合</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2021-12-03T08:37:30.000Z" title="Created 2021-12-03 16:37:30">2021-12-03</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Technology/">Technology</a></span></div><div class="content">概述​	我们可以使用OCSinverntory搜集整理资产信息并导入GLPI系统作为CMDB的形式来实现公司资产管理的数字化，方便资产的统一管理和信息维护。
-名词解释OCSInverntoryNG​	OCSinventoyNG 使用perl编写的开源资产管理软件，它通过agent上报相关信息来获取部署范围内的Windows、Unix、MacOS、andriod等资产信息。
-GLPI​	GLPI是一款由法国人开发的开源CMDB软件，GLPI是法语Gestionnaire libre de parc informatique的缩写，它使用PHP开发。
-
-系统部署基础设施# 系统更新
-dnf install -y epel-release dnf-utils
-dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
-dnf install -y https://rpms.remirepo.net/enterprise/remi-release-8.rpm
-
-dnf config- ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2021/11/29/centos7-discuzq/" title="CentOS7上使用yum部署Discuz!Q">CentOS7上使用yum部署Discuz!Q</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2021-11-29T09:35:28.000Z" title="Created 2021-11-29 17:35:28">2021-11-29</time></span></div><div class="content">文档资料官方指引
-官方站点: https://discuz.com/
-
-示例站点：https://discuz.chat/
-
-安装指引: https://discuz.com/docs/Linux%20%E4%B8%BB%E6%9C%BA.html#nginx
-
-后台使用：https://discuz.com/manual-admin/
-
-程序下载: https://dl.discuz.chat/dzq_latest_install.zip
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+        if (true) initMermaidGestures(item)
+        item.__mermaidOriginalSvg = svg
+        if (true) attachMermaidViewerButton(item)
+      }
 
 
-社区使用站点：纷享社区 (fxiaoke.com)
-后台登录：管理中心首页 (fxiaoke.com)
-程序部署系统准备#!/bin/bash
-yum makecache
-yum update -y
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
 
-# 创建本地软件源
-# 因为是在内网环境部署，所以采用yumdownload下载软件后，使用本机源的形式部署。
-# 使用remi源
-# 需要开启epel源
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
 
-tar zxvf php74.tar.gz -C /opt/
-yum install -y createrepo
-createrepo /opt/php74/
-yum-config-mana ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2021/11/19/centos7-mcafee/" title="Linux上安装McAfee杀毒软件">Linux上安装McAfee杀毒软件</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2021-11-18T23:35:28.000Z" title="Created 2021-11-19 07:35:28">2021-11-19</time></span></div><div class="content">背景为了满足客户的安全需求，我司需要至少使用两种杀毒软件对交付的应用服务程序进行安全检查。因此，在ClamAV的基础上，我们还需要另外一种Linux版本的杀毒软件。不幸的是，无论使用baidu或者google检索出的所有免费可用杀毒软件大多已经没有Linux版本了，要么交付不菲的费用、要么产品下线、要么必须安装GTK桌面。
-最后，在我们的认知范围内，可以选择的产品是Mcafee Endpoint Security，也就是他家的企业版杀毒软件。理由一个是可以免费试用，一个是可以单机使用。
-另外，在检索的过程中发现国内的Linux版本杀毒软件有一个360的安全卫士Linux版，还有一个火绒企业版的Linux客户端。印象里面奇安信的天擎系统也有Linux的agent。不过，试用国产软件的后续麻烦事多，就不叨扰了。
-获取
-Mcafee提供试用软件包下载；
-Endpoint Security 提供Windows、Mac、Linux三种版本的客户端；
-客户端可以搭配EPO服务器进行统一下发和管理，也可以以Standalone的形式来运行
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
 
-吐槽
-M家的免费试用包获取有时间间隔，如果你下错了，每次无 ...</div></div></div><nav id="pagination"><div class="pagination"><a class="extend prev" rel="prev" href="/page/3/#content-inner"><i class="fas fa-chevron-left fa-fw"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/#content-inner">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/#content-inner">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/#content-inner">11</a><a class="extend next" rel="next" href="/page/5/#content-inner"><i class="fas fa-chevron-right fa-fw"></i></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">靖轩</div><div class="author-info__description">逝者如斯夫,不舍昼夜</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">94</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">179</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">13</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/sujx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://gitee.com/grepsu" target="_blank" title="Gitee"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:sujx@live.cn" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS链接"><i class="fa  fa-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/21/magedu-week-3/" title="Linux系统基础知识·3">Linux系统基础知识·3</a><time datetime="2023-05-21T14:48:47.000Z" title="Created 2023-05-21 22:48:47">2023-05-21</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/14/magedu-week-2/" title="Linux系统基础知识·2">Linux系统基础知识·2</a><time datetime="2023-05-14T14:48:47.000Z" title="Created 2023-05-14 22:48:47">2023-05-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/04/10/magedu-week-1/" title="Linux系统基础知识·1">Linux系统基础知识·1</a><time datetime="2023-04-10T08:35:34.000Z" title="Created 2023-04-10 16:35:34">2023-04-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2022/11/03/How2UseKVM/" title="内核虚拟化KVM的使用">内核虚拟化KVM的使用</a><time datetime="2022-11-03T14:22:22.000Z" title="Created 2022-11-03 22:22:22">2022-11-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2022/10/19/clean-old-kernel/" title="CentOS主机清理旧内核">CentOS主机清理旧内核</a><time datetime="2022-10-19T06:48:47.000Z" title="Created 2022-10-19 14:48:47">2022-10-19</time></div></div></div></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>Tags</span></div><div class="card-tag-cloud"><a href="/tags/github/" style="font-size: 1.1em; color: #999">github</a> <a href="/tags/logic/" style="font-size: 1.1em; color: #999">logic</a> <a href="/tags/disk/" style="font-size: 1.1em; color: #999">disk</a> <a href="/tags/kms/" style="font-size: 1.1em; color: #999">kms</a> <a href="/tags/receipt/" style="font-size: 1.1em; color: #999">receipt</a> <a href="/tags/s3/" style="font-size: 1.1em; color: #999">s3</a> <a href="/tags/VLC/" style="font-size: 1.1em; color: #999">VLC</a> <a href="/tags/wordpress/" style="font-size: 1.1em; color: #999">wordpress</a> <a href="/tags/hexo/" style="font-size: 1.1em; color: #999">hexo</a> <a href="/tags/LVM/" style="font-size: 1.1em; color: #999">LVM</a> <a href="/tags/tips/" style="font-size: 1.23em; color: #999ea6">tips</a> <a href="/tags/Kubernetes/" style="font-size: 1.1em; color: #999">Kubernetes</a> <a href="/tags/mapreduce/" style="font-size: 1.1em; color: #999">mapreduce</a> <a href="/tags/CMDB/" style="font-size: 1.1em; color: #999">CMDB</a> <a href="/tags/Virtual/" style="font-size: 1.1em; color: #999">Virtual</a> <a href="/tags/english/" style="font-size: 1.1em; color: #999">english</a> <a href="/tags/7zip/" style="font-size: 1.23em; color: #999ea6">7zip</a> <a href="/tags/CentOS/" style="font-size: 1.5em; color: #99a9bf">CentOS</a> <a href="/tags/share/" style="font-size: 1.1em; color: #999">share</a> <a href="/tags/zoom/" style="font-size: 1.1em; color: #999">zoom</a> <a href="/tags/offline/" style="font-size: 1.23em; color: #999ea6">offline</a> <a href="/tags/fedora/" style="font-size: 1.1em; color: #999">fedora</a> <a href="/tags/x11/" style="font-size: 1.1em; color: #999">x11</a> <a href="/tags/livestream/" style="font-size: 1.1em; color: #999">livestream</a> <a href="/tags/vSphere/" style="font-size: 1.1em; color: #999">vSphere</a> <a href="/tags/MyLife/" style="font-size: 1.1em; color: #999">MyLife</a> <a href="/tags/tsinghua/" style="font-size: 1.1em; color: #999">tsinghua</a> <a href="/tags/CRM/" style="font-size: 1.1em; color: #999">CRM</a> <a href="/tags/Firewall/" style="font-size: 1.1em; color: #999">Firewall</a> <a href="/tags/backup/" style="font-size: 1.1em; color: #999">backup</a> <a href="/tags/java/" style="font-size: 1.1em; color: #999">java</a> <a href="/tags/steam/" style="font-size: 1.1em; color: #999">steam</a> <a href="/tags/minio/" style="font-size: 1.1em; color: #999">minio</a> <a href="/tags/Virtualization/" style="font-size: 1.1em; color: #999">Virtualization</a> <a href="/tags/Vulnerability/" style="font-size: 1.1em; color: #999">Vulnerability</a> <a href="/tags/performance/" style="font-size: 1.1em; color: #999">performance</a> <a href="/tags/MacMini/" style="font-size: 1.1em; color: #999">MacMini</a> <a href="/tags/system/" style="font-size: 1.37em; color: #99a4b2">system</a> <a href="/tags/Antivirus/" style="font-size: 1.1em; color: #999">Antivirus</a> <a href="/tags/Fail2Ban/" style="font-size: 1.1em; color: #999">Fail2Ban</a></div></div><div class="card-widget card-archives"><div class="item-headline"><i class="fas fa-archive"></i><span>Archives</span><a class="card-more-btn" href="/archives/" title="More">
-    <i class="fas fa-angle-right"></i></a></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/05/"><span class="card-archive-list-date">May 2023</span><span class="card-archive-list-count">2</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/04/"><span class="card-archive-list-date">April 2023</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/11/"><span class="card-archive-list-date">November 2022</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/10/"><span class="card-archive-list-date">October 2022</span><span class="card-archive-list-count">2</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/09/"><span class="card-archive-list-date">September 2022</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/08/"><span class="card-archive-list-date">August 2022</span><span class="card-archive-list-count">2</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/07/"><span class="card-archive-list-date">July 2022</span><span class="card-archive-list-count">2</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/06/"><span class="card-archive-list-date">June 2022</span><span class="card-archive-list-count">2</span></a></li></ul></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>Info</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">Article :</div><div class="item-count">94</div></div><div class="webinfo-item"><div class="item-name">Total Count :</div><div class="item-count">127.8k</div></div><div class="webinfo-item"><div class="item-name">UV :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">PV :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">Last Push :</div><div class="item-count" id="last-push-date" data-lastPushDate="2023-06-02T14:52:52.702Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://cdn.sujx.net/about/footimg.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By 靖轩</div><div class="footer_custom_text">京ICP备17034757号-1</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading the Database</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('/libs/mermaid/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.5"></script></div></div></body></html>

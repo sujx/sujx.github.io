@@ -1,0 +1,661 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>IT运维安全策略 | 靖轩</title><meta name="author" content="靖轩"><meta name="copyright" content="靖轩"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="概述IT运维安全主要包括网络层面、系统层面、软件层面、硬件层面。 硬件层面IDC机房、服务器硬件、IT设备等定期巡检，保证其正常、稳定运行，以防止损失、被盗、高温、静电、电源等 软件层面Nginx、Java、PHP、MySQL、Web站点、业务系统等软件程序漏洞及BUG，对外访问权限、监听的端口、版本隐藏、软件权限控制、用户名和密码控制 系统层面操作系统自身版本、BUG漏洞、暴露的端口、服务、系统">
+<meta property="og:type" content="article">
+<meta property="og:title" content="IT运维安全策略">
+<meta property="og:url" content="https://www.sujx.net/2024/08/03/About-IT-SEC/index.html">
+<meta property="og:site_name" content="靖轩">
+<meta property="og:description" content="概述IT运维安全主要包括网络层面、系统层面、软件层面、硬件层面。 硬件层面IDC机房、服务器硬件、IT设备等定期巡检，保证其正常、稳定运行，以防止损失、被盗、高温、静电、电源等 软件层面Nginx、Java、PHP、MySQL、Web站点、业务系统等软件程序漏洞及BUG，对外访问权限、监听的端口、版本隐藏、软件权限控制、用户名和密码控制 系统层面操作系统自身版本、BUG漏洞、暴露的端口、服务、系统">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.sujx.net/covers/cover36.jpg">
+<meta property="article:published_time" content="2024-08-03T07:04:07.000Z">
+<meta property="article:modified_time" content="2026-09-26T02:32:14.911Z">
+<meta property="article:author" content="靖轩">
+<meta property="article:tag" content="DDoS">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="ab">
+<meta property="article:tag" content="firewalld">
+<meta property="article:tag" content="flood">
+<meta property="article:tag" content="hping3">
+<meta property="article:tag" content="iptables">
+<meta property="article:tag" content="security">
+<meta property="article:tag" content="syn">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.sujx.net/covers/cover36.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "IT运维安全策略",
+  "url": "https://www.sujx.net/2024/08/03/About-IT-SEC/",
+  "image": "https://cdn.sujx.net/covers/cover36.jpg",
+  "datePublished": "2024-08-03T07:04:07.000Z",
+  "dateModified": "2026-09-26T02:32:14.911Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "靖轩",
+      "url": "https://www.sujx.net"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://cdn.sujx.net/about/favicon.png"><link rel="canonical" href="https://www.sujx.net/2024/08/03/About-IT-SEC/index.html"><link rel="preconnect" href="//cdnjs.cloudflare.com"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css?v=5.5.5"><link rel="stylesheet" href="/fonts/css/all.min.css"><link rel="stylesheet" href="/libs/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?417b20ac1984432f821159fac27d3bb5";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><link rel="stylesheet" href="/fonts/titillium-web.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: '/libs/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: true,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'IT运维安全策略',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="alternate" href="/atom.xml" title="靖轩" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">靖轩</span></a><a class="nav-page-title" href="/"><span class="site-name">IT运维安全策略</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">IT运维安全策略</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-08-03T07:04:07.000Z" title="发表于 2024-08-03 15:04:07">2024-08-03</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-09-26T02:32:14.911Z" title="更新于 2026-09-26 10:32:14">2026-09-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8/">信息安全</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">4.9k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>19分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>IT运维安全主要包括网络层面、系统层面、软件层面、硬件层面。</p>
+<h3 id="硬件层面"><a href="#硬件层面" class="headerlink" title="硬件层面"></a>硬件层面</h3><p>IDC机房、服务器硬件、IT设备等定期巡检，保证其正常、稳定运行，以防止损失、被盗、高温、静电、电源等</p>
+<h3 id="软件层面"><a href="#软件层面" class="headerlink" title="软件层面"></a>软件层面</h3><p>Nginx、Java、PHP、MySQL、Web站点、业务系统等软件程序漏洞及BUG，对外访问权限、监听的端口、版本隐藏、软件权限控制、用户名和密码控制</p>
+<h3 id="系统层面"><a href="#系统层面" class="headerlink" title="系统层面"></a>系统层面</h3><p>操作系统自身版本、BUG漏洞、暴露的端口、服务、系统权限、root用户、禁止ping、指令特权控制</p>
+<h3 id="网络层面"><a href="#网络层面" class="headerlink" title="网络层面"></a>网络层面</h3><p>大流量冲击、DDoS、ARP攻击、通信中断等，网络层面安全重点关注网络流量、网络连通性。</p>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover36.jpg"></p>
+<blockquote>
+<ol start="2023">
+<li>05 摄于河北邯郸·太极宗师杨露禅</li>
+</ol>
+</blockquote>
+<h2 id="攻击方式"><a href="#攻击方式" class="headerlink" title="攻击方式"></a>攻击方式</h2><h3 id="DDoS攻击"><a href="#DDoS攻击" class="headerlink" title="DDoS攻击"></a>DDoS攻击</h3><p>DDoS( Distributed Denial of Service， 分布式拒绝服务 )攻击的主要目的是让指定目标无法提供正常服务，是目前最强大、最难防御的攻击之一。</p>
+<h4 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h4><p>借助于客户端&#x2F;服务器技术，将多个计算机联合起来作为攻击平台，对一个或多个目标发动DDoS攻击，从而成倍提高拒绝服务攻击的威力。</p>
+<ol>
+<li>分布式拒绝服务攻击采取的攻击手段就是分布式的，使攻击方式出现了没有规律的情况，且在攻击时使用通常协议和服务；<br>2。 攻击数据包时经过伪装的，源IP地址也是伪造的，以使攻击时不会出现拥塞控制。</li>
+<li>攻击目的时候让服务器的网络堆栈溢出而崩溃</li>
+</ol>
+<h4 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h4><ol>
+<li>基于ARP的攻击</li>
+<li>基于ICMP的攻击</li>
+<li>基于IP的攻击</li>
+<li>基于TCP的攻击<ol>
+<li>SYN Flood攻击</li>
+<li>CC攻击</li>
+</ol>
+</li>
+<li>基于应用层的攻击<ol>
+<li>HTTP Flood攻击</li>
+<li>Hydra暴力破解攻击</li>
+</ol>
+</li>
+</ol>
+<h4 id="防御"><a href="#防御" class="headerlink" title="防御"></a>防御</h4><p>在实际生产环境中，DDoS防御方法通常有如下：</p>
+<ol>
+<li>使用专业抗DDoS防火墙、高防IP等设备；</li>
+<li>构建和部署CDN业务，把站点改造为静态或者伪静态；</li>
+<li>采用高性能的网络设备，升级网络带宽；</li>
+<li>增加服务器数量、升级主机服务器硬件；<br>5。 对操作系统和应用服务进行调优。</li>
+</ol>
+<h3 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h3><h4 id="Hping3"><a href="#Hping3" class="headerlink" title="Hping3"></a>Hping3</h4><p>hping3是一款面向TCP&#x2F;IP的数据包生成和分析工具。可以用于对主机进行路由跟踪、防火墙规则测试、以及使用随机性源头IP发动DDoS攻击。</p>
+<p>常用参数：</p>
+<p>-c：设置发送数据包的数量<br>-d：设置每个数据包的大小<br>-i ：设置数据包之间的时候间间隔<br>-w：设置TCP窗口大小<br>-a：设置发起数据包的源IP地址<br>-k：保留root权限使用<br>-q：只输出关键信息到stdout<br>-p：设置目标端口，缺省为0<br>-S：表示发送TCP SYN包<br>-F：表示发送TCP FIN包<br>-P：表示发送ICMP包<br>–help：查看帮助信息<br>–fast：快速扫描模式<br>–flood：发送数据包并不等待响应（洪水攻击）<br>–rand-dest：随机化目标IP地址<br>–rand-source：随机源地址模式<br>–udp：发送UDP包<br>–tcp-timestamp：设置TCP包时间戳<br>–traceroute：扫描路径中的每个路由器</p>
+<h5 id="攻击端"><a href="#攻击端" class="headerlink" title="攻击端"></a>攻击端</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">工具准备</span></span><br><span class="line">dnf install -y hping3</span><br><span class="line">dnf install -y curl</span><br><span class="line">curl -l 192. 168. 20. 10</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">攻击命令</span></span><br><span class="line">hping3 -c 1000 -d 120 -S -w 64 -p 80 --flood --rand-source 192. 168. 20. 10</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h5 id="防御端"><a href="#防御端" class="headerlink" title="防御端"></a>防御端</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">准备目标</span></span><br><span class="line">dnf install httpd tcpdump -y</span><br><span class="line">systemctl enable --now httpd</span><br><span class="line">firewall-cmd --permanent --add-service=http</span><br><span class="line">firewall-cmd --reload</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看网络状态，有大量随机IP产生的SYN——RECV状态</span></span><br><span class="line">[root@client ~]# netstat -an </span><br><span class="line">Active Internet connections ( servers and established )</span><br><span class="line">Proto Recv-Q Send-Q Local Address           Foreign Address         State      </span><br><span class="line">tcp        0      0 0. 0. 0. 0:22              0. 0. 0. 0:*               LISTEN     </span><br><span class="line">tcp        0      0 192. 168. 20. 10:22        192. 168. 20. 1:48397      ESTABLISHED</span><br><span class="line">tcp        0     52 192. 168. 20. 10:22        192. 168. 20. 1:48547      ESTABLISHED</span><br><span class="line">tcp6       0      0 :::80                   :::*                    LISTEN     </span><br><span class="line">tcp6       0      0 :::22                   :::*                    LISTEN     </span><br><span class="line">tcp6       0      0 192. 168. 20. 10:80        254. 182. 59. 69:62761     SYN_RECV   </span><br><span class="line">tcp6       0      0 192. 168. 20. 10:80        246. 70. 188. 121:45359    SYN_RECV   </span><br><span class="line">tcp6       0      0 192. 168. 20. 10:80        250. 44. 133. 136:52495    SYN_RECV   </span><br><span class="line">tcp6       0      0 192. 168. 20. 10:80        250. 153. 82. 250:51361    SYN_RECV   </span><br><span class="line">tcp6       0      0 192. 168. 20. 10:80        252. 12. 85. 79:21534      SYN_RECV   </span><br><span class="line">tcp6       0      0 192. 168. 20. 10:80        241. 56. 60. 70:35306      SYN_RECV   </span><br><span class="line">tcp6       0      0 192. 168. 20. 10:80        252. 106. 32. 27:50753     SYN_RECV   </span><br><span class="line">tcp6       0      0 192. 168. 20. 10:80        246. 221. 153. 53:21519    SYN_RECV   </span><br><span class="line">tcp6       0      0 192. 168. 20. 10:80        254. 70. 43. 179:13237     SYN_RECV   </span><br><span class="line">tcp6       0      0 192. 168. 20. 10:80        252. 72. 156. 251:47133    SYN_RECV   </span><br><span class="line">tcp6       0      0 192. 168. 20. 10:80        247. 26. 161. 182:21455    SYN_RECV   </span><br><span class="line">tcp6       0      0 192. 168. 20. 10:80        246. 204. 141. 116:52585   SYN_RECV   </span><br><span class="line">tcp6       0      0 192. 168. 20. 10:80        250. 124. 8. 76:13265      SYN_RECV   </span><br><span class="line">tcp6       0      0 192. 168. 20. 10:80        252. 82. 68. 126:15169     SYN_RECV   </span><br><span class="line">tcp6       0      0 192. 168. 20. 10:80        246. 238. 219. 102:36672   SYN_RECV   </span><br><span class="line">tcp6       0      0 192. 168. 20. 10:80        254. 56. 14. 234:1275      SYN_RECV   </span><br><span class="line">tcp6       0      0 192. 168. 20. 10:80        246. 29. 44. 82:1165       SYN_RECV   </span><br><span class="line">tcp6       0      0 192. 168. 20. 10:80        246. 66. 253. 203:13181    SYN_RECV   </span><br><span class="line">tcp6       0      0 192. 168. 20. 10:80        246. 205. 24. 116:43387    SYN_RECV   </span><br><span class="line">tcp6       0      0 192. 168. 20. 10:80        247. 59. 42. 4:16845       SYN_RECV   </span><br><span class="line">tcp6       0      0 192. 168. 20. 10:80        254. 73. 81. 8:54042       SYN_RECV   </span><br><span class="line">tcp6       0      0 192. 168. 20. 10:80        246. 24. 247. 205:50123    SYN_RECV   </span><br><span class="line">tcp6       0      0 192. 168. 20. 10:80        250. 128. 12. 194:43317    SYN_RECV   </span><br><span class="line">tcp6       0      0 192. 168. 20. 10:80        252. 136. 180. 83:64686    SYN_RECV   </span><br><span class="line">tcp6       0      0 192. 168. 20. 10:80        252. 184. 71. 14:45271     SYN_RECV   </span><br><span class="line">tcp6       0      0 192. 168. 20. 10:80        246. 40. 36. 183:23153     SYN_RECV   </span><br><span class="line">tcp6       0      0 192. 168. 20. 10:80        254. 14. 82. 189:48945     SYN_RECV   </span><br><span class="line">tcp6       0      0 192. 168. 20. 10:80        252. 120. 110. 133:49484   SYN_RECV   </span><br><span class="line">tcp6       0      0 192. 168. 20. 10:80        241. 136. 140. 14:4805     SYN_RECV   </span><br><span class="line">tcp6       0      0 192. 168. 20. 10:80        254. 252. 107. 11:57425    SYN_RECV  </span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">主机CPU也被打满</span></span><br></pre></td></tr></table></figure>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/08/iptables-htop.png"></p>
+<h4 id="ApacheBench"><a href="#ApacheBench" class="headerlink" title="ApacheBench"></a>ApacheBench</h4><p>ApacheBech是Apache的开发的httpd压力测试工具，简称AB压测工具。其原理就是创建多个并发连接对某一URL地址进行访问。ab每一次GET都会和目的端握手，不会复用同一个TCP连接，在很小的时候间内发送了10000次GET请求，并建立10000次，产生10000个会话。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装</span></span><br><span class="line">dnf install -y httpd-tools</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">参数</span></span><br><span class="line">[root@share ~]# ab -h</span><br><span class="line">Usage: ab [options] [http[s]://]hostname[:port]/path</span><br><span class="line">Options are:</span><br><span class="line">    -n requests     用于指定压力测试总共的执行次数</span><br><span class="line">    -c concurrency  用于指定压力测试的并发数</span><br><span class="line">    -t timelimit    等待响应的最大时间（ 单位：秒 ）</span><br><span class="line">    -s timeout      超时时间，默认30秒</span><br><span class="line">    -b windowsize   TCP发送/接收的缓冲大小（ 单位：字节 ）</span><br><span class="line">    -B address      测试目标地址</span><br><span class="line">    -p postfile     发送POST请求时需要上传的文件，此外还必须设置-T参数</span><br><span class="line">    -u putfile      发送PUT请求时需要上传的文件，此外还必须设置-T参数</span><br><span class="line">    -T content-type 用于设置Content-Type请求头信息，例如：application/x-www-form-urlencoded，默认值为text/plain</span><br><span class="line">    -v verbosity    指定打印帮助信息的冗余级别</span><br><span class="line">    -w              以HTML表格形式打印结果</span><br><span class="line">    -i              使用HEAD请求代替GET请求</span><br><span class="line">    -x attributes   插入字符串作为table标签的属性</span><br><span class="line">    -y attributes   插入字符串作为tr标签的属性</span><br><span class="line">    -z attributes   插入字符串作为td标签的属性</span><br><span class="line">    -C attribute    添加cookie信息，例如：&quot;Apache=1234&quot;( 可以重复该参数选项以添加多个 )</span><br><span class="line">    -H attribute    添加任意的请求头，例如：&quot;Accept-Encoding: gzip&quot;，请求头将会添加在现有的多个请求头之后（ 可以重复该参数选项以添加多个 ）</span><br><span class="line">    -A attribute    添加一个基本的网络认证信息，用户名和密码之间用英文冒号隔开</span><br><span class="line">    -P attribute    添加一个基本的代理认证信息，用户名和密码之间用英文冒号隔开</span><br><span class="line">    -X proxy:port   指定使用的代理服务器和端口号，例如:&quot;126. 10. 10. 3:88&quot;</span><br><span class="line">    -V              打印版本号并退出</span><br><span class="line">    -k              使用HTTP的KeepAlive特性</span><br><span class="line">    -d              不显示百分比</span><br><span class="line">    -S              不显示预估和警告信息</span><br><span class="line">    -q              Do not show progress when doing more than 150 requests</span><br><span class="line">    -l              Accept variable document length ( use this for dynamic pages )</span><br><span class="line">    -g filename     输出结果信息到gnuplot格式的文件中</span><br><span class="line">    -e filename     输出结果信息到CSV格式的文件中</span><br><span class="line">    -r              指定接收到错误信息时不退出程序</span><br><span class="line">    -m method       方法名称</span><br><span class="line">    -h              显示用法信息，其实就是ab -help</span><br><span class="line">    -I              Disable TLS Server Name Indication ( SNI ) extension</span><br><span class="line">    -Z ciphersuite  使用指定SSL/TLS指纹（ See openssl ciphers ）</span><br><span class="line">    -f protocol     指定SSL/TLS协议版本（ SSL2, TLS1, TLS1. 1, TLS1. 2, TLS1. 3 or ALL ）</span><br><span class="line">    -E certfile     使用指定客户端证书私钥和证书链</span><br></pre></td></tr></table></figure>
+
+<h5 id="攻击端-1"><a href="#攻击端-1" class="headerlink" title="攻击端"></a>攻击端</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">对测试端发起持续1000秒的10000并发连接访问</span></span><br><span class="line">[root@share ~]# ab -c 10000 -n 10000 http://192. 168. 20. 10/</span><br><span class="line">This is ApacheBench, Version 2. 3 &lt;$Revision: 1903618 $&gt;</span><br><span class="line">Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/</span><br><span class="line">Licensed to The Apache Software Foundation, http://www.apache.org/</span><br><span class="line"></span><br><span class="line">Benchmarking 192. 168. 20. 10 ( be patient )</span><br><span class="line">Completed 1000 requests</span><br><span class="line">Completed 2000 requests</span><br><span class="line">Completed 3000 requests</span><br><span class="line">Completed 4000 requests</span><br><span class="line">Completed 5000 requests</span><br><span class="line">Completed 6000 requests</span><br><span class="line">Completed 7000 requests</span><br><span class="line">Completed 8000 requests</span><br><span class="line">Completed 9000 requests</span><br><span class="line">Completed 10000 requests</span><br><span class="line">Finished 10000 requests</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Server Software:        Apache/2. 4. 57#目标版本</span><br><span class="line">Server Hostname:        192. 168. 20. 10#目标地址</span><br><span class="line">Server Port:            80# 目标端口</span><br><span class="line"></span><br><span class="line">Document Path:          /# 站点根目录</span><br><span class="line">Document Length:        7620 bytes# 返回的分页大小</span><br><span class="line"></span><br><span class="line">Concurrency Level:      10000# 并发连接数1000</span><br><span class="line">Time taken for tests:   24. 744 seconds# 执行时长</span><br><span class="line">Complete requests:      10000# 完成并发</span><br><span class="line">Failed requests:        7# 失败请求</span><br><span class="line">   ( Connect: 0, Receive: 0, Length: 7, Exceptions: 0 )</span><br><span class="line">Non-2xx responses:      9993 # 返回2XX正常信号值的次数</span><br><span class="line">Total transferred:      78914721 bytes # 数据传输量</span><br><span class="line">HTML transferred:       76146660 bytes</span><br><span class="line">Requests per second:    404. 13 [#/sec] ( mean )#每秒平均请求数</span><br><span class="line">Time per request:       24744. 438 [ms] ( mean )#每次并发请求时间</span><br><span class="line">Time per request:       2. 474 [ms] ( mean, across all concurrent requests )#每个请求实际运行平均时间</span><br><span class="line">Transfer rate:          3114. 44 [Kbytes/sec] received#传输速率</span><br><span class="line"></span><br><span class="line">Connection Times ( ms )#压力测试时的连接处理时间</span><br><span class="line">              min  mean[+/-sd] median   max</span><br><span class="line">Connect:        0 1137 969. 1   1158    3391</span><br><span class="line">Processing:    36 1917 1834. 5   1256   23316</span><br><span class="line">Waiting:        1 1898 1743. 3   1252    6453</span><br><span class="line">Total:        186 3055 2113. 1   2519   23316</span><br><span class="line"></span><br><span class="line">Percentage of the requests served within a certain time ( ms )#在一定时间内的请求响应时间占比</span><br><span class="line"><span class="meta prompt_">  50% </span><span class="language-bash">  2519</span></span><br><span class="line"><span class="meta prompt_">  66% </span><span class="language-bash">  3947</span></span><br><span class="line"><span class="meta prompt_">  75% </span><span class="language-bash">  4442</span></span><br><span class="line"><span class="meta prompt_">  80% </span><span class="language-bash">  4883</span></span><br><span class="line"><span class="meta prompt_">  90% </span><span class="language-bash">  6193</span></span><br><span class="line"><span class="meta prompt_">  95% </span><span class="language-bash">  6923</span></span><br><span class="line"><span class="meta prompt_">  98% </span><span class="language-bash">  7233</span></span><br><span class="line"><span class="meta prompt_">  99% </span><span class="language-bash">  7283</span></span><br><span class="line"><span class="meta prompt_"> 100% </span><span class="language-bash"> 23316 ( longest request )</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="防火墙"><a href="#防火墙" class="headerlink" title="防火墙"></a>防火墙</h2><p>防火墙主要用于对数据包进行过滤，从而对用户访问进行控制。Netfilter&#x2F;iptables是Linux自带的防火墙工具，功能强大、使用灵活。Iptables主要工作在OSI的二、三、四层。</p>
+<p>虽然Netfilter&#x2F;iptables IP信息包过滤系统其实是由Netfilter和ipatables两个组件构成。Netfilter组件是内核的一部分，由信息包过滤表组成，这些表包含内核用来控制信息包过滤处理的规则集。iptables组件时一种工具，用来插入、修改和出去信息包过滤表中过的规则。</p>
+<h3 id="iptables"><a href="#iptables" class="headerlink" title="iptables"></a>iptables</h3><h4 id="表与链功能"><a href="#表与链功能" class="headerlink" title="表与链功能"></a>表与链功能</h4><p>iptables防火墙的规则链分为三种：</p>
+<ol>
+<li>输入input: 用来过滤目的地址时本机的连接</li>
+<li>转发forward：用来过滤目的地址和源地址都不是本机的连接</li>
+<li>输出output：用来过滤源地址时本机的连接</li>
+</ol>
+<h4 id="数据包流程"><a href="#数据包流程" class="headerlink" title="数据包流程"></a>数据包流程</h4><p>iptables防火墙可以对数据包进行过滤和限制，数据包先经过PREOUTING，由该链确定数据包走向</p>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/08/iptables-a.png"></p>
+<ol>
+<li>如果目的地址是本地，则发送到INPUT</li>
+<li>若满足PREROUTING的NAT表上的转发规则，则发送给FORWARD，然后在经过POSTROUTING发送出去；</li>
+<li>主机发送数据包则通过OUTPUT发送</li>
+<li>PREROUTING和POSTRUOITNG指的是数据包的流向</li>
+</ol>
+<h4 id="四表五链"><a href="#四表五链" class="headerlink" title="四表五链"></a>四表五链</h4><p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/08/iptables-c.png"></p>
+<h5 id="filter表"><a href="#filter表" class="headerlink" title="filter表"></a>filter表</h5><p>iptables fileter是iptables防火墙的默认表，具有以下三种内建链</p>
+<ol>
+<li>INPUT链</li>
+<li>OUTPUT链</li>
+<li>FORWARD链</li>
+</ol>
+<h5 id="NAT表"><a href="#NAT表" class="headerlink" title="NAT表"></a>NAT表</h5><p>NAT就是当内网主机访问外网，内网主机的数据包要通过路由器时，路由器将数据包中的源内网IP地址改为路由器上的公网IP地址，同时记录下该数据包的消息。反之，当外网的数据经过路由发往内网主机时，数据包中的目的IP修改为内网IP。</p>
+<p>它具有3个内建链：</p>
+<ol>
+<li>PREROUTING链</li>
+<li>POSTROUTING链</li>
+<li>OUTPUT链</li>
+</ol>
+<h5 id="Mangle表"><a href="#Mangle表" class="headerlink" title="Mangle表"></a>Mangle表</h5><p>iptables mangle表用于指定如何处理数据包，他能改变TCP头中的QoS位。</p>
+<p>它具有5个内建链：</p>
+<ol>
+<li>PREROUTING链</li>
+<li>POSTROUTING链</li>
+<li>OUTPUT链</li>
+<li>INPUT链</li>
+<li>FORWARD链</li>
+</ol>
+<h5 id="RAW表"><a href="#RAW表" class="headerlink" title="RAW表"></a>RAW表</h5><p>iptables raw表用于处理异常，它具有2个内建链</p>
+<ol>
+<li>PREROUTING</li>
+<li>OUTPUT</li>
+</ol>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/08/iptables-b.png"></p>
+<h3 id="使用规则"><a href="#使用规则" class="headerlink" title="使用规则"></a>使用规则</h3><h4 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h4><p>-A 追加规则–&gt;iptables -A INPUT<br>-D 删除规则–&gt;iptables -D INPUT 1( 编号 )<br>-R 修改规则–&gt;iptables -R INPUT 1 -s 192. 168. 12. 0 -j DROP 取代现行规则，顺序不变（ 1是位置 ）<br>-I 插入规则–&gt;iptables -I INPUT 1 –dport 80 -j ACCEPT 插入一条规则，原本位置上的规则将会往后移动一个顺位<br>-L 查看规则–&gt;iptables -L INPUT 列出规则链中的所有规则<br>-N 新的规则–&gt;iptables -N allowed 定义新的规则<br>-E 重命名链<br>-F 清空所有规则<br>-Z 清除链中使用的规则<br>-P 设置默认规则</p>
+<h4 id="匹配条件"><a href="#匹配条件" class="headerlink" title="匹配条件"></a>匹配条件</h4><p>-p 协议 例：iptables -A INPUT -p tcp<br>-s 源地址 例：iptables -A INPUT -s 192. 168. 1. 1<br>-d 目的地址 例：iptables -A INPUT -d 192. 168. 12. 1<br>–sport 源端口 例:iptables -A INPUT -p tcp –sport 22<br>–dport 目的端口 例:iptables -A INPUT -p tcp –dport 22<br>-i 指定入口网卡 例:iptables -A INPUT -i eth0<br>-o 指定出口网卡 例:iptables -A FORWARD -o eth0<br>-j 指定要进行的处理动作</p>
+<h4 id="常用动作"><a href="#常用动作" class="headerlink" title="常用动作"></a>常用动作</h4><p>DROP 丢弃<br>REJECT 明示拒绝<br>ACCEPT 接受<br>SNAT 基于源地址的转换<br>DNAT 基于目标地址转换<br>MASQUERADE 动态伪装<br>MASQUERADE：源地址伪装<br>REDIRECT：重定向：主要用于实现端口重定向<br>MARK：打防火墙标记的<br>RETURN：返回 在自定义链执行完毕后使用返回，来返回原规则链。</p>
+<h4 id="案例演示"><a href="#案例演示" class="headerlink" title="案例演示"></a>案例演示</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">清空现有规则</span></span><br><span class="line">iptables -F</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">设置默认规则为拒绝所有连结</span></span><br><span class="line">iptables -P INPUT DROP</span><br><span class="line">iptables -P FORWARD DROP</span><br><span class="line">iptables -P OUTPUT DROP</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">允许环回访问</span></span><br><span class="line">iptables -A INPUT -i lo -j ACCEPT</span><br><span class="line">iptables -A OUTPUT -o lo -j ACCEPT</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">允许其他主机ping自己主机</span></span><br><span class="line">iptables -A INPUT -p icmp --icmp-type echo-request -j ACCEPT</span><br><span class="line">iptables -A OUTPUT -p icmp --icmp-type echo-reply -j ACCEPT</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">从内部 ping 到任何外部服务器</span></span><br><span class="line">iptables -A OUTPUT -p icmp --icmp-type echo-request -j ACCEPT</span><br><span class="line">iptables -A INPUT -p icmp --icmp-type echo-reply -j ACCEPT</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">允许SSH连接</span></span><br><span class="line">iptables -A INPUT -i eth0 -p tcp --dport 22 -m state --state NEW, ESTABLISHED -j ACCEPT</span><br><span class="line">iptables -A OUTPUT -o eth0 -p tcp --sport 22 -m state --state ESTABLISHED -j ACCEPT</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">允许访问其他服务器SSH</span></span><br><span class="line">iptables -A OUTPUT -o eth0 -p tcp --dport 22 -m state --state NEW, ESTABLISHED -j ACCEPT</span><br><span class="line">iptables -A INPUT -i eth0 -p tcp --sport 22 -m state --state ESTABLISHED -j ACCEPT</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">允许http流量流入</span></span><br><span class="line">iptables -A INPUT -i eth0 -p tcp --dport 80 -m state --state NEW, ESTABLISHED -j ACCEPT</span><br><span class="line">iptables -A OUTPUT -o eth0 -p tcp --sport 80 -m state --state ESTABLISHED -j ACCEPT</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">允许http流量流出</span></span><br><span class="line">iptables -A OUTPUT -o eth0 -p tcp --dport 80 -m state --state NEW, ESTABLISHED -j ACCEPT</span><br><span class="line">iptables -A INPUT -i eth0 -p tcp --sport 80 -m state --state ESTABLISHED -j ACCEPT</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">允许https流量流入</span></span><br><span class="line">iptables -A INPUT -i eth0 -p tcp --dport 443 -m state --state NEW, ESTABLISHED -j ACCEPT</span><br><span class="line">iptables -A OUTPUT -o eth0 -p tcp --sport 443 -m state --state ESTABLISHED -j ACCEPT</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">允许https流量流出</span></span><br><span class="line">iptables -A OUTPUT -o eth0 -p tcp --dport 443 -m state --state NEW, ESTABLISHED -j ACCEPT</span><br><span class="line">iptables -A INPUT -i eth0 -p tcp --sport 443 -m state --state ESTABLISHED -j ACCEPT</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">限制并发流量为25</span></span><br><span class="line">iptables -A INPUT -p tcp --dport 80 -m limit --limit 25/minute --limit-burst 100 -j ACCEPT</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">端口转发，将442端口流量转发到22端口</span></span><br><span class="line">iptables -t nat -A PREROUTING -p tcp -d 192. 168. 102. 37 --dport 422 -j DNAT --to 192. 168. 102. 37:22</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">如果您执行上述操作，您还需要明确允许端口 422 上的传入连接。</span></span><br><span class="line">iptables -A INPUT -i eth0 -p tcp --dport 422 -m state --state NEW, ESTABLISHED -j ACCEPT</span><br><span class="line">iptables -A OUTPUT -o eth0 -p tcp --sport 422 -m state --state ESTABLISHED -j ACCEPT</span><br></pre></td></tr></table></figure>
+
+<h3 id="Firewalld"><a href="#Firewalld" class="headerlink" title="Firewalld"></a>Firewalld</h3><p>Firewalld是一款动态防火墙管理工具，是为了解决iptables的每一次规则变更都需要卸载和重新加载内核模块的问题，其底层仍然是使用iptables作为防火墙规则管理入口。</p>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/08/iptables-d.png"></p>
+<h4 id="规则区域"><a href="#规则区域" class="headerlink" title="规则区域"></a>规则区域</h4><p>Firewalld使用区和服务的概念来简化流量管理。zones 是预定义的规则集。网络接口和源可以分配给区。允许的流量取决于您计算机连接到的网络，并分配了这个网络的安全级别。防火墙服务是预定义的规则，覆盖了允许特定服务进入流量的所有必要设置，并在区中应用。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@Testnode ~]# firewall-cmd --get-zones</span><br><span class="line">block dmz docker drop external home internal nm-shared public trusted work</span><br></pre></td></tr></table></figure>
+
+<p>Firewalld在区域方面遵循严格的原则：</p>
+<p>1。 流量只进入一个区域。<br>2。 流量只流出一个区域。<br>3。 区域定义了一个信任级别。<br>4。 默认情况下，允许区域内流量（在同一区域中）。<br>5。 默认情况下，拒绝区域内流量（从区域到区域）。</p>
+<p><code>/usr/lib/firewalld/zones/</code> 目录存储预定义的区域，您可以立即将它们应用到任何可用的网络接口。只有在修改后，这些文件才会被拷贝到 <code>/etc/firewalld/zones/</code> 目录中。预定义区的默认设置如下：</p>
+<ul>
+<li><p><code>block</code></p>
+<p>适用于：任何传入的网络连接都会被拒绝，并对 <code>IPv4</code> 显示 icmp-host-prohibited 消息，对 <code>IPv6</code> 显示 icmp6-adm-prohibited 消息。接受：只接受从系统内启动的网络连接。</p>
+</li>
+<li><p><code>dmz</code></p>
+<p>适用于：DMZ 中可公开访问，且对内部网络有有限访问的计算机。接受： 只接受所选的传入连接。</p>
+</li>
+<li><p><code>drop</code></p>
+<p>适用于：任何传入的网络数据包都被丢弃，没有任何通知。接受：只有传出的网络连接。</p>
+</li>
+<li><p><code>external</code></p>
+<p>适用于：启用了伪装的外部网络，尤其适用于路由器。不信任网络上其他计算机的情况。接受： 只接受所选的传入连接。</p>
+</li>
+<li><p><code>home</code></p>
+<p>适用于：您主要信任网络上其他计算机的家庭环境。接受： 只接受所选的传入连接。</p>
+</li>
+<li><p><code>internal</code></p>
+<p>适用于：您主要信任网络上其他计算机的内部网络。接受： 只接受所选的传入连接。</p>
+</li>
+<li><p><code>public</code></p>
+<p>适用于：您不信任网络上其他计算机的公共区域。接受： 只接受所选的传入连接。</p>
+</li>
+<li><p><code>trusted</code></p>
+<p>接受：所有网络连接。</p>
+</li>
+<li><p><code>work</code></p>
+<p>适用于：您主要信任网络上其他计算机的工作环境。接受： 只接受所选的传入连接。</p>
+</li>
+</ul>
+<p>这些区中的一个被设置为 <em>default</em> 区。当接口连接被添加到 <code>NetworkManager</code> 中时，它们会被分配到默认区。安装时，<code>firewalld</code> 中的默认区域是 <code>public</code> 区域。您可以更改默认区域。</p>
+<h4 id="规则文件"><a href="#规则文件" class="headerlink" title="规则文件"></a>规则文件</h4><p><code>firewalld</code> 区配置文件包含区的信息。这些区描述、服务、端口、协议、icmp-blocks、masquerade、forward-ports 和丰富的语言规则采用 XML 文件格式。文件名必须是 <code>*zone-name*. xml</code>，其中 <em>zone-name</em> 的长度限制为 17 个字符。区域配置文件位于 <code>/usr/lib/firewalld/zones/</code> 和 <code>/etc/firewalld/zones/</code> 目录中。</p>
+<p>以下示例展示了允许 <code>TCP</code> 和 <code>UDP</code> 协议的一个服务（ <code>SSH</code> ）和一个端口范围的配置：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1. 0&quot;</span> encoding=<span class="string">&quot;utf-8&quot;</span>?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">zone</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">short</span>&gt;</span>My Zone<span class="tag">&lt;/<span class="name">short</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">description</span>&gt;</span>Here you can describe the characteristic features of the zone.<span class="tag">&lt;/<span class="name">description</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">service</span> <span class="attr">name</span>=<span class="string">&quot;ssh&quot;</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">port</span> <span class="attr">protocol</span>=<span class="string">&quot;udp&quot;</span> <span class="attr">port</span>=<span class="string">&quot;1025-65535&quot;</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">port</span> <span class="attr">protocol</span>=<span class="string">&quot;tcp&quot;</span> <span class="attr">port</span>=<span class="string">&quot;1025-65535&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">zone</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h4 id="使用案例"><a href="#使用案例" class="headerlink" title="使用案例"></a>使用案例</h4><ol>
+<li><p>检查 <code>firewalld</code> 中的服务是否没有被允许：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># firewall-cmd --list-services</span><br><span class="line">ssh dhcpv6-client</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>列出 <code>firewalld</code> 中所有预定义的服务：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># firewall-cmd --get-services</span><br><span class="line">RH-Satellite-6 amanda-client amanda-k5-client bacula bacula-client bitcoin bitcoin-rpc bitcoin-testnet bitcoin-testnet-rpc ceph ceph-mon cfengine condor-collector ctdb dhcp dhcpv6 dhcpv6-client dns docker-registry ...</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>将服务添加到 <code>firewalld</code> 允许的服务的列表中：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># firewall-cmd --add-service=&lt;service_name&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使新设置具有持久性：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># firewall-cmd --runtime-to-permanent</span><br></pre></td></tr></table></figure></li>
+<li><p>列出所有永久防火墙规则：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># firewall-cmd --list-all --permanent</span><br><span class="line">public</span><br><span class="line">  target: default</span><br><span class="line">  icmp-block-inversion: no</span><br><span class="line">  interfaces:</span><br><span class="line">  sources:</span><br><span class="line">  services: cockpit dhcpv6-client ssh</span><br><span class="line">  ports:</span><br><span class="line">  protocols:</span><br><span class="line">  forward: no</span><br><span class="line">  masquerade: no</span><br><span class="line">  forward-ports:</span><br><span class="line">  source-ports:</span><br><span class="line">  icmp-blocks:</span><br><span class="line">  rich rules:</span><br></pre></td></tr></table></figure></li>
+<li><p>检查 <code>firewalld</code> 服务的永久配置的有效性。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># firewall-cmd --check-config</span><br><span class="line">success</span><br></pre></td></tr></table></figure></li>
+</ol>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Linux/">Linux</a><a class="post-meta__tags" href="/tags/security/">security</a><a class="post-meta__tags" href="/tags/hping3/">hping3</a><a class="post-meta__tags" href="/tags/ab/">ab</a><a class="post-meta__tags" href="/tags/syn/">syn</a><a class="post-meta__tags" href="/tags/flood/">flood</a><a class="post-meta__tags" href="/tags/firewalld/">firewalld</a><a class="post-meta__tags" href="/tags/iptables/">iptables</a><a class="post-meta__tags" href="/tags/DDoS/">DDoS</a></div><div class="post-share"><div class="social-share" data-image="https://cdn.sujx.net/covers/cover36.jpg" data-sites="facebook,twitter,weibo,qq"></div><link rel="stylesheet" href="/libs/sharejs/css/share.min.css" media="print" onload="this.media='all'"><script src="/libs/sharejs/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>能否请我喝一杯咖啡？</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.jpg" target="_blank"><img class="post-qr-code-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/wechat.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2024/08/14/NFS-iSCSI/" title="Linux的集中式网络存储"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover43.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Linux的集中式网络存储</div></div><div class="info-2"><div class="info-item-1">网络存储主要分为两种形式，一种是块存储，就是共享存储是以块设备的形式挂载到目标服务器之上的，代表就是iSCSI、ceph；另一种是文件存储，就是文件是以共享文件夹的形式来挂载到目标服务器之上，这方面的代表就是NFS和SMB，以及新兴的S3存储。这里简单记录以下iSCSI和NFS的搭建。其他文件存储形式，后续再记录。    07 摄于山东泰安·泰山·南天门   iSCSIiSCSI是基于IP协议的技术标准，该技术允许用户通过TCP&#x2F;IP网络来构建IP-SAN. 基本构成 iSCSI会话的建立是通过启动器（ Initiator ）和目标器（ Target ）实现的 Target为服务端，是一个或者多个LUN的集合 Initiator则是客户端使用的工具，用来连接target Target和Initator都使用IQN来识别 IQN是target的唯一标识符，命名标准为iqn.yyyy-mm.&lt;倒过来的域名，全局唯一&gt;[:识别名称]  配置流程Target配置 安装target 创建target 为target添加lun 指定initiator  Initiato...</div></div></div></a><a class="pagination-related" href="/2024/07/16/WSL-Docker-GPU/" title="在Windows中使用Docker搭建大模型RAG"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/909bigship.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">在Windows中使用Docker搭建大模型RAG</div></div><div class="info-2"><div class="info-item-1">本文将使用Windows环境来构建基于Qwen2-7b大模型的小型本地知识库。涉及到的内容包括：  Windows环境的Docker部署； Qwen2-7b大模型的获取； 基于Ollama的大模型部署； Open-webui的前台展示     07 摄于广州黄埔·鱼珠码头 909功勋试验舰   系统准备部署WSL需要先启用“适用于 Linux 的 Windows 子系统”可选功能，然后才能在 Windows 上安装 Linux 分发。 以管理员身份打开 PowerShell（“开始”菜单 &gt;“PowerShell” &gt;单击右键 &gt;“以管理员身份运行”），然后输入以下命令： # 启用WSLdism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart# 安装虚拟化dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart# 下载内...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2021/10/09/Dnsmasq/" title="配置DNSMasq缓存系统"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover104.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-10-09</div><div class="info-item-2">配置DNSMasq缓存系统</div></div><div class="info-2"><div class="info-item-1">部署DNSMasq实现解析缓存服务DNSMasq是一个简洁、快速的DNS和DHCP服务器，我们可以使用它为局域网和主机自身提供可靠的DHCPv4、DHCPv6、BOOTP以及PXE服务。本文将记录一次DNSMasq的部署过程，并由该服务提供Github。 com的域名解析。 部署# 系统更新yum makecacheyum update -y# 安装软件yum install -y dnsmasq# 启动服务systemctl enable dnsmasq.service --now# 开通防火墙firewall-cmd --permanent --add-service=dnsfirewall-cmd --reload# 检查状态systemctl status dnsmasq● dnsmasq.service - DNS caching server.   Loaded: loaded ( /usr/lib/systemd/system/dnsmasq.service; enabled; vendor preset: disabled )   Active: active (...</div></div></div></a><a class="pagination-related" href="/2025/01/14/Prometheus_Howto/" title="Prometheus使用初步"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover77.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-01-14</div><div class="info-item-2">Prometheus使用初步</div></div><div class="info-2"><div class="info-item-1">概述Prometheus是新一代监控系统解决方案，可以和Kubernetes无缝对接，是容器监控的不二之选，其功能组件有：  Prometheus Server，主程序，同时也是一个时序数据库 AlertManager，告警组件 Pushgateway 中间网管组件 Data visualization and export 数据展示组件 Service discovery 服务发现组件   部署Server# promtheus server 的部署podman pull prom/prometheus:v. 3. 1. 0mkdir ~/prometheus# 创建配置文件cat &gt; ~/prometheus/prometheus.yml &lt;&lt;EOFglobal:  scrape_interval: 15s   scrape_timeout: 10s   evaluation_interval: 15s alerting:  alertmanagers:  - follow_redirects: true    scheme: http    timeout...</div></div></div></a><a class="pagination-related" href="/2021/12/13/wazuh-turning-elastic/" title="Wazuh应用之Elasticsearch的调优"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/wazuh-show.PNG" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-12-13</div><div class="info-item-2">Wazuh应用之Elasticsearch的调优</div></div><div class="info-2"><div class="info-item-1">概述wazuh本身是一个对资源要求较低的系统，但长期运行下来，还是会出现各种各样资源使用不足的问题。因此，需要进行一定程度的优化和调整 调整ES参数开启内存锁定参数   # 锁定物理内存地址，防止ES内存被交换出去，避免频繁使用swap分区cat &gt;&gt; /etc/elasticsearch/elasticsearch.yml &lt;&lt;EOFbootstrap.memory_lock: trueEOF  限制系统资源   # 配置Elasticsearch的systemd调用mkdir -p /etc/systemd/system/elasticsearch.service.d/ cat &gt; /etc/systemd/system/elasticsearch.service.d/elasticsearch.conf &lt;&lt; EOF[Service]LimitMEMLOCK=infinityEOF  调整内核参数   cat &gt;&gt; /etc/security/limits.conf &lt;&lt;EOFelasticsearch so...</div></div></div></a><a class="pagination-related" href="/2024/05/17/Test-Disk-By-Fio/" title="磁盘性能测试"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover4.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-05-17</div><div class="info-item-2">磁盘性能测试</div></div><div class="info-2"><div class="info-item-1">前些天正好有个外协部门需要利旧，需要根据阿里云的测试流程对新华三的服务器和NVME磁盘进行一下测试，所以把手头的资料整理一下。    05 摄于洛阳·龙门石窟   存储一开始想写点什么来着，后来发现少数派上的文章写的非常棒，就一并转贴了 数字存储完全指南 存储设备的诞生与历史 机械硬盘的原理与参数详解 固态硬盘的历史、结构与原理 固态硬盘的参数解读与实际性能 运行内存都在运行什么？ 理解U盘、内存卡、移动硬盘和手机存储芯片构造  文牍测试流程 测试用例 测试报告 测试FIO简介FIO是一个用于测试磁盘IOPS性能的工具，可以对本地存储或者远程共享进行压力测试和验证，并能够给出磁盘性能的指标。FIO能够按照随机读、随机写、读写混合等不同IO模式对压测对象进行性能测试。 使用# 检查是否4k对齐[root@zhangjiakou ~]# fdisk -luDisk /dev/vda: 40 GiB, 42949672960 bytes, 83886080 sectorsUnits: sectors of 1 * 512 = 512 bytesSector size ( logical...</div></div></div></a><a class="pagination-related" href="/2024/08/20/Linux-Performance/" title="「Linux性能优化大师」"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover41.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-08-20</div><div class="info-item-2">「Linux性能优化大师」</div></div><div class="info-2"><div class="info-item-1">我其实是买了这本书好多年了，都是拿起来翻了两页就看不动了，最近下决心还是把它看完吧，毕竟这书真的有点老了。该书是基于LInux 2。 6内核和RHEL6的版本为例进行的Linux性能解析，即便在15年成书的时候候，都已经算老了。这本书的内容的确有很大问题，个人感觉更像红帽EX442考试的参考教程，很多语句就像英文硬翻的，只能说有一定的科普的作用。 说起来，该书作者赵永刚还是我素未谋面的同事，他是我在纷享工作岗位的前前任，我曾经蹲的工位也曾是他的工位。  性能调优是一项艰巨的任务，需要深入了解硬件、操作系统和应用程序的工作原理。     07 摄于北京朝阳区·众秀大厦   深入理解Linux操作系统Linux进程管理进程进程管理在任何操作系统中都是最重要的任务之一。进程是在处理器上执行的一个实例，进程可以使用任意资源以便内核可以处理完成任务。在Linux操作系统上运行的进程多是通过task_struct结构来管理的，也被称为进程描述符。一个进程描述符包含了单个进程在运行期间所有必要的信息，比如进程表示、属性、构建进程的资源等。 每个进程都有自己的生命周期，比如创建、执行、终止、删除...</div></div></div></a><a class="pagination-related" href="/2026/01/11/Linux_Cache/" title="精通 Linux 缓存：提升性能与速度"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover138.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-01-11</div><div class="info-item-2">精通 Linux 缓存：提升性能与速度</div></div><div class="info-2"><div class="info-item-1">在系统管理和 DevOps 领域，性能至关重要。每一毫秒都至关重要，而 Linux 系统速度的一个最基本但最容易被误解的组件之一就是其缓存机制。许多管理员看到高内存使用率归因于“缓存”而本能地担忧，但这通常是系统健康且性能良好的迹象。理解 Linux 缓存不仅仅是一个学术练习；它是一项实用技能，使您能够准确诊断性能问题并优化您的基础设施。本全面指南将揭开 Linux 缓存系统的神秘面纱，从其核心组件到实用的监控和管理技术。 Linux 缓存是什么从根本上说，Linux 缓存是一个机制，它使用系统未使用的部分随机存取存储器（RAM）来存储最近从磁盘（如 SSD 或 HDD）读取或写入的数据。由于从 RAM 访问数据比从磁盘读取快几个数量级，因此这种缓存可以显著加快系统操作。你可以把它想象成一个图书管理员，他把最常被借阅的书籍放在附近的推车里，而不是每次使用后都放回庞大的书架上。下次有人询问这些热门书籍时，管理员可以立即递给他。在这个类比中，RAM 是推车，磁盘是主图书馆，而 Linux 内核是聪明的管理员。这个过程最小化了磁盘 I&#x2F;O（输入&#x2F;输出），这个计算机系...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">靖轩</div><div class="author-info-description">逝者如斯夫,不舍昼夜</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/grepsu"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://gitee.com/grepsu" target="_blank" title="Gitee"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:sujx@live.cn" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS链接"><i class="fa  fa-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A6%82%E8%BF%B0"><span class="toc-number">1.</span> <span class="toc-text">概述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A1%AC%E4%BB%B6%E5%B1%82%E9%9D%A2"><span class="toc-number">1.1.</span> <span class="toc-text">硬件层面</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BD%AF%E4%BB%B6%E5%B1%82%E9%9D%A2"><span class="toc-number">1.2.</span> <span class="toc-text">软件层面</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E5%B1%82%E9%9D%A2"><span class="toc-number">1.3.</span> <span class="toc-text">系统层面</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E5%B1%82%E9%9D%A2"><span class="toc-number">1.4.</span> <span class="toc-text">网络层面</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%94%BB%E5%87%BB%E6%96%B9%E5%BC%8F"><span class="toc-number">2.</span> <span class="toc-text">攻击方式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#DDoS%E6%94%BB%E5%87%BB"><span class="toc-number">2.1.</span> <span class="toc-text">DDoS攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8E%9F%E7%90%86"><span class="toc-number">2.1.1.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%86%E7%B1%BB"><span class="toc-number">2.1.2.</span> <span class="toc-text">分类</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%98%B2%E5%BE%A1"><span class="toc-number">2.1.3.</span> <span class="toc-text">防御</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E4%BE%8B"><span class="toc-number">2.2.</span> <span class="toc-text">实例</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Hping3"><span class="toc-number">2.2.1.</span> <span class="toc-text">Hping3</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%94%BB%E5%87%BB%E7%AB%AF"><span class="toc-number">2.2.1.1.</span> <span class="toc-text">攻击端</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E9%98%B2%E5%BE%A1%E7%AB%AF"><span class="toc-number">2.2.1.2.</span> <span class="toc-text">防御端</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ApacheBench"><span class="toc-number">2.2.2.</span> <span class="toc-text">ApacheBench</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%94%BB%E5%87%BB%E7%AB%AF-1"><span class="toc-number">2.2.2.1.</span> <span class="toc-text">攻击端</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%98%B2%E7%81%AB%E5%A2%99"><span class="toc-number">3.</span> <span class="toc-text">防火墙</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#iptables"><span class="toc-number">3.1.</span> <span class="toc-text">iptables</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A1%A8%E4%B8%8E%E9%93%BE%E5%8A%9F%E8%83%BD"><span class="toc-number">3.1.1.</span> <span class="toc-text">表与链功能</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%8C%85%E6%B5%81%E7%A8%8B"><span class="toc-number">3.1.2.</span> <span class="toc-text">数据包流程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9B%9B%E8%A1%A8%E4%BA%94%E9%93%BE"><span class="toc-number">3.1.3.</span> <span class="toc-text">四表五链</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#filter%E8%A1%A8"><span class="toc-number">3.1.3.1.</span> <span class="toc-text">filter表</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#NAT%E8%A1%A8"><span class="toc-number">3.1.3.2.</span> <span class="toc-text">NAT表</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Mangle%E8%A1%A8"><span class="toc-number">3.1.3.3.</span> <span class="toc-text">Mangle表</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#RAW%E8%A1%A8"><span class="toc-number">3.1.3.4.</span> <span class="toc-text">RAW表</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E8%A7%84%E5%88%99"><span class="toc-number">3.2.</span> <span class="toc-text">使用规则</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-number">3.2.1.</span> <span class="toc-text">常用命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8C%B9%E9%85%8D%E6%9D%A1%E4%BB%B6"><span class="toc-number">3.2.2.</span> <span class="toc-text">匹配条件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E5%8A%A8%E4%BD%9C"><span class="toc-number">3.2.3.</span> <span class="toc-text">常用动作</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A1%88%E4%BE%8B%E6%BC%94%E7%A4%BA"><span class="toc-number">3.2.4.</span> <span class="toc-text">案例演示</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Firewalld"><span class="toc-number">3.3.</span> <span class="toc-text">Firewalld</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A7%84%E5%88%99%E5%8C%BA%E5%9F%9F"><span class="toc-number">3.3.1.</span> <span class="toc-text">规则区域</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A7%84%E5%88%99%E6%96%87%E4%BB%B6"><span class="toc-number">3.3.2.</span> <span class="toc-text">规则文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%A1%88%E4%BE%8B"><span class="toc-number">3.3.3.</span> <span class="toc-text">使用案例</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/07/03/AIGC_FoxHole/" title="海鹰">海鹰</a><time datetime="2026-07-03T01:04:07.000Z" title="发表于 2026-07-03 09:04:07">2026-07-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/11/fristVibeCoding/" title="鹊随金印：我的第一个完整的AI编程项目">鹊随金印：我的第一个完整的AI编程项目</a><time datetime="2026-06-11T01:04:07.000Z" title="发表于 2026-06-11 09:04:07">2026-06-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/03/VI_Howto/" title="VI编辑器简介">VI编辑器简介</a><time datetime="2026-06-03T01:04:07.000Z" title="发表于 2026-06-03 09:04:07">2026-06-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/28/HNCitic_2605/" title="我要上头条">我要上头条</a><time datetime="2026-05-28T01:04:07.000Z" title="发表于 2026-05-28 09:04:07">2026-05-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/12/TS-Domain-Controller-Sync-Failure/" title="记一次Windows AD域控制器同步故障排错">记一次Windows AD域控制器同步故障排错</a><time datetime="2026-05-12T03:04:07.000Z" title="发表于 2026-05-12 11:04:07">2026-05-12</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2008 - 2026 By 靖轩</span></div><div class="footer_custom_text">京ICP备17034757号</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.5"></script><script src="/js/main.js?v=5.5.5"></script><script src="/libs/fancybox/fancybox.umd.js"></script><script src="/js/instantpage.js" type="module"></script><script src="/libs/lazyload/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const parseViewBox = viewBox => {
+    if (!viewBox) return null
+    const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
+    if (parts.length !== 4 || parts.some(n => Number.isNaN(n))) return null
+    return parts
+  }
+
+  const getSvgViewBox = svg => {
+    const attr = parseViewBox(svg.getAttribute('viewBox'))
+    if (attr) return attr
+
+    // Fallback: use bbox to build a viewBox
+    try {
+      const bbox = svg.getBBox()
+      if (bbox && bbox.width && bbox.height) return [bbox.x, bbox.y, bbox.width, bbox.height]
+    } catch (e) {
+      // getBBox may fail on some edge cases; ignore
+    }
+
+    const w = Number(svg.getAttribute('width')) || 0
+    const h = Number(svg.getAttribute('height')) || 0
+    if (w > 0 && h > 0) return [0, 0, w, h]
+    return [0, 0, 100, 100]
+  }
+
+  const setSvgViewBox = (svg, vb) => {
+    svg.setAttribute('viewBox', `${vb[0]} ${vb[1]} ${vb[2]} ${vb[3]}`)
+  }
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v))
+
+  const openSvgInNewTab = ({ source, initViewBox }) => {
+    const getClonedSvg = () => {
+      if (typeof source === 'string') {
+        const template = document.createElement('template')
+        template.innerHTML = source.trim()
+        const svg = template.content.querySelector('svg')
+        return svg ? svg.cloneNode(true) : null
+      }
+      if (source && typeof source.cloneNode === 'function') {
+        return source.cloneNode(true)
+      }
+      return null
+    }
+
+    const clone = getClonedSvg()
+    if (!clone) return
+    if (initViewBox && initViewBox.length === 4) {
+      clone.setAttribute('viewBox', initViewBox.join(' '))
+    }
+    if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+    if (!clone.getAttribute('xmlns:xlink') && clone.outerHTML.includes('xlink:')) {
+      clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+    }
+    // inject background to match current theme
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    const bg = getComputedStyle(document.body).backgroundColor || (isDark ? '#1e1e1e' : '#ffffff')
+    if (!clone.style.background) clone.style.background = bg
+
+    const serializer = new XMLSerializer()
+    const svgSource = serializer.serializeToString(clone)
+    const htmlSource = `<!doctype html><html><head><meta charset="utf-8" />
+      <style>
+        html, body { width: 100%; height: 100%; margin: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; }
+        svg { max-width: 100%; max-height: 100%; height: auto; width: auto; }
+      </style>
+      </head><body>${svgSource}</body></html>`
+    const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank', 'noopener')
+    setTimeout(() => URL.revokeObjectURL(url), 30000)
+  }
+
+  const attachMermaidViewerButton = wrap => {
+    let btn = wrap.querySelector('.mermaid-open-btn')
+    if (!btn) {
+      btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'mermaid-open-btn'
+      wrap.appendChild(btn)
+    }
+
+    btn.innerHTML = '<i class="fa fa-search fa-fw" aria-hidden="true"></i>'
+
+    if (!btn.__mermaidViewerBound) {
+      btn.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        const svg = wrap.__mermaidOriginalSvg || wrap.querySelector('svg')
+        if (!svg) return
+        const initViewBox = wrap.__mermaidInitViewBox
+        if (typeof svg === 'string') {
+          openSvgInNewTab({ source: svg, initViewBox })
+          return
+        }
+        openSvgInNewTab({ source: svg, initViewBox })
+      })
+      btn.__mermaidViewerBound = true
+    }
+  }
+
+  // Zoom around a point (px, py) in the SVG viewport (in viewBox coordinates)
+  const zoomAtPoint = (vb, factor, px, py) => {
+    const w = vb[2] * factor
+    const h = vb[3] * factor
+    const nx = px - (px - vb[0]) * factor
+    const ny = py - (py - vb[1]) * factor
+    return [nx, ny, w, h]
+  }
+
+  const initMermaidGestures = wrap => {
+    const svg = wrap.querySelector('svg')
+    if (!svg) return
+
+    // Ensure viewBox exists so gestures always work
+    const initVb = getSvgViewBox(svg)
+    wrap.__mermaidInitViewBox = initVb
+    wrap.__mermaidCurViewBox = initVb.slice()
+    setSvgViewBox(svg, initVb)
+
+    // Avoid binding multiple times on themeChange/pjax
+    if (wrap.__mermaidGestureBound) return
+    wrap.__mermaidGestureBound = true
+
+    // Helper: map client (viewport) coordinate -> viewBox coordinate
+    const clientToViewBox = (clientX, clientY) => {
+      const rect = svg.getBoundingClientRect()
+      const vb = wrap.__mermaidCurViewBox || getSvgViewBox(svg)
+      const x = vb[0] + (clientX - rect.left) * (vb[2] / rect.width)
+      const y = vb[1] + (clientY - rect.top) * (vb[3] / rect.height)
+      return { x, y, rect, vb }
+    }
+
+    const state = {
+      pointers: new Map(),
+      startVb: null,
+      startDist: 0,
+      startCenter: null
+    }
+
+    const clampVb = vb => {
+      const init = wrap.__mermaidInitViewBox || vb
+      const minW = init[2] * 0.1
+      const maxW = init[2] * 10
+      const minH = init[3] * 0.1
+      const maxH = init[3] * 10
+      vb[2] = clamp(vb[2], minW, maxW)
+      vb[3] = clamp(vb[3], minH, maxH)
+      return vb
+    }
+
+    const setCurVb = vb => {
+      vb = clampVb(vb)
+      wrap.__mermaidCurViewBox = vb
+      setSvgViewBox(svg, vb)
+    }
+
+    const onPointerDown = e => {
+      // Allow only primary button for mouse
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      svg.setPointerCapture(e.pointerId)
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      if (state.pointers.size === 1) {
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      } else if (state.pointers.size === 2) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        state.startDist = Math.hypot(dx, dy)
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        state.startCenter = { x: (pts[0].x + pts[1].x) / 2, y: (pts[0].y + pts[1].y) / 2 }
+      }
+    }
+
+    const onPointerMove = e => {
+      if (!state.pointers.has(e.pointerId)) return
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      // Pan with 1 pointer
+      if (state.pointers.size === 1 && state.startVb) {
+        const p = [...state.pointers.values()][0]
+        const prev = { x: e.clientX - e.movementX, y: e.clientY - e.movementY }
+        // movementX/Y unreliable on touch, compute from stored last position
+        const last = wrap.__mermaidLastSinglePointer || p
+        const dxClient = p.x - last.x
+        const dyClient = p.y - last.y
+        wrap.__mermaidLastSinglePointer = p
+
+        const { rect } = clientToViewBox(p.x, p.y)
+        const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        const dx = dxClient * (vb[2] / rect.width)
+        const dy = dyClient * (vb[3] / rect.height)
+        setCurVb([vb[0] - dx, vb[1] - dy, vb[2], vb[3]])
+        return
+      }
+
+      // Pinch zoom with 2 pointers
+      if (state.pointers.size === 2 && state.startVb && state.startDist > 0) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        const dist = Math.hypot(dx, dy)
+        if (!dist) return
+        const factor = state.startDist / dist // dist bigger => zoom in (viewBox smaller)
+
+        const cx = (pts[0].x + pts[1].x) / 2
+        const cy = (pts[0].y + pts[1].y) / 2
+        const centerClient = { x: cx, y: cy }
+
+        const pxy = clientToViewBox(centerClient.x, centerClient.y)
+        const cpx = pxy.x
+        const cpy = pxy.y
+
+        const vb = zoomAtPoint(state.startVb, factor, cpx, cpy)
+        setCurVb(vb)
+      }
+    }
+
+    const onPointerUpOrCancel = e => {
+      state.pointers.delete(e.pointerId)
+      if (state.pointers.size === 0) {
+        state.startVb = null
+        state.startDist = 0
+        state.startCenter = null
+        wrap.__mermaidLastSinglePointer = null
+      } else if (state.pointers.size === 1) {
+        // reset single pointer baseline to avoid jump
+        wrap.__mermaidLastSinglePointer = [...state.pointers.values()][0]
+      }
+    }
+
+    // Wheel zoom (mouse/trackpad)
+    const onWheel = e => {
+      // ctrlKey on mac trackpad pinch; we treat both as zoom
+      e.preventDefault()
+      const delta = e.deltaY
+      const zoomFactor = delta > 0 ? 1.1 : 0.9
+      const { x, y } = clientToViewBox(e.clientX, e.clientY)
+      const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      setCurVb(zoomAtPoint(vb, zoomFactor, x, y))
+    }
+
+    const onDblClick = () => {
+      const init = wrap.__mermaidInitViewBox
+      if (!init) return
+      wrap.__mermaidCurViewBox = init.slice()
+      setSvgViewBox(svg, init)
+    }
+
+    svg.addEventListener('pointerdown', onPointerDown)
+    svg.addEventListener('pointermove', onPointerMove)
+    svg.addEventListener('pointerup', onPointerUpOrCancel)
+    svg.addEventListener('pointercancel', onPointerUpOrCancel)
+    svg.addEventListener('wheel', onWheel, { passive: false })
+    svg.addEventListener('dblclick', onDblClick)
+  }
+
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+
+      // Clear old render (themeChange/pjax will rerun)
+      const oldSvg = item.querySelector('svg')
+      if (oldSvg) oldSvg.remove()
+      item.__mermaidGestureBound = false
+
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+        if (true) initMermaidGestures(item)
+        item.__mermaidOriginalSvg = svg
+        if (true) attachMermaidViewerButton(item)
+      }
+
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('/libs/mermaid/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.5"></script></div></div></body></html>

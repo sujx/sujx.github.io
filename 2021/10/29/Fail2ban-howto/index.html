@@ -1,0 +1,524 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Fail2Ban的使用 | 靖轩</title><meta name="author" content="靖轩"><meta name="copyright" content="靖轩"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Fail2ban是一个根据系统日志动态调整防火墙规则的安全工具，它具有响应迅速、使用方便的特性。   1 摄于天津西青·精武园   概述安装# Fail2ban是fedora社区打包的rpm包，需要添加EPEL软件源dnf install -y epel-releasednf makecachednf update -ydnf install -y fail2bansystemctl enable">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Fail2Ban的使用">
+<meta property="og:url" content="https://www.sujx.net/2021/10/29/Fail2ban-howto/index.html">
+<meta property="og:site_name" content="靖轩">
+<meta property="og:description" content="Fail2ban是一个根据系统日志动态调整防火墙规则的安全工具，它具有响应迅速、使用方便的特性。   1 摄于天津西青·精武园   概述安装# Fail2ban是fedora社区打包的rpm包，需要添加EPEL软件源dnf install -y epel-releasednf makecachednf update -ydnf install -y fail2bansystemctl enable">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.sujx.net/covers/cover38.jpg">
+<meta property="article:published_time" content="2021-10-29T14:37:30.000Z">
+<meta property="article:modified_time" content="2026-09-26T02:25:04.124Z">
+<meta property="article:author" content="靖轩">
+<meta property="article:tag" content="CentOS">
+<meta property="article:tag" content="Fail2Ban">
+<meta property="article:tag" content="Firewall">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.sujx.net/covers/cover38.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Fail2Ban的使用",
+  "url": "https://www.sujx.net/2021/10/29/Fail2ban-howto/",
+  "image": "https://cdn.sujx.net/covers/cover38.jpg",
+  "datePublished": "2021-10-29T14:37:30.000Z",
+  "dateModified": "2026-09-26T02:25:04.124Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "靖轩",
+      "url": "https://www.sujx.net"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://cdn.sujx.net/about/favicon.png"><link rel="canonical" href="https://www.sujx.net/2021/10/29/Fail2ban-howto/index.html"><link rel="preconnect" href="//cdnjs.cloudflare.com"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css?v=5.5.5"><link rel="stylesheet" href="/fonts/css/all.min.css"><link rel="stylesheet" href="/libs/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?417b20ac1984432f821159fac27d3bb5";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><link rel="stylesheet" href="/fonts/titillium-web.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: '/libs/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: true,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Fail2Ban的使用',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="alternate" href="/atom.xml" title="靖轩" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">靖轩</span></a><a class="nav-page-title" href="/"><span class="site-name">Fail2Ban的使用</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">Fail2Ban的使用</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-10-29T14:37:30.000Z" title="发表于 2021-10-29 22:37:30">2021-10-29</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-09-26T02:25:04.124Z" title="更新于 2026-09-26 10:25:04">2026-09-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8/">信息安全</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">1.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>5分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><p>Fail2ban是一个根据系统日志动态调整防火墙规则的安全工具，它具有响应迅速、使用方便的特性。<br><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover38.jpg"></p>
+<blockquote>
+<ol start="2021">
+<li>1 摄于天津西青·精武园</li>
+</ol>
+</blockquote>
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Fail2ban是fedora社区打包的rpm包，需要添加EPEL软件源</span></span><br><span class="line">dnf install -y epel-release</span><br><span class="line">dnf makecache</span><br><span class="line">dnf update -y</span><br><span class="line"></span><br><span class="line">dnf install -y fail2ban</span><br><span class="line">systemctl enable --now fail2ban.service</span><br></pre></td></tr></table></figure>
+
+<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@centos fail2ban]# tree /etc/fail2ban/</span><br><span class="line">/etc/fail2ban/					# 配置文件目录</span><br><span class="line">├── action.d					# 可搭配下列进程进行防火管理，比如防火墙封堵、发送邮件等</span><br><span class="line">│   ├── abuseipdb.conf</span><br><span class="line">│   ├── apf.conf</span><br><span class="line">│   ├── badips.conf</span><br><span class="line">│   ├── badips.py</span><br><span class="line">│   ├── blocklist_de.conf</span><br><span class="line">│   ├── cloudflare.conf</span><br><span class="line">│   ├── dshield.conf</span><br><span class="line">│   ├── dummy.conf</span><br><span class="line">│   ├── firewallcmd-allports.conf</span><br><span class="line">│   ├── firewallcmd-common.conf</span><br><span class="line">│   ├── firewallcmd-ipset.conf</span><br><span class="line">│   ├── firewallcmd-multiport.conf</span><br><span class="line">│   ├── firewallcmd-new.conf</span><br><span class="line">│   ├── firewallcmd-rich-logging.conf</span><br><span class="line">│   ├── firewallcmd-rich-rules.conf</span><br><span class="line">│   ├── helpers-common.conf</span><br><span class="line">│   ├── iptables-allports.conf</span><br><span class="line">│   ├── iptables-common.conf</span><br><span class="line">│   ├── iptables.conf</span><br><span class="line">│   ├── iptables-ipset-proto4. conf</span><br><span class="line">│   ├── iptables-ipset-proto6-allports.conf</span><br><span class="line">│   ├── iptables-ipset-proto6. conf</span><br><span class="line">│   ├── iptables-multiport.conf</span><br><span class="line">│   ├── iptables-multiport-log.conf</span><br><span class="line">│   ├── iptables-new.conf</span><br><span class="line">│   ├── iptables-xt_recent-echo.conf</span><br><span class="line">│   ├── mail-whois-common.conf</span><br><span class="line">│   ├── mynetwatchman.conf</span><br><span class="line">│   ├── netscaler.conf</span><br><span class="line">│   ├── nftables-allports.conf</span><br><span class="line">│   ├── nftables.conf</span><br><span class="line">│   ├── nftables-multiport.conf</span><br><span class="line">│   ├── nginx-block-map.conf</span><br><span class="line">│   ├── npf.conf</span><br><span class="line">│   ├── nsupdate.conf</span><br><span class="line">│   ├── route.conf</span><br><span class="line">│   ├── sendmail-buffered.conf</span><br><span class="line">│   ├── sendmail-common.conf</span><br><span class="line">│   ├── sendmail.conf</span><br><span class="line">│   ├── sendmail-geoip-lines.conf</span><br><span class="line">│   ├── sendmail-whois.conf</span><br><span class="line">│   ├── sendmail-whois-ipjailmatches.conf</span><br><span class="line">│   ├── sendmail-whois-ipmatches.conf</span><br><span class="line">│   ├── sendmail-whois-lines.conf</span><br><span class="line">│   ├── sendmail-whois-matches.conf</span><br><span class="line">│   ├── shorewall-ipset-proto6. conf</span><br><span class="line">│   ├── smtp.py</span><br><span class="line">│   ├── symbiosis-blacklist-allports.conf</span><br><span class="line">│   └── xarf-login-attack.conf</span><br><span class="line">├── fail2ban.conf					# 服务配置文件</span><br><span class="line">├── fail2ban.d</span><br><span class="line">├── filter.d						# 结合各种过滤器和规则实现对多种服务的防护</span><br><span class="line">│   ├── 3proxy.conf</span><br><span class="line">│   ├── apache-auth.conf</span><br><span class="line">│   ├── apache-badbots.conf</span><br><span class="line">│   ├── apache-botsearch.conf</span><br><span class="line">│   ├── apache-common.conf</span><br><span class="line">│   ├── apache-fakegooglebot.conf</span><br><span class="line">│   ├── apache-modsecurity.conf</span><br><span class="line">│   ├── apache-nohome.conf</span><br><span class="line">│   ├── apache-noscript.conf</span><br><span class="line">│   ├── apache-overflows.conf</span><br><span class="line">│   ├── apache-pass.conf</span><br><span class="line">│   ├── apache-shellshock.conf</span><br><span class="line">│   ├── assp.conf</span><br><span class="line">│   ├── asterisk.conf</span><br><span class="line">│   ├── bitwarden.conf</span><br><span class="line">│   ├── botsearch-common.conf</span><br><span class="line">│   ├── centreon.conf</span><br><span class="line">│   ├── common.conf</span><br><span class="line">│   ├── counter-strike.conf</span><br><span class="line">│   ├── courier-auth.conf</span><br><span class="line">│   ├── courier-smtp.conf</span><br><span class="line">│   ├── cyrus-imap.conf</span><br><span class="line">│   ├── directadmin.conf</span><br><span class="line">│   ├── domino-smtp.conf</span><br><span class="line">│   ├── dovecot.conf</span><br><span class="line">│   ├── dropbear.conf</span><br><span class="line">│   ├── drupal-auth.conf</span><br><span class="line">│   ├── ejabberd-auth.conf</span><br><span class="line">│   ├── exim-common.conf</span><br><span class="line">│   ├── exim.conf</span><br><span class="line">│   ├── exim-spam.conf</span><br><span class="line">│   ├── freeswitch.conf</span><br><span class="line">│   ├── froxlor-auth.conf</span><br><span class="line">│   ├── gitlab.conf</span><br><span class="line">│   ├── grafana.conf</span><br><span class="line">│   ├── groupoffice.conf</span><br><span class="line">│   ├── gssftpd.conf</span><br><span class="line">│   ├── guacamole.conf</span><br><span class="line">│   ├── haproxy-http-auth.conf</span><br><span class="line">│   ├── horde.conf</span><br><span class="line">│   ├── ignorecommands</span><br><span class="line">│   │   └── apache-fakegooglebot</span><br><span class="line">│   ├── kerio.conf</span><br><span class="line">│   ├── lighttpd-auth.conf</span><br><span class="line">│   ├── mongodb-auth.conf</span><br><span class="line">│   ├── monit.conf</span><br><span class="line">│   ├── murmur.conf</span><br><span class="line">│   ├── mysqld-auth.conf</span><br><span class="line">│   ├── nagios.conf</span><br><span class="line">│   ├── named-refused.conf</span><br><span class="line">│   ├── nginx-botsearch.conf</span><br><span class="line">│   ├── nginx-http-auth.conf</span><br><span class="line">│   ├── nginx-limit-req.conf</span><br><span class="line">│   ├── nsd.conf</span><br><span class="line">│   ├── openhab.conf</span><br><span class="line">│   ├── openwebmail.conf</span><br><span class="line">│   ├── oracleims.conf</span><br><span class="line">│   ├── pam-generic.conf</span><br><span class="line">│   ├── perdition.conf</span><br><span class="line">│   ├── phpmyadmin-syslog.conf</span><br><span class="line">│   ├── php-url-fopen.conf</span><br><span class="line">│   ├── portsentry.conf</span><br><span class="line">│   ├── postfix.conf</span><br><span class="line">│   ├── proftpd.conf</span><br><span class="line">│   ├── pure-ftpd.conf</span><br><span class="line">│   ├── qmail.conf</span><br><span class="line">│   ├── recidive.conf</span><br><span class="line">│   ├── roundcube-auth.conf</span><br><span class="line">│   ├── screensharingd.conf</span><br><span class="line">│   ├── selinux-common.conf</span><br><span class="line">│   ├── selinux-ssh.conf</span><br><span class="line">│   ├── sendmail-auth.conf</span><br><span class="line">│   ├── sendmail-reject.conf</span><br><span class="line">│   ├── sieve.conf</span><br><span class="line">│   ├── slapd.conf</span><br><span class="line">│   ├── softethervpn.conf</span><br><span class="line">│   ├── sogo-auth.conf</span><br><span class="line">│   ├── solid-pop3d.conf</span><br><span class="line">│   ├── squid.conf</span><br><span class="line">│   ├── squirrelmail.conf</span><br><span class="line">│   ├── sshd.conf</span><br><span class="line">│   ├── stunnel.conf</span><br><span class="line">│   ├── suhosin.conf</span><br><span class="line">│   ├── tine20. conf</span><br><span class="line">│   ├── traefik-auth.conf</span><br><span class="line">│   ├── uwimap-auth.conf</span><br><span class="line">│   ├── vsftpd.conf</span><br><span class="line">│   ├── webmin-auth.conf</span><br><span class="line">│   ├── wuftpd.conf</span><br><span class="line">│   ├── xinetd-fail.conf</span><br><span class="line">│   ├── znc-adminlog.conf</span><br><span class="line">│   └── zoneminder.conf</span><br><span class="line">├── jail.conf				# 自定义监狱，所有黑名单用户根据此项配置管理</span><br><span class="line">├── jail.d</span><br><span class="line">│   └── 00-firewalld.conf</span><br><span class="line">├── paths-common.conf</span><br><span class="line">└── paths-fedora.conf</span><br><span class="line"></span><br><span class="line">5 directories, 145 files</span><br></pre></td></tr></table></figure>
+
+<h2 id="初步应用"><a href="#初步应用" class="headerlink" title="初步应用"></a>初步应用</h2><h3 id="定义服务"><a href="#定义服务" class="headerlink" title="定义服务"></a>定义服务</h3><p>在管理目录下存在一个jail。 conf文件，通过修改该文件就可实现对各项服务的访问关进监狱。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@centos fail2ban]# cp jail.conf jail.confbak</span><br><span class="line">[root@centos fail2ban]# vim jail.conf</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">默认配置</span></span><br><span class="line">[DEFAULT]</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">被ban时间</span></span><br><span class="line">bantime  = 15m</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">检索时间</span></span><br><span class="line">findtime  = 10m</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">最大尝试数，即失败5次就被ban15分钟</span></span><br><span class="line">maxretry = 5</span><br><span class="line">maxmatches = %( maxretry )s</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">后端服务依赖systemd</span></span><br><span class="line">backend = systemd</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">日志警告信息可以使用DNS记录访问主机地址</span></span><br><span class="line">usedns = warn</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">日志编码使用utf-8</span></span><br><span class="line">logencoding = utf-8</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">启用监管</span></span><br><span class="line">enabled = ture</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">默认为普通模式</span></span><br><span class="line">mode = normal</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">过滤模块</span></span><br><span class="line">filter = %( __name__ )s[mode=%( mode )s]</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">防火墙调用firewallcmd，默认为iptables</span></span><br><span class="line">banaction = firewallcmd-ipset[actiontype=&lt;multiport&gt;]</span><br><span class="line">banaction_allports = firewallcmd-ipset[actiontype=&lt;allports&gt;]</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">管理SSHD</span></span><br><span class="line">[sshd]</span><br><span class="line">enabled = true</span><br><span class="line">filter  = sshd</span><br><span class="line">port    = 22</span><br><span class="line">logpath = /var/log/secure</span><br></pre></td></tr></table></figure>
+
+<h3 id="应对SSH爆破"><a href="#应对SSH爆破" class="headerlink" title="应对SSH爆破"></a>应对SSH爆破</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@sklnx001 ~]# systemctl restart fail2ban</span><br><span class="line">[root@sklnx001 ~]# fail2ban-client status</span><br><span class="line">Status</span><br><span class="line">|- Number of jail:      1</span><br><span class="line">`- Jail list:   sshd</span><br><span class="line">[root@sklnx001 ~]# fail2ban-client status sshd</span><br><span class="line">Status for the jail: sshd</span><br><span class="line">|- Filter</span><br><span class="line">|  |- Currently failed: 0</span><br><span class="line">|  |- Total failed:     0</span><br><span class="line">|  `- Journal matches:  _SYSTEMD_UNIT=sshd.service + _COMM=sshd</span><br><span class="line">`- Actions</span><br><span class="line">   |- Currently banned: 0</span><br><span class="line">   |- Total banned:     0</span><br><span class="line">   `- Banned IP list:</span><br></pre></td></tr></table></figure>
+
+<h3 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">查看被ban IP，其中sshd为名称，比如上面的[wordpress]</span></span><br><span class="line">fail2ban-client status sshd</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">删除被ban IP</span></span><br><span class="line">fail2ban-client set sshd delignoreip 192. 168. 111. 111</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">查看日志</span></span><br><span class="line">tail /var/log/fail2ban.log</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="高级应用"><a href="#高级应用" class="headerlink" title="高级应用"></a>高级应用</h2><h3 id="防护Wordpress"><a href="#防护Wordpress" class="headerlink" title="防护Wordpress"></a>防护Wordpress</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">在指定目录下建立wordpress配置文件，指定监控wordpress的访问地址</span></span><br><span class="line">vi /etc/fail2ban/filter.d/wordpress.conf</span><br><span class="line"></span><br><span class="line">[Definition]</span><br><span class="line">failregex = ^ -.* /wp-login.php.* HTTP/1\..&quot;</span><br><span class="line">ignoreregex =</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">在jail.conf中加入如下配置，让fail2ban监视指定日志文件，根据日志记录进行拦截</span></span><br><span class="line">[wordpress]</span><br><span class="line">enabled = true</span><br><span class="line">port = http, https</span><br><span class="line">filter = wordpress</span><br><span class="line">action = %( action_mwl )s</span><br><span class="line">maxretry = 20</span><br><span class="line">findtime = 60</span><br><span class="line">bantime = 3600</span><br><span class="line">logpath = /usr/local/nginx/logs/access.log</span><br></pre></td></tr></table></figure>
+
+<h3 id="防止半连接攻击"><a href="#防止半连接攻击" class="headerlink" title="防止半连接攻击"></a>防止半连接攻击</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">需要先新建一个nginx日志匹配规则</span></span><br><span class="line">vi /etc/fail2ban/filter.d/nginx-cc.conf</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">填写如下内容</span></span><br><span class="line">[Definition]</span><br><span class="line">failregex =  -.*- .*HTTP/1.* .* .*$</span><br><span class="line">ignoreregex =</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">加入如下配置</span></span><br><span class="line">[nginx-cc]</span><br><span class="line">enabled = true</span><br><span class="line">port = http, https</span><br><span class="line">filter = nginx-cc</span><br><span class="line">action = %( action_mwl )s</span><br><span class="line">maxretry = 20</span><br><span class="line">findtime = 60</span><br><span class="line">bantime = 3600</span><br><span class="line">logpath = /usr/local/nginx/logs/access.log</span><br></pre></td></tr></table></figure>
+
+<h2 id="参考文件"><a href="#参考文件" class="headerlink" title="参考文件"></a>参考文件</h2><p>[fail2ban防护DDOS攻击]: <a target="_blank" rel="noopener" href="https://www.cnblogs.com/ipyanthony/p/9336142.html">https://www.cnblogs.com/ipyanthony/p/9336142.html</a>	“”Fail2ban防护DDOS攻击”<br>[使用Fail2Ban保护Nginx\Wordpress简单又高效]: <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/71818778">https://zhuanlan.zhihu.com/p/71818778</a>	““使用Fail2Ban保护wordpress”</p>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/CentOS/">CentOS</a><a class="post-meta__tags" href="/tags/Fail2Ban/">Fail2Ban</a><a class="post-meta__tags" href="/tags/Firewall/">Firewall</a></div><div class="post-share"><div class="social-share" data-image="https://cdn.sujx.net/covers/cover38.jpg" data-sites="facebook,twitter,weibo,qq"></div><link rel="stylesheet" href="/libs/sharejs/css/share.min.css" media="print" onload="this.media='all'"><script src="/libs/sharejs/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>能否请我喝一杯咖啡？</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.jpg" target="_blank"><img class="post-qr-code-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/wechat.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2021/11/01/vmdk2vhdx/" title="VMware磁盘文件转化为Hyper-V磁盘"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/wallhaven-4dzk5g.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">VMware磁盘文件转化为Hyper-V磁盘</div></div><div class="info-2"><div class="info-item-1">VMware磁盘文件转化为Hyper-V磁盘背景现有以VM形式提供的测试工具，大多以VMware的vmdk格式存储。那么就存在将这些文件转换为现有的Hyper-V支持的VHDX格式的需求。 工具有很多工具可以实现不同虚机版本的硬盘文件互转，比如winimage或者virtualbox以及各个厂商推出的工具。 本次推荐使用Starwind出品的免费工具： [V2VConverter]: https://www.starwindsoftware.com/starwind-v2v-converter	“”V2V Converter&#x2F; P2V Migrator”[免注册下载地址]: https://link.zhihu.com/?target=https%3A//www.starwindsoftware.com/tmplink/starwindconverter.exe 步骤 获取虚拟机VMDK文件  避免直接使用VMwareWorkstation创建的虚机文件，应当使用“文件”—“导出为OVF”生成的vmdk文件 从ESXi导出的ova文件，可以解压缩之后得到相对应的vmdk...</div></div></div></a><a class="pagination-related" href="/2021/10/19/tmux/" title="使用Tmux进行对Linux主机的管理"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/wallhaven-151377.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">使用Tmux进行对Linux主机的管理</div></div><div class="info-2"><div class="info-item-1">使用Tmux进行对Linux主机的管理Tmux是一个用来替代Screen的多窗口管理工具。由于CentOS8官方源已经不再提供screen，其替代品就是Tmux( Terminal MultipleXer )。 安装dnf makecachednf install -y tmux# 进入Tmuxtmux# 退出exit  基本使用# 创建一个名为t1的tmux会话，默认初始编号为0$ tmux new -s t1# 临时退出当前会话，即分离会话$ tmux detach		# 或使用crtl+b d# 再创建一个新的会话t2和t3$ tmux new -s t2$ tmux new -s t3# 查看当前tmux所有会话$ tmux lst1: 4 windows ( created Thu Oct 28 18:09:28 2021 ) [189x42]t2: 1 windows ( created Thu Oct 28 18:12:42 2021 ) [189x42]t3: 1 windows ( created Thu Oct 28 18:14:33 2021 ) [189x...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2022/03/11/centos8-covert-2-stream/" title="CentOS 8转换为CentOS Stream 8"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/wallhaven-151377.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2022-03-11</div><div class="info-item-2">CentOS 8转换为CentOS Stream 8</div></div><div class="info-2"><div class="info-item-1">由于CentOS 8的源已经不可用，所以需要将原有 CentOS 8 升级为CentOS Steam 8： dnf --disablerepo &#x27;*&#x27; --enablerepo extras swap centos-linux-repos centos-stream-reposdnf distro-sync  </div></div></div></a><a class="pagination-related" href="/2019/11/20/centos8-itop-install/" title="基于CentOS8快速部署iTop"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/itop15.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2019-11-20</div><div class="info-item-2">基于CentOS8快速部署iTop</div></div><div class="info-2"><div class="info-item-1">iTop是一个用PHP编写的基于ITIL理念打造的开源ITSM系统。本次将在CentOS8的虚机上安装部署一套iTOP系统。  系统准备 首先是准本LAMP环境，使用系统默认的Apache2. 4. 3、PHP7. 2、Mariadb10. 3.  yum update -yyum install -y cmake make autoconf gcc gcc-g++ unzip graphviz libzip-devel libzip-toolsyum install -y httpd php php-fpm php-ldap php-soapyum install -y php-xmlrpc php-gd php-opcache php-mysqlnd php-json php-develyum install -y libmcrypt libmcrypt-devel php-pecl-apcu mhashyum install -y php-odbc php-mbstring php-snmpyum install -y mariadb mariadb-serverfirew...</div></div></div></a><a class="pagination-related" href="/2021/11/19/centos7-mcafee/" title="Linux上安装McAfee杀毒软件"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/wallhaven-43wj9y.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-11-19</div><div class="info-item-2">Linux上安装McAfee杀毒软件</div></div><div class="info-2"><div class="info-item-1">背景为了满足客户的安全需求，我司需要至少使用两种杀毒软件对交付的应用服务程序进行安全检查。因此，在ClamAV的基础上，我们还需要另外一种Linux版本的杀毒软件。不幸的是，无论使用baidu或者google检索出的所有免费可用杀毒软件大多已经没有Linux版本了，要么交付不菲的费用、要么产品下线、要么必须安装GTK桌面。 最后，在我们的认知范围内，可以选择的产品是Mcafee Endpoint Security，也就是他家的企业版杀毒软件。理由一个是可以免费试用，一个是可以单机使用。 另外，在检索的过程中发现国内的Linux版本杀毒软件有一个360的安全卫士Linux版，还有一个火绒企业版的Linux客户端。印象里面奇安信的天擎系统也有Linux的agent。不过，试用国产软件的后续麻烦事多，就不叨扰了。 获取 Mcafee提供试用软件包下载； Endpoint Security 提供Windows、Mac、Linux三种版本的客户端； 客户端可以搭配EPO服务器进行统一下发和管理，也可以以Standalone的形式来运行  吐槽 M家的免费试用包获取有时间间隔，如果你下错了，...</div></div></div></a><a class="pagination-related" href="/2021/11/29/Discuzq-Howto/" title="CentOS7上使用yum部署Discuz!Q"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/07/wallhaven-g8q8qd.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-11-29</div><div class="info-item-2">CentOS7上使用yum部署Discuz!Q</div></div><div class="info-2"><div class="info-item-1">文档资料官方指引 官方站点: https://discuz.com/  示例站点：https://discuz.chat/  安装指引: https://discuz.com/docs/Linux%20%E4%B8%BB%E6%9C%BA.html#nginx  后台使用：https://discuz.com/manual-admin/  程序下载: https://dl.discuz.chat/dzq_latest_install.zip   社区使用站点：纷享社区 （ fxiaoke.com ） 后台登录：管理中心首页 （ fxiaoke.com ） 程序部署系统准备#!/bin/bashyum makecacheyum update -y# 创建本地软件源# 因为是在内网环境部署，所以采用yumdownload下载软件后，使用本机源的形式部署。# 使用remi源# 需要开启epel源tar zxvf php74. tar.gz -C /opt/yum install -y createrepocreaterepo /opt/php74/yum-config-manager ...</div></div></div></a><a class="pagination-related" href="/2019/07/20/centos7-ssh-nopasswd/" title="CentOS的免密登录"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/wallhaven-0j2llm.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2019-07-20</div><div class="info-item-2">CentOS的免密登录</div></div><div class="info-2"><div class="info-item-1">实现CentOS的免密登录还是挺简单的。  密钥的产生  ssh-keygen -t rsa  在用户家目录下的。 ssh目录下产生id_rsa和id_rsa。 pub两个密钥文件。其中，。 pub为公钥。  公钥的上传  ssh-copy-id -i ~/. ssh/id_rsa.pub root@target_IP  使用ssh-copy-id来实现自动的上传、修改配置。  增加主机配置文件  vim ~/. ssh/config————————————————————Host target0    //主机名称Hostname 192. 168. 174. 148    //主机IP或解析记录Port 22 //SSH端口号User root   //SSH用户名Host target1Hostname 192. 168. 174. 149Port 22User root————————————————————   测试  [root@ansible_server ~]# ssh target0Last login: Fri Dec 20 14:59:11 2019 fro...</div></div></div></a><a class="pagination-related" href="/2021/11/15/lvm-extend-sysdisk/" title="CentOS扩容LVM系统盘"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/05/wallhaven-4lmklr.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-11-15</div><div class="info-item-2">CentOS扩容LVM系统盘</div></div><div class="info-2"><div class="info-item-1">目的在系统运维中，遇到磁盘空间不足的情况时，往往需要对磁盘进行扩容。一种方式是新增磁盘，一种方式磁盘扩容。前者较为简单，已有相关内容。本次就说一下系统盘单盘扩容的方法。 过程 以下使用CentOS8. 5环境下的GPT格式磁盘  扩容对象为&#x2F;dev&#x2F;nvme0n1，容量有20G扩容为50G  扩盘前状态 [root@elastic ~]# pvscan   PV /dev/nvme0n1p3   VG cl              lvm2 [18. 41 GiB / 0    free]  Total: 1 [18. 41 GiB] / in use: 1 [18. 41 GiB] / in no VG: 0 [0   ]# 注意使用parted来查看硬盘状态，而不应当使用fdisk，因为下述使用GPT分区。[root@elastic ~]# parted -lModel: NVMe Device ( nvme )Disk /dev/nvme0n1: 53. 7GBSector size ( logical/physical ): 512B/512BPar...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">靖轩</div><div class="author-info-description">逝者如斯夫,不舍昼夜</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/grepsu"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://gitee.com/grepsu" target="_blank" title="Gitee"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:sujx@live.cn" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS链接"><i class="fa  fa-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A6%82%E8%BF%B0"><span class="toc-number">1.</span> <span class="toc-text">概述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85"><span class="toc-number">1.1.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE"><span class="toc-number">1.2.</span> <span class="toc-text">配置</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9D%E6%AD%A5%E5%BA%94%E7%94%A8"><span class="toc-number">2.</span> <span class="toc-text">初步应用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89%E6%9C%8D%E5%8A%A1"><span class="toc-number">2.1.</span> <span class="toc-text">定义服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%94%E5%AF%B9SSH%E7%88%86%E7%A0%B4"><span class="toc-number">2.2.</span> <span class="toc-text">应对SSH爆破</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-number">2.3.</span> <span class="toc-text">常用命令</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%AB%98%E7%BA%A7%E5%BA%94%E7%94%A8"><span class="toc-number">3.</span> <span class="toc-text">高级应用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%98%B2%E6%8A%A4Wordpress"><span class="toc-number">3.1.</span> <span class="toc-text">防护Wordpress</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%98%B2%E6%AD%A2%E5%8D%8A%E8%BF%9E%E6%8E%A5%E6%94%BB%E5%87%BB"><span class="toc-number">3.2.</span> <span class="toc-text">防止半连接攻击</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E4%BB%B6"><span class="toc-number">4.</span> <span class="toc-text">参考文件</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/07/03/AIGC_FoxHole/" title="海鹰">海鹰</a><time datetime="2026-07-03T01:04:07.000Z" title="发表于 2026-07-03 09:04:07">2026-07-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/11/fristVibeCoding/" title="鹊随金印：我的第一个完整的AI编程项目">鹊随金印：我的第一个完整的AI编程项目</a><time datetime="2026-06-11T01:04:07.000Z" title="发表于 2026-06-11 09:04:07">2026-06-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/03/VI_Howto/" title="VI编辑器简介">VI编辑器简介</a><time datetime="2026-06-03T01:04:07.000Z" title="发表于 2026-06-03 09:04:07">2026-06-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/28/HNCitic_2605/" title="我要上头条">我要上头条</a><time datetime="2026-05-28T01:04:07.000Z" title="发表于 2026-05-28 09:04:07">2026-05-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/12/TS-Domain-Controller-Sync-Failure/" title="记一次Windows AD域控制器同步故障排错">记一次Windows AD域控制器同步故障排错</a><time datetime="2026-05-12T03:04:07.000Z" title="发表于 2026-05-12 11:04:07">2026-05-12</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2008 - 2026 By 靖轩</span></div><div class="footer_custom_text">京ICP备17034757号</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.5"></script><script src="/js/main.js?v=5.5.5"></script><script src="/libs/fancybox/fancybox.umd.js"></script><script src="/js/instantpage.js" type="module"></script><script src="/libs/lazyload/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const parseViewBox = viewBox => {
+    if (!viewBox) return null
+    const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
+    if (parts.length !== 4 || parts.some(n => Number.isNaN(n))) return null
+    return parts
+  }
+
+  const getSvgViewBox = svg => {
+    const attr = parseViewBox(svg.getAttribute('viewBox'))
+    if (attr) return attr
+
+    // Fallback: use bbox to build a viewBox
+    try {
+      const bbox = svg.getBBox()
+      if (bbox && bbox.width && bbox.height) return [bbox.x, bbox.y, bbox.width, bbox.height]
+    } catch (e) {
+      // getBBox may fail on some edge cases; ignore
+    }
+
+    const w = Number(svg.getAttribute('width')) || 0
+    const h = Number(svg.getAttribute('height')) || 0
+    if (w > 0 && h > 0) return [0, 0, w, h]
+    return [0, 0, 100, 100]
+  }
+
+  const setSvgViewBox = (svg, vb) => {
+    svg.setAttribute('viewBox', `${vb[0]} ${vb[1]} ${vb[2]} ${vb[3]}`)
+  }
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v))
+
+  const openSvgInNewTab = ({ source, initViewBox }) => {
+    const getClonedSvg = () => {
+      if (typeof source === 'string') {
+        const template = document.createElement('template')
+        template.innerHTML = source.trim()
+        const svg = template.content.querySelector('svg')
+        return svg ? svg.cloneNode(true) : null
+      }
+      if (source && typeof source.cloneNode === 'function') {
+        return source.cloneNode(true)
+      }
+      return null
+    }
+
+    const clone = getClonedSvg()
+    if (!clone) return
+    if (initViewBox && initViewBox.length === 4) {
+      clone.setAttribute('viewBox', initViewBox.join(' '))
+    }
+    if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+    if (!clone.getAttribute('xmlns:xlink') && clone.outerHTML.includes('xlink:')) {
+      clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+    }
+    // inject background to match current theme
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    const bg = getComputedStyle(document.body).backgroundColor || (isDark ? '#1e1e1e' : '#ffffff')
+    if (!clone.style.background) clone.style.background = bg
+
+    const serializer = new XMLSerializer()
+    const svgSource = serializer.serializeToString(clone)
+    const htmlSource = `<!doctype html><html><head><meta charset="utf-8" />
+      <style>
+        html, body { width: 100%; height: 100%; margin: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; }
+        svg { max-width: 100%; max-height: 100%; height: auto; width: auto; }
+      </style>
+      </head><body>${svgSource}</body></html>`
+    const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank', 'noopener')
+    setTimeout(() => URL.revokeObjectURL(url), 30000)
+  }
+
+  const attachMermaidViewerButton = wrap => {
+    let btn = wrap.querySelector('.mermaid-open-btn')
+    if (!btn) {
+      btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'mermaid-open-btn'
+      wrap.appendChild(btn)
+    }
+
+    btn.innerHTML = '<i class="fa fa-search fa-fw" aria-hidden="true"></i>'
+
+    if (!btn.__mermaidViewerBound) {
+      btn.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        const svg = wrap.__mermaidOriginalSvg || wrap.querySelector('svg')
+        if (!svg) return
+        const initViewBox = wrap.__mermaidInitViewBox
+        if (typeof svg === 'string') {
+          openSvgInNewTab({ source: svg, initViewBox })
+          return
+        }
+        openSvgInNewTab({ source: svg, initViewBox })
+      })
+      btn.__mermaidViewerBound = true
+    }
+  }
+
+  // Zoom around a point (px, py) in the SVG viewport (in viewBox coordinates)
+  const zoomAtPoint = (vb, factor, px, py) => {
+    const w = vb[2] * factor
+    const h = vb[3] * factor
+    const nx = px - (px - vb[0]) * factor
+    const ny = py - (py - vb[1]) * factor
+    return [nx, ny, w, h]
+  }
+
+  const initMermaidGestures = wrap => {
+    const svg = wrap.querySelector('svg')
+    if (!svg) return
+
+    // Ensure viewBox exists so gestures always work
+    const initVb = getSvgViewBox(svg)
+    wrap.__mermaidInitViewBox = initVb
+    wrap.__mermaidCurViewBox = initVb.slice()
+    setSvgViewBox(svg, initVb)
+
+    // Avoid binding multiple times on themeChange/pjax
+    if (wrap.__mermaidGestureBound) return
+    wrap.__mermaidGestureBound = true
+
+    // Helper: map client (viewport) coordinate -> viewBox coordinate
+    const clientToViewBox = (clientX, clientY) => {
+      const rect = svg.getBoundingClientRect()
+      const vb = wrap.__mermaidCurViewBox || getSvgViewBox(svg)
+      const x = vb[0] + (clientX - rect.left) * (vb[2] / rect.width)
+      const y = vb[1] + (clientY - rect.top) * (vb[3] / rect.height)
+      return { x, y, rect, vb }
+    }
+
+    const state = {
+      pointers: new Map(),
+      startVb: null,
+      startDist: 0,
+      startCenter: null
+    }
+
+    const clampVb = vb => {
+      const init = wrap.__mermaidInitViewBox || vb
+      const minW = init[2] * 0.1
+      const maxW = init[2] * 10
+      const minH = init[3] * 0.1
+      const maxH = init[3] * 10
+      vb[2] = clamp(vb[2], minW, maxW)
+      vb[3] = clamp(vb[3], minH, maxH)
+      return vb
+    }
+
+    const setCurVb = vb => {
+      vb = clampVb(vb)
+      wrap.__mermaidCurViewBox = vb
+      setSvgViewBox(svg, vb)
+    }
+
+    const onPointerDown = e => {
+      // Allow only primary button for mouse
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      svg.setPointerCapture(e.pointerId)
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      if (state.pointers.size === 1) {
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      } else if (state.pointers.size === 2) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        state.startDist = Math.hypot(dx, dy)
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        state.startCenter = { x: (pts[0].x + pts[1].x) / 2, y: (pts[0].y + pts[1].y) / 2 }
+      }
+    }
+
+    const onPointerMove = e => {
+      if (!state.pointers.has(e.pointerId)) return
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      // Pan with 1 pointer
+      if (state.pointers.size === 1 && state.startVb) {
+        const p = [...state.pointers.values()][0]
+        const prev = { x: e.clientX - e.movementX, y: e.clientY - e.movementY }
+        // movementX/Y unreliable on touch, compute from stored last position
+        const last = wrap.__mermaidLastSinglePointer || p
+        const dxClient = p.x - last.x
+        const dyClient = p.y - last.y
+        wrap.__mermaidLastSinglePointer = p
+
+        const { rect } = clientToViewBox(p.x, p.y)
+        const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        const dx = dxClient * (vb[2] / rect.width)
+        const dy = dyClient * (vb[3] / rect.height)
+        setCurVb([vb[0] - dx, vb[1] - dy, vb[2], vb[3]])
+        return
+      }
+
+      // Pinch zoom with 2 pointers
+      if (state.pointers.size === 2 && state.startVb && state.startDist > 0) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        const dist = Math.hypot(dx, dy)
+        if (!dist) return
+        const factor = state.startDist / dist // dist bigger => zoom in (viewBox smaller)
+
+        const cx = (pts[0].x + pts[1].x) / 2
+        const cy = (pts[0].y + pts[1].y) / 2
+        const centerClient = { x: cx, y: cy }
+
+        const pxy = clientToViewBox(centerClient.x, centerClient.y)
+        const cpx = pxy.x
+        const cpy = pxy.y
+
+        const vb = zoomAtPoint(state.startVb, factor, cpx, cpy)
+        setCurVb(vb)
+      }
+    }
+
+    const onPointerUpOrCancel = e => {
+      state.pointers.delete(e.pointerId)
+      if (state.pointers.size === 0) {
+        state.startVb = null
+        state.startDist = 0
+        state.startCenter = null
+        wrap.__mermaidLastSinglePointer = null
+      } else if (state.pointers.size === 1) {
+        // reset single pointer baseline to avoid jump
+        wrap.__mermaidLastSinglePointer = [...state.pointers.values()][0]
+      }
+    }
+
+    // Wheel zoom (mouse/trackpad)
+    const onWheel = e => {
+      // ctrlKey on mac trackpad pinch; we treat both as zoom
+      e.preventDefault()
+      const delta = e.deltaY
+      const zoomFactor = delta > 0 ? 1.1 : 0.9
+      const { x, y } = clientToViewBox(e.clientX, e.clientY)
+      const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      setCurVb(zoomAtPoint(vb, zoomFactor, x, y))
+    }
+
+    const onDblClick = () => {
+      const init = wrap.__mermaidInitViewBox
+      if (!init) return
+      wrap.__mermaidCurViewBox = init.slice()
+      setSvgViewBox(svg, init)
+    }
+
+    svg.addEventListener('pointerdown', onPointerDown)
+    svg.addEventListener('pointermove', onPointerMove)
+    svg.addEventListener('pointerup', onPointerUpOrCancel)
+    svg.addEventListener('pointercancel', onPointerUpOrCancel)
+    svg.addEventListener('wheel', onWheel, { passive: false })
+    svg.addEventListener('dblclick', onDblClick)
+  }
+
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+
+      // Clear old render (themeChange/pjax will rerun)
+      const oldSvg = item.querySelector('svg')
+      if (oldSvg) oldSvg.remove()
+      item.__mermaidGestureBound = false
+
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+        if (true) initMermaidGestures(item)
+        item.__mermaidOriginalSvg = svg
+        if (true) attachMermaidViewerButton(item)
+      }
+
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('/libs/mermaid/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.5"></script></div></div></body></html>

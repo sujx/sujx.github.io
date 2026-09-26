@@ -1,0 +1,537 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Zabbix 7 LTS的初始化 | 靖轩</title><meta name="author" content="靖轩"><meta name="copyright" content="靖轩"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Zabbix概述Zabbix是⼀个基于WEB界⾯的提供分布式系统监视以及⽹络监视功能的企业级的开源解决⽅案，由 Alexei Vladishev 在1991年的莫斯科写下第一版，目前由 Zabbix SIA 主导开发和支持。Zabbix能监视各种⽹络参数，保证服务器系统的安全运营；并提供各种通知机制以让系统管理员快速定位&#x2F;解决存在的各种问题。Zabbix主要由2部分构成，Zabbix s">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Zabbix 7 LTS的初始化">
+<meta property="og:url" content="https://www.sujx.net/2024/06/09/Zabbix-7-Deploy/index.html">
+<meta property="og:site_name" content="靖轩">
+<meta property="og:description" content="Zabbix概述Zabbix是⼀个基于WEB界⾯的提供分布式系统监视以及⽹络监视功能的企业级的开源解决⽅案，由 Alexei Vladishev 在1991年的莫斯科写下第一版，目前由 Zabbix SIA 主导开发和支持。Zabbix能监视各种⽹络参数，保证服务器系统的安全运营；并提供各种通知机制以让系统管理员快速定位&#x2F;解决存在的各种问题。Zabbix主要由2部分构成，Zabbix s">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.sujx.net/covers/cover22.jpg">
+<meta property="article:published_time" content="2024-06-09T07:04:07.000Z">
+<meta property="article:modified_time" content="2026-09-26T02:25:04.235Z">
+<meta property="article:author" content="靖轩">
+<meta property="article:tag" content="Monitor">
+<meta property="article:tag" content="Zabbix">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.sujx.net/covers/cover22.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Zabbix 7 LTS的初始化",
+  "url": "https://www.sujx.net/2024/06/09/Zabbix-7-Deploy/",
+  "image": "https://cdn.sujx.net/covers/cover22.jpg",
+  "datePublished": "2024-06-09T07:04:07.000Z",
+  "dateModified": "2026-09-26T02:25:04.235Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "靖轩",
+      "url": "https://www.sujx.net"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://cdn.sujx.net/about/favicon.png"><link rel="canonical" href="https://www.sujx.net/2024/06/09/Zabbix-7-Deploy/index.html"><link rel="preconnect" href="//cdnjs.cloudflare.com"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css?v=5.5.5"><link rel="stylesheet" href="/fonts/css/all.min.css"><link rel="stylesheet" href="/libs/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?417b20ac1984432f821159fac27d3bb5";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><link rel="stylesheet" href="/fonts/titillium-web.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: '/libs/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: true,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Zabbix 7 LTS的初始化',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="alternate" href="/atom.xml" title="靖轩" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">靖轩</span></a><a class="nav-page-title" href="/"><span class="site-name">Zabbix 7 LTS的初始化</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">Zabbix 7 LTS的初始化</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-06-09T07:04:07.000Z" title="发表于 2024-06-09 15:04:07">2024-06-09</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-09-26T02:25:04.235Z" title="更新于 2026-09-26 10:25:04">2026-09-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F/">应用程序</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">1.8k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>8分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><h2 id="Zabbix概述"><a href="#Zabbix概述" class="headerlink" title="Zabbix概述"></a>Zabbix概述</h2><p>Zabbix是⼀个基于WEB界⾯的提供分布式系统监视以及⽹络监视功能的企业级的开源解决⽅案，由 Alexei Vladishev 在1991年的莫斯科写下第一版，目前由 Zabbix SIA 主导开发和支持。Zabbix能监视各种⽹络参数，保证服务器系统的安全运营；并提供各种通知机制以让系统管理员快速定位&#x2F;解决存在的各种问题。Zabbix主要由2部分构成，Zabbix server与可选组件Zabbix agent。Zabbix server可以通过SNMP，Zabbix agent，Ping，端⼝监视等⽅法提供对远程服务器&#x2F;⽹络状态的监视，数据收集等功能，它可以运⾏在Linux， Solaris， HP-UX， AIX， Free BSD， Open BSD， OS X等平台上。Zabbix 是免费的。Zabbix 是在 GPL 通用公共许可证第 2 版下编写和分发的。这意味着它的源代码是免费分发的，可供公众使用。</p>
+<p>Zabbix是⼀款综合了数据收集、数据展⽰、数据提取、监控报警配置、⽤⼾展⽰等⽅⾯的⼀款综合运维监控平台。Zabbix学习⼊⻔较快，功能也很强⼤，是⼀个可以迅速⽤起来的监控软件，能够满⾜中⼩企业的监控报警需求，因此是中⼩型企业运维监控的⾸选平台。</p>
+<p>Zabbix⽬前发布的版本有标准版和⻓期⽀持版（LTS）两种，LTS为Long Term Support的简写。Zabbix LTS版本，将为客⼾提供5年的⽀持服务。前三年完全⽀持与后两年有限制⽀持。前三年包括⼀般、关键、安全性问题解决，后两年包括关键、安全性问题解决。超出时间不提供技术⽀持服务。Zabbix标准版，发布计划周期为六个⽉，每六个⽉将有⼀个新的Zabbix稳定版本发布。⽬前Zabbix LTS最新版本为Zabbix 7。 0 LTS。</p>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover22.jpg"></p>
+<blockquote>
+<ol start="2024">
+<li>06 摄于广州海珠·广州医科大学第一附属医院住院部</li>
+</ol>
+</blockquote>
+<h2 id="Server端安装"><a href="#Server端安装" class="headerlink" title="Server端安装"></a>Server端安装</h2><h3 id="数据库准备"><a href="#数据库准备" class="headerlink" title="数据库准备"></a>数据库准备</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装MySQL Server 8. 0数据库</span></span><br><span class="line">dnf -y install mysql-server</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">指定客户端和服务端使用utf8来访问mariadb</span></span><br><span class="line">cat &gt; /etc/my.cnf.d/charset.cnf &lt;&lt;&#x27;EOF&#x27;</span><br><span class="line">[mysqld]</span><br><span class="line">character-set-server = utf8mb4</span><br><span class="line"></span><br><span class="line">[client]</span><br><span class="line">default-character-set = utf8mb4</span><br><span class="line">EOF</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">拉起服务</span></span><br><span class="line">systemctl enable --now mysqld</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">创建数据库</span></span><br><span class="line">mysql -uroot &lt;&lt; EOF</span><br><span class="line">CREATE USER zabbix@localhost IDENTIFIED BY &#x27;zabbix&#x27;;</span><br><span class="line">CREATE DATABASE zabbix CHARACTER SET &#x27;utf8mb4&#x27; COLLATE &#x27;utf8mb4_bin&#x27;;</span><br><span class="line">GRANT all privileges on zabbix.* to &#x27;zabbix&#x27;@&#x27;localhost&#x27;;</span><br><span class="line">FLUSH PRIVILEGES;</span><br><span class="line">set global log_bin_trust_function_creators = 1;</span><br><span class="line">exit</span><br><span class="line">EOF</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">访问测试</span></span><br><span class="line">mysql -uzabbix -pzabbix -hlocalhost &lt;&lt;EOF</span><br><span class="line">show databases;</span><br><span class="line">exit</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+
+<h3 id="服务端部署"><a href="#服务端部署" class="headerlink" title="服务端部署"></a>服务端部署</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">获取Nginx官方源</span></span><br><span class="line">cat &gt; /etc/yum.repos.d/nginx.repo &lt;&lt;&#x27;EOF&#x27;</span><br><span class="line">[nginx-stable]</span><br><span class="line">name=nginx stable repo</span><br><span class="line">baseurl=http://nginx.org/packages/centos/$releasever/$basearch</span><br><span class="line">gpgcheck=1</span><br><span class="line">enabled=1</span><br><span class="line">gpgkey=https://nginx.org/keys/nginx_signing.key</span><br><span class="line">module_hotfixes=true</span><br><span class="line">EOF</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">使用Redhat系主机，如果开启EPEL，需要在epel的repo源中取消zabbix的安装包</span></span><br><span class="line">rm -rf /etc/yum.repos.d/epel*</span><br><span class="line">cat &gt; /etc/yum.repos.d/epel.repo &lt;&lt;&#x27;EOF&#x27;</span><br><span class="line">[epel]</span><br><span class="line">name=Extra Packages for Enterprise Linux $releasever - $basearch</span><br><span class="line">baseurl=https://mirrors.aliyun.com/epel/$releasever/Everything/$basearch/</span><br><span class="line">enabled=1</span><br><span class="line">gpgcheck=1</span><br><span class="line">countme=1</span><br><span class="line">gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-$releasever</span><br><span class="line">excludepkgs=zabbix*</span><br><span class="line">EOF</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">获取官方源</span></span><br><span class="line">rpm -Uvh https://repo.zabbix.com/zabbix/7. 0/rocky/9/x86_64/zabbix-release-7. 0-5. el9. noarch.rpm</span><br><span class="line">dnf clean all</span><br><span class="line">dnf makecache</span><br><span class="line"></span><br><span class="line">dnf install -y nginx php php-fpm</span><br><span class="line">dnf install -y zabbix-server-mysql zabbix-web-mysql zabbix-nginx-conf zabbix-sql-scripts zabbix-selinux-policy zabbix-agent</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">修改php-fpm时区</span></span><br><span class="line">cat &gt;&gt; /etc/php-fpm.d/zabbix.conf &lt;&lt;EOF</span><br><span class="line">php_value[date.timezone] = Asia/Shanghai</span><br><span class="line">EOF</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">导入数据库</span></span><br><span class="line">zcat /usr/share/zabbix-sql-scripts/mysql/server.sql.gz | mysql --default-character-set=utf8mb4 -uzabbix -p zabbix</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">字体问题解决</span></span><br><span class="line">dnf install -y mkfontdir mkfontscale</span><br><span class="line">wget https://dl.rockylinux.org/pub/rocky/8/AppStream/aarch64/os/Packages/w/wqy-microhei-fonts-0. 2. 0-0. 22. beta.el8. noarch.rpm</span><br><span class="line">rpm -Uvh wqy-microhei-fonts-0. 2. 0-0. 22. beta.el8. noarch.rpm</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">字体备用站点</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">wget https://abf-downloads.openmandriva.org/5. 0/repository/x86_64/unsupported/release/fonts-ttf-wqy-zenhei-0. 9. 45-4-omv4002. noarch.rpm</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">rpm -Uvh fonts-ttf-wqy-zenhei-0. 9. 45-4-omv4002. noarch.rpm</span></span><br><span class="line"></span><br><span class="line">cd /etc/alternatives</span><br><span class="line">rm -rf zabbix-web-font</span><br><span class="line">ln -s /usr/share/fonts/wqy-microhei/wqy-microhei.ttc zabbix-web-font</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="built_in">ln</span> -s /usr/share/fonts/TTF/wqy-zenhei/wqy-zenhei.ttc zabbix-web-font</span></span><br><span class="line">cd ~</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">修改Zabbix Server配置文件</span></span><br><span class="line">cat &gt;&gt;/etc/zabbix/zabbix_server.conf &lt;&lt;EOF</span><br><span class="line">DBPassword=zabbix</span><br><span class="line">DBSocket=/var/lib/mysql/mysql.sock</span><br><span class="line">EOF</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">重新配置数据库全局属性</span></span><br><span class="line">mysql -uroot &lt;&lt; EOF</span><br><span class="line">set global log_bin_trust_function_creators = 0;</span><br><span class="line">exit</span><br><span class="line">EOF</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">修改Nginx配置文件</span></span><br><span class="line">sed &#x27;s/8080/80/g; s/example.com/zbx.sujx.net/g; s/#//g&#x27; /etc/nginx/conf.d/zabbix.conf</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">启动进程</span></span><br><span class="line">systemctl enable --now zabbix-server zabbix-agent nginx php-fpm</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">锁定软件版本，防止意外升级</span></span><br><span class="line">dnf install -y python3-dnf-plugin-versionlock</span><br><span class="line">dnf versionlock add zabbix-* mysql-server</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">配置防火墙</span></span><br><span class="line">systemctl enable --now firewalld</span><br><span class="line">firewall-cmd --permanent --add-service=&#123;http, https&#125;</span><br><span class="line">firewall-cmd --permanent --add-port=&#123;10051/tcp, 10050/tcp&#125;</span><br><span class="line">firewall-cmd --reload</span><br></pre></td></tr></table></figure>
+<h3 id="配置WEB"><a href="#配置WEB" class="headerlink" title="配置WEB"></a>配置WEB</h3><ol>
+<li>使用setup向导部署web ui<br><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/07/zabbix/1.png"></li>
+<li>前置安装条件检查<br><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/07/zabbix/2.png"></li>
+<li>配置数据库<br><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/07/zabbix/3.png"></li>
+<li>配置时区和主题<br><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/07/zabbix/4.png"></li>
+<li>安装结束<br><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/07/zabbix/5.png"></li>
+<li>进入系统<br><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/07/zabbix/6.png"></li>
+</ol>
+<h2 id="Agent端部署"><a href="#Agent端部署" class="headerlink" title="Agent端部署"></a>Agent端部署</h2><h3 id="配置Yum源"><a href="#配置Yum源" class="headerlink" title="配置Yum源"></a>配置Yum源</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">使用Redhat系主机，如果开启EPEL，需要在epel的repo源中取消zabbix的安装包</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">CentOS、RockyLinux、RHEL等RPM系主机的agent部署</span></span><br><span class="line">rm -rf /etc/yum.repos.d/epel*</span><br><span class="line">cat &gt; /etc/yum.repos.d/epel.repo &lt;&lt;&#x27;EOF&#x27;</span><br><span class="line">[epel]</span><br><span class="line">name=Extra Packages for Enterprise Linux $releasever - $basearch</span><br><span class="line">baseurl=https://mirrors.aliyun.com/epel/$releasever/Everything/$basearch/</span><br><span class="line">enabled=1</span><br><span class="line">gpgcheck=1</span><br><span class="line">countme=1</span><br><span class="line">gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-$releasever</span><br><span class="line">excludepkgs=zabbix*</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line">rpm -Uvh https://repo.zabbix.com/zabbix/7. 0/rocky/9/x86_64/zabbix-release-7. 0-5. el9. noarch.rpm</span><br><span class="line">dnf clean all</span><br><span class="line">dnf makecache</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Ubuntu、Debian等deb系主机的部署</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">wget https://repo.zabbix.com/zabbix/7. 0/ubuntu/pool/main/z/zabbix-release/zabbix-release_7. 0-2+ubuntu22. 04_all.deb</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">dpkg -i ./zabbix-release_7. 0-2+ubuntu22. 04_all.deb</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">apt update</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="手动安装"><a href="#手动安装" class="headerlink" title="手动安装"></a>手动安装</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">CentOS、RockyLinux、RHEL等RPM系主机的agent部署</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装Agent2</span></span><br><span class="line">dnf install zabbix-agent2 zabbix-agent2-plugin-*</span><br><span class="line">dnf install -y python3-dnf-plugin-versionlock</span><br><span class="line">dnf versionlock add zabbix-*</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Ubuntu、Debian等deb系主机的部署</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">apt install zabbix-agent2 zabbix-agent2-plugin-*</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">apt-mark hold zabbix-agent2*</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">修改Agent2的配置文件</span></span><br><span class="line">sed -i &#x27;s/Server=127. 0. 0. 1/Server=zbx.sujx.net/; s/ServerActive=127. 0. 0. 1/ServerActive=zbx.sujx.net/; s/Hostname=Zabbix server/# Hostname= Zabbix Agent/; s/# UnsafeUserParameters=0/UnsafeUserParameters=1/; s/# HostnameItem=system.hostname/HostnameItem=system.hostname/; s/# HostMetadata=/HostMetadata=linux zabbix.beijing/ &#x27; /etc/zabbix/zabbix_agent2. conf</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">启动服务</span></span><br><span class="line">systemctl enable --now zabbix-agent2</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">配置防火墙</span></span><br><span class="line">systemctl enable --now firewalld</span><br><span class="line">firewall-cmd --permanent --add-service=zabbix-agent</span><br><span class="line">firewall-cmd --reload</span><br></pre></td></tr></table></figure>
+<h3 id="创建主机"><a href="#创建主机" class="headerlink" title="创建主机"></a>创建主机</h3><p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/07/zabbix/7.png"></p>
+<h3 id="查看视图"><a href="#查看视图" class="headerlink" title="查看视图"></a>查看视图</h3><p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/07/zabbix/8.png"></p>
+<h2 id="告警配置"><a href="#告警配置" class="headerlink" title="告警配置"></a>告警配置</h2><h3 id="电子邮件"><a href="#电子邮件" class="headerlink" title="电子邮件"></a>电子邮件</h3><h4 id="添加邮件媒介"><a href="#添加邮件媒介" class="headerlink" title="添加邮件媒介"></a>添加邮件媒介</h4><ol>
+<li>设置电子邮件SMTP<br><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/07/zabbix/9.png"></li>
+<li>用户添加E-Mail通知<br><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/07/zabbix/10.png"></li>
+</ol>
+<h4 id="添加动作"><a href="#添加动作" class="headerlink" title="添加动作"></a>添加动作</h4><ol>
+<li>启用“通知管理员”<br><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/07/zabbix/11.png"></li>
+<li>配置发送条件<br><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/07/zabbix/12.png"></li>
+</ol>
+<h3 id="电话告警"><a href="#电话告警" class="headerlink" title="电话告警"></a>电话告警</h3><p>可以使用<strong>饭碗告警</strong>的邮件转电话方式来实现<a target="_blank" rel="noopener" href="https://fwalert.com/wiki/implement-call-notification-for-important-emails-with-fwalert/">电话通知</a>。</p>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/07/zabbix/13.png"></p>
+<h2 id="自动化"><a href="#自动化" class="headerlink" title="自动化"></a>自动化</h2><h3 id="自动化部署Agent"><a href="#自动化部署Agent" class="headerlink" title="自动化部署Agent"></a>自动化部署Agent</h3><h4 id="部署Ansible"><a href="#部署Ansible" class="headerlink" title="部署Ansible"></a>部署Ansible</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">创建目录</span></span><br><span class="line">mkdir -p  ~/ansible/&#123;files, log, tmp, playbook, pem&#125;</span><br><span class="line">touch ~/ansible/&#123;inventory, ansible.cfg&#125;</span><br><span class="line">dnf makecache</span><br><span class="line">dnf update</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">配置证书</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">由于主机使用证书方式访问SSH，所以需要将pem文件放置到~/ansible/pem目录下</span></span><br><span class="line">chmod 400 ~/ansible/pem/wulanchabu.pem</span><br><span class="line">dos2unix ~/ansible/pem/wulanchabu.pem</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装Ansible</span></span><br><span class="line">dnf install -y ansible</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">配置Ansible</span></span><br><span class="line">cat &gt; ~/ansible/ansible.cfg &lt;&lt;&#x27;EOF&#x27;</span><br><span class="line">[defaults]</span><br><span class="line">inventory = ./inventory</span><br><span class="line">remote_tmp     = ./tmp</span><br><span class="line">local_tmp      = ./tmp</span><br><span class="line">log_path = ./log/ansible.log</span><br><span class="line">private_key_file = ./pem/wulanchabu.pem</span><br><span class="line"></span><br><span class="line">forks          = 5</span><br><span class="line">poll_interval  = 15</span><br><span class="line">transport      = smart</span><br><span class="line">host_key_checking = False</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">[privilege_escalation]</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">become = True</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">become_method = <span class="built_in">sudo</span></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">become_user = root</span></span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line">cat &gt;&gt; ~/ansible/inventory &lt;&lt;&#x27;EOF&#x27;</span><br><span class="line">[MartixAccount]</span><br><span class="line">macc[20:39]. sujx.net</span><br><span class="line">EOF</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">校验</span></span><br><span class="line">ansible all -m ping</span><br></pre></td></tr></table></figure>
+
+<h4 id="批量部署"><a href="#批量部署" class="headerlink" title="批量部署"></a>批量部署</h4><h5 id="创建执行脚本"><a href="#创建执行脚本" class="headerlink" title="创建执行脚本"></a>创建执行脚本</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="built_in">touch</span> /tmp/zabbix_agent_install.sh</span></span><br><span class="line">rm -rf /etc/yum.repos.d/epel*</span><br><span class="line">cat &gt; /etc/yum.repos.d/epel.repo &lt;&lt;&#x27;EOF&#x27;</span><br><span class="line">[epel]</span><br><span class="line">name=Extra Packages for Enterprise Linux $releasever - $basearch</span><br><span class="line">baseurl=https://mirrors.aliyun.com/epel/$releasever/Everything/$basearch/</span><br><span class="line">enabled=1</span><br><span class="line">gpgcheck=1</span><br><span class="line">countme=1</span><br><span class="line">gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-$releasever</span><br><span class="line">excludepkgs=zabbix*</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line">rpm -Uvh https://repo.zabbix.com/zabbix/7. 0/rocky/9/x86_64/zabbix-release-7. 0-5. el9. noarch.rpm</span><br><span class="line">dnf clean all</span><br><span class="line">dnf makecache</span><br><span class="line"></span><br><span class="line">dnf install -y zabbix-agent2 zabbix-agent2-plugin-*</span><br><span class="line">dnf install -y python3-dnf-plugin-versionlock</span><br><span class="line">dnf versionlock add zabbix-*</span><br><span class="line"></span><br><span class="line">sed -i &#x27;s/Server=127. 0. 0. 1/Server=zbx.sujx.net/; s/ServerActive=127. 0. 0. 1/ServerActive=zbx.sujx.net/; s/Hostname=Zabbix server/# Hostname= Zabbix Agent/; s/# UnsafeUserParameters=0/UnsafeUserParameters=1/; s/# HostnameItem=system.hostname/HostnameItem=system.hostname/; s/# HostMetadata=/HostMetadata=linux zabbix.beijing/ &#x27; /etc/zabbix/zabbix_agent2. conf</span><br><span class="line"></span><br><span class="line">systemctl enable --now zabbix-agent2</span><br></pre></td></tr></table></figure>
+
+<h5 id="Ansible部署"><a href="#Ansible部署" class="headerlink" title="Ansible部署"></a>Ansible部署</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ansible all -m copy -a &quot;src=/tmp/zabbix_agent_install.sh dest=/tmp/&quot;</span><br><span class="line">ansible all -m shell -a &#x27;sh /tmp/zabbix_agent_install.sh&#x27;</span><br></pre></td></tr></table></figure>
+
+<h3 id="自动化添加主机"><a href="#自动化添加主机" class="headerlink" title="自动化添加主机"></a>自动化添加主机</h3><h4 id="添加规则"><a href="#添加规则" class="headerlink" title="添加规则"></a>添加规则</h4><p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/07/zabbix/14.png"></p>
+<h3 id="启用动作"><a href="#启用动作" class="headerlink" title="启用动作"></a>启用动作</h3><p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/07/zabbix/15.png"></p>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Monitor/">Monitor</a><a class="post-meta__tags" href="/tags/Zabbix/">Zabbix</a></div><div class="post-share"><div class="social-share" data-image="https://cdn.sujx.net/covers/cover22.jpg" data-sites="facebook,twitter,weibo,qq"></div><link rel="stylesheet" href="/libs/sharejs/css/share.min.css" media="print" onload="this.media='all'"><script src="/libs/sharejs/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>能否请我喝一杯咖啡？</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.jpg" target="_blank"><img class="post-qr-code-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/wechat.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2024/06/12/Deploy-System-by-PXE/" title="Linux的网络部署"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover35.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Linux的网络部署</div></div><div class="info-2"><div class="info-item-1">PXE( (Preboot eXecution Environment )是一种通过网络来实现网络部署操作系统或者网络加载操作系统的技术，主要的流程为：  通过DHCP引导内核或者启动文件  通过Web、SMB或者FTP共享文件下载系统安装文件；   3。 通过KS文件实现无人值守，自动设置、自动装机。    其基本思路和网络流量走向如下图：     DHCP# 安装dhcp serverdnf install -y dhcp-server# 增加配置文件cat &gt; /etc/dhcp/dhcpd.conf&lt;&lt;&#x27;EOF&#x27;option domain-name            &quot;sujx.net&quot;;option domain-name-servers    192. 168. 10. 2;default-lease-time 864000;max-lease-time 1000000;authoritative;option space pxelinux;option pxelinux.magic code 208 = ...</div></div></div></a><a class="pagination-related" href="/2024/06/02/What-is-ITIL/" title="ITIL基础"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover2.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">ITIL基础</div></div><div class="info-2"><div class="info-item-1">ITIL ( Information Technology Infrastructure Library ) 是信息技术基础架构最佳实践库，是一种最佳实践的框架或IT服务管理的有效方法。其目的是建立一种有效的途径去提高IT服务质量的同时来为企业和客户创造更多的商业价值。   04 摄于广州天河·西西弗书店   IT服务管理战略规划原则 需要满足企业的商业战略并为企业创造价值 IT服务的可视化管理 IT资源的动态按需供给与资源共享最大化 IT服务管理变成战略资产 技术、流程和人员的标准化来降低服务成本 有效的风险管理和高效的质量管理 持续改进和提高  发展历程历史1986年，英国中央电脑和电信局发布ITIL V1 1999年，英国政府商务办公室发布ITIL V2 2005年，国际标准化组织按照ITIL发布ISO 20000 2007年，英国政府商务办公室发布ITIL V3 2011年，英国政府商务办公室发布ITIL 2011版 2019年，英国政府商务办公室发布ITIL V4 ITIL V2   主要部分 流程和职能举例    服务支持 事件管理    问题管理    变更管理  ...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/11/02/UPtime-kuma-Howto/" title="使用UPtime-Kuma来监控站点和SSL证书"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover121.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-02</div><div class="info-item-2">使用UPtime-Kuma来监控站点和SSL证书</div></div><div class="info-2"><div class="info-item-1"> Uptime Kuma 是一款轻量级自动化运维监控工具，支持监控 HTTP( s )、TCP、Ping、DNS 记录、推送以及 Steam 游戏服务器的正常运行时间。对于检查特定关键词是否存在于网页中等轻量级监控是足够了。相对于Zabbix，它的设置更为简单，非常适合用于网页监测服务。     10 山西省临汾市洪洞县·广胜寺   安装Docker# 系统使用Rockylinux 10# 卸载Podmandnf remove -y podman*dnf install -y yum-utils device-mapper-persistent-data lvm2 jq# 官方安装案例# curl -fsSL https://get.docker.com -o get-docker.sh# sh ./get-docker.sh --dry-run# 添加软件源信息dnf config-manager --add-repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.reposed -i &#x27;s+d...</div></div></div></a><a class="pagination-related" href="/2019/10/23/Zabbix-deploy/" title="Zabbix的集中式部署"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/zabbix_1.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2019-10-23</div><div class="info-item-2">Zabbix的集中式部署</div></div><div class="info-2"><div class="info-item-1">Zabbix是一种高效、快速、开源的企业级监控系统。本文将基于Zabbix4。 4和CentOS8来实现集中式部署一台监控主站点。  主机部署  首先部署两台CentOS8（Zabbix:10. 30. 2. 67、MySQL:10. 30. 2. 68）主机，并安装epel-release源和zabbix源，其中建议使用[1]。 dnf upgrade -ydnf install -y epel-releaserpm -Uvh https://repo.zabbix.com/zabbix/4. 4/rhel/8/x86_64/zabbix-release-4. 4-1. el8. noarch.rpmdnf upgrade -y   Zabbix服务部署  登录Zabbix服务器，安装主程序 dnf -y upgradednf -y install httpd php php-fpmdnf -y install zabbix-server-mysql zabbix-web-mysql zabbix-apache-conf zabbix-agent#修改启动项systemctl ...</div></div></div></a><a class="pagination-related" href="/2025/10/08/Zabbix-MFA/" title="Zabbix7 开启MFA以及遗忘处置"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover122.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-08</div><div class="info-item-2">Zabbix7 开启MFA以及遗忘处置</div></div><div class="info-2"><div class="info-item-1">为提高Zabbix Web的安全性，7。 0版本添加二步验证，增加了MFA( 多因子认证 )，目前支持TOTP和 Duo Universal Prompt二种类型的MFA。    10 山西省临汾市洪洞县·广胜寺   开启功能开启以使用TOTP配置MFA为例，点击用户→认证，选择MFA 设置，点击添加。  配置用户在Zabbix 7 中不能通过设置用户属性来添加MFA功能，需要配置MFA用户组来对用户添加功能。  验证生成验证码只有当退出当前用户，再次登录就可以看到验证码的QR界面。可以通过手机APP或者网页插件来实现验证码的生成  日常登录 排错世事无常，把root密码忘掉是常有的事情，配置完成之后就搞丢MFA验证码的事也常有。常见的问题一个是遗忘MFA验证码，方法就是删除现有的totp_secret就可以；另外一个就是QR码的兼容性问题，这个需要修改加密方式。 相关数据库# MFA验证方法mysql&gt; SELECT * FROM mfa;+-------+------+-----------+---------------+-------------+---------...</div></div></div></a><a class="pagination-related" href="/2025/01/14/Prometheus_Howto/" title="Prometheus使用初步"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover77.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-01-14</div><div class="info-item-2">Prometheus使用初步</div></div><div class="info-2"><div class="info-item-1">概述Prometheus是新一代监控系统解决方案，可以和Kubernetes无缝对接，是容器监控的不二之选，其功能组件有：  Prometheus Server，主程序，同时也是一个时序数据库 AlertManager，告警组件 Pushgateway 中间网管组件 Data visualization and export 数据展示组件 Service discovery 服务发现组件   部署Server# promtheus server 的部署podman pull prom/prometheus:v. 3. 1. 0mkdir ~/prometheus# 创建配置文件cat &gt; ~/prometheus/prometheus.yml &lt;&lt;EOFglobal:  scrape_interval: 15s   scrape_timeout: 10s   evaluation_interval: 15s alerting:  alertmanagers:  - follow_redirects: true    scheme: http    timeout...</div></div></div></a><a class="pagination-related" href="/2024/06/13/Zabbix-7-MySQL-Migrate/" title="将Zabbix的本地数据库迁移至远程"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover25.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-06-13</div><div class="info-item-2">将Zabbix的本地数据库迁移至远程</div></div><div class="info-2"><div class="info-item-1">由于系统规划的变更，现要将已部署的Zabbix主机数据库由本地迁移至远程服务器。现将基本思路和操作纪录一二。    05 摄于天津河东区·李公楼地道   创建目标1。 在远程数据库服务器上创建对应迁移目标。 # 远程MySQL数据库地址为mysql.sujx.net# 创建数据库和访问用户mysql -uroot &lt;&lt; EOFCREATE USER &#x27;zabbix&#x27;@&#x27;%&#x27; IDENTIFIED BY &#x27;zabbix&#x27;;CREATE DATABASE db_zabbix CHARACTER SET &#x27;utf8mb4&#x27; COLLATE &#x27;utf8mb4_bin&#x27;;GRANT all privileges on db_zabbix.* to &#x27;zabbix&#x27;@&#x27;%&#x27;;FLUSH PRIVILEGES;set global log_bin_trust_function_creators = 0;exitEOF# 防火墙设置firewal...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">靖轩</div><div class="author-info-description">逝者如斯夫,不舍昼夜</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/grepsu"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://gitee.com/grepsu" target="_blank" title="Gitee"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:sujx@live.cn" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS链接"><i class="fa  fa-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Zabbix%E6%A6%82%E8%BF%B0"><span class="toc-number">1.</span> <span class="toc-text">Zabbix概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Server%E7%AB%AF%E5%AE%89%E8%A3%85"><span class="toc-number">2.</span> <span class="toc-text">Server端安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E5%87%86%E5%A4%87"><span class="toc-number">2.1.</span> <span class="toc-text">数据库准备</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E7%AB%AF%E9%83%A8%E7%BD%B2"><span class="toc-number">2.2.</span> <span class="toc-text">服务端部署</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEWEB"><span class="toc-number">2.3.</span> <span class="toc-text">配置WEB</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Agent%E7%AB%AF%E9%83%A8%E7%BD%B2"><span class="toc-number">3.</span> <span class="toc-text">Agent端部署</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEYum%E6%BA%90"><span class="toc-number">3.1.</span> <span class="toc-text">配置Yum源</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%8B%E5%8A%A8%E5%AE%89%E8%A3%85"><span class="toc-number">3.2.</span> <span class="toc-text">手动安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E4%B8%BB%E6%9C%BA"><span class="toc-number">3.3.</span> <span class="toc-text">创建主机</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E8%A7%86%E5%9B%BE"><span class="toc-number">3.4.</span> <span class="toc-text">查看视图</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%91%8A%E8%AD%A6%E9%85%8D%E7%BD%AE"><span class="toc-number">4.</span> <span class="toc-text">告警配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%B5%E5%AD%90%E9%82%AE%E4%BB%B6"><span class="toc-number">4.1.</span> <span class="toc-text">电子邮件</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E9%82%AE%E4%BB%B6%E5%AA%92%E4%BB%8B"><span class="toc-number">4.1.1.</span> <span class="toc-text">添加邮件媒介</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E5%8A%A8%E4%BD%9C"><span class="toc-number">4.1.2.</span> <span class="toc-text">添加动作</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%B5%E8%AF%9D%E5%91%8A%E8%AD%A6"><span class="toc-number">4.2.</span> <span class="toc-text">电话告警</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%87%AA%E5%8A%A8%E5%8C%96"><span class="toc-number">5.</span> <span class="toc-text">自动化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%87%AA%E5%8A%A8%E5%8C%96%E9%83%A8%E7%BD%B2Agent"><span class="toc-number">5.1.</span> <span class="toc-text">自动化部署Agent</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%83%A8%E7%BD%B2Ansible"><span class="toc-number">5.1.1.</span> <span class="toc-text">部署Ansible</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%89%B9%E9%87%8F%E9%83%A8%E7%BD%B2"><span class="toc-number">5.1.2.</span> <span class="toc-text">批量部署</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E6%89%A7%E8%A1%8C%E8%84%9A%E6%9C%AC"><span class="toc-number">5.1.2.1.</span> <span class="toc-text">创建执行脚本</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Ansible%E9%83%A8%E7%BD%B2"><span class="toc-number">5.1.2.2.</span> <span class="toc-text">Ansible部署</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B7%BB%E5%8A%A0%E4%B8%BB%E6%9C%BA"><span class="toc-number">5.2.</span> <span class="toc-text">自动化添加主机</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E8%A7%84%E5%88%99"><span class="toc-number">5.2.1.</span> <span class="toc-text">添加规则</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AF%E7%94%A8%E5%8A%A8%E4%BD%9C"><span class="toc-number">5.3.</span> <span class="toc-text">启用动作</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/07/03/AIGC_FoxHole/" title="海鹰">海鹰</a><time datetime="2026-07-03T01:04:07.000Z" title="发表于 2026-07-03 09:04:07">2026-07-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/11/fristVibeCoding/" title="鹊随金印：我的第一个完整的AI编程项目">鹊随金印：我的第一个完整的AI编程项目</a><time datetime="2026-06-11T01:04:07.000Z" title="发表于 2026-06-11 09:04:07">2026-06-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/03/VI_Howto/" title="VI编辑器简介">VI编辑器简介</a><time datetime="2026-06-03T01:04:07.000Z" title="发表于 2026-06-03 09:04:07">2026-06-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/28/HNCitic_2605/" title="我要上头条">我要上头条</a><time datetime="2026-05-28T01:04:07.000Z" title="发表于 2026-05-28 09:04:07">2026-05-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/12/TS-Domain-Controller-Sync-Failure/" title="记一次Windows AD域控制器同步故障排错">记一次Windows AD域控制器同步故障排错</a><time datetime="2026-05-12T03:04:07.000Z" title="发表于 2026-05-12 11:04:07">2026-05-12</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2008 - 2026 By 靖轩</span></div><div class="footer_custom_text">京ICP备17034757号</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.5"></script><script src="/js/main.js?v=5.5.5"></script><script src="/libs/fancybox/fancybox.umd.js"></script><script src="/js/instantpage.js" type="module"></script><script src="/libs/lazyload/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const parseViewBox = viewBox => {
+    if (!viewBox) return null
+    const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
+    if (parts.length !== 4 || parts.some(n => Number.isNaN(n))) return null
+    return parts
+  }
+
+  const getSvgViewBox = svg => {
+    const attr = parseViewBox(svg.getAttribute('viewBox'))
+    if (attr) return attr
+
+    // Fallback: use bbox to build a viewBox
+    try {
+      const bbox = svg.getBBox()
+      if (bbox && bbox.width && bbox.height) return [bbox.x, bbox.y, bbox.width, bbox.height]
+    } catch (e) {
+      // getBBox may fail on some edge cases; ignore
+    }
+
+    const w = Number(svg.getAttribute('width')) || 0
+    const h = Number(svg.getAttribute('height')) || 0
+    if (w > 0 && h > 0) return [0, 0, w, h]
+    return [0, 0, 100, 100]
+  }
+
+  const setSvgViewBox = (svg, vb) => {
+    svg.setAttribute('viewBox', `${vb[0]} ${vb[1]} ${vb[2]} ${vb[3]}`)
+  }
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v))
+
+  const openSvgInNewTab = ({ source, initViewBox }) => {
+    const getClonedSvg = () => {
+      if (typeof source === 'string') {
+        const template = document.createElement('template')
+        template.innerHTML = source.trim()
+        const svg = template.content.querySelector('svg')
+        return svg ? svg.cloneNode(true) : null
+      }
+      if (source && typeof source.cloneNode === 'function') {
+        return source.cloneNode(true)
+      }
+      return null
+    }
+
+    const clone = getClonedSvg()
+    if (!clone) return
+    if (initViewBox && initViewBox.length === 4) {
+      clone.setAttribute('viewBox', initViewBox.join(' '))
+    }
+    if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+    if (!clone.getAttribute('xmlns:xlink') && clone.outerHTML.includes('xlink:')) {
+      clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+    }
+    // inject background to match current theme
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    const bg = getComputedStyle(document.body).backgroundColor || (isDark ? '#1e1e1e' : '#ffffff')
+    if (!clone.style.background) clone.style.background = bg
+
+    const serializer = new XMLSerializer()
+    const svgSource = serializer.serializeToString(clone)
+    const htmlSource = `<!doctype html><html><head><meta charset="utf-8" />
+      <style>
+        html, body { width: 100%; height: 100%; margin: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; }
+        svg { max-width: 100%; max-height: 100%; height: auto; width: auto; }
+      </style>
+      </head><body>${svgSource}</body></html>`
+    const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank', 'noopener')
+    setTimeout(() => URL.revokeObjectURL(url), 30000)
+  }
+
+  const attachMermaidViewerButton = wrap => {
+    let btn = wrap.querySelector('.mermaid-open-btn')
+    if (!btn) {
+      btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'mermaid-open-btn'
+      wrap.appendChild(btn)
+    }
+
+    btn.innerHTML = '<i class="fa fa-search fa-fw" aria-hidden="true"></i>'
+
+    if (!btn.__mermaidViewerBound) {
+      btn.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        const svg = wrap.__mermaidOriginalSvg || wrap.querySelector('svg')
+        if (!svg) return
+        const initViewBox = wrap.__mermaidInitViewBox
+        if (typeof svg === 'string') {
+          openSvgInNewTab({ source: svg, initViewBox })
+          return
+        }
+        openSvgInNewTab({ source: svg, initViewBox })
+      })
+      btn.__mermaidViewerBound = true
+    }
+  }
+
+  // Zoom around a point (px, py) in the SVG viewport (in viewBox coordinates)
+  const zoomAtPoint = (vb, factor, px, py) => {
+    const w = vb[2] * factor
+    const h = vb[3] * factor
+    const nx = px - (px - vb[0]) * factor
+    const ny = py - (py - vb[1]) * factor
+    return [nx, ny, w, h]
+  }
+
+  const initMermaidGestures = wrap => {
+    const svg = wrap.querySelector('svg')
+    if (!svg) return
+
+    // Ensure viewBox exists so gestures always work
+    const initVb = getSvgViewBox(svg)
+    wrap.__mermaidInitViewBox = initVb
+    wrap.__mermaidCurViewBox = initVb.slice()
+    setSvgViewBox(svg, initVb)
+
+    // Avoid binding multiple times on themeChange/pjax
+    if (wrap.__mermaidGestureBound) return
+    wrap.__mermaidGestureBound = true
+
+    // Helper: map client (viewport) coordinate -> viewBox coordinate
+    const clientToViewBox = (clientX, clientY) => {
+      const rect = svg.getBoundingClientRect()
+      const vb = wrap.__mermaidCurViewBox || getSvgViewBox(svg)
+      const x = vb[0] + (clientX - rect.left) * (vb[2] / rect.width)
+      const y = vb[1] + (clientY - rect.top) * (vb[3] / rect.height)
+      return { x, y, rect, vb }
+    }
+
+    const state = {
+      pointers: new Map(),
+      startVb: null,
+      startDist: 0,
+      startCenter: null
+    }
+
+    const clampVb = vb => {
+      const init = wrap.__mermaidInitViewBox || vb
+      const minW = init[2] * 0.1
+      const maxW = init[2] * 10
+      const minH = init[3] * 0.1
+      const maxH = init[3] * 10
+      vb[2] = clamp(vb[2], minW, maxW)
+      vb[3] = clamp(vb[3], minH, maxH)
+      return vb
+    }
+
+    const setCurVb = vb => {
+      vb = clampVb(vb)
+      wrap.__mermaidCurViewBox = vb
+      setSvgViewBox(svg, vb)
+    }
+
+    const onPointerDown = e => {
+      // Allow only primary button for mouse
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      svg.setPointerCapture(e.pointerId)
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      if (state.pointers.size === 1) {
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      } else if (state.pointers.size === 2) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        state.startDist = Math.hypot(dx, dy)
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        state.startCenter = { x: (pts[0].x + pts[1].x) / 2, y: (pts[0].y + pts[1].y) / 2 }
+      }
+    }
+
+    const onPointerMove = e => {
+      if (!state.pointers.has(e.pointerId)) return
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      // Pan with 1 pointer
+      if (state.pointers.size === 1 && state.startVb) {
+        const p = [...state.pointers.values()][0]
+        const prev = { x: e.clientX - e.movementX, y: e.clientY - e.movementY }
+        // movementX/Y unreliable on touch, compute from stored last position
+        const last = wrap.__mermaidLastSinglePointer || p
+        const dxClient = p.x - last.x
+        const dyClient = p.y - last.y
+        wrap.__mermaidLastSinglePointer = p
+
+        const { rect } = clientToViewBox(p.x, p.y)
+        const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        const dx = dxClient * (vb[2] / rect.width)
+        const dy = dyClient * (vb[3] / rect.height)
+        setCurVb([vb[0] - dx, vb[1] - dy, vb[2], vb[3]])
+        return
+      }
+
+      // Pinch zoom with 2 pointers
+      if (state.pointers.size === 2 && state.startVb && state.startDist > 0) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        const dist = Math.hypot(dx, dy)
+        if (!dist) return
+        const factor = state.startDist / dist // dist bigger => zoom in (viewBox smaller)
+
+        const cx = (pts[0].x + pts[1].x) / 2
+        const cy = (pts[0].y + pts[1].y) / 2
+        const centerClient = { x: cx, y: cy }
+
+        const pxy = clientToViewBox(centerClient.x, centerClient.y)
+        const cpx = pxy.x
+        const cpy = pxy.y
+
+        const vb = zoomAtPoint(state.startVb, factor, cpx, cpy)
+        setCurVb(vb)
+      }
+    }
+
+    const onPointerUpOrCancel = e => {
+      state.pointers.delete(e.pointerId)
+      if (state.pointers.size === 0) {
+        state.startVb = null
+        state.startDist = 0
+        state.startCenter = null
+        wrap.__mermaidLastSinglePointer = null
+      } else if (state.pointers.size === 1) {
+        // reset single pointer baseline to avoid jump
+        wrap.__mermaidLastSinglePointer = [...state.pointers.values()][0]
+      }
+    }
+
+    // Wheel zoom (mouse/trackpad)
+    const onWheel = e => {
+      // ctrlKey on mac trackpad pinch; we treat both as zoom
+      e.preventDefault()
+      const delta = e.deltaY
+      const zoomFactor = delta > 0 ? 1.1 : 0.9
+      const { x, y } = clientToViewBox(e.clientX, e.clientY)
+      const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      setCurVb(zoomAtPoint(vb, zoomFactor, x, y))
+    }
+
+    const onDblClick = () => {
+      const init = wrap.__mermaidInitViewBox
+      if (!init) return
+      wrap.__mermaidCurViewBox = init.slice()
+      setSvgViewBox(svg, init)
+    }
+
+    svg.addEventListener('pointerdown', onPointerDown)
+    svg.addEventListener('pointermove', onPointerMove)
+    svg.addEventListener('pointerup', onPointerUpOrCancel)
+    svg.addEventListener('pointercancel', onPointerUpOrCancel)
+    svg.addEventListener('wheel', onWheel, { passive: false })
+    svg.addEventListener('dblclick', onDblClick)
+  }
+
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+
+      // Clear old render (themeChange/pjax will rerun)
+      const oldSvg = item.querySelector('svg')
+      if (oldSvg) oldSvg.remove()
+      item.__mermaidGestureBound = false
+
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+        if (true) initMermaidGestures(item)
+        item.__mermaidOriginalSvg = svg
+        if (true) attachMermaidViewerButton(item)
+      }
+
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('/libs/mermaid/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.5"></script></div></div></body></html>

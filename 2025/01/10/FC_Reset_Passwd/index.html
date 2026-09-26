@@ -1,0 +1,529 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>重置Fusioncompute相关密码 | 靖轩</title><meta name="author" content="靖轩"><meta name="copyright" content="靖轩"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="前些天处理了一个三节点Fusioncompute虚拟化项目的用户密码遗失问题。其实问题很简单，就是FC系统的WEB界面管理员密码和远程登录VRM主机的Gandalf账户密码被改来改去，谁也不知道正确密码了。然后，这个简单的内容经过业主IT部门、设备销售部位、公司售后这一串人员之后，到我手里的时候候就已经是被描述为三台主机的root密码没了、系统无法登录、要尽全力保障业务虚机数据安全了。这件事情最搞">
+<meta property="og:type" content="article">
+<meta property="og:title" content="重置Fusioncompute相关密码">
+<meta property="og:url" content="https://www.sujx.net/2025/01/10/FC_Reset_Passwd/index.html">
+<meta property="og:site_name" content="靖轩">
+<meta property="og:description" content="前些天处理了一个三节点Fusioncompute虚拟化项目的用户密码遗失问题。其实问题很简单，就是FC系统的WEB界面管理员密码和远程登录VRM主机的Gandalf账户密码被改来改去，谁也不知道正确密码了。然后，这个简单的内容经过业主IT部门、设备销售部位、公司售后这一串人员之后，到我手里的时候候就已经是被描述为三台主机的root密码没了、系统无法登录、要尽全力保障业务虚机数据安全了。这件事情最搞">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.sujx.net/covers/cover71.jpg">
+<meta property="article:published_time" content="2025-01-10T04:04:07.000Z">
+<meta property="article:modified_time" content="2026-09-26T02:32:14.940Z">
+<meta property="article:author" content="靖轩">
+<meta property="article:tag" content="Fusioncompute">
+<meta property="article:tag" content="Huawei">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="password">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.sujx.net/covers/cover71.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "重置Fusioncompute相关密码",
+  "url": "https://www.sujx.net/2025/01/10/FC_Reset_Passwd/",
+  "image": "https://cdn.sujx.net/covers/cover71.jpg",
+  "datePublished": "2025-01-10T04:04:07.000Z",
+  "dateModified": "2026-09-26T02:32:14.940Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "靖轩",
+      "url": "https://www.sujx.net"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://cdn.sujx.net/about/favicon.png"><link rel="canonical" href="https://www.sujx.net/2025/01/10/FC_Reset_Passwd/index.html"><link rel="preconnect" href="//cdnjs.cloudflare.com"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css?v=5.5.5"><link rel="stylesheet" href="/fonts/css/all.min.css"><link rel="stylesheet" href="/libs/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?417b20ac1984432f821159fac27d3bb5";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><link rel="stylesheet" href="/fonts/titillium-web.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: '/libs/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: true,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '重置Fusioncompute相关密码',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="alternate" href="/atom.xml" title="靖轩" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">靖轩</span></a><a class="nav-page-title" href="/"><span class="site-name">重置Fusioncompute相关密码</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">重置Fusioncompute相关密码</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-01-10T04:04:07.000Z" title="发表于 2025-01-10 12:04:07">2025-01-10</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-09-26T02:32:14.940Z" title="更新于 2026-09-26 10:32:14">2026-09-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F/">应用程序</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">1.4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>5分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><p>前些天处理了一个三节点Fusioncompute虚拟化项目的用户密码遗失问题。其实问题很简单，就是FC系统的WEB界面管理员密码和远程登录VRM主机的Gandalf账户密码被改来改去，谁也不知道正确密码了。然后，这个简单的内容经过业主IT部门、设备销售部位、公司售后这一串人员之后，到我手里的时候候就已经是被描述为三台主机的root密码没了、系统无法登录、要尽全力保障业务虚机数据安全了。<br>这件事情最搞的地方在于售前他们给华为开工单，华为一线和二线开碰头会的结果是建议整个环境推到重来……唉，不想吐槽华为虚拟化产品线已经很久了。</p>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover71.jpg"></p>
+<blockquote>
+<ol start="2025">
+<li>01 北京·房山 某矿山机械公司的灯塔工程示范车间</li>
+</ol>
+</blockquote>
+<h2 id="现场调查"><a href="#现场调查" class="headerlink" title="现场调查"></a>现场调查</h2><h3 id="物理"><a href="#物理" class="headerlink" title="物理"></a>物理</h3><ol>
+<li>核对现场涉及主机环境， 根据售前交付的实施规划表， 清点交换机和服务器的状态以及标签、机架位置、线缆连接等基本信息；</li>
+<li>与现场甲方维护人员核对IP地址、服务器配置、主机名、上次可使用相关账号密码的关键信息；</li>
+<li>与甲方确认必要保存的实施底线， 明确业务虚机数据的规模、数量、可接受风险程度；</li>
+<li>与甲方确认机房行为管理细则， 包括明确实施期间的活动范围以及饮水 如厕等位置， 也包括甲方其他关注行为违规项目（ 例如， 甲方规定车间内必须全时佩戴安全帽 ）；</li>
+<li>经甲方同意， 连接包括笔记本电脑电源、具体可使用的网线接口和IP地址；</li>
+<li>如需连接外网， 则要经甲方同意并在甲方同意的网络通道连接；</li>
+</ol>
+<h3 id="逻辑"><a href="#逻辑" class="headerlink" title="逻辑"></a>逻辑</h3><ol>
+<li>依据现有信息表格， 核对服务器IP地址和账号信息调查事故现场</li>
+<li>核对故障现象， 明确故障范围</li>
+</ol>
+<h2 id="故障处理"><a href="#故障处理" class="headerlink" title="故障处理"></a>故障处理</h2><h3 id="CNA主机检查"><a href="#CNA主机检查" class="headerlink" title="CNA主机检查"></a>CNA主机检查</h3><p>根据前期调查表格， 明确VRM主机的服务器位置， 登录对应CNA主机查看VRM主机属性</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看第一台CNA主机的虚机情况</span></span><br><span class="line">[gandalf@CNA01 ~]$ su - root</span><br><span class="line">Password: </span><br><span class="line">Last login: Thu Jan  9 16:01:01 CST 2025</span><br><span class="line">CNA01:~ # TMOUT=0</span><br><span class="line">CNA01:~ # virsh list</span><br><span class="line"> Id   Name         State</span><br><span class="line"> ------------------------</span><br><span class="line"> 1    i-00000002   running</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看第二天CNA主机的虚机情况</span></span><br><span class="line">[gandalf@CNA02 ~]$ su - root</span><br><span class="line">Password: </span><br><span class="line">Last login: Thu Jan  9 16:01:01 CST 2025</span><br><span class="line">CNA02:~ # TMOUT=0</span><br><span class="line">CNA02:~ # virsh list</span><br><span class="line"> Id   Name         State</span><br><span class="line"> ------------------------</span><br><span class="line"> 1    i-00000001   running</span><br></pre></td></tr></table></figure>
+<h3 id="确定VRM主机的VNC端口"><a href="#确定VRM主机的VNC端口" class="headerlink" title="确定VRM主机的VNC端口"></a>确定VRM主机的VNC端口</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">确定主VRM主机VNC端口为标准端口</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">使用标准端口通过vnc连接CNA主机01IP</span></span><br><span class="line">CNA01:~ # modify_vm_vnc open i-00000002</span><br><span class="line">vrm id:i-00000002</span><br><span class="line">Begin safe stop vm i-00000002</span><br><span class="line">del_nginx_libvirt_conf, cmd is sh /etc/vna-api/ecs_scripts/NginxDelServer.sh &quot;5900&quot;</span><br><span class="line">Begin undefine vm i-00000002</span><br><span class="line">Begin define vm i-00000002</span><br><span class="line">Begin start vm i-00000002</span><br><span class="line">add_nginx_libvirt_conf, cmd is sh /etc/vna-api/ecs_scripts/NginxAddServer.sh &quot;172. 16. 199. 100&quot; &quot;5900&quot;</span><br><span class="line">modify vm vnc success.</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">确定备VRM主机VNC端口</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">使用指定5935端口通过vnc连接CNA02主机IP</span></span><br><span class="line">CNA02:~ # modify_vm_vnc open i-00000001</span><br><span class="line">vrm id:i-00000001</span><br><span class="line">Begin safe stop vm i-00000001</span><br><span class="line">del_nginx_libvirt_conf, cmd is sh /etc/vna-api/ecs_scripts/NginxDelServer.sh &quot;5935&quot;</span><br><span class="line">Begin undefine vm i-00000001</span><br><span class="line">Begin define vm i-00000001</span><br><span class="line">Begin start vm i-00000001</span><br><span class="line">add_nginx_libvirt_conf, cmd is sh /etc/vna-api/ecs_scripts/NginxAddServer.sh &quot;172. 16. 199. 101&quot; &quot;5935&quot;</span><br><span class="line">modify vm vnc success.</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">可以看出是非标准接口</span></span><br><span class="line">CNA02:~ # virsh dumpxml i-00000001 | grep vnc</span><br><span class="line">    &lt;graphics type=&#x27;vnc&#x27; port=&#x27;5935&#x27; autoport=&#x27;yes&#x27; listen=&#x27;127. 0. 0. 1&#x27; keymap=&#x27;en-us&#x27;&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="连接VRM"><a href="#连接VRM" class="headerlink" title="连接VRM"></a>连接VRM</h3><h4 id="创建VNC连接"><a href="#创建VNC连接" class="headerlink" title="创建VNC连接"></a>创建VNC连接</h4><p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2025/01/vrm-vnc.PNG"></p>
+<h4 id="连接VRM主机"><a href="#连接VRM主机" class="headerlink" title="连接VRM主机"></a>连接VRM主机</h4><p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2025/01/vrm-vnc2.PNG"></p>
+<h4 id="登录并改密"><a href="#登录并改密" class="headerlink" title="登录并改密"></a>登录并改密</h4><p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2025/01/vrm-passwd.PNG"></p>
+<h3 id="修改FC密码"><a href="#修改FC密码" class="headerlink" title="修改FC密码"></a>修改FC密码</h3><h4 id="查询FC数据库密码"><a href="#查询FC数据库密码" class="headerlink" title="查询FC数据库密码"></a>查询FC数据库密码</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">备份用户数据库, 默认密码为 SingleLOUD!1</span></span><br><span class="line">pg_dump -U galax vrm -W SingleLOUD\!1 -t sm.tbl_user &gt; /home/GalaX8800/tbl_user.sql</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">遗忘FC数据库密码或者非默认密码, 则可以使用如下脚本查询</span></span><br><span class="line">python -c &quot;import fskmc; print( fskmc. FS_KMC_Manage(). kmc_decrypt( \&quot;`cat /etc/galax/gaussdb/gaussdbpwd.conf`\&quot; ))&quot;</span><br></pre></td></tr></table></figure>
+
+<h4 id="修改Admin密码"><a href="#修改Admin密码" class="headerlink" title="修改Admin密码"></a>修改Admin密码</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">重置admin密码为初始密码为 IaaS@PORTAL-CLOUD8!</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">修改后请进入系统管理--&gt;权限管理--&gt;用户管理 修改管理员密码</span></span><br><span class="line">psql -U galax vrm -W SingleLOUD\!1 -c &quot;update sm.tbl_user set password=&#x27;ed1a53af6f94d460ae36d39157e84d8bw+MJmGLcUz02&#x27; where username=&#x27;admin&#x27; and usertype=&#x27;0&#x27;;&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">psql为非标准密码, 则可以使用以下命令重置admin密码为 Huawei@123!</span></span><br><span class="line">psql -U galax vrm -c &quot;update sm.tbl_user set password=&#x27;75832dd7fb530fc7f574d61d49cadf20rF86+JEaDx02&#x27; where username=&#x27;admin&#x27; and usertype=&#x27;0&#x27;;&quot;</span><br></pre></td></tr></table></figure>
+
+<h2 id="事件总结"><a href="#事件总结" class="headerlink" title="事件总结"></a>事件总结</h2><p>本次事件由于root密码其实没有变化， 所以相对容易解决。如果虚拟化部署的VRM主机的root密码、gandalf密码和admin密码全没了的话， 就要麻烦一些，需要将VRM进入维护模式然后再进行root密码重置。业主一直抱怨FC环境为什么不能提供硬性的重置密码功能， 比如发个短信或者其他认证等方式来修改密码。</p>
+<p>其实吧，FC系统的密码重置策略在管理不严格的甲方那边很容易造成此次事件重现。首先，FC的密码是三个月需要定期修改，并且无法复制粘贴。其次，FC的官方文档中没有应对此种事件的合理手段。本次事件耗时近六个小时，其中绝大多数时间都消耗在和400扯皮上了。使用vnc连接VRM主机的操作是我自己尝试出来的，官方文档中的Fusioncompute_VncView工具早在8。 1版本中就已经EOS，二线工程师都无法下载了。另外，在FC系统之外，使用VNC连接VRM主机没有密码验证，也是挺迷的。虽然官方文档中花大篇幅描述了如何重置VNC密码，但就这么直接连上了……</p>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Linux/">Linux</a><a class="post-meta__tags" href="/tags/Huawei/">Huawei</a><a class="post-meta__tags" href="/tags/Fusioncompute/">Fusioncompute</a><a class="post-meta__tags" href="/tags/password/">password</a></div><div class="post-share"><div class="social-share" data-image="https://cdn.sujx.net/covers/cover71.jpg" data-sites="facebook,twitter,weibo,qq"></div><link rel="stylesheet" href="/libs/sharejs/css/share.min.css" media="print" onload="this.media='all'"><script src="/libs/sharejs/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>能否请我喝一杯咖啡？</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.jpg" target="_blank"><img class="post-qr-code-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/wechat.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/01/14/Prometheus_Howto/" title="Prometheus使用初步"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover77.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Prometheus使用初步</div></div><div class="info-2"><div class="info-item-1">概述Prometheus是新一代监控系统解决方案，可以和Kubernetes无缝对接，是容器监控的不二之选，其功能组件有：  Prometheus Server，主程序，同时也是一个时序数据库 AlertManager，告警组件 Pushgateway 中间网管组件 Data visualization and export 数据展示组件 Service discovery 服务发现组件   部署Server# promtheus server 的部署podman pull prom/prometheus:v. 3. 1. 0mkdir ~/prometheus# 创建配置文件cat &gt; ~/prometheus/prometheus.yml &lt;&lt;EOFglobal:  scrape_interval: 15s   scrape_timeout: 10s   evaluation_interval: 15s alerting:  alertmanagers:  - follow_redirects: true    scheme: http    timeout...</div></div></div></a><a class="pagination-related" href="/2025/01/02/Building_Enterprise_Private_Cloud-openstack/" title="企业私有云建设指南·OpenStack"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover72.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">企业私有云建设指南·OpenStack</div></div><div class="info-2"><div class="info-item-1">这是《企业私有云建设指南》的第三部分，主要介绍OpenStack的设计和部署。    12 天津·和平·解放北路   计算资源物理服务器与裸机 裸机物理服务器的角色规划 管理节点 控制节点 计算节点 存储节点 网络节点   裸机自动化配置工具 Cobbler Cloudboot Inronic   OpenStack裸机部署方案 TripleO Kolla    Hypervisor层Hypervisor是虚拟化技术的基础，是云计算的核心基础。Hypervisor是运行在物理服务器和操作系统之间的软件层，其主要作用在于调度虚拟客户机系统对共享物理资源的使用请求。  容器化部署OpenStack最佳实践：Kolla OpenStack编排管理Docker集群最佳实践：Magnum+Zun  存储资源块存储 通常使用Cinder项目来实现，Cinder提供了不同存储后端的抽象统一接口 当前流行使用Ceph RBD作为私有云的块存储解决方案 商业存储方案  对象存储 Swift Ceph RGW Minio  文件存储 Manila NFS、CIFS、GlusterFS 或者HDFS ...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/10/17/How2-Minecraft-Server-Systemd/" title="手动搭建MineCraft服务器"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover129.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-17</div><div class="info-item-2">手动搭建MineCraft服务器</div></div><div class="info-2"><div class="info-item-1"> 原先使用MCManager部署的我的世界服务器需要重新刷一下新出的系统，所以就借机备份重新手动部署，体会一下原始的Minecraft是如何运行起来的。     06 陕西·西安 秦汉通航的医疗救援直升机   我将为您详细介绍如何手动搭建Java版Minecraft服务器（不借助一键安装工具）。以下是完整步骤： 环境准备部署JAVA# 查看系统版本cat /etc/rocky-releaseuname -r# 检查是否已安装Javajava -versionwhich java# 检查已安装的Java包rpm -qa | grep -i javarpm -qa | grep -i jdk# 卸载OpenJDK（如果需要）# dnf remove -y java-* openjdk-* jdk-*# 部署Oracle版本Java, 手动下载官方LTS长期支持版JDKrpm -Uvh jdk-21_linux-x64_bin.rpm# 部署OpenJDK版本Javadnf install -y java-21-openjdk.x86_64# 验证安装java -versionjava...</div></div></div></a><a class="pagination-related" href="/2024/08/20/Linux-Performance/" title="「Linux性能优化大师」"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover41.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-08-20</div><div class="info-item-2">「Linux性能优化大师」</div></div><div class="info-2"><div class="info-item-1">我其实是买了这本书好多年了，都是拿起来翻了两页就看不动了，最近下决心还是把它看完吧，毕竟这书真的有点老了。该书是基于LInux 2。 6内核和RHEL6的版本为例进行的Linux性能解析，即便在15年成书的时候候，都已经算老了。这本书的内容的确有很大问题，个人感觉更像红帽EX442考试的参考教程，很多语句就像英文硬翻的，只能说有一定的科普的作用。 说起来，该书作者赵永刚还是我素未谋面的同事，他是我在纷享工作岗位的前前任，我曾经蹲的工位也曾是他的工位。  性能调优是一项艰巨的任务，需要深入了解硬件、操作系统和应用程序的工作原理。     07 摄于北京朝阳区·众秀大厦   深入理解Linux操作系统Linux进程管理进程进程管理在任何操作系统中都是最重要的任务之一。进程是在处理器上执行的一个实例，进程可以使用任意资源以便内核可以处理完成任务。在Linux操作系统上运行的进程多是通过task_struct结构来管理的，也被称为进程描述符。一个进程描述符包含了单个进程在运行期间所有必要的信息，比如进程表示、属性、构建进程的资源等。 每个进程都有自己的生命周期，比如创建、执行、终止、删除...</div></div></div></a><a class="pagination-related" href="/2021/07/09/clamav-privte-depoly/" title="建立内网Linux防病毒系统"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/wallhaven-4lekzl.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-07-09</div><div class="info-item-2">建立内网Linux防病毒系统</div></div><div class="info-2"><div class="info-item-1">ClamAV本来是为了Postfix邮件网关而开发的防毒软件，主要目的是对邮件队列里面的邮件进行病毒查杀。然后，这个防毒模块独立出来成为一个提供病毒、恶意软件、蠕虫的查杀能力的开源软件，成为了Linux环境下实现文件安全的主要选择。� 部署ClamAV 添加EPEL源  # ClamAV的RHEL/CentOS源是直接用epel来发布的yum cleanallyum makecacheyum install -y git python3-pipyum install -y epel-release# 添加华为云源sed -i &quot;s/#baseurl/baseurl/g&quot; /etc/yum.repos.d/epel.reposed -i &quot;s/metalink/#metalink/g&quot; /etc/yum.repos.d/epel.reposed -i &quot;s@https\?://download.example/pub@https://repo.huaweicloud.com@g&quot; /etc/yum.repos.d/epel...</div></div></div></a><a class="pagination-related" href="/2024/05/17/Test-Disk-By-Fio/" title="磁盘性能测试"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover4.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-05-17</div><div class="info-item-2">磁盘性能测试</div></div><div class="info-2"><div class="info-item-1">前些天正好有个外协部门需要利旧，需要根据阿里云的测试流程对新华三的服务器和NVME磁盘进行一下测试，所以把手头的资料整理一下。    05 摄于洛阳·龙门石窟   存储一开始想写点什么来着，后来发现少数派上的文章写的非常棒，就一并转贴了 数字存储完全指南 存储设备的诞生与历史 机械硬盘的原理与参数详解 固态硬盘的历史、结构与原理 固态硬盘的参数解读与实际性能 运行内存都在运行什么？ 理解U盘、内存卡、移动硬盘和手机存储芯片构造  文牍测试流程 测试用例 测试报告 测试FIO简介FIO是一个用于测试磁盘IOPS性能的工具，可以对本地存储或者远程共享进行压力测试和验证，并能够给出磁盘性能的指标。FIO能够按照随机读、随机写、读写混合等不同IO模式对压测对象进行性能测试。 使用# 检查是否4k对齐[root@zhangjiakou ~]# fdisk -luDisk /dev/vda: 40 GiB, 42949672960 bytes, 83886080 sectorsUnits: sectors of 1 * 512 = 512 bytesSector size ( logical...</div></div></div></a><a class="pagination-related" href="/2025/03/10/EnterpriseNet-Whatis/" title="认识企业网络"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover86.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-03-10</div><div class="info-item-2">认识企业网络</div></div><div class="info-2"><div class="info-item-1">使用交换机理论基础1。 交换机是构建局域网的基础设备。交换机工作在数据链路层，又称为二层交换机，其功能是基于MAC地址进行数据帧的转发。交换机的每个接口都可以直接连接单台主机或另一台交换机，并以全双工方式巩固工作。交换机有一条高宽带的背部总线和内部交换矩阵。同时还有一个MAC地址与接口之间的映射表，即MAC地址表。当交换机接收到一个数据帧以后，会查看该帧首部的MAC地址，并依据MAC地址表，将该帧从对应的目的接口转发出去。2. 交换机的转发过程  接收到数据帧，提取MAC信息并与现有MAC地址表对比，若存在则更新MAC地址表生存期限 判断该数据帧的目的MAC是广播帧，还是单播帧 存在映射则进行单播，否则进行广播 有回复信息，则添加到MAC地址映射表 生成树协议STP 链路聚合 交换机命令行 用户视图 系统视图 业务视图    基本命令# 默认视图&lt;Huawei&gt;# 进入系统视图&lt;Huawei&gt;system-viewEnter system view, return user view with Ctrl+Z.[Huawei]# 关闭信息中心[Huawei]...</div></div></div></a><a class="pagination-related" href="/2026/02/13/CPU-Usage/" title="CPU高占用的排查"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover141.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-02-13</div><div class="info-item-2">CPU高占用的排查</div></div><div class="info-2"><div class="info-item-1">作为一名 Linux 系统工程师，我确信你们都使用过 top 命令。它一直是几十年来首选的工具——简单、可靠，并且在你需要时总是存在。但你有没有注意到一件事？偶尔，你可能会发现一个进程的 CPU 使用率飙升到 150%、200%甚至 400%！这里发生了什么？这是怎么可能的？ 乍一看，这些数字可能看起来像是个错误——毕竟，什么东西会使用超过 100%的 CPU 呢？系统是出问题了吗？还是被黑了？但实际上，这完全正常。原因在于 Linux 报告 CPU 使用率的方式以及多核处理器的工作原理。 在本文中，我们将探讨为什么会发生这种情况，并使用实用工具和实际案例来证明这一点。     02 山东·青岛   使用 top 检查 CPU 利用率CPU 是任何操作系统的核心，执行指令以允许程序运行。在 Linux 中，top 命令是一个方便的工具，提供实时性能洞察。它显示关键系统指标，例如：  进程使用情况 内存消耗 CPU 负载  当系统出现高 CPU 利用率时，top 有助于识别哪些进程占用了最多的资源，从而更容易诊断性能问题。 要检查 CPU 利用率，请打开终端并运行： top  该命...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">靖轩</div><div class="author-info-description">逝者如斯夫,不舍昼夜</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/grepsu"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://gitee.com/grepsu" target="_blank" title="Gitee"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:sujx@live.cn" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS链接"><i class="fa  fa-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8E%B0%E5%9C%BA%E8%B0%83%E6%9F%A5"><span class="toc-number">1.</span> <span class="toc-text">现场调查</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%89%A9%E7%90%86"><span class="toc-number">1.1.</span> <span class="toc-text">物理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%BB%E8%BE%91"><span class="toc-number">1.2.</span> <span class="toc-text">逻辑</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%85%E9%9A%9C%E5%A4%84%E7%90%86"><span class="toc-number">2.</span> <span class="toc-text">故障处理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#CNA%E4%B8%BB%E6%9C%BA%E6%A3%80%E6%9F%A5"><span class="toc-number">2.1.</span> <span class="toc-text">CNA主机检查</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A1%AE%E5%AE%9AVRM%E4%B8%BB%E6%9C%BA%E7%9A%84VNC%E7%AB%AF%E5%8F%A3"><span class="toc-number">2.2.</span> <span class="toc-text">确定VRM主机的VNC端口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9E%E6%8E%A5VRM"><span class="toc-number">2.3.</span> <span class="toc-text">连接VRM</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%9B%E5%BB%BAVNC%E8%BF%9E%E6%8E%A5"><span class="toc-number">2.3.1.</span> <span class="toc-text">创建VNC连接</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%9E%E6%8E%A5VRM%E4%B8%BB%E6%9C%BA"><span class="toc-number">2.3.2.</span> <span class="toc-text">连接VRM主机</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%99%BB%E5%BD%95%E5%B9%B6%E6%94%B9%E5%AF%86"><span class="toc-number">2.3.3.</span> <span class="toc-text">登录并改密</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9FC%E5%AF%86%E7%A0%81"><span class="toc-number">2.4.</span> <span class="toc-text">修改FC密码</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9F%A5%E8%AF%A2FC%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AF%86%E7%A0%81"><span class="toc-number">2.4.1.</span> <span class="toc-text">查询FC数据库密码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9Admin%E5%AF%86%E7%A0%81"><span class="toc-number">2.4.2.</span> <span class="toc-text">修改Admin密码</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8B%E4%BB%B6%E6%80%BB%E7%BB%93"><span class="toc-number">3.</span> <span class="toc-text">事件总结</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/07/03/AIGC_FoxHole/" title="海鹰">海鹰</a><time datetime="2026-07-03T01:04:07.000Z" title="发表于 2026-07-03 09:04:07">2026-07-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/11/fristVibeCoding/" title="鹊随金印：我的第一个完整的AI编程项目">鹊随金印：我的第一个完整的AI编程项目</a><time datetime="2026-06-11T01:04:07.000Z" title="发表于 2026-06-11 09:04:07">2026-06-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/03/VI_Howto/" title="VI编辑器简介">VI编辑器简介</a><time datetime="2026-06-03T01:04:07.000Z" title="发表于 2026-06-03 09:04:07">2026-06-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/28/HNCitic_2605/" title="我要上头条">我要上头条</a><time datetime="2026-05-28T01:04:07.000Z" title="发表于 2026-05-28 09:04:07">2026-05-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/12/TS-Domain-Controller-Sync-Failure/" title="记一次Windows AD域控制器同步故障排错">记一次Windows AD域控制器同步故障排错</a><time datetime="2026-05-12T03:04:07.000Z" title="发表于 2026-05-12 11:04:07">2026-05-12</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2008 - 2026 By 靖轩</span></div><div class="footer_custom_text">京ICP备17034757号</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.5"></script><script src="/js/main.js?v=5.5.5"></script><script src="/libs/fancybox/fancybox.umd.js"></script><script src="/js/instantpage.js" type="module"></script><script src="/libs/lazyload/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const parseViewBox = viewBox => {
+    if (!viewBox) return null
+    const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
+    if (parts.length !== 4 || parts.some(n => Number.isNaN(n))) return null
+    return parts
+  }
+
+  const getSvgViewBox = svg => {
+    const attr = parseViewBox(svg.getAttribute('viewBox'))
+    if (attr) return attr
+
+    // Fallback: use bbox to build a viewBox
+    try {
+      const bbox = svg.getBBox()
+      if (bbox && bbox.width && bbox.height) return [bbox.x, bbox.y, bbox.width, bbox.height]
+    } catch (e) {
+      // getBBox may fail on some edge cases; ignore
+    }
+
+    const w = Number(svg.getAttribute('width')) || 0
+    const h = Number(svg.getAttribute('height')) || 0
+    if (w > 0 && h > 0) return [0, 0, w, h]
+    return [0, 0, 100, 100]
+  }
+
+  const setSvgViewBox = (svg, vb) => {
+    svg.setAttribute('viewBox', `${vb[0]} ${vb[1]} ${vb[2]} ${vb[3]}`)
+  }
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v))
+
+  const openSvgInNewTab = ({ source, initViewBox }) => {
+    const getClonedSvg = () => {
+      if (typeof source === 'string') {
+        const template = document.createElement('template')
+        template.innerHTML = source.trim()
+        const svg = template.content.querySelector('svg')
+        return svg ? svg.cloneNode(true) : null
+      }
+      if (source && typeof source.cloneNode === 'function') {
+        return source.cloneNode(true)
+      }
+      return null
+    }
+
+    const clone = getClonedSvg()
+    if (!clone) return
+    if (initViewBox && initViewBox.length === 4) {
+      clone.setAttribute('viewBox', initViewBox.join(' '))
+    }
+    if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+    if (!clone.getAttribute('xmlns:xlink') && clone.outerHTML.includes('xlink:')) {
+      clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+    }
+    // inject background to match current theme
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    const bg = getComputedStyle(document.body).backgroundColor || (isDark ? '#1e1e1e' : '#ffffff')
+    if (!clone.style.background) clone.style.background = bg
+
+    const serializer = new XMLSerializer()
+    const svgSource = serializer.serializeToString(clone)
+    const htmlSource = `<!doctype html><html><head><meta charset="utf-8" />
+      <style>
+        html, body { width: 100%; height: 100%; margin: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; }
+        svg { max-width: 100%; max-height: 100%; height: auto; width: auto; }
+      </style>
+      </head><body>${svgSource}</body></html>`
+    const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank', 'noopener')
+    setTimeout(() => URL.revokeObjectURL(url), 30000)
+  }
+
+  const attachMermaidViewerButton = wrap => {
+    let btn = wrap.querySelector('.mermaid-open-btn')
+    if (!btn) {
+      btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'mermaid-open-btn'
+      wrap.appendChild(btn)
+    }
+
+    btn.innerHTML = '<i class="fa fa-search fa-fw" aria-hidden="true"></i>'
+
+    if (!btn.__mermaidViewerBound) {
+      btn.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        const svg = wrap.__mermaidOriginalSvg || wrap.querySelector('svg')
+        if (!svg) return
+        const initViewBox = wrap.__mermaidInitViewBox
+        if (typeof svg === 'string') {
+          openSvgInNewTab({ source: svg, initViewBox })
+          return
+        }
+        openSvgInNewTab({ source: svg, initViewBox })
+      })
+      btn.__mermaidViewerBound = true
+    }
+  }
+
+  // Zoom around a point (px, py) in the SVG viewport (in viewBox coordinates)
+  const zoomAtPoint = (vb, factor, px, py) => {
+    const w = vb[2] * factor
+    const h = vb[3] * factor
+    const nx = px - (px - vb[0]) * factor
+    const ny = py - (py - vb[1]) * factor
+    return [nx, ny, w, h]
+  }
+
+  const initMermaidGestures = wrap => {
+    const svg = wrap.querySelector('svg')
+    if (!svg) return
+
+    // Ensure viewBox exists so gestures always work
+    const initVb = getSvgViewBox(svg)
+    wrap.__mermaidInitViewBox = initVb
+    wrap.__mermaidCurViewBox = initVb.slice()
+    setSvgViewBox(svg, initVb)
+
+    // Avoid binding multiple times on themeChange/pjax
+    if (wrap.__mermaidGestureBound) return
+    wrap.__mermaidGestureBound = true
+
+    // Helper: map client (viewport) coordinate -> viewBox coordinate
+    const clientToViewBox = (clientX, clientY) => {
+      const rect = svg.getBoundingClientRect()
+      const vb = wrap.__mermaidCurViewBox || getSvgViewBox(svg)
+      const x = vb[0] + (clientX - rect.left) * (vb[2] / rect.width)
+      const y = vb[1] + (clientY - rect.top) * (vb[3] / rect.height)
+      return { x, y, rect, vb }
+    }
+
+    const state = {
+      pointers: new Map(),
+      startVb: null,
+      startDist: 0,
+      startCenter: null
+    }
+
+    const clampVb = vb => {
+      const init = wrap.__mermaidInitViewBox || vb
+      const minW = init[2] * 0.1
+      const maxW = init[2] * 10
+      const minH = init[3] * 0.1
+      const maxH = init[3] * 10
+      vb[2] = clamp(vb[2], minW, maxW)
+      vb[3] = clamp(vb[3], minH, maxH)
+      return vb
+    }
+
+    const setCurVb = vb => {
+      vb = clampVb(vb)
+      wrap.__mermaidCurViewBox = vb
+      setSvgViewBox(svg, vb)
+    }
+
+    const onPointerDown = e => {
+      // Allow only primary button for mouse
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      svg.setPointerCapture(e.pointerId)
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      if (state.pointers.size === 1) {
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      } else if (state.pointers.size === 2) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        state.startDist = Math.hypot(dx, dy)
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        state.startCenter = { x: (pts[0].x + pts[1].x) / 2, y: (pts[0].y + pts[1].y) / 2 }
+      }
+    }
+
+    const onPointerMove = e => {
+      if (!state.pointers.has(e.pointerId)) return
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      // Pan with 1 pointer
+      if (state.pointers.size === 1 && state.startVb) {
+        const p = [...state.pointers.values()][0]
+        const prev = { x: e.clientX - e.movementX, y: e.clientY - e.movementY }
+        // movementX/Y unreliable on touch, compute from stored last position
+        const last = wrap.__mermaidLastSinglePointer || p
+        const dxClient = p.x - last.x
+        const dyClient = p.y - last.y
+        wrap.__mermaidLastSinglePointer = p
+
+        const { rect } = clientToViewBox(p.x, p.y)
+        const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        const dx = dxClient * (vb[2] / rect.width)
+        const dy = dyClient * (vb[3] / rect.height)
+        setCurVb([vb[0] - dx, vb[1] - dy, vb[2], vb[3]])
+        return
+      }
+
+      // Pinch zoom with 2 pointers
+      if (state.pointers.size === 2 && state.startVb && state.startDist > 0) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        const dist = Math.hypot(dx, dy)
+        if (!dist) return
+        const factor = state.startDist / dist // dist bigger => zoom in (viewBox smaller)
+
+        const cx = (pts[0].x + pts[1].x) / 2
+        const cy = (pts[0].y + pts[1].y) / 2
+        const centerClient = { x: cx, y: cy }
+
+        const pxy = clientToViewBox(centerClient.x, centerClient.y)
+        const cpx = pxy.x
+        const cpy = pxy.y
+
+        const vb = zoomAtPoint(state.startVb, factor, cpx, cpy)
+        setCurVb(vb)
+      }
+    }
+
+    const onPointerUpOrCancel = e => {
+      state.pointers.delete(e.pointerId)
+      if (state.pointers.size === 0) {
+        state.startVb = null
+        state.startDist = 0
+        state.startCenter = null
+        wrap.__mermaidLastSinglePointer = null
+      } else if (state.pointers.size === 1) {
+        // reset single pointer baseline to avoid jump
+        wrap.__mermaidLastSinglePointer = [...state.pointers.values()][0]
+      }
+    }
+
+    // Wheel zoom (mouse/trackpad)
+    const onWheel = e => {
+      // ctrlKey on mac trackpad pinch; we treat both as zoom
+      e.preventDefault()
+      const delta = e.deltaY
+      const zoomFactor = delta > 0 ? 1.1 : 0.9
+      const { x, y } = clientToViewBox(e.clientX, e.clientY)
+      const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      setCurVb(zoomAtPoint(vb, zoomFactor, x, y))
+    }
+
+    const onDblClick = () => {
+      const init = wrap.__mermaidInitViewBox
+      if (!init) return
+      wrap.__mermaidCurViewBox = init.slice()
+      setSvgViewBox(svg, init)
+    }
+
+    svg.addEventListener('pointerdown', onPointerDown)
+    svg.addEventListener('pointermove', onPointerMove)
+    svg.addEventListener('pointerup', onPointerUpOrCancel)
+    svg.addEventListener('pointercancel', onPointerUpOrCancel)
+    svg.addEventListener('wheel', onWheel, { passive: false })
+    svg.addEventListener('dblclick', onDblClick)
+  }
+
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+
+      // Clear old render (themeChange/pjax will rerun)
+      const oldSvg = item.querySelector('svg')
+      if (oldSvg) oldSvg.remove()
+      item.__mermaidGestureBound = false
+
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+        if (true) initMermaidGestures(item)
+        item.__mermaidOriginalSvg = svg
+        if (true) attachMermaidViewerButton(item)
+      }
+
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('/libs/mermaid/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.5"></script></div></div></body></html>

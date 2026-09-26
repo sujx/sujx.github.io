@@ -1,0 +1,572 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>IDC机房中的服务器选择1U还是2U？ | 靖轩</title><meta name="author" content="靖轩"><meta name="copyright" content="靖轩"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="在现代数据中心，每个硬件决策都会影响您的盈利。空间紧张，电费攀升，冷却系统超负荷运转。1U 和 2U 服务器（例如Dell PowerEdge R660 ( 1U ) 和R760 ( 2U )）之间的选择，可能会成就或破坏您的效率目标。1U 服务器承诺最大限度地利用机架空间，而 2U 服务器则提供更多存储和扩展选项。那么，从磁盘、CPU、内存、电源、冷却成本以及 AI 等特定用例的角度来看，哪个服">
+<meta property="og:type" content="article">
+<meta property="og:title" content="IDC机房中的服务器选择1U还是2U？">
+<meta property="og:url" content="https://www.sujx.net/2025/04/17/RackServer-Howto/index.html">
+<meta property="og:site_name" content="靖轩">
+<meta property="og:description" content="在现代数据中心，每个硬件决策都会影响您的盈利。空间紧张，电费攀升，冷却系统超负荷运转。1U 和 2U 服务器（例如Dell PowerEdge R660 ( 1U ) 和R760 ( 2U )）之间的选择，可能会成就或破坏您的效率目标。1U 服务器承诺最大限度地利用机架空间，而 2U 服务器则提供更多存储和扩展选项。那么，从磁盘、CPU、内存、电源、冷却成本以及 AI 等特定用例的角度来看，哪个服">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.sujx.net/covers/cover98.jpg">
+<meta property="article:published_time" content="2025-04-17T07:04:07.000Z">
+<meta property="article:modified_time" content="2026-09-26T02:25:04.195Z">
+<meta property="article:author" content="靖轩">
+<meta property="article:tag" content="rack-server">
+<meta property="article:tag" content="服务器">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.sujx.net/covers/cover98.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "IDC机房中的服务器选择1U还是2U？",
+  "url": "https://www.sujx.net/2025/04/17/RackServer-Howto/",
+  "image": "https://cdn.sujx.net/covers/cover98.jpg",
+  "datePublished": "2025-04-17T07:04:07.000Z",
+  "dateModified": "2026-09-26T02:25:04.195Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "靖轩",
+      "url": "https://www.sujx.net"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://cdn.sujx.net/about/favicon.png"><link rel="canonical" href="https://www.sujx.net/2025/04/17/RackServer-Howto/index.html"><link rel="preconnect" href="//cdnjs.cloudflare.com"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css?v=5.5.5"><link rel="stylesheet" href="/fonts/css/all.min.css"><link rel="stylesheet" href="/libs/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?417b20ac1984432f821159fac27d3bb5";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><link rel="stylesheet" href="/fonts/titillium-web.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: '/libs/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: true,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'IDC机房中的服务器选择1U还是2U？',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="alternate" href="/atom.xml" title="靖轩" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">靖轩</span></a><a class="nav-page-title" href="/"><span class="site-name">IDC机房中的服务器选择1U还是2U？</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">IDC机房中的服务器选择1U还是2U？</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-04-17T07:04:07.000Z" title="发表于 2025-04-17 15:04:07">2025-04-17</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-09-26T02:25:04.195Z" title="更新于 2026-09-26 10:25:04">2026-09-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B5%B7%E5%A4%96%E6%9D%82%E8%B0%88/">海外杂谈</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">2.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>7分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><p>在现代数据中心，每个硬件决策都会影响您的盈利。空间紧张，电费攀升，冷却系统超负荷运转。1U 和 2U 服务器（例如<a target="_blank" rel="noopener" href="https://www.dell.com/en-us/shop/dell-poweredge-servers/poweredge-r660-rack-server/spd/poweredge-r660/pe_r660_16362_vi_vp">Dell PowerEdge R660</a> ( 1U ) 和<a target="_blank" rel="noopener" href="https://www.dell.com/en-us/shop/dell-poweredge-servers/poweredge-r760-rack-server/spd/poweredge-r760/pe_r760_16363_vi_vp">R760</a> ( 2U )）之间的选择，可能会成就或破坏您的效率目标。1U 服务器承诺最大限度地利用机架空间，而 2U 服务器则提供更多存储和扩展选项。那么，从磁盘、CPU、内存、电源、冷却成本以及 AI 等特定用例的角度来看，哪个服务器更胜一筹？让我们来探讨为什么 R760 可能是现代数据中心的更明智之选。</p>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover98.jpg"></p>
+<h2 id="机架空间真的是决定因素吗？"><a href="#机架空间真的是决定因素吗？" class="headerlink" title="机架空间真的是决定因素吗？"></a>机架空间真的是决定因素吗？</h2><p>与 R760 的 2U 设计（3. 5 英寸）相比， Dell PowerEdge R660 的 1U 尺寸（1. 75 英寸）允许您在机架中装入更多服务器。这使得 R660 对于垂直<a target="_blank" rel="noopener" href="https://virtualg.uk/tag/dell-laptops-2025/">空间</a>有限的数据中心来说极具吸引力。然而，机架空间不仅仅用于堆叠服务器，还在于每台服务器的功能。</p>
+<p>假设一个数据库需要 24 个 NVMe 驱动器。R660 最多支持 10 个前置 2。 5 英寸驱动器和 2 个后置 2。 5 英寸驱动器，即每 1U 空间共计 12 个驱动器，或每 U 空间 12 个磁盘。要达到 24 个驱动器，您需要两台 R660，占用 2U 空间。另一方面，R760 在 2U 空间中最多可处理 24 个前置 2。 5 英寸驱动器和 4 个后置 2。 5 英寸驱动器，相当于每 U 空间 14 个磁盘（2。 5 英寸驱动器）或每 U 空间 7 个磁盘（12 个前置 3。 5 英寸驱动器和 4 个后置 2。 5 英寸驱动器）。在这种情况下，两种配置均使用 2U 空间，因此 R760 不会直接节省机架空间。</p>
+<p>然而，R760 也提供了间接的空间相关优势。通过将工作负载整合到一台服务器（而不是两台），您可以减少所需的网络端口和线缆数量。在大规模部署中，这可以减少对额外网络交换机的需求，简化基础设施并可能降低成本。更少的服务器也意味着更低的布线复杂性和更轻松的管理，这在密集型数据中心中是一个显著的优势。</p>
+<h2 id="计算和内存如何叠加？"><a href="#计算和内存如何叠加？" class="headerlink" title="计算和内存如何叠加？"></a>计算和内存如何叠加？</h2><p>两款服务器均支持最多两颗第四代英特尔至强可扩展处理器，每颗处理器最多 56 个核心，总计每台服务器 112 个核心。由于 R660 为 1U 架构，因此每台服务器可提供 112 个核心；而 R760 为 2U 架构，每台服务器可提供 56 个核心。对于虚拟化或高密度分析等计算密集型工作负载，R660 更高的核心密度使其在机架空间方面更加高效。</p>
+<p>内存容量相同，两款服务器均支持 32 个 DDR5 DIMM 插槽，最高可达 8 TB，传输速率为 4800 MT&#x2F;s。R660 每 U 可达 8 TB，而 R760 每 U 可达 4 TB。对于内存密集型应用（例如内存数据库），R660 更高的内存密度更具优势。然而，R760 更大的机箱支持更多扩展选项，对于某些工作负载而言，这可能比内存密度问题更重要。</p>
+<h2 id="电力成本会影响你的选择吗？"><a href="#电力成本会影响你的选择吗？" class="headerlink" title="电力成本会影响你的选择吗？"></a>电力成本会影响你的选择吗？</h2><p>功耗是一个主要问题，因为能源成本可能与硬件成本不相上下。对于配备两个 350W CPU、32 个 32GB DDR5 DIMM 和 24 个 2。 5 英寸 NVMe 硬盘的高端配置，R760 的功耗约为 1660W。相比之下，配备 10 个 2。 5 英寸硬盘和三个 PCIe 卡的单个 R660 功耗约为 1200W，因此两个 R660 的功耗约为 2400W，才能达到 R760 的 24 个硬盘容量。这使得 R760 在处理存储密集型工作负载时更加节能，因为它将资源整合到一台服务器中。</p>
+<p>按每 U 计算，R760 每 U 功耗约为 830W（1660W &#x2F; 2），而 R660 每 U 功耗为 1200W。虽然 R660 每台服务器的较低功耗对于较轻的工作负载具有吸引力，但 R760 能够在单个机箱中处理更多组件，这通常会导致扩展时总能耗更低。</p>
+<h2 id="冷却效率是否起到决定性作用？"><a href="#冷却效率是否起到决定性作用？" class="headerlink" title="冷却效率是否起到决定性作用？"></a>冷却效率是否起到决定性作用？</h2><p>冷却至关重要，因为服务器会产生大量热量，从而需要耗能系统。R660 和 R760 均支持直接液冷 （ DLC ），与风冷相比，可降低高达 15% 的冷却能耗。R660 的 Smart Flow 机箱可优化气流，支持高 TDP CPU（高达 350W），并节省 20% 的风扇功耗。R760 更大的机箱可容纳更多发热组件，例如额外的驱动器和 GPU，其 DLC 支持可确保高密度配置的高效冷却。</p>
+<p>有关 DLC 的更多详情，请访问<a target="_blank" rel="noopener" href="https://www.dell.com/en-us/shop/dell-poweredge-servers/poweredge-r760-rack-server/spd/poweredge-r760/pe_r760_16363_vi_vp">Dell PowerEdge R760</a>和<a target="_blank" rel="noopener" href="https://www.dell.com/en-us/shop/dell-poweredge-servers/poweredge-r660-rack-server/spd/poweredge-r660/pe_r660_16362_vi_vp">Dell PowerEdge R660</a>产品页面。DLC 对于突破热极限的工作负载（例如 GPU 密集型任务）尤其有益，R760 的散热能力可支持稳健的配置，且无需过高的散热成本，从而带来优势。</p>
+<h2 id="为什么-2U-非常适合-AI-和-GPU-工作负载"><a href="#为什么-2U-非常适合-AI-和-GPU-工作负载" class="headerlink" title="为什么 2U 非常适合 AI 和 GPU 工作负载"></a>为什么 2U 非常适合 AI 和 GPU 工作负载</h2><p>对于人工智能、机器学习和高性能计算 （ HPC ） 而言，GPU 支持至关重要。R760 最多支持两个 350W 双宽 GPU 和六个 75W 单宽 GPU，非常适合深度学习模型训练或实时 AI 推理等高要求任务。R660 仅限两个 75W 单宽 GPU（未来版本可能会增加更多 GPU），不太适合这些工作负载。</p>
+<p>R760 拥有八个 PCIe 插槽（R660 只有三个），可支持额外的加速器、高速 NIC 或 FPGA，从而增强其在 AI 驱动型数据中心中的多功能性。例如，一台 R760 即可处理可能需要多台 R660 才能处理的复杂 AI 工作负载，从而进一步降低电源、散热和基础设施成本。如果您的数据中心正在为 AI 做好准备，那么 R760 无疑是您的不二之选。</p>
+<h2 id="最后的想法：2U-对现代数据中心的优势"><a href="#最后的想法：2U-对现代数据中心的优势" class="headerlink" title="最后的想法：2U 对现代数据中心的优势"></a>最后的想法：2U 对现代数据中心的优势</h2><p>在 R660 和 R760 之间进行选择取决于您的工作负载和数据中心的限制。R660 的 1U 外形尺寸可最大程度地提高机架密度，使其成为空间受限且需要执行虚拟化等计算密集型任务的环境的理想之选。它每 U 配备 112 个核心和 8 TB 内存，并且每台服务器功耗较低（约 1200W），因此即使工作负载较轻也能高效运行。</p>
+<p>然而，R760 的 2U 设计在存储密集型、扩展驱动型或 GPU 密集型工作负载方面表现出色。它能够支持多达 24 个 2。 5 英寸或 12 个 3。 5 英寸硬盘、8 个 PCIe 插槽以及强大的 GPU，使其成为数据库、AI 和 HPC 的强大引擎。通过将资源整合到更少的服务器中，R760 降低了总功耗（约 1660W，而两台 R660 则为 2400W），并简化了网络基础设施，从而有可能大规模降低交换机和布线成本。两款服务器均受益于 DLC 技术，从而提高了冷却效率，但 R760 能够处理更强大的配置，这使其在高性能环境中更具优势。</p>
+<p>对于需要平衡空间、电力和冷却成本的现代数据中心来说，R760 通常是面向未来的最佳选择，尤其适用于人工智能和存储密集型应用。其多功能性和高效率使其成为数据驱动型企业的战略投资。有关详细规格，请查看<a target="_blank" rel="noopener" href="https://www.dell.com/en-us/shop/dell-poweredge-servers/poweredge-r760-rack-server/spd/poweredge-r760/pe_r760_16363_vi_vp">Dell PowerEdge R760</a>和<a target="_blank" rel="noopener" href="https://www.dell.com/en-us/shop/dell-poweredge-servers/poweredge-r660-rack-server/spd/poweredge-r660/pe_r660_16362_vi_vp">Dell PowerEdge R660</a>。</p>
+<h3 id="比较表：Dell-PowerEdge-R660-与-R760"><a href="#比较表：Dell-PowerEdge-R660-与-R760" class="headerlink" title="比较表：Dell PowerEdge R660 与 R760"></a>比较表：Dell PowerEdge R660 与 R760</h3><table>
+<thead>
+<tr>
+<th align="left">公制</th>
+<th align="left">戴尔 PowerEdge R660 ( 1U )</th>
+<th align="left">戴尔 PowerEdge R760 ( 2U )</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">外形尺寸</td>
+<td align="left">1U</td>
+<td align="left">2U</td>
+</tr>
+<tr>
+<td align="left">每U盘数量</td>
+<td align="left">12（10 个前轮 + 2 个后轮 2. 5 英寸）</td>
+<td align="left">14 ( 24 个前轮 + 4 个后轮 2. 5 英寸 ) &#x2F; 7 ( 12 个前轮 3. 5 英寸 + 4 个后轮 2. 5 英寸 )</td>
+</tr>
+<tr>
+<td align="left">每 U CPU 核心数</td>
+<td align="left">112（2 个 56 核 CPU）</td>
+<td align="left">56（2 个 56 核 CPU）</td>
+</tr>
+<tr>
+<td align="left">每U内存</td>
+<td align="left">8 TB（32 个 DDR5 DIMM）</td>
+<td align="left">4 TB（32 个 DDR5 DIMM）</td>
+</tr>
+<tr>
+<td align="left">每U预计功率</td>
+<td align="left">~1200瓦</td>
+<td align="left">约830瓦（1660瓦&#x2F;2）</td>
+</tr>
+<tr>
+<td align="left">最大电源</td>
+<td align="left">1800W（钛金）</td>
+<td align="left">2800W（钛金）</td>
+</tr>
+<tr>
+<td align="left">冷却选项</td>
+<td align="left">空气、可选 DLC、智能流量</td>
+<td align="left">空中，可选 DLC</td>
+</tr>
+<tr>
+<td align="left">PCIe 插槽</td>
+<td align="left">3</td>
+<td align="left">8</td>
+</tr>
+<tr>
+<td align="left">GPU 支持</td>
+<td align="left">2 x 75W 单宽</td>
+<td align="left">2 x 350W 双宽 + 6 x 75W 单宽</td>
+</tr>
+<tr>
+<td align="left">起始价格</td>
+<td align="left">约 5, 616 美元</td>
+<td align="left">约 12, 282 美元</td>
+</tr>
+</tbody></table>
+<hr>
+<p>本文译自: </p>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8/">服务器</a><a class="post-meta__tags" href="/tags/rack-server/">rack-server</a></div><div class="post-share"><div class="social-share" data-image="https://cdn.sujx.net/covers/cover98.jpg" data-sites="facebook,twitter,weibo,qq"></div><link rel="stylesheet" href="/libs/sharejs/css/share.min.css" media="print" onload="this.media='all'"><script src="/libs/sharejs/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>能否请我喝一杯咖啡？</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.jpg" target="_blank"><img class="post-qr-code-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/wechat.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/04/24/Opinon-Monitor/" title="「新媒体舆情监测与管理」"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover95.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">「新媒体舆情监测与管理」</div></div><div class="info-2"><div class="info-item-1"> 每一个个体都认为自己是独立思考，自己的思想具有独立性以及原创性，所做的选择出自于自我自由意志的选择，但整体所呈现出来的却是大家一致的共同性。  人类经历了口语传播时代、文字传播时代、印刷传播时代、电子传播时代等多个不同的历史发展阶段。随着互联网时代的到来，新的信息的产生、发布和传播模式，带来了舆情的发生、发展的新变革，也使得网络舆情相比以往口口相传的社会舆情具有更加空前的影响力。    03 天津空港经济开发区·中国移动空港机房   网络时代与网络舆情网络时代信息传播的特点内容的特点 丰富多样 可存储性 易检索性 易复制性 多形态性  传播的特点 即时性 交互性 综合性 便捷性 成本低  主体的特点 虚拟性 多元化 主体性 自由性 自主性  受众的特点 群体性 个体性 自由性  理解舆情和网络舆情 舆情基本上就是对一些事实从道义上加以解释和经过整理的一种看法  舆情通俗地讲就是社情民意，是指社会各阶层民众对社会存在和发展所持有的情绪、态度、看法意见和行为倾向。 网络舆情是社会民众在网络空间对公共事务和公共性问题以及具体事件产生或发表的情绪、意见、看法、态度、诉求的交汇与综合。 ...</div></div></div></a><a class="pagination-related" href="/2025/04/09/Migrate-Website/" title="一个站点的迁移"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover93.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">一个站点的迁移</div></div><div class="info-2"><div class="info-item-1">手头有一台遗留的Web站点，使用LAMP和Nodejs技术架构的展示站点。因为技术栈老旧，还是使用17年左右的野生部署脚本编译安装的，后期维护困难较大，所以需要做一下迁移。原始版本是使用CentOS 7。 9以及PHP 7。 3。 13、MySQL 5。 7、NodeJS 16，部署于本地虚拟化系统。因为外网访问量不大，但又是必须对外展示的一部分，所以就由本地虚机向阿里云主机迁移。规划数据库使用RDS，搭配ECS（RockyLinux 9。 5 ）和CDN来使用。 这里就记录一下迁移的部署方式，以作备案。    09  北京·延庆·航空工业博物馆   环境准备System# 开启网络BBR模块echo &quot;net.core.default_qdisc=fq&quot; &gt;&gt; /etc/sysctl.confecho &quot;net.ipv4. tcp_congestion_control=bbr&quot; &gt;&gt; /etc/sysctl.confsysctl -p# 打开连接数限制echo &quot;* hard nofile 64000&q...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2024/10/27/iDrac-Whatis/" title="iDrac的进化"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover67.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-10-27</div><div class="info-item-2">iDrac的进化</div></div><div class="info-2"><div class="info-item-1">iDRAC是嵌入在主板上的控制器卡，它提供基本管理级别。通过OpenManage套件在操作系统级别提供高级管理选项。此套件是一组可帮助您进行查找、监控、管理和部署戴尔服务器的软件。  戴尔iDRAC，即集成戴尔远程访问控制器，是用于戴尔PowerEdge服务器带外管理的硬件和软件解决方案。 iDRAC旨在实现安全的本地和远程服务器管理，允许IT管理员从任何位置部署、更新、监控和维护戴尔PowerEdge服务器，而无需在服务器上安装或运行操作系统或代理。 在服务器管理方面，很少有技术能像戴尔的集成戴尔远程访问控制器（通常称为iDRAC）那样产生深远的影响。从它的诞生到目前的迭代，iDRAC一直是服务器技术演进的领导者。 21世纪初 - 早期带外管理的概念并不新鲜，但戴尔旨在为其PowerEdge服务器系列完善这一概念。最终演变成iDRAC的第一个版本是作为单独的卡片随戴尔PowerEdge服务器引入的。这是在21世纪初，当时服务器虚拟化和云计算才刚刚开始成形。随着数据中心规模和复杂性的增长，远程管理的需求变得至关重要。 iDRAC6 - 游戏规则改变者2009年 - 向前迈出的一大...</div></div></div></a><a class="pagination-related" href="/2024/03/06/How-to-Select-Datacenter/" title="如何选择IDC"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover40.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-03-06</div><div class="info-item-2">如何选择IDC</div></div><div class="info-2"><div class="info-item-1">什么是数据中心？数据中心是承载 IT 基础架构的实体房间、建筑或设施，用于构建、运行和交付应用和服务，以及存储和管理与这些应用和服务相关的数据。 近年来，数据中心已从专供一家企业使用并受到严格控制的私有本地设施，发展成为由云服务提供商拥有的远程设施或这些设施构成的网络，这些设施容纳虚拟化的 IT 基础架构，供多家企业和客户共享使用。  数据中心的选择空间环境评估地质环境 五个远离：远离水\土\火\污\磁 三个临近: 靠近市政主干道 临近公共交通站 临近城市及生活商业区   一个确保：确保良好的移动信号， 保证联络通常  空间结构 机房的抗震等级和载荷（ GB50223-2008 ） 外场地空间的选择 机房的选择 机柜的选择 辅助区域的选择  基础设施评估电气系统 可靠性要求  输电侧的高可靠性 全路径的所有节点要保证充分冗余 备用方案的持续支援能力   用电安全要求  机房接地系统必须满足要求 所有设备的可导电外壳均应做等电位连接， 不应有对地绝缘的孤立导体 机房所在大楼的接地电阻应小于1Ω 机房地板或者地面应有静电泄放措施   电力容量要求  不推荐使用20A以下机柜， 最好使...</div></div></div></a><a class="pagination-related" href="/2023/12/23/Server-Host-Check-Template/" title="「服务器巡检和维护报告」模板"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023/12/wallhaven-439e19.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-12-23</div><div class="info-item-2">「服务器巡检和维护报告」模板</div></div><div class="info-2"><div class="info-item-1"> 服务器巡检和维护报告巡检时间2022年12月30日 巡检人员小明 基础信息服务器名称：WebServer001IP地址：192. 168. 1. 100服务器类型：虚拟化应用服务器巡检内容系统状态   监控项目 主机状态    CPU使用率 50%   内存使用率 70%   硬盘使用率 40%   网络流量 12. 8GB   服务状态   服务名称 服务状态    WEB服务 运行正常   数据库服务 运行正常   邮件服务 运行正常   其他服务 运行正常   安全检查   安全项目 运行状态    防火墙设置 已启用   安全漏洞扫描 无高危漏洞   病毒扫描 无病毒感染   备份检查   备份项目 检查状态    系统备份 已备份   数据备份 已备份   存在风险问题记录、解决方案及预期解决时间表   问题编号 问题描述 问题表现 影响范围 发生频率 解决方案 操作步骤 预计解决时间    1 系统日志管理不善 日志堆积，未及时清理，占用磁盘空间 本地主机 每季度 优化日志管理策略 建立日志轮转清理脚本 2023年1月10日   风险分析优化日志管理策略，可能会需要...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">靖轩</div><div class="author-info-description">逝者如斯夫,不舍昼夜</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/grepsu"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://gitee.com/grepsu" target="_blank" title="Gitee"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:sujx@live.cn" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS链接"><i class="fa  fa-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%BA%E6%9E%B6%E7%A9%BA%E9%97%B4%E7%9C%9F%E7%9A%84%E6%98%AF%E5%86%B3%E5%AE%9A%E5%9B%A0%E7%B4%A0%E5%90%97%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">机架空间真的是决定因素吗？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97%E5%92%8C%E5%86%85%E5%AD%98%E5%A6%82%E4%BD%95%E5%8F%A0%E5%8A%A0%EF%BC%9F"><span class="toc-number">2.</span> <span class="toc-text">计算和内存如何叠加？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%B5%E5%8A%9B%E6%88%90%E6%9C%AC%E4%BC%9A%E5%BD%B1%E5%93%8D%E4%BD%A0%E7%9A%84%E9%80%89%E6%8B%A9%E5%90%97%EF%BC%9F"><span class="toc-number">3.</span> <span class="toc-text">电力成本会影响你的选择吗？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%B7%E5%8D%B4%E6%95%88%E7%8E%87%E6%98%AF%E5%90%A6%E8%B5%B7%E5%88%B0%E5%86%B3%E5%AE%9A%E6%80%A7%E4%BD%9C%E7%94%A8%EF%BC%9F"><span class="toc-number">4.</span> <span class="toc-text">冷却效率是否起到决定性作用？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88-2U-%E9%9D%9E%E5%B8%B8%E9%80%82%E5%90%88-AI-%E5%92%8C-GPU-%E5%B7%A5%E4%BD%9C%E8%B4%9F%E8%BD%BD"><span class="toc-number">5.</span> <span class="toc-text">为什么 2U 非常适合 AI 和 GPU 工作负载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%80%E5%90%8E%E7%9A%84%E6%83%B3%E6%B3%95%EF%BC%9A2U-%E5%AF%B9%E7%8E%B0%E4%BB%A3%E6%95%B0%E6%8D%AE%E4%B8%AD%E5%BF%83%E7%9A%84%E4%BC%98%E5%8A%BF"><span class="toc-number">6.</span> <span class="toc-text">最后的想法：2U 对现代数据中心的优势</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AF%94%E8%BE%83%E8%A1%A8%EF%BC%9ADell-PowerEdge-R660-%E4%B8%8E-R760"><span class="toc-number">6.1.</span> <span class="toc-text">比较表：Dell PowerEdge R660 与 R760</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/07/03/AIGC_FoxHole/" title="海鹰">海鹰</a><time datetime="2026-07-03T01:04:07.000Z" title="发表于 2026-07-03 09:04:07">2026-07-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/11/fristVibeCoding/" title="鹊随金印：我的第一个完整的AI编程项目">鹊随金印：我的第一个完整的AI编程项目</a><time datetime="2026-06-11T01:04:07.000Z" title="发表于 2026-06-11 09:04:07">2026-06-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/03/VI_Howto/" title="VI编辑器简介">VI编辑器简介</a><time datetime="2026-06-03T01:04:07.000Z" title="发表于 2026-06-03 09:04:07">2026-06-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/28/HNCitic_2605/" title="我要上头条">我要上头条</a><time datetime="2026-05-28T01:04:07.000Z" title="发表于 2026-05-28 09:04:07">2026-05-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/12/TS-Domain-Controller-Sync-Failure/" title="记一次Windows AD域控制器同步故障排错">记一次Windows AD域控制器同步故障排错</a><time datetime="2026-05-12T03:04:07.000Z" title="发表于 2026-05-12 11:04:07">2026-05-12</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2008 - 2026 By 靖轩</span></div><div class="footer_custom_text">京ICP备17034757号</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.5"></script><script src="/js/main.js?v=5.5.5"></script><script src="/libs/fancybox/fancybox.umd.js"></script><script src="/js/instantpage.js" type="module"></script><script src="/libs/lazyload/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const parseViewBox = viewBox => {
+    if (!viewBox) return null
+    const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
+    if (parts.length !== 4 || parts.some(n => Number.isNaN(n))) return null
+    return parts
+  }
+
+  const getSvgViewBox = svg => {
+    const attr = parseViewBox(svg.getAttribute('viewBox'))
+    if (attr) return attr
+
+    // Fallback: use bbox to build a viewBox
+    try {
+      const bbox = svg.getBBox()
+      if (bbox && bbox.width && bbox.height) return [bbox.x, bbox.y, bbox.width, bbox.height]
+    } catch (e) {
+      // getBBox may fail on some edge cases; ignore
+    }
+
+    const w = Number(svg.getAttribute('width')) || 0
+    const h = Number(svg.getAttribute('height')) || 0
+    if (w > 0 && h > 0) return [0, 0, w, h]
+    return [0, 0, 100, 100]
+  }
+
+  const setSvgViewBox = (svg, vb) => {
+    svg.setAttribute('viewBox', `${vb[0]} ${vb[1]} ${vb[2]} ${vb[3]}`)
+  }
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v))
+
+  const openSvgInNewTab = ({ source, initViewBox }) => {
+    const getClonedSvg = () => {
+      if (typeof source === 'string') {
+        const template = document.createElement('template')
+        template.innerHTML = source.trim()
+        const svg = template.content.querySelector('svg')
+        return svg ? svg.cloneNode(true) : null
+      }
+      if (source && typeof source.cloneNode === 'function') {
+        return source.cloneNode(true)
+      }
+      return null
+    }
+
+    const clone = getClonedSvg()
+    if (!clone) return
+    if (initViewBox && initViewBox.length === 4) {
+      clone.setAttribute('viewBox', initViewBox.join(' '))
+    }
+    if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+    if (!clone.getAttribute('xmlns:xlink') && clone.outerHTML.includes('xlink:')) {
+      clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+    }
+    // inject background to match current theme
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    const bg = getComputedStyle(document.body).backgroundColor || (isDark ? '#1e1e1e' : '#ffffff')
+    if (!clone.style.background) clone.style.background = bg
+
+    const serializer = new XMLSerializer()
+    const svgSource = serializer.serializeToString(clone)
+    const htmlSource = `<!doctype html><html><head><meta charset="utf-8" />
+      <style>
+        html, body { width: 100%; height: 100%; margin: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; }
+        svg { max-width: 100%; max-height: 100%; height: auto; width: auto; }
+      </style>
+      </head><body>${svgSource}</body></html>`
+    const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank', 'noopener')
+    setTimeout(() => URL.revokeObjectURL(url), 30000)
+  }
+
+  const attachMermaidViewerButton = wrap => {
+    let btn = wrap.querySelector('.mermaid-open-btn')
+    if (!btn) {
+      btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'mermaid-open-btn'
+      wrap.appendChild(btn)
+    }
+
+    btn.innerHTML = '<i class="fa fa-search fa-fw" aria-hidden="true"></i>'
+
+    if (!btn.__mermaidViewerBound) {
+      btn.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        const svg = wrap.__mermaidOriginalSvg || wrap.querySelector('svg')
+        if (!svg) return
+        const initViewBox = wrap.__mermaidInitViewBox
+        if (typeof svg === 'string') {
+          openSvgInNewTab({ source: svg, initViewBox })
+          return
+        }
+        openSvgInNewTab({ source: svg, initViewBox })
+      })
+      btn.__mermaidViewerBound = true
+    }
+  }
+
+  // Zoom around a point (px, py) in the SVG viewport (in viewBox coordinates)
+  const zoomAtPoint = (vb, factor, px, py) => {
+    const w = vb[2] * factor
+    const h = vb[3] * factor
+    const nx = px - (px - vb[0]) * factor
+    const ny = py - (py - vb[1]) * factor
+    return [nx, ny, w, h]
+  }
+
+  const initMermaidGestures = wrap => {
+    const svg = wrap.querySelector('svg')
+    if (!svg) return
+
+    // Ensure viewBox exists so gestures always work
+    const initVb = getSvgViewBox(svg)
+    wrap.__mermaidInitViewBox = initVb
+    wrap.__mermaidCurViewBox = initVb.slice()
+    setSvgViewBox(svg, initVb)
+
+    // Avoid binding multiple times on themeChange/pjax
+    if (wrap.__mermaidGestureBound) return
+    wrap.__mermaidGestureBound = true
+
+    // Helper: map client (viewport) coordinate -> viewBox coordinate
+    const clientToViewBox = (clientX, clientY) => {
+      const rect = svg.getBoundingClientRect()
+      const vb = wrap.__mermaidCurViewBox || getSvgViewBox(svg)
+      const x = vb[0] + (clientX - rect.left) * (vb[2] / rect.width)
+      const y = vb[1] + (clientY - rect.top) * (vb[3] / rect.height)
+      return { x, y, rect, vb }
+    }
+
+    const state = {
+      pointers: new Map(),
+      startVb: null,
+      startDist: 0,
+      startCenter: null
+    }
+
+    const clampVb = vb => {
+      const init = wrap.__mermaidInitViewBox || vb
+      const minW = init[2] * 0.1
+      const maxW = init[2] * 10
+      const minH = init[3] * 0.1
+      const maxH = init[3] * 10
+      vb[2] = clamp(vb[2], minW, maxW)
+      vb[3] = clamp(vb[3], minH, maxH)
+      return vb
+    }
+
+    const setCurVb = vb => {
+      vb = clampVb(vb)
+      wrap.__mermaidCurViewBox = vb
+      setSvgViewBox(svg, vb)
+    }
+
+    const onPointerDown = e => {
+      // Allow only primary button for mouse
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      svg.setPointerCapture(e.pointerId)
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      if (state.pointers.size === 1) {
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      } else if (state.pointers.size === 2) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        state.startDist = Math.hypot(dx, dy)
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        state.startCenter = { x: (pts[0].x + pts[1].x) / 2, y: (pts[0].y + pts[1].y) / 2 }
+      }
+    }
+
+    const onPointerMove = e => {
+      if (!state.pointers.has(e.pointerId)) return
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      // Pan with 1 pointer
+      if (state.pointers.size === 1 && state.startVb) {
+        const p = [...state.pointers.values()][0]
+        const prev = { x: e.clientX - e.movementX, y: e.clientY - e.movementY }
+        // movementX/Y unreliable on touch, compute from stored last position
+        const last = wrap.__mermaidLastSinglePointer || p
+        const dxClient = p.x - last.x
+        const dyClient = p.y - last.y
+        wrap.__mermaidLastSinglePointer = p
+
+        const { rect } = clientToViewBox(p.x, p.y)
+        const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        const dx = dxClient * (vb[2] / rect.width)
+        const dy = dyClient * (vb[3] / rect.height)
+        setCurVb([vb[0] - dx, vb[1] - dy, vb[2], vb[3]])
+        return
+      }
+
+      // Pinch zoom with 2 pointers
+      if (state.pointers.size === 2 && state.startVb && state.startDist > 0) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        const dist = Math.hypot(dx, dy)
+        if (!dist) return
+        const factor = state.startDist / dist // dist bigger => zoom in (viewBox smaller)
+
+        const cx = (pts[0].x + pts[1].x) / 2
+        const cy = (pts[0].y + pts[1].y) / 2
+        const centerClient = { x: cx, y: cy }
+
+        const pxy = clientToViewBox(centerClient.x, centerClient.y)
+        const cpx = pxy.x
+        const cpy = pxy.y
+
+        const vb = zoomAtPoint(state.startVb, factor, cpx, cpy)
+        setCurVb(vb)
+      }
+    }
+
+    const onPointerUpOrCancel = e => {
+      state.pointers.delete(e.pointerId)
+      if (state.pointers.size === 0) {
+        state.startVb = null
+        state.startDist = 0
+        state.startCenter = null
+        wrap.__mermaidLastSinglePointer = null
+      } else if (state.pointers.size === 1) {
+        // reset single pointer baseline to avoid jump
+        wrap.__mermaidLastSinglePointer = [...state.pointers.values()][0]
+      }
+    }
+
+    // Wheel zoom (mouse/trackpad)
+    const onWheel = e => {
+      // ctrlKey on mac trackpad pinch; we treat both as zoom
+      e.preventDefault()
+      const delta = e.deltaY
+      const zoomFactor = delta > 0 ? 1.1 : 0.9
+      const { x, y } = clientToViewBox(e.clientX, e.clientY)
+      const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      setCurVb(zoomAtPoint(vb, zoomFactor, x, y))
+    }
+
+    const onDblClick = () => {
+      const init = wrap.__mermaidInitViewBox
+      if (!init) return
+      wrap.__mermaidCurViewBox = init.slice()
+      setSvgViewBox(svg, init)
+    }
+
+    svg.addEventListener('pointerdown', onPointerDown)
+    svg.addEventListener('pointermove', onPointerMove)
+    svg.addEventListener('pointerup', onPointerUpOrCancel)
+    svg.addEventListener('pointercancel', onPointerUpOrCancel)
+    svg.addEventListener('wheel', onWheel, { passive: false })
+    svg.addEventListener('dblclick', onDblClick)
+  }
+
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+
+      // Clear old render (themeChange/pjax will rerun)
+      const oldSvg = item.querySelector('svg')
+      if (oldSvg) oldSvg.remove()
+      item.__mermaidGestureBound = false
+
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+        if (true) initMermaidGestures(item)
+        item.__mermaidOriginalSvg = svg
+        if (true) attachMermaidViewerButton(item)
+      }
+
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('/libs/mermaid/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.5"></script></div></div></body></html>

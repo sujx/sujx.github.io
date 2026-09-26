@@ -1,0 +1,540 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>使用winget实现软件管理 | 靖轩</title><meta name="author" content="靖轩"><meta name="copyright" content="靖轩"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="简介winget是微软在Windows 1809之后提供的综合性程序包管理器解决方案，最新的Windows 10&#x2F;11 22H2 版本已经内置。简单来说，就是Windows 具备了类似apt、yum、pcman之类在终端直接部署和管理软件的包管理器。 基本使用格式为： winget [命令] ID 官方使用指南：  文档地址 Windows开发环境  WinGet 命令行实用工具可从命令">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用winget实现软件管理">
+<meta property="og:url" content="https://www.sujx.net/2023/01/20/powershell-winget/index.html">
+<meta property="og:site_name" content="靖轩">
+<meta property="og:description" content="简介winget是微软在Windows 1809之后提供的综合性程序包管理器解决方案，最新的Windows 10&#x2F;11 22H2 版本已经内置。简单来说，就是Windows 具备了类似apt、yum、pcman之类在终端直接部署和管理软件的包管理器。 基本使用格式为： winget [命令] ID 官方使用指南：  文档地址 Windows开发环境  WinGet 命令行实用工具可从命令">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.sujx.net/2024/06/wallhaven-4ljkpp.jpg">
+<meta property="article:published_time" content="2023-01-20T07:04:07.000Z">
+<meta property="article:modified_time" content="2026-09-26T02:25:04.260Z">
+<meta property="article:author" content="靖轩">
+<meta property="article:tag" content="Windows">
+<meta property="article:tag" content="powershell">
+<meta property="article:tag" content="winget">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.sujx.net/2024/06/wallhaven-4ljkpp.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "使用winget实现软件管理",
+  "url": "https://www.sujx.net/2023/01/20/powershell-winget/",
+  "image": "https://cdn.sujx.net/2024/06/wallhaven-4ljkpp.jpg",
+  "datePublished": "2023-01-20T07:04:07.000Z",
+  "dateModified": "2026-09-26T02:25:04.260Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "靖轩",
+      "url": "https://www.sujx.net"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://cdn.sujx.net/about/favicon.png"><link rel="canonical" href="https://www.sujx.net/2023/01/20/powershell-winget/index.html"><link rel="preconnect" href="//cdnjs.cloudflare.com"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css?v=5.5.5"><link rel="stylesheet" href="/fonts/css/all.min.css"><link rel="stylesheet" href="/libs/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?417b20ac1984432f821159fac27d3bb5";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><link rel="stylesheet" href="/fonts/titillium-web.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: '/libs/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: true,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '使用winget实现软件管理',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="alternate" href="/atom.xml" title="靖轩" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">靖轩</span></a><a class="nav-page-title" href="/"><span class="site-name">使用winget实现软件管理</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">使用winget实现软件管理</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-01-20T07:04:07.000Z" title="发表于 2023-01-20 15:04:07">2023-01-20</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-09-26T02:25:04.260Z" title="更新于 2026-09-26 10:25:04">2026-09-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F/">应用程序</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">972</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>3分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>winget是微软在Windows 1809之后提供的综合性程序包管理器解决方案，最新的Windows 10&#x2F;11 22H2 版本已经内置。简单来说，就是Windows 具备了类似apt、yum、pcman之类在终端直接部署和管理软件的包管理器。</p>
+<p>基本使用格式为： winget [命令] ID</p>
+<p>官方使用指南：</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows/package-manager/">文档地址</a></li>
+<li><a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows/dev-environment/">Windows开发环境</a></li>
+</ol>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">WinGet 命令行实用工具可从命令行安装应用程序和其他程序包。</span><br><span class="line"></span><br><span class="line">使用情况: winget [&lt;命令&gt;] [&lt;选项&gt;]</span><br><span class="line"></span><br><span class="line">下列命令有效:</span><br><span class="line">  install    安装给定的程序包</span><br><span class="line">  show       显示包的相关信息</span><br><span class="line">  source     管理程序包的来源</span><br><span class="line">  search     查找并显示程序包的基本信息</span><br><span class="line">  list       显示已安装的程序包</span><br><span class="line">  upgrade    显示并执行可用升级</span><br><span class="line">  uninstall  卸载给定的程序包</span><br><span class="line">  hash       哈希安装程序的帮助程序</span><br><span class="line">  validate   验证清单文件</span><br><span class="line">  settings   打开设置或设置管理员设置</span><br><span class="line">  features   显示实验性功能的状态</span><br><span class="line">  export     导出已安装程序包的列表</span><br><span class="line">  import     安装文件中的所有程序包</span><br><span class="line">  pin        管理包钉，即排除指定软件为更新项</span><br><span class="line"></span><br><span class="line">如需特定命令的更多详细信息，请向其传递帮助参数。 [-?]</span><br><span class="line"></span><br><span class="line">下列选项可用：</span><br><span class="line">  <span class="literal">-v</span>, <span class="literal">--version</span>              显示工具的版本</span><br><span class="line">  <span class="literal">--info</span>                    显示工具的常规信息</span><br><span class="line">  -?, <span class="literal">--help</span>                 显示选定命令的帮助信息</span><br><span class="line">  <span class="literal">--wait</span>                    提示用户在退出前按任意键</span><br><span class="line">  <span class="literal">--logs</span>, <span class="literal">--open-logs</span>        打开默认日志位置</span><br><span class="line">  <span class="literal">--verbose</span>, <span class="literal">--verbose-logs</span>  启用 WinGet 的详细日志记录</span><br><span class="line">  <span class="literal">--disable-interactivity</span>   禁用交互式提示</span><br><span class="line"></span><br><span class="line">可在此找到更多帮助: <span class="string">&quot;https://aka.ms/winget-command-help&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><h3 id="搜索指定软件包"><a href="#搜索指定软件包" class="headerlink" title="搜索指定软件包"></a>搜索指定软件包</h3><p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023pic/winget-001.PNG"></p>
+<h3 id="列出当前系统软件"><a href="#列出当前系统软件" class="headerlink" title="列出当前系统软件"></a>列出当前系统软件</h3><p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023pic/winget-002.PNG"></p>
+<h3 id="升级可用包"><a href="#升级可用包" class="headerlink" title="升级可用包"></a>升级可用包</h3><p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023pic/winget-003.PNG"></p>
+<h3 id="使用代理"><a href="#使用代理" class="headerlink" title="使用代理"></a>使用代理</h3><p>在拉取Github上托管程序的时候候，会遇到网络不可用的问题，例如上图。这就需要在开启代理之后，需要设置powershell的代理访问。<br>在安装vscode之后，使用如下命令，打开powershell的<a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/powershell/scripting/learn/shell/creating-profiles?view=powershell-7.3">当前用户配置文件</a></p>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">code <span class="variable">$PROFILE</span></span><br></pre></td></tr></table></figure>
+
+<p>设立两个自定义命令：</p>
+<ol>
+<li>开始使用本地代理：spp</li>
+<li>停止使用本地代理：upp</li>
+</ol>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">set_proxy_variable</span></span> &#123;</span><br><span class="line">	<span class="built_in">Set-Item</span> Env:http_proxy <span class="string">&quot;http://127. 0. 0. 1:33210&quot;</span> </span><br><span class="line">	<span class="built_in">Set-Item</span> Env:https_proxy <span class="string">&quot;http://127. 0. 0. 1:33210&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">unset_proxy_variable</span></span> &#123;</span><br><span class="line">    <span class="built_in">Remove-Item</span> Env:http_proxy</span><br><span class="line">    <span class="built_in">Remove-Item</span> Env:https_proxy</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">New-Alias</span> <span class="literal">-Name</span> spp <span class="literal">-Value</span> set_proxy_variable</span><br></pre></td></tr></table></figure>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023pic/winget-004.PNG"></p>
+<h3 id="设定不更新指定软件包"><a href="#设定不更新指定软件包" class="headerlink" title="设定不更新指定软件包"></a>设定不更新指定软件包</h3><p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023pic/winget-005.PNG"></p>
+<h3 id="升级全部可升级软件包"><a href="#升级全部可升级软件包" class="headerlink" title="升级全部可升级软件包"></a>升级全部可升级软件包</h3><p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023pic/winget-006.PNG"></p>
+<h2 id="进阶"><a href="#进阶" class="headerlink" title="进阶"></a>进阶</h2><h3 id="批量部署软件"><a href="#批量部署软件" class="headerlink" title="批量部署软件"></a>批量部署软件</h3><p>可以使用export和import这两个参数项来管理json文件，从而实现软件的批量安装。</p>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">winget export <span class="literal">-o</span> Thinkpad<span class="literal">-install-soft</span>.json</span><br><span class="line">winget import <span class="literal">-i</span> Thinkpad<span class="literal">-install-soft</span>.json</span><br></pre></td></tr></table></figure>
+<h3 id="使用脚本部署"><a href="#使用脚本部署" class="headerlink" title="使用脚本部署"></a>使用脚本部署</h3><p>winget也支持编写bat处理脚本来执行软件的部署。</p>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">@<span class="built_in">echo</span> off  </span><br><span class="line"><span class="built_in">Echo</span> Install Powertoys and Terminal  </span><br><span class="line">REM Powertoys  </span><br><span class="line">winget install Microsoft. Powertoys  </span><br><span class="line"><span class="keyword">if</span> %ERRORLEVEL% EQU <span class="number">0</span> <span class="built_in">Echo</span> Powertoys installed successfully.  </span><br><span class="line">REM Terminal  </span><br><span class="line">winget install Microsoft. WindowsTerminal  </span><br><span class="line"><span class="keyword">if</span> %ERRORLEVEL% EQU <span class="number">0</span> <span class="built_in">Echo</span> Terminal installed successfully.   %ERRORLEVEL%</span><br></pre></td></tr></table></figure>
+
+<h3 id="开启自动补全"><a href="#开启自动补全" class="headerlink" title="开启自动补全"></a>开启自动补全</h3><p>通过编辑powershell的启动文件可以实现winget命令的自动补全：</p>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line"><span class="built_in">Register-ArgumentCompleter</span> <span class="literal">-Native</span> <span class="literal">-CommandName</span> winget <span class="literal">-ScriptBlock</span> &#123;</span><br><span class="line">    <span class="keyword">param</span>( <span class="variable">$wordToComplete</span>, <span class="variable">$commandAst</span>, <span class="variable">$cursorPosition</span> )</span><br><span class="line">        [<span class="type">Console</span>]::InputEncoding = [<span class="type">Console</span>]::OutputEncoding = <span class="variable">$OutputEncoding</span> = [<span class="type">System.</span> <span class="type">Text.</span> <span class="type">Utf8Encoding</span>]::new()</span><br><span class="line">        <span class="variable">$Local:word</span> = <span class="variable">$wordToComplete</span>. Replace( <span class="string">&#x27;&quot;&#x27;</span>, <span class="string">&#x27;&quot;&quot;&#x27;</span> )</span><br><span class="line">        <span class="variable">$Local:ast</span> = <span class="variable">$commandAst</span>. ToString(). Replace( <span class="string">&#x27;&quot;&#x27;</span>, <span class="string">&#x27;&quot;&quot;&#x27;</span> )</span><br><span class="line">        winget complete <span class="literal">--word</span>=<span class="string">&quot;<span class="variable">$Local:word</span>&quot;</span> <span class="literal">--commandline</span> <span class="string">&quot;<span class="variable">$Local:ast</span>&quot;</span> <span class="literal">--position</span> <span class="variable">$cursorPosition</span> | <span class="built_in">ForEach-Object</span> &#123;</span><br><span class="line">            [<span class="type">System.</span> <span class="type">Management.</span> <span class="type">Automation.</span> <span class="type">CompletionResult</span>]::new( <span class="variable">$_</span>, <span class="variable">$_</span>, <span class="string">&#x27;ParameterValue&#x27;</span>, <span class="variable">$_</span> )</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="更改镜像源"><a href="#更改镜像源" class="headerlink" title="更改镜像源"></a>更改镜像源</h3><p>更改镜像源需要两个条件：</p>
+<ol>
+<li>使用管理员权限操作终端或者powershell；</li>
+<li>需要临时关闭Windows安全中心的SmartScreen</li>
+</ol>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">winget source remove winget</span><br><span class="line">winget source add winget https://mirrors.ustc.edu.cn/win<span class="built_in">get-source</span></span><br></pre></td></tr></table></figure>
+
+<p>关闭SmartScreen的路径如下：</p>
+<p>Windows安全中心——&gt;应用和浏览器控制——&gt;基于声誉的保护<br><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023pic/winget-010.PNG"></p>
+<h2 id="客户端"><a href="#客户端" class="headerlink" title="客户端"></a>客户端</h2><p>基于winget的功能，第三方开发科WingetGUI程序，<a target="_blank" rel="noopener" href="https://www.marticliment.com/wingetui/">官网</a>，可以使用图形化的方式来使用winget。</p>
+<h3 id="搜索安装可用包"><a href="#搜索安装可用包" class="headerlink" title="搜索安装可用包"></a>搜索安装可用包</h3><p>很多国产软件都可以直接winget安装使用<br><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023pic/winget-007.PNG"></p>
+<h3 id="管理已安装软件"><a href="#管理已安装软件" class="headerlink" title="管理已安装软件"></a>管理已安装软件</h3><p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023pic/winget-008.PNG"></p>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Windows/">Windows</a><a class="post-meta__tags" href="/tags/winget/">winget</a><a class="post-meta__tags" href="/tags/powershell/">powershell</a></div><div class="post-share"><div class="social-share" data-image="https://cdn.sujx.net/2024/06/wallhaven-4ljkpp.jpg" data-sites="facebook,twitter,weibo,qq"></div><link rel="stylesheet" href="/libs/sharejs/css/share.min.css" media="print" onload="this.media='all'"><script src="/libs/sharejs/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>能否请我喝一杯咖啡？</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.jpg" target="_blank"><img class="post-qr-code-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/wechat.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2023/01/23/ISO27001-Deploy/" title="从无到有通过ISO27001认证"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover23.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">从无到有通过ISO27001认证</div></div><div class="info-2"><div class="info-item-1">建设篇安全是一个不断的持续的过程，每个环节都不可缺少，在安全的路上懂的越多发现自己不懂的越多。 1概述我在某做WL的公司负责公司整体安全，保护公司业务系统的安全（这个系统会有大部分看官的个人信息）。公司业务发展很快，但是信息化基础建设很落后，管理不规范，人员技术水平参差不齐，对网络和安全没有认识。领导对安全概念模糊，无法落实；因为是新来的，领导对提出的解决方案有选择的进行，但是有个好的地方就是公司发展太快，出现过不少安全问题，给我们安全部带来了外部推动力（虽然不想出事，但是出事了可以加快安全建设的脚步）。 一年的时候间从什么都没到现在的逐渐成型、各种安全流程的建立和落地，建了ISO27001安全体系（通过了认证），此篇文章进行了一个总结，期间也碰到了的很多坑和挫折，自己也在这个过程中学习了成长了，这里再次感谢帮助过我的朋友们，感谢安全部另外一位X大牛。 2对ISO27001理解通过一年的时候间对从0到拿证的过程，简单说一下我对ISO27001的理解：不管是ISO27001还是安全我觉得都是围绕着业务进行的，一切的出发点都是保证业务的连续的、稳定的运行，要保证业务的连续的、稳定的运...</div></div></div></a><a class="pagination-related" href="/2023/01/11/Ansible-Howto/" title="Ansible的使用入门"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover27.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Ansible的使用入门</div></div><div class="info-2"><div class="info-item-1">简介Ansible的名字来源于小说《安德的游戏》中超时空的即时通信工具，可以使用它远程实时控制前线舰队的战斗。2012年3月发布0. 0. 1版，2015年为Redhat收购。 宗旨 Keep Things Simple Stay Organized Test Often  优点 具有数千个功能丰富的模块 使用和部署简单 安全 幂等性 支持使用YAML格式进行playbook的任务编排 具有较强大的多层解决方案  缺点 不支持一般性事务回滚 对于大量主机执行效率差，如不saltstack效率高  组成 Inventory：主机清单文件，提供主机信息和主机分组信息 Modules：执行命令的功能模块 Plugins：功能模块的补充 API：供第三方程序调用的编程接口  安装部署# Rocklinux 需要BaseOS、APPstream、EPEL三个软件源的支持[sujx@master ~]$ yum info ansibleName         : ansibleVersion      : 7. 2. 0Release      : 1. el8Architecture :...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2022/06/01/powershell-remote-netadapter/" title="远程搜集主机网卡信息"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/wallhaven-4lekzl.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2022-06-01</div><div class="info-item-2">远程搜集主机网卡信息</div></div><div class="info-2"><div class="info-item-1">远程搜集主机网卡信息开启功能客户端默认情况下，在Windows 10或者11 首次执行powershell脚本会提示”系统禁止脚本运行“的错误。这是因为M$为了安全，把powershell的脚本执行策略设定为有数字证书的才允许执行。因此，需要执行脚本的方法一个是使用合法的数字证书对脚本进行签名： # 获取合法的PFX证书（ IIS版本SSL证书 ）# 一般情况下都会为证书设置密码，所以这一步需要输入密码进行验证$cert = Get-PfxCertificate -FilePath &quot;test.pfx&quot;# 然后为 demo.ps1 脚本文件签名：Set-AuthenticodeSignature -FilePath &quot;demo.ps1&quot; `    -Certificate $cert -IncludeChain &quot;All&quot; `    -TimeStampServer &quot;http://timestamp.verisign.com/scripts/timstamp.dll&quot;  或者我们干脆取消这一限制： ...</div></div></div></a><a class="pagination-related" href="/2022/07/01/powershell-vm-netacl/" title="使用PowerShell脚本管理Hyper-V宿主机上的虚机网卡访问ACL规则"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/07/20240803100728.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2022-07-01</div><div class="info-item-2">使用PowerShell脚本管理Hyper-V宿主机上的虚机网卡访问ACL规则</div></div><div class="info-2"><div class="info-item-1">使用PowerShell脚本管理Hyper-V宿主机上的虚机网卡访问ACL规则前情 标题也太绕了  The Add-VMNetworkAdapterExtendedAcl cmdlet creates an extended access control list ( ACL ) for a virtual network adapter. The ACL allows or denies access to a virtual machine network adapter for network packets based on source IP address, destination IP address, protocol, source port, and destination port. 官方文档 其实在单一Hyper-V宿主机上实现对其上运行的VM网络访问限制，主要是对非集群化部署有用，一旦涉及群集部署或者动态迁移，这个功能就没用了。这些规则是写到宿主机里面的，不会跟随VM而迁移。不过，对于边缘部署或者固定节点部署的VM还是有用的。 脚本实现# 使用Power...</div></div></div></a><a class="pagination-related" href="/2021/02/02/change-localadmin-password/" title="批量修改Windows主机本地管理员密码"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/06/wallhaven-4ljkpp.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-02-02</div><div class="info-item-2">批量修改Windows主机本地管理员密码</div></div><div class="info-2"><div class="info-item-1">在Windows活动目录中的主机依据合规的要求，至少每年都应当按照密码规则进行一次本地管理员的密码变更。 以下脚本是使用有域管理员权限的域账号进行批量执行来修改主机管理员密码。 # Windows域主机变更本地管理员密码脚本# 执行需要有本地主机管理员权限的域账号# 执行需要本地主机开启powershell远程执行权限# 引入需要变更密码的主机$VMList = @( &#x27;server1&#x27;, &#x27;server2&#x27;, &#x27;server3&#x27;, &#x27;server4&#x27; )# 设立一个函数来执行密码变更function ChangeAdminPwd( $VMName )&#123;	# 设定本地密码规则，非随机密码，便于使用passgen配合主机名和加盐规则推导主机密码    $LocalPwd = &#x27;#&#x27; + ( (cmd /c &quot;PassGen.exe -g $VMName billgate -l 20 -e 2&quot; ) -split &quot; &quot; )[4]   ...</div></div></div></a><a class="pagination-related" href="/2025/01/19/Python-editor/" title="基于本地AI的Python编程环境搭建"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover78.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-01-19</div><div class="info-item-2">基于本地AI的Python编程环境搭建</div></div><div class="info-2"><div class="info-item-1">随着大模型技术的普及，开发者可以通过集成这些工具来加速开发流程。VSCode 提供了一个高度可配置的编辑器，非常适合用于设置和管理复杂的工作流程。本文将指导您如何在 VSCode 中安装并配置 Ollama 和 DeepSeek 大模型框架，以构建一个Windows上的高效开发环境。    01 北京·月坛   基本条件 winget # 当遇到winget无法在默认源中找到任何包的时候候, 比如如下情况PS C:\Users\root&gt; winget search ollama尝试更新源失败： winget搜索源时失败;结果将不包括在内： wingetPS C:\Users\root&gt; winget install Microsoft. PowerShell搜索源时失败: winget执行此命令时发生意外错误：0x8a15000f : Data required by the source is missing在工作源中找不到任何包。PS C:\Windows\system32&gt; winget source add winget https://mirrors...</div></div></div></a><a class="pagination-related" href="/2020/04/07/hyper-v-host-init/" title="Hyper-V主机的开局"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover33.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-04-07</div><div class="info-item-2">Hyper-V主机的开局</div></div><div class="info-2"><div class="info-item-1">Hyper-V是微软推出的虚拟化平台，它具有免费、高效、功能完备和安全的特性，但他的管理是基于powershell和winrm来进行管理配置。习惯了windows的图形界面配置和Linux的Bash管理，初次上手还是有点难度。   欧亚大陆实际地形图  安装略，…… 初始配置开局默认可以使用sconfig这个TUI工具来进行改计算机名、加域、调整时间、设置IP地址等初始化操作。 安装Windows功能# 安装Hyper-V Powershell Install-WindowsFeature Hyper-V-PowerShell# 安装SNMP服务Install-WindowsFeature SNMP-Service# 安装数据中心桥接功能Install-WindowsFeature Data-Center-BridgingInstall-WindowsFeature Data-Center-Bridging -IncludeManagementTools# 打开ICMP Ping功能Enable-NetFirewallRule -Name FPS-ICMP4-ERQ-In# 打开...</div></div></div></a><a class="pagination-related" href="/2021/12/23/hfs-how-to/" title="使用HFS提供简单文件共享服务"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/wallhaven-0j2llm.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-12-23</div><div class="info-item-2">使用HFS提供简单文件共享服务</div></div><div class="info-2"><div class="info-item-1">背景 财务部门有台银行业务前置机，按银行IT要求是是非域独立部署的Windows客户端主机； 开发需要调用上面接收的票务数据，要求是需要走http协议； 所有变更不能和现有银行部署软件相冲突； 易于维护，并能够记录所有访问纪录以便审计；  介绍 HFS是一个简易、快速的单文件免安装HTTP Server 官方有简体中文帮助文件 支持随Windows启动、支持自定义端口号、支持专家&#x2F;易用模式切换  部署 找个文件夹存放，并双击启动 可以将文件或者文件夹拖入程序界面就可以添加； 默认为虚拟目录，是将目标文件夹复制到软件支持的VFS文件系统内，修改虚拟目录下文件夹不影响真实文件，但虚拟目录的支持的文件数受限； 真实目录是将给硬盘上的实际文件夹建立一个软连接，实际操作真实文件； 指定访问端口 多网卡情况下，绑定指定网卡IP 添加用户并指定权限，只有设定用了访问用户，才能设置上传权限 随Windows启动并最小化显示 设定日志记录内容 默认日志只是在程序界面显示，可以使用“Log to file”来保存日志记录  其他 HFS默认允许所有人可访问，可以通过配置limit来ban掉...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">靖轩</div><div class="author-info-description">逝者如斯夫,不舍昼夜</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/grepsu"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://gitee.com/grepsu" target="_blank" title="Gitee"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:sujx@live.cn" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS链接"><i class="fa  fa-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B"><span class="toc-number">2.</span> <span class="toc-text">示例</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%90%9C%E7%B4%A2%E6%8C%87%E5%AE%9A%E8%BD%AF%E4%BB%B6%E5%8C%85"><span class="toc-number">2.1.</span> <span class="toc-text">搜索指定软件包</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%97%E5%87%BA%E5%BD%93%E5%89%8D%E7%B3%BB%E7%BB%9F%E8%BD%AF%E4%BB%B6"><span class="toc-number">2.2.</span> <span class="toc-text">列出当前系统软件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%87%E7%BA%A7%E5%8F%AF%E7%94%A8%E5%8C%85"><span class="toc-number">2.3.</span> <span class="toc-text">升级可用包</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E4%BB%A3%E7%90%86"><span class="toc-number">2.4.</span> <span class="toc-text">使用代理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E5%AE%9A%E4%B8%8D%E6%9B%B4%E6%96%B0%E6%8C%87%E5%AE%9A%E8%BD%AF%E4%BB%B6%E5%8C%85"><span class="toc-number">2.5.</span> <span class="toc-text">设定不更新指定软件包</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%87%E7%BA%A7%E5%85%A8%E9%83%A8%E5%8F%AF%E5%8D%87%E7%BA%A7%E8%BD%AF%E4%BB%B6%E5%8C%85"><span class="toc-number">2.6.</span> <span class="toc-text">升级全部可升级软件包</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E9%98%B6"><span class="toc-number">3.</span> <span class="toc-text">进阶</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%B9%E9%87%8F%E9%83%A8%E7%BD%B2%E8%BD%AF%E4%BB%B6"><span class="toc-number">3.1.</span> <span class="toc-text">批量部署软件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E8%84%9A%E6%9C%AC%E9%83%A8%E7%BD%B2"><span class="toc-number">3.2.</span> <span class="toc-text">使用脚本部署</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%80%E5%90%AF%E8%87%AA%E5%8A%A8%E8%A1%A5%E5%85%A8"><span class="toc-number">3.3.</span> <span class="toc-text">开启自动补全</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9B%B4%E6%94%B9%E9%95%9C%E5%83%8F%E6%BA%90"><span class="toc-number">3.4.</span> <span class="toc-text">更改镜像源</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="toc-number">4.</span> <span class="toc-text">客户端</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%90%9C%E7%B4%A2%E5%AE%89%E8%A3%85%E5%8F%AF%E7%94%A8%E5%8C%85"><span class="toc-number">4.1.</span> <span class="toc-text">搜索安装可用包</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AE%A1%E7%90%86%E5%B7%B2%E5%AE%89%E8%A3%85%E8%BD%AF%E4%BB%B6"><span class="toc-number">4.2.</span> <span class="toc-text">管理已安装软件</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/07/03/AIGC_FoxHole/" title="海鹰">海鹰</a><time datetime="2026-07-03T01:04:07.000Z" title="发表于 2026-07-03 09:04:07">2026-07-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/11/fristVibeCoding/" title="鹊随金印：我的第一个完整的AI编程项目">鹊随金印：我的第一个完整的AI编程项目</a><time datetime="2026-06-11T01:04:07.000Z" title="发表于 2026-06-11 09:04:07">2026-06-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/03/VI_Howto/" title="VI编辑器简介">VI编辑器简介</a><time datetime="2026-06-03T01:04:07.000Z" title="发表于 2026-06-03 09:04:07">2026-06-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/28/HNCitic_2605/" title="我要上头条">我要上头条</a><time datetime="2026-05-28T01:04:07.000Z" title="发表于 2026-05-28 09:04:07">2026-05-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/12/TS-Domain-Controller-Sync-Failure/" title="记一次Windows AD域控制器同步故障排错">记一次Windows AD域控制器同步故障排错</a><time datetime="2026-05-12T03:04:07.000Z" title="发表于 2026-05-12 11:04:07">2026-05-12</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2008 - 2026 By 靖轩</span></div><div class="footer_custom_text">京ICP备17034757号</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.5"></script><script src="/js/main.js?v=5.5.5"></script><script src="/libs/fancybox/fancybox.umd.js"></script><script src="/js/instantpage.js" type="module"></script><script src="/libs/lazyload/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const parseViewBox = viewBox => {
+    if (!viewBox) return null
+    const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
+    if (parts.length !== 4 || parts.some(n => Number.isNaN(n))) return null
+    return parts
+  }
+
+  const getSvgViewBox = svg => {
+    const attr = parseViewBox(svg.getAttribute('viewBox'))
+    if (attr) return attr
+
+    // Fallback: use bbox to build a viewBox
+    try {
+      const bbox = svg.getBBox()
+      if (bbox && bbox.width && bbox.height) return [bbox.x, bbox.y, bbox.width, bbox.height]
+    } catch (e) {
+      // getBBox may fail on some edge cases; ignore
+    }
+
+    const w = Number(svg.getAttribute('width')) || 0
+    const h = Number(svg.getAttribute('height')) || 0
+    if (w > 0 && h > 0) return [0, 0, w, h]
+    return [0, 0, 100, 100]
+  }
+
+  const setSvgViewBox = (svg, vb) => {
+    svg.setAttribute('viewBox', `${vb[0]} ${vb[1]} ${vb[2]} ${vb[3]}`)
+  }
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v))
+
+  const openSvgInNewTab = ({ source, initViewBox }) => {
+    const getClonedSvg = () => {
+      if (typeof source === 'string') {
+        const template = document.createElement('template')
+        template.innerHTML = source.trim()
+        const svg = template.content.querySelector('svg')
+        return svg ? svg.cloneNode(true) : null
+      }
+      if (source && typeof source.cloneNode === 'function') {
+        return source.cloneNode(true)
+      }
+      return null
+    }
+
+    const clone = getClonedSvg()
+    if (!clone) return
+    if (initViewBox && initViewBox.length === 4) {
+      clone.setAttribute('viewBox', initViewBox.join(' '))
+    }
+    if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+    if (!clone.getAttribute('xmlns:xlink') && clone.outerHTML.includes('xlink:')) {
+      clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+    }
+    // inject background to match current theme
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    const bg = getComputedStyle(document.body).backgroundColor || (isDark ? '#1e1e1e' : '#ffffff')
+    if (!clone.style.background) clone.style.background = bg
+
+    const serializer = new XMLSerializer()
+    const svgSource = serializer.serializeToString(clone)
+    const htmlSource = `<!doctype html><html><head><meta charset="utf-8" />
+      <style>
+        html, body { width: 100%; height: 100%; margin: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; }
+        svg { max-width: 100%; max-height: 100%; height: auto; width: auto; }
+      </style>
+      </head><body>${svgSource}</body></html>`
+    const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank', 'noopener')
+    setTimeout(() => URL.revokeObjectURL(url), 30000)
+  }
+
+  const attachMermaidViewerButton = wrap => {
+    let btn = wrap.querySelector('.mermaid-open-btn')
+    if (!btn) {
+      btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'mermaid-open-btn'
+      wrap.appendChild(btn)
+    }
+
+    btn.innerHTML = '<i class="fa fa-search fa-fw" aria-hidden="true"></i>'
+
+    if (!btn.__mermaidViewerBound) {
+      btn.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        const svg = wrap.__mermaidOriginalSvg || wrap.querySelector('svg')
+        if (!svg) return
+        const initViewBox = wrap.__mermaidInitViewBox
+        if (typeof svg === 'string') {
+          openSvgInNewTab({ source: svg, initViewBox })
+          return
+        }
+        openSvgInNewTab({ source: svg, initViewBox })
+      })
+      btn.__mermaidViewerBound = true
+    }
+  }
+
+  // Zoom around a point (px, py) in the SVG viewport (in viewBox coordinates)
+  const zoomAtPoint = (vb, factor, px, py) => {
+    const w = vb[2] * factor
+    const h = vb[3] * factor
+    const nx = px - (px - vb[0]) * factor
+    const ny = py - (py - vb[1]) * factor
+    return [nx, ny, w, h]
+  }
+
+  const initMermaidGestures = wrap => {
+    const svg = wrap.querySelector('svg')
+    if (!svg) return
+
+    // Ensure viewBox exists so gestures always work
+    const initVb = getSvgViewBox(svg)
+    wrap.__mermaidInitViewBox = initVb
+    wrap.__mermaidCurViewBox = initVb.slice()
+    setSvgViewBox(svg, initVb)
+
+    // Avoid binding multiple times on themeChange/pjax
+    if (wrap.__mermaidGestureBound) return
+    wrap.__mermaidGestureBound = true
+
+    // Helper: map client (viewport) coordinate -> viewBox coordinate
+    const clientToViewBox = (clientX, clientY) => {
+      const rect = svg.getBoundingClientRect()
+      const vb = wrap.__mermaidCurViewBox || getSvgViewBox(svg)
+      const x = vb[0] + (clientX - rect.left) * (vb[2] / rect.width)
+      const y = vb[1] + (clientY - rect.top) * (vb[3] / rect.height)
+      return { x, y, rect, vb }
+    }
+
+    const state = {
+      pointers: new Map(),
+      startVb: null,
+      startDist: 0,
+      startCenter: null
+    }
+
+    const clampVb = vb => {
+      const init = wrap.__mermaidInitViewBox || vb
+      const minW = init[2] * 0.1
+      const maxW = init[2] * 10
+      const minH = init[3] * 0.1
+      const maxH = init[3] * 10
+      vb[2] = clamp(vb[2], minW, maxW)
+      vb[3] = clamp(vb[3], minH, maxH)
+      return vb
+    }
+
+    const setCurVb = vb => {
+      vb = clampVb(vb)
+      wrap.__mermaidCurViewBox = vb
+      setSvgViewBox(svg, vb)
+    }
+
+    const onPointerDown = e => {
+      // Allow only primary button for mouse
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      svg.setPointerCapture(e.pointerId)
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      if (state.pointers.size === 1) {
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      } else if (state.pointers.size === 2) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        state.startDist = Math.hypot(dx, dy)
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        state.startCenter = { x: (pts[0].x + pts[1].x) / 2, y: (pts[0].y + pts[1].y) / 2 }
+      }
+    }
+
+    const onPointerMove = e => {
+      if (!state.pointers.has(e.pointerId)) return
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      // Pan with 1 pointer
+      if (state.pointers.size === 1 && state.startVb) {
+        const p = [...state.pointers.values()][0]
+        const prev = { x: e.clientX - e.movementX, y: e.clientY - e.movementY }
+        // movementX/Y unreliable on touch, compute from stored last position
+        const last = wrap.__mermaidLastSinglePointer || p
+        const dxClient = p.x - last.x
+        const dyClient = p.y - last.y
+        wrap.__mermaidLastSinglePointer = p
+
+        const { rect } = clientToViewBox(p.x, p.y)
+        const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        const dx = dxClient * (vb[2] / rect.width)
+        const dy = dyClient * (vb[3] / rect.height)
+        setCurVb([vb[0] - dx, vb[1] - dy, vb[2], vb[3]])
+        return
+      }
+
+      // Pinch zoom with 2 pointers
+      if (state.pointers.size === 2 && state.startVb && state.startDist > 0) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        const dist = Math.hypot(dx, dy)
+        if (!dist) return
+        const factor = state.startDist / dist // dist bigger => zoom in (viewBox smaller)
+
+        const cx = (pts[0].x + pts[1].x) / 2
+        const cy = (pts[0].y + pts[1].y) / 2
+        const centerClient = { x: cx, y: cy }
+
+        const pxy = clientToViewBox(centerClient.x, centerClient.y)
+        const cpx = pxy.x
+        const cpy = pxy.y
+
+        const vb = zoomAtPoint(state.startVb, factor, cpx, cpy)
+        setCurVb(vb)
+      }
+    }
+
+    const onPointerUpOrCancel = e => {
+      state.pointers.delete(e.pointerId)
+      if (state.pointers.size === 0) {
+        state.startVb = null
+        state.startDist = 0
+        state.startCenter = null
+        wrap.__mermaidLastSinglePointer = null
+      } else if (state.pointers.size === 1) {
+        // reset single pointer baseline to avoid jump
+        wrap.__mermaidLastSinglePointer = [...state.pointers.values()][0]
+      }
+    }
+
+    // Wheel zoom (mouse/trackpad)
+    const onWheel = e => {
+      // ctrlKey on mac trackpad pinch; we treat both as zoom
+      e.preventDefault()
+      const delta = e.deltaY
+      const zoomFactor = delta > 0 ? 1.1 : 0.9
+      const { x, y } = clientToViewBox(e.clientX, e.clientY)
+      const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      setCurVb(zoomAtPoint(vb, zoomFactor, x, y))
+    }
+
+    const onDblClick = () => {
+      const init = wrap.__mermaidInitViewBox
+      if (!init) return
+      wrap.__mermaidCurViewBox = init.slice()
+      setSvgViewBox(svg, init)
+    }
+
+    svg.addEventListener('pointerdown', onPointerDown)
+    svg.addEventListener('pointermove', onPointerMove)
+    svg.addEventListener('pointerup', onPointerUpOrCancel)
+    svg.addEventListener('pointercancel', onPointerUpOrCancel)
+    svg.addEventListener('wheel', onWheel, { passive: false })
+    svg.addEventListener('dblclick', onDblClick)
+  }
+
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+
+      // Clear old render (themeChange/pjax will rerun)
+      const oldSvg = item.querySelector('svg')
+      if (oldSvg) oldSvg.remove()
+      item.__mermaidGestureBound = false
+
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+        if (true) initMermaidGestures(item)
+        item.__mermaidOriginalSvg = svg
+        if (true) attachMermaidViewerButton(item)
+      }
+
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('/libs/mermaid/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.5"></script></div></div></body></html>

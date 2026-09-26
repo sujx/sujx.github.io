@@ -1,0 +1,634 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>从无到有通过ISO27001认证 | 靖轩</title><meta name="author" content="靖轩"><meta name="copyright" content="靖轩"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="建设篇安全是一个不断的持续的过程，每个环节都不可缺少，在安全的路上懂的越多发现自己不懂的越多。 1概述我在某做WL的公司负责公司整体安全，保护公司业务系统的安全（这个系统会有大部分看官的个人信息）。公司业务发展很快，但是信息化基础建设很落后，管理不规范，人员技术水平参差不齐，对网络和安全没有认识。领导对安全概念模糊，无法落实；因为是新来的，领导对提出的解决方案有选择的进行，但是有个好的地方就是公司">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从无到有通过ISO27001认证">
+<meta property="og:url" content="https://www.sujx.net/2023/01/23/ISO27001-Deploy/index.html">
+<meta property="og:site_name" content="靖轩">
+<meta property="og:description" content="建设篇安全是一个不断的持续的过程，每个环节都不可缺少，在安全的路上懂的越多发现自己不懂的越多。 1概述我在某做WL的公司负责公司整体安全，保护公司业务系统的安全（这个系统会有大部分看官的个人信息）。公司业务发展很快，但是信息化基础建设很落后，管理不规范，人员技术水平参差不齐，对网络和安全没有认识。领导对安全概念模糊，无法落实；因为是新来的，领导对提出的解决方案有选择的进行，但是有个好的地方就是公司">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.sujx.net/covers/cover23.jpg">
+<meta property="article:published_time" content="2023-01-23T07:04:07.000Z">
+<meta property="article:modified_time" content="2026-09-26T02:25:04.149Z">
+<meta property="article:author" content="靖轩">
+<meta property="article:tag" content="ISO27001">
+<meta property="article:tag" content="blog">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.sujx.net/covers/cover23.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "从无到有通过ISO27001认证",
+  "url": "https://www.sujx.net/2023/01/23/ISO27001-Deploy/",
+  "image": "https://cdn.sujx.net/covers/cover23.jpg",
+  "datePublished": "2023-01-23T07:04:07.000Z",
+  "dateModified": "2026-09-26T02:25:04.149Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "靖轩",
+      "url": "https://www.sujx.net"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://cdn.sujx.net/about/favicon.png"><link rel="canonical" href="https://www.sujx.net/2023/01/23/ISO27001-Deploy/index.html"><link rel="preconnect" href="//cdnjs.cloudflare.com"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css?v=5.5.5"><link rel="stylesheet" href="/fonts/css/all.min.css"><link rel="stylesheet" href="/libs/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?417b20ac1984432f821159fac27d3bb5";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><link rel="stylesheet" href="/fonts/titillium-web.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: '/libs/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: true,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '从无到有通过ISO27001认证',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="alternate" href="/atom.xml" title="靖轩" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">靖轩</span></a><a class="nav-page-title" href="/"><span class="site-name">从无到有通过ISO27001认证</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">从无到有通过ISO27001认证</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-01-23T07:04:07.000Z" title="发表于 2023-01-23 15:04:07">2023-01-23</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-09-26T02:25:04.149Z" title="更新于 2026-09-26 10:25:04">2026-09-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8/">信息安全</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">4.3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>12分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><h1 id="建设篇"><a href="#建设篇" class="headerlink" title="建设篇"></a>建设篇</h1><p>安全是一个不断的持续的过程，每个环节都不可缺少，在安全的路上懂的越多发现自己不懂的越多。</p>
+<h2 id="1概述"><a href="#1概述" class="headerlink" title="1概述"></a>1概述</h2><p>我在某做WL的公司负责公司整体安全，保护公司业务系统的安全（这个系统会有大部分看官的个人信息）。公司业务发展很快，但是信息化基础建设很落后，管理不规范，人员技术水平参差不齐，对网络和安全没有认识。领导对安全概念模糊，无法落实；因为是新来的，领导对提出的解决方案有选择的进行，但是有个好的地方就是公司发展太快，出现过不少安全问题，给我们安全部带来了外部推动力（虽然不想出事，但是出事了可以加快安全建设的脚步）。</p>
+<p>一年的时候间从什么都没到现在的逐渐成型、各种安全流程的建立和落地，建了ISO27001安全体系（通过了认证），此篇文章进行了一个总结，期间也碰到了的很多坑和挫折，自己也在这个过程中学习了成长了，这里再次感谢帮助过我的朋友们，感谢安全部另外一位X大牛。</p>
+<h2 id="2对ISO27001理解"><a href="#2对ISO27001理解" class="headerlink" title="2对ISO27001理解"></a>2对ISO27001理解</h2><p>通过一年的时候间对从0到拿证的过程，简单说一下我对ISO27001的理解：不管是ISO27001还是安全我觉得都是围绕着业务进行的，一切的出发点都是保证业务的连续的、稳定的运行，要保证业务的连续的、稳定的运行，你需要知道你有什么资产，资产面临什么风险，这些风险要怎么处理，这样一个过程中还要循序PDCA的原则（plan-do-check-action）。做每一个制度和每一个要求的时候候从业务角度出发去思考，这样做才可以最大化的保证所写的制度规范能执行，为后面落地提供依据。凭空或单纯从安全的角度看问题，很容易把问题想的很严重，给出的解决方案往往短时间无法执行，后面会简阐述一下当时的想法。</p>
+<p>脱离业务谈安全和脱离安全谈业务都是不现实的。</p>
+<p><a href="https://cdn.sujx.net/2023pic/iso27001-1.png"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023pic/iso27001-1.png"></a></p>
+<h2 id="3为什么要做"><a href="#3为什么要做" class="headerlink" title="3为什么要做"></a>3为什么要做</h2><p>我个人理解做这个事情的2大因素：</p>
+<h3 id="3-1外因"><a href="#3-1外因" class="headerlink" title="3. 1外因"></a>3. 1外因</h3><p>一个公司发展到一定程度和规模的时候候，公司自身的安全已经不是自己的问题了，你会涉及到社会层面、合作层面、业务发展层面。如：我们公司的发起做ISO27001的需求其实就不是来自安全部，是业务部门在推广业务的过程中遇到了阻力，因为客户的系统过了ISO27001他们会要求你与他对接的系统有一定的安全性，这个要求就表现为ISO27001。</p>
+<p>我们就业找工作很多时候是看能力，但是有时候证书就像一个门票，没有门票就无法上车，ISO27001就是一个公司的证书。</p>
+<p>还有重要因素《网络安全法》出台了，国家对安全的要求肯定是先从政府自身开始，然后慢慢到要求企业，与其等出事不如从现在开始做。</p>
+<h3 id="3-2内因"><a href="#3-2内因" class="headerlink" title="3. 2内因"></a>3. 2内因</h3><p>每一个公司通过几年或更长时间的成长，公司会积累很多信息化系统，保障这些系统的正常运行就很重要，并且在对信息化管理过程中出现的很多职责不明确，边界不清，流程和制度不全，所有的操作规范和行为都靠约定俗成，没有体系化文档支撑，这些都影响系统稳定运行。</p>
+<h2 id="4控制项简单说明"><a href="#4控制项简单说明" class="headerlink" title="4控制项简单说明"></a>4控制项简单说明</h2><p>ISO27001相信做安全的同学都有接触，百度有很详细的说明，我简单说一下自己的理解，大牛勿喷。ISO27001是一套安全管理类的文档，为了保证信息化工作和生产正常稳定的运行，一切都是围绕业务展开的，很多安全管理思路从公司的核心业务出发去考虑很多制度和规范都可以合理的解释。说个题外话很多做技术的和做管理的都是相互不对路，相互看不起，说句实在很多时候纯粹靠技术或纯粹靠管理去达到某个防护目标是不可能实现的，技术的实现可以方便和简化管理，管理制度的要求可以推动技术的落地，2者是相辅相成。</p>
+<p>ISO27001从原来的15项标准要求变为了现在的18项，新增了2项、通信和操作管理拆除为2项。</p>
+<p><a href="https://cdn.sujx.net/2023pic/iso27001-2.png"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023pic/iso27001-2.png"></a></p>
+<p>下面简单说一下我对18个标准项的理解，并不是所有标准都要响应，如果实际情况没有可以不写，标准的要求不是重新编写公司已有的制度，只需要在原有制度上增加对安全相关的控制项：</p>
+<p><a href="https://cdn.sujx.net/2023pic/iso27001-3.jpg"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023pic/iso27001-3.jpg"></a></p>
+<p><a href="https://cdn.sujx.net/2023pic/iso27001-4.jpg"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023pic/iso27001-4.jpg"></a></p>
+<p><a href="https://cdn.sujx.net/2023pic/iso27001-5.jpg"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023pic/iso27001-5.jpg"></a></p>
+<p><a href="https://cdn.sujx.net/2023pic/iso27001-6.jpg"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023pic/iso27001-6.jpg"></a></p>
+<p><a href="https://cdn.sujx.net/2023pic/iso27001-7.jpg"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023pic/iso27001-7.jpg"></a></p>
+<p><a href="https://cdn.sujx.net/2023pic/iso27001-8.jpg"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023pic/iso27001-8.jpg"></a></p>
+<p><a href="https://cdn.sujx.net/2023pic/iso27001-9.jpg"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023pic/iso27001-9.jpg"></a></p>
+<p><a href="https://cdn.sujx.net/2023pic/iso27001-10.jpg"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023pic/iso27001-10.jpg"></a></p>
+<p><a href="https://cdn.sujx.net/2023pic/iso27001-11.jpg"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023pic/iso27001-11.jpg"></a></p>
+<p><a href="https://cdn.sujx.net/2023pic/iso27001-12.jpg"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023pic/iso27001-12.jpg"></a></p>
+<p><a href="https://cdn.sujx.net/2023pic/iso27001-13.jpg"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023pic/iso27001-13.jpg"></a></p>
+<p><a href="https://cdn.sujx.net/2023pic/iso27001-14.jpg"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023pic/iso27001-14.jpg"></a></p>
+<p><a href="https://cdn.sujx.net/2023pic/iso27001-15.jpg"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023pic/iso27001-15.jpg"></a></p>
+<p><a href="https://cdn.sujx.net/2023pic/iso27001-16.jpg"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023pic/iso27001-16.jpg"></a></p>
+<p><a href="https://cdn.sujx.net/2023pic/iso27001-17.jpg"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023pic/iso27001-17.jpg"></a></p>
+<p><a href="https://cdn.sujx.net/2023pic/iso27001-18.jpg"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023pic/iso27001-18.jpg"></a></p>
+<p><a href="https://cdn.sujx.net/2023pic/iso27001-19.jpg"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023pic/iso27001-19.jpg"></a></p>
+<p><a href="https://cdn.sujx.net/2023pic/iso27001-20.jpg"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023pic/iso27001-20.jpg"></a></p>
+<h2 id="5文档编写架构"><a href="#5文档编写架构" class="headerlink" title="5文档编写架构"></a>5文档编写架构</h2><p>ISO27001对应的文档说明其实叫适用性声明，如上表文件和控制项是一一对应的，标准文档架构为：手册、程序文件、作业指导书、运行记录：</p>
+<p><a href="https://cdn.sujx.net/2023pic/iso27001-21.jpg"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023pic/iso27001-21.jpg"></a></p>
+<p>Ø 手册：就是对ISO27001体系的一个总体的说明文档</p>
+<p><a href="https://cdn.sujx.net/2023pic/iso27001-22.jpg"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023pic/iso27001-22.jpg"></a></p>
+<p>Ø 程序文件：具体描述每一个对应的标准要做什么</p>
+<p><a href="https://cdn.sujx.net/2023pic/iso27001-23.png"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023pic/iso27001-23.png"></a></p>
+<p>Ø 作业指导书：是对程序文件进一步解读，怎么做</p>
+<p><a href="https://cdn.sujx.net/2023pic/iso27001-24.png"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023pic/iso27001-24.png"></a></p>
+<p>Ø 运行记录：是对做了上述工作后的一个产出文档，可以是电子记录或纸质文件</p>
+<p><a href="https://cdn.sujx.net/2023pic/iso27001-25.png"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023pic/iso27001-25.png"></a></p>
+<p>针对这个情况咨询过评审老师，现在可以按照自己公司的实际情况去执行，但是手册文件必须都有。我们针对公司的实际情况做了修改，因为很多时候落地的时候候都是以制度去要求和约束，我们把原有架构做了改变，重写全部的策略和要求，当然过程中有参考，整个过程耗费2人一个月时间（对于技术出身的人来说是艰苦的岁月），中途还修改了2个版本，跟领导对内容一个一个文档审。</p>
+<p>变为：手册、策略、制度、运行记录</p>
+<p>Ø 手册：一样没变</p>
+<p>Ø 策略：针对标准要求，提出我们自己公司的要求</p>
+<p><a href="https://cdn.sujx.net/2023pic/iso27001-26.png"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023pic/iso27001-26.png"></a></p>
+<p>Ø 制度：用制度明确需要做什么，要求怎么做</p>
+<p><a href="https://cdn.sujx.net/2023pic/iso27001-27.png"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023pic/iso27001-27.png"></a></p>
+<p>Ø 运行记录：不单纯为运行记录文件，还包含了怎么做的具体操作文档</p>
+<p><a href="https://cdn.sujx.net/2023pic/iso27001-28.png"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023pic/iso27001-28.png"></a></p>
+<p><a href="https://cdn.sujx.net/2023pic/iso27001-29.png"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023pic/iso27001-29.png"></a></p>
+<p>最后强调一下最好不要拍脑袋写一些要求，尽量实事求是，做到什么程度就在这个程度是增加安全要求。</p>
+<h2 id="6体系运行"><a href="#6体系运行" class="headerlink" title="6体系运行"></a>6体系运行</h2><h3 id="6-1体系发布"><a href="#6-1体系发布" class="headerlink" title="6. 1体系发布"></a>6. 1体系发布</h3><p>安全的工作如果由上致下会很顺利很容易推动，但是，体系的发布一定需要领导层去帮你发布执行，让全公司知道有这样一件事情，然后给领导要讲解（洗脑）这个东西是做什么的，可以为公司带来什么好处，让领导认同或部分认同你的观点，这样对后面的体系建设会很有帮助。</p>
+<h3 id="“6-2体系分解”-6-2体系分解"><a href="#“6-2体系分解”-6-2体系分解" class="headerlink" title="“6. 2体系分解” )6. 2体系分解"></a>“6. 2体系分解” )6. 2体系分解</h3><p>按照正常套路来说ISO27001要做的东西很多，我把安全体系分割为了3大块：管理、技术、和运行（前面也有提到）。管理：主要是制度、规范约束；技术：主要是实现目标；运行：主要是让前面的2点不要成为空谈，要有定期检查产出。</p>
+<p><a href="https://cdn.sujx.net/2023pic/iso27001-30.png"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023pic/iso27001-30.png"></a></p>
+<p>本来在按照公司的现状我制定的安全是分三步走的：起步-成长-成熟，成熟后运行2-3年再通过ISO27001的审核，在我个人看来毫无压力。但是由于要拿证时间只有1年，所有的东西都需要重新做没法按照套路来。</p>
+<p><a href="https://cdn.sujx.net/2023pic/iso27001-31.png"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023pic/iso27001-31.png"></a></p>
+<p> 如果大家的时候间较多，建议做一次全面的风险评估，针对风险一个一个完善文档。</p>
+<h3 id="“6-3体系执行”-6-3体系执行"><a href="#“6-3体系执行”-6-3体系执行" class="headerlink" title="“6. 3体系执行” )6. 3体系执行"></a>“6. 3体系执行” )6. 3体系执行</h3><p>执行主要是看检查在上述文档中的产出，如：发布了《安全运维管理制度》，那么根据要求，可能需要对机房进行周期性巡检产出《机房巡检记录表》，进出机房需要产出《机房进出记录表》。</p>
+<p><a href="https://cdn.sujx.net/2023pic/iso27001-32.png"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023pic/iso27001-32.png"></a></p>
+<p><a href="https://cdn.sujx.net/2023pic/iso27001-33.png"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023pic/iso27001-33.png"></a></p>
+<p><a href="https://cdn.sujx.net/2023pic/iso27001-34.png"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023pic/iso27001-34.png"></a></p>
+<p>按照个套路检查一个制度文件的产出，因此我们做了一个表，便于后面的审计：</p>
+<p><a href="https://cdn.sujx.net/2023pic/iso27001-35.png"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023pic/iso27001-35.png"></a></p>
+<p> 大家可以把一些事情简单化，什么什么都用文档很繁琐，如：</p>
+<p>基于django 自主开发的资产管理系统，如果出现什么漏洞可以快速定位。</p>
+<p><a href="https://cdn.sujx.net/2023pic/iso27001-36.png"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023pic/iso27001-36.png"></a></p>
+<p> 上面只是日常的执行要求，ISO27001还会有一个每年的内审和评审，内审：检查日常工作是否按照要求做好；评审：审核制度体系是否需要跟上公司的业务变化，做错对应的调整。</p>
+<h3 id="6-4体系培训"><a href="#6-4体系培训" class="headerlink" title="6. 4体系培训"></a>6. 4体系培训</h3><p>体系制度已经发布后，执行是有阻力的，因为打破了原有的约定俗成，增加了各个部门的工作量，这个需要非常耐心的去解释解答（这个过程很多人会找碴），需要培训去使大家有一定认识，从而配合你做事情。当然最重要的是从领导层面推动，那样阻力就少很多，我们在这个过程中也没少发生申请事件，被删文件夹、中勒索病毒、数据库被暴力破解还有来自合作伙伴的漏洞通报。</p>
+<p>培训可以从以下几块做：</p>
+<p>Ø 新员工培训</p>
+<p>Ø 平时公司内部培训、讨论、讲座</p>
+<p>Ø 真实案例延时（渗透测试、当场干公司的系统，顺便展示实力，不过这个度自己要把握好）</p>
+<p>多抛头露面准没坏处。</p>
+<h2 id="7总结"><a href="#7总结" class="headerlink" title="7总结"></a>7总结</h2><p>简单介绍了ISO27001的建设，一个体系文件写下来，深深的觉得这个东西就是套路，环环相扣，都是相互引用的。在刚开始的时候候压力、阻力会很大，但是做好了后面是一劳永逸，让制度执行几个月后做内审和评审，发现问题并解决，做完这些就基本可以申请外审了。</p>
+<p>最后如果大家有想法要做的话可以先看一次标准，理解一下，再结合实际情况进行编写，因为在制度文档里面写到的就需要实现，外审的时候候就要查的，尽量实事求是。</p>
+<hr>
+<h1 id="审核篇"><a href="#审核篇" class="headerlink" title="审核篇"></a>审核篇</h1><h2 id="1审核前"><a href="#1审核前" class="headerlink" title="1审核前"></a>1审核前</h2><h3 id="1-1注意事项"><a href="#1-1注意事项" class="headerlink" title="1. 1注意事项"></a>1. 1注意事项</h3><p>找个一个评审机构交钱（相信机构大家能找到），签合同，签合同的时候候需要注意几点：</p>
+<p>Ø体系类型、覆盖范围、人数</p>
+<p>体系类型这个问题不大，基本都不会错；覆盖范围是需要慎重的，因为最后的证书上面会写清楚公司所通过认真的范围，如果不包含自己的业务那认证就白做了，当时写错了还要改合同，后面搞的很麻烦，希望大家不要重现我的坑；人数要写真实的，人数会关系到最后这个认证的费用，人数越多费用越贵。</p>
+<p><a href="https://cdn.sujx.net/2023pic/iso27001-37.png"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023pic/iso27001-37.png"></a></p>
+<p>附一个ITSMS的可以受理的范围：</p>
+<p><a href="https://cdn.sujx.net/2023pic/iso27001-38.png"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023pic/iso27001-38.png"></a></p>
+<p>Ø 填写申请书《管理体系认证申请书》</p>
+<p>公司名字和地址要真实，包含所有的分公司，其中有临时办公场所也需要写，分公司多的话检查的时候候是需要抽查到不同的分公司审核的（说是抽查其实甲方可以指定）。如果只是一个地址认证就写对应的地址就好。</p>
+<p><a href="https://cdn.sujx.net/2023pic/iso27001-39.png"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023pic/iso27001-39.png"></a></p>
+<p><a href="https://cdn.sujx.net/2023pic/iso27001-40.png"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023pic/iso27001-40.png"></a></p>
+<h3 id="1-2需要递交的电子档文件"><a href="#1-2需要递交的电子档文件" class="headerlink" title="1. 2需要递交的电子档文件"></a>1. 2需要递交的电子档文件</h3><h4 id="1-1-1-电子文档"><a href="#1-1-1-电子文档" class="headerlink" title="1. 1. 1 电子文档"></a>1. 1. 1 电子文档</h4><p>组织简介、组织机构图、人员情况、申请认证产品的生产&#x2F;加工&#x2F;服务工艺流程图；</p>
+<p>管理手册和程序文件；</p>
+<p>关于认证活动的限制条件( 如出于安全和&#x2F;或保密等原因，存在时\ )；</p>
+<p>信息安全管理体系方针和目标；</p>
+<p>支持信息安全管理体系的规程和控制措施；</p>
+<p>风险评估报告；（含风险评估方法的描述）；</p>
+<p>残余风险报告</p>
+<p>风险处置计划</p>
+<p>适用性声明；</p>
+<p>适用的法律法规的标准的清单。</p>
+<p>申请书附表四、五（见申请书第6、7页）（到时候认证公司会给你文档的，如果有需求我也可以分享）</p>
+<h4 id="1-1-2-二、所需原件有："><a href="#1-1-2-二、所需原件有：" class="headerlink" title="1. 1. 2 二、所需原件有："></a>1. 1. 2 二、所需原件有：</h4><p>合同，一式两份，签名盖章；</p>
+<p>申请书，一式一份，签名盖章；</p>
+<p>信息安全及信息技术服务管理体系保密协议，一式两份，签名盖章；</p>
+<p>临时场所清单；加盖企业公章；（不存在临时场所企业不需提供）</p>
+<p>营业执照、相关资质证书（最新年检副本）一式一份，加盖企业公章。</p>
+<h2 id="2审核中"><a href="#2审核中" class="headerlink" title="2审核中"></a>2审核中</h2><p>所有文档提交后，等待外审的到来，外审：分为一审和二审，外审的时候候认证公司会联系负责人并约定好检查时间到现场检查。如果项目含了外审老师的差旅费，后面就不需要公司承担，如果不含的话，需要报销审核老师的差旅费（建议签合同的时候候把这部分的钱包含了，免得后面太麻烦）。</p>
+<p><a href="https://cdn.sujx.net/2023pic/iso27001-41.png"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023pic/iso27001-41.png"></a></p>
+<p>在通知书里会包含审核的内容和计划，在审核老师来之前做好准备。</p>
+<h3 id="2-1一审"><a href="#2-1一审" class="headerlink" title="2. 1一审"></a>2. 1一审</h3><p>一审安排：</p>
+<p><a href="https://cdn.sujx.net/2023pic/iso27001-42.png"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023pic/iso27001-42.png"></a></p>
+<p>主要是审核制度体系文件是否满足标准，公司有没按照体系制度的要求去执行，是否有运行记录的产出，公司的总体情况以及看一下公司的办公环境。一审主要是针对信息安全部进行的，以了解情况为主，一般来说有问题可以当场整改。</p>
+<p>一般一审只需要一天，审核人员为：审核组长。审核完成会出一份审核结果。如果不通过一般都在一审不通过，不需要二审了。</p>
+<p><a href="https://cdn.sujx.net/2023pic/iso27001-43.png"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023pic/iso27001-43.png"></a></p>
+<h3 id="2-2二审"><a href="#2-2二审" class="headerlink" title="2. 2二审"></a>2. 2二审</h3><p>二审安排：</p>
+<p><a href="https://cdn.sujx.net/2023pic/iso27001-44.png"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023pic/iso27001-44.png"></a></p>
+<p>二审建议首末次会议最好有重要的领导参加，表示对安全的重视（至于为什么后面解释）。</p>
+<p>二审需要的时候间会较长，我们那时候是2个审核员审核4天，具体的时候间需求会根据所申报的系统和人数去判定。系统多时间长审核的也很详细，审核的套路不是像等保对着一个一个标准制度过。我们的那2个审核老师是把对应的系统负责人叫过来大家聊天，如：你负责什么，平时正常工作什么做的，忙不忙周末要加班吗。如果心里有底气的不怕被套路，坐等没那么好的建议还是多培训一下，让主要负责人熟悉一下安全部所写的体系。</p>
+<p> 审核完成后现场给出不符合项进行整改，反正不管做的多好都有整改项的。</p>
+<p><a href="https://cdn.sujx.net/2023pic/iso27001-45.png"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023pic/iso27001-45.png"></a></p>
+<h2 id="3审核后"><a href="#3审核后" class="headerlink" title="3审核后"></a>3审核后</h2><p>审核完成后需要对上面的不符合项进行整改，整个整改需要做的有：</p>
+<ol>
+<li>整改前后截图</li>
+<li>打印纸质文档，并需要手写填写</li>
+<li>扫描彩色版发给审核组长确认</li>
+</ol>
+<p><a href="https://cdn.sujx.net/2023pic/iso27001-46.png"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023pic/iso27001-46.png"></a></p>
+<p>最后就是把所有的资料扫描盖章快递到指定地址。</p>
+<h2 id="4总结"><a href="#4总结" class="headerlink" title="4总结"></a>4总结</h2><p>通过跟审核老师沟通，发现如果一个企业有做好安全的决心，并且也再去做，领导足够重视那样一般来说肯定可以过，但是如果审核过程中出现说的但是没做，那就是原则性问题了，就会不过。ISO27001总体原则就是：说我所做，做我所说。说到必须要做，做的好不好是改进的地方。</p>
+<p>所以审核不要怕有不符合项，不符合项是一定会有的。除了原则性问题外，有2种情况也会导致不过：</p>
+<ol>
+<li>不符合项太多</li>
+<li>区域性不符合，严重不符合，举例子：抽查防病毒安装情况，一个部门抽查都没装就是区域性；一个办公环境一层都没装，而且包含很多部门，这个就是严重不符合</li>
+</ol>
+<p>审核主要是自己有做，心里有底，最后照顾好审核老师的心情，中午一起吃个饭，这样后面就好说话了，过的几率就会大很多。</p>
+<p>最后祝大家ISO27001外审都通过。</p>
+<h1 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h1><ol>
+<li>本文来自宝藏网站<a target="_blank" rel="noopener" href="https://ksowo.com/">Lyy’s Blog</a>，是由<a target="_blank" rel="noopener" href="https://ksowo.com/2018/01/19/%E4%BB%8E%E6%97%A0%E5%88%B0%E6%9C%89%E9%80%9A%E8%BF%87ISO27001%E8%AE%A4%E8%AF%81-%E5%BB%BA%E8%AE%BE%E7%AF%87/">从无到有通过ISO27001认证-建设篇</a>和<a target="_blank" rel="noopener" href="https://ksowo.com/2017/12/18/%E4%BB%8E%E6%97%A0%E5%88%B0%E6%9C%89%E9%80%9A%E8%BF%87ISO27001%E8%AE%A4%E8%AF%81-%E5%AE%A1%E6%A0%B8%E7%AF%87/">从无到有通过ISO27001认证-审核篇</a>合并而成，非常感谢原作者。</li>
+<li>原作者blog中包含了大量的ISO27001建设的示例文档和安全建设思考；</li>
+</ol>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/blog/">blog</a><a class="post-meta__tags" href="/tags/ISO27001/">ISO27001</a></div><div class="post-share"><div class="social-share" data-image="https://cdn.sujx.net/covers/cover23.jpg" data-sites="facebook,twitter,weibo,qq"></div><link rel="stylesheet" href="/libs/sharejs/css/share.min.css" media="print" onload="this.media='all'"><script src="/libs/sharejs/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>能否请我喝一杯咖啡？</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.jpg" target="_blank"><img class="post-qr-code-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/wechat.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2023/02/05/wrongly-written/" title="莫写错别字"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023pic/20230710130343.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">莫写错别字</div></div><div class="info-2"><div class="info-item-1">登发市场停车场拍到的一个告警，射橡头、射象头、摄像头…… </div></div></div></a><a class="pagination-related" href="/2023/01/20/powershell-winget/" title="使用winget实现软件管理"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/06/wallhaven-4ljkpp.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">使用winget实现软件管理</div></div><div class="info-2"><div class="info-item-1">简介winget是微软在Windows 1809之后提供的综合性程序包管理器解决方案，最新的Windows 10&#x2F;11 22H2 版本已经内置。简单来说，就是Windows 具备了类似apt、yum、pcman之类在终端直接部署和管理软件的包管理器。 基本使用格式为： winget [命令] ID 官方使用指南：  文档地址 Windows开发环境  WinGet 命令行实用工具可从命令行安装应用程序和其他程序包。使用情况: winget [&lt;命令&gt;] [&lt;选项&gt;]下列命令有效:  install    安装给定的程序包  show       显示包的相关信息  source     管理程序包的来源  search     查找并显示程序包的基本信息  list       显示已安装的程序包  upgrade    显示并执行可用升级  uninstall  卸载给定的程序包  hash       哈希安装程序的帮助程序  validate   验证清单文件  settings   打开设置或设置管理员设置  features   显示实...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2021/06/29/Hexo-Deploy/" title="使用Hexo构建静态博客站点"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/05/wallhaven-x6yzoz.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-29</div><div class="info-item-2">使用Hexo构建静态博客站点</div></div><div class="info-2"><div class="info-item-1">因为本站点是运行在阿里云最便宜的虚拟主机上面的，为提高运行效率、节约成本以及学习使用相关技术。现将原有wordpress站点迁移导出部署为hexo站点。hexo的优势：  原生使用markdown来进行文本编辑； 渲染生成静态文件后部署，省去了PHP环境和数据库环境； 基于HTML页面，无论是oss、virtualhost、virtualmachine都能快速灵活部署；   环境部署 部署NODE. JS  # 使用Ubuntu Desktop 20. 04 LTS环境sudo apt update sudo apt upgrade -ysudo apt install -y curl gitcurl -sL https://deb.nodesource.com/setup_12. x -o nodesource_setup.shchmod +x nodesource_setup.sh sudo ./nodesource_setup.shsudo apt udpatesudo apt install -y nodejs build-essential# 使用CentOS 8 环境...</div></div></div></a><a class="pagination-related" href="/2024/10/11/Hexo-Mirage/" title="Hexo升级迁移"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover59.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-10-11</div><div class="info-item-2">Hexo升级迁移</div></div><div class="info-2"><div class="info-item-1">现有的Hexo架构已经用了三年年，随着Nodejs、hexo和theme-butterfly的大版本升级，现有的系统也该update一下了。基本情况是系统从RockyLinux9换成了Fedora，Nodejs由18升级到21，Butterfly主题由4。 2升级到了5。 2，Hexo也升级到了7。 3。     30 摄于内蒙古·呼和浩特市·泽成冰煮羊     基础软件 操作系统软件使用Fedora 40 dnf update -ydnf install -y wget curl htop fail2ban rsyslogmkdir -p . config/htoptouch . config/htop/htoprc 部署Nginx dnf install -y wget curl nginx dnf install -y netdatasystemctl enable --now nginxsystemctl enable --now netdata# 创建SSL目录mkdir /etc/nginx/ssl# 复制ssl证书# 创建通用SSL配置文件cat &gt;/etc/...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">靖轩</div><div class="author-info-description">逝者如斯夫,不舍昼夜</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/grepsu"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://gitee.com/grepsu" target="_blank" title="Gitee"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:sujx@live.cn" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS链接"><i class="fa  fa-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BB%BA%E8%AE%BE%E7%AF%87"><span class="toc-number">1.</span> <span class="toc-text">建设篇</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E6%A6%82%E8%BF%B0"><span class="toc-number">1.1.</span> <span class="toc-text">1概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E5%AF%B9ISO27001%E7%90%86%E8%A7%A3"><span class="toc-number">1.2.</span> <span class="toc-text">2对ISO27001理解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%81%9A"><span class="toc-number">1.3.</span> <span class="toc-text">3为什么要做</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1%E5%A4%96%E5%9B%A0"><span class="toc-number">1.3.1.</span> <span class="toc-text">3. 1外因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2%E5%86%85%E5%9B%A0"><span class="toc-number">1.3.2.</span> <span class="toc-text">3. 2内因</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4%E6%8E%A7%E5%88%B6%E9%A1%B9%E7%AE%80%E5%8D%95%E8%AF%B4%E6%98%8E"><span class="toc-number">1.4.</span> <span class="toc-text">4控制项简单说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5%E6%96%87%E6%A1%A3%E7%BC%96%E5%86%99%E6%9E%B6%E6%9E%84"><span class="toc-number">1.5.</span> <span class="toc-text">5文档编写架构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6%E4%BD%93%E7%B3%BB%E8%BF%90%E8%A1%8C"><span class="toc-number">1.6.</span> <span class="toc-text">6体系运行</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1%E4%BD%93%E7%B3%BB%E5%8F%91%E5%B8%83"><span class="toc-number">1.6.1.</span> <span class="toc-text">6. 1体系发布</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%80%9C6-2%E4%BD%93%E7%B3%BB%E5%88%86%E8%A7%A3%E2%80%9D-6-2%E4%BD%93%E7%B3%BB%E5%88%86%E8%A7%A3"><span class="toc-number">1.6.2.</span> <span class="toc-text">“6. 2体系分解” )6. 2体系分解</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%80%9C6-3%E4%BD%93%E7%B3%BB%E6%89%A7%E8%A1%8C%E2%80%9D-6-3%E4%BD%93%E7%B3%BB%E6%89%A7%E8%A1%8C"><span class="toc-number">1.6.3.</span> <span class="toc-text">“6. 3体系执行” )6. 3体系执行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-4%E4%BD%93%E7%B3%BB%E5%9F%B9%E8%AE%AD"><span class="toc-number">1.6.4.</span> <span class="toc-text">6. 4体系培训</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7%E6%80%BB%E7%BB%93"><span class="toc-number">1.7.</span> <span class="toc-text">7总结</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%A1%E6%A0%B8%E7%AF%87"><span class="toc-number">2.</span> <span class="toc-text">审核篇</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E5%AE%A1%E6%A0%B8%E5%89%8D"><span class="toc-number">2.1.</span> <span class="toc-text">1审核前</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-number">2.1.1.</span> <span class="toc-text">1. 1注意事项</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2%E9%9C%80%E8%A6%81%E9%80%92%E4%BA%A4%E7%9A%84%E7%94%B5%E5%AD%90%E6%A1%A3%E6%96%87%E4%BB%B6"><span class="toc-number">2.1.2.</span> <span class="toc-text">1. 2需要递交的电子档文件</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-1-%E7%94%B5%E5%AD%90%E6%96%87%E6%A1%A3"><span class="toc-number">2.1.2.1.</span> <span class="toc-text">1. 1. 1 电子文档</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-2-%E4%BA%8C%E3%80%81%E6%89%80%E9%9C%80%E5%8E%9F%E4%BB%B6%E6%9C%89%EF%BC%9A"><span class="toc-number">2.1.2.2.</span> <span class="toc-text">1. 1. 2 二、所需原件有：</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E5%AE%A1%E6%A0%B8%E4%B8%AD"><span class="toc-number">2.2.</span> <span class="toc-text">2审核中</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1%E4%B8%80%E5%AE%A1"><span class="toc-number">2.2.1.</span> <span class="toc-text">2. 1一审</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2%E4%BA%8C%E5%AE%A1"><span class="toc-number">2.2.2.</span> <span class="toc-text">2. 2二审</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3%E5%AE%A1%E6%A0%B8%E5%90%8E"><span class="toc-number">2.3.</span> <span class="toc-text">3审核后</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4%E6%80%BB%E7%BB%93"><span class="toc-number">2.4.</span> <span class="toc-text">4总结</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AF%B4%E6%98%8E"><span class="toc-number">3.</span> <span class="toc-text">说明</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/07/03/AIGC_FoxHole/" title="海鹰">海鹰</a><time datetime="2026-07-03T01:04:07.000Z" title="发表于 2026-07-03 09:04:07">2026-07-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/11/fristVibeCoding/" title="鹊随金印：我的第一个完整的AI编程项目">鹊随金印：我的第一个完整的AI编程项目</a><time datetime="2026-06-11T01:04:07.000Z" title="发表于 2026-06-11 09:04:07">2026-06-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/03/VI_Howto/" title="VI编辑器简介">VI编辑器简介</a><time datetime="2026-06-03T01:04:07.000Z" title="发表于 2026-06-03 09:04:07">2026-06-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/28/HNCitic_2605/" title="我要上头条">我要上头条</a><time datetime="2026-05-28T01:04:07.000Z" title="发表于 2026-05-28 09:04:07">2026-05-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/12/TS-Domain-Controller-Sync-Failure/" title="记一次Windows AD域控制器同步故障排错">记一次Windows AD域控制器同步故障排错</a><time datetime="2026-05-12T03:04:07.000Z" title="发表于 2026-05-12 11:04:07">2026-05-12</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2008 - 2026 By 靖轩</span></div><div class="footer_custom_text">京ICP备17034757号</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.5"></script><script src="/js/main.js?v=5.5.5"></script><script src="/libs/fancybox/fancybox.umd.js"></script><script src="/js/instantpage.js" type="module"></script><script src="/libs/lazyload/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const parseViewBox = viewBox => {
+    if (!viewBox) return null
+    const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
+    if (parts.length !== 4 || parts.some(n => Number.isNaN(n))) return null
+    return parts
+  }
+
+  const getSvgViewBox = svg => {
+    const attr = parseViewBox(svg.getAttribute('viewBox'))
+    if (attr) return attr
+
+    // Fallback: use bbox to build a viewBox
+    try {
+      const bbox = svg.getBBox()
+      if (bbox && bbox.width && bbox.height) return [bbox.x, bbox.y, bbox.width, bbox.height]
+    } catch (e) {
+      // getBBox may fail on some edge cases; ignore
+    }
+
+    const w = Number(svg.getAttribute('width')) || 0
+    const h = Number(svg.getAttribute('height')) || 0
+    if (w > 0 && h > 0) return [0, 0, w, h]
+    return [0, 0, 100, 100]
+  }
+
+  const setSvgViewBox = (svg, vb) => {
+    svg.setAttribute('viewBox', `${vb[0]} ${vb[1]} ${vb[2]} ${vb[3]}`)
+  }
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v))
+
+  const openSvgInNewTab = ({ source, initViewBox }) => {
+    const getClonedSvg = () => {
+      if (typeof source === 'string') {
+        const template = document.createElement('template')
+        template.innerHTML = source.trim()
+        const svg = template.content.querySelector('svg')
+        return svg ? svg.cloneNode(true) : null
+      }
+      if (source && typeof source.cloneNode === 'function') {
+        return source.cloneNode(true)
+      }
+      return null
+    }
+
+    const clone = getClonedSvg()
+    if (!clone) return
+    if (initViewBox && initViewBox.length === 4) {
+      clone.setAttribute('viewBox', initViewBox.join(' '))
+    }
+    if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+    if (!clone.getAttribute('xmlns:xlink') && clone.outerHTML.includes('xlink:')) {
+      clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+    }
+    // inject background to match current theme
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    const bg = getComputedStyle(document.body).backgroundColor || (isDark ? '#1e1e1e' : '#ffffff')
+    if (!clone.style.background) clone.style.background = bg
+
+    const serializer = new XMLSerializer()
+    const svgSource = serializer.serializeToString(clone)
+    const htmlSource = `<!doctype html><html><head><meta charset="utf-8" />
+      <style>
+        html, body { width: 100%; height: 100%; margin: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; }
+        svg { max-width: 100%; max-height: 100%; height: auto; width: auto; }
+      </style>
+      </head><body>${svgSource}</body></html>`
+    const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank', 'noopener')
+    setTimeout(() => URL.revokeObjectURL(url), 30000)
+  }
+
+  const attachMermaidViewerButton = wrap => {
+    let btn = wrap.querySelector('.mermaid-open-btn')
+    if (!btn) {
+      btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'mermaid-open-btn'
+      wrap.appendChild(btn)
+    }
+
+    btn.innerHTML = '<i class="fa fa-search fa-fw" aria-hidden="true"></i>'
+
+    if (!btn.__mermaidViewerBound) {
+      btn.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        const svg = wrap.__mermaidOriginalSvg || wrap.querySelector('svg')
+        if (!svg) return
+        const initViewBox = wrap.__mermaidInitViewBox
+        if (typeof svg === 'string') {
+          openSvgInNewTab({ source: svg, initViewBox })
+          return
+        }
+        openSvgInNewTab({ source: svg, initViewBox })
+      })
+      btn.__mermaidViewerBound = true
+    }
+  }
+
+  // Zoom around a point (px, py) in the SVG viewport (in viewBox coordinates)
+  const zoomAtPoint = (vb, factor, px, py) => {
+    const w = vb[2] * factor
+    const h = vb[3] * factor
+    const nx = px - (px - vb[0]) * factor
+    const ny = py - (py - vb[1]) * factor
+    return [nx, ny, w, h]
+  }
+
+  const initMermaidGestures = wrap => {
+    const svg = wrap.querySelector('svg')
+    if (!svg) return
+
+    // Ensure viewBox exists so gestures always work
+    const initVb = getSvgViewBox(svg)
+    wrap.__mermaidInitViewBox = initVb
+    wrap.__mermaidCurViewBox = initVb.slice()
+    setSvgViewBox(svg, initVb)
+
+    // Avoid binding multiple times on themeChange/pjax
+    if (wrap.__mermaidGestureBound) return
+    wrap.__mermaidGestureBound = true
+
+    // Helper: map client (viewport) coordinate -> viewBox coordinate
+    const clientToViewBox = (clientX, clientY) => {
+      const rect = svg.getBoundingClientRect()
+      const vb = wrap.__mermaidCurViewBox || getSvgViewBox(svg)
+      const x = vb[0] + (clientX - rect.left) * (vb[2] / rect.width)
+      const y = vb[1] + (clientY - rect.top) * (vb[3] / rect.height)
+      return { x, y, rect, vb }
+    }
+
+    const state = {
+      pointers: new Map(),
+      startVb: null,
+      startDist: 0,
+      startCenter: null
+    }
+
+    const clampVb = vb => {
+      const init = wrap.__mermaidInitViewBox || vb
+      const minW = init[2] * 0.1
+      const maxW = init[2] * 10
+      const minH = init[3] * 0.1
+      const maxH = init[3] * 10
+      vb[2] = clamp(vb[2], minW, maxW)
+      vb[3] = clamp(vb[3], minH, maxH)
+      return vb
+    }
+
+    const setCurVb = vb => {
+      vb = clampVb(vb)
+      wrap.__mermaidCurViewBox = vb
+      setSvgViewBox(svg, vb)
+    }
+
+    const onPointerDown = e => {
+      // Allow only primary button for mouse
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      svg.setPointerCapture(e.pointerId)
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      if (state.pointers.size === 1) {
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      } else if (state.pointers.size === 2) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        state.startDist = Math.hypot(dx, dy)
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        state.startCenter = { x: (pts[0].x + pts[1].x) / 2, y: (pts[0].y + pts[1].y) / 2 }
+      }
+    }
+
+    const onPointerMove = e => {
+      if (!state.pointers.has(e.pointerId)) return
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      // Pan with 1 pointer
+      if (state.pointers.size === 1 && state.startVb) {
+        const p = [...state.pointers.values()][0]
+        const prev = { x: e.clientX - e.movementX, y: e.clientY - e.movementY }
+        // movementX/Y unreliable on touch, compute from stored last position
+        const last = wrap.__mermaidLastSinglePointer || p
+        const dxClient = p.x - last.x
+        const dyClient = p.y - last.y
+        wrap.__mermaidLastSinglePointer = p
+
+        const { rect } = clientToViewBox(p.x, p.y)
+        const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        const dx = dxClient * (vb[2] / rect.width)
+        const dy = dyClient * (vb[3] / rect.height)
+        setCurVb([vb[0] - dx, vb[1] - dy, vb[2], vb[3]])
+        return
+      }
+
+      // Pinch zoom with 2 pointers
+      if (state.pointers.size === 2 && state.startVb && state.startDist > 0) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        const dist = Math.hypot(dx, dy)
+        if (!dist) return
+        const factor = state.startDist / dist // dist bigger => zoom in (viewBox smaller)
+
+        const cx = (pts[0].x + pts[1].x) / 2
+        const cy = (pts[0].y + pts[1].y) / 2
+        const centerClient = { x: cx, y: cy }
+
+        const pxy = clientToViewBox(centerClient.x, centerClient.y)
+        const cpx = pxy.x
+        const cpy = pxy.y
+
+        const vb = zoomAtPoint(state.startVb, factor, cpx, cpy)
+        setCurVb(vb)
+      }
+    }
+
+    const onPointerUpOrCancel = e => {
+      state.pointers.delete(e.pointerId)
+      if (state.pointers.size === 0) {
+        state.startVb = null
+        state.startDist = 0
+        state.startCenter = null
+        wrap.__mermaidLastSinglePointer = null
+      } else if (state.pointers.size === 1) {
+        // reset single pointer baseline to avoid jump
+        wrap.__mermaidLastSinglePointer = [...state.pointers.values()][0]
+      }
+    }
+
+    // Wheel zoom (mouse/trackpad)
+    const onWheel = e => {
+      // ctrlKey on mac trackpad pinch; we treat both as zoom
+      e.preventDefault()
+      const delta = e.deltaY
+      const zoomFactor = delta > 0 ? 1.1 : 0.9
+      const { x, y } = clientToViewBox(e.clientX, e.clientY)
+      const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      setCurVb(zoomAtPoint(vb, zoomFactor, x, y))
+    }
+
+    const onDblClick = () => {
+      const init = wrap.__mermaidInitViewBox
+      if (!init) return
+      wrap.__mermaidCurViewBox = init.slice()
+      setSvgViewBox(svg, init)
+    }
+
+    svg.addEventListener('pointerdown', onPointerDown)
+    svg.addEventListener('pointermove', onPointerMove)
+    svg.addEventListener('pointerup', onPointerUpOrCancel)
+    svg.addEventListener('pointercancel', onPointerUpOrCancel)
+    svg.addEventListener('wheel', onWheel, { passive: false })
+    svg.addEventListener('dblclick', onDblClick)
+  }
+
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+
+      // Clear old render (themeChange/pjax will rerun)
+      const oldSvg = item.querySelector('svg')
+      if (oldSvg) oldSvg.remove()
+      item.__mermaidGestureBound = false
+
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+        if (true) initMermaidGestures(item)
+        item.__mermaidOriginalSvg = svg
+        if (true) attachMermaidViewerButton(item)
+      }
+
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('/libs/mermaid/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.5"></script></div></div></body></html>

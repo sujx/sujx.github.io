@@ -1,0 +1,626 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Hyper-V的使用技巧 | 靖轩</title><meta name="author" content="靖轩"><meta name="copyright" content="靖轩"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="我日常在WSL+VMware Workstation环境中发现，虽然当前环境已经解决了多品牌虚拟化的问题，但还是经常会出现CPU飙升、内核报错的问题。最后，还是决定全盘Hyper-V化。  功能启用帮助文档 Microsoft Learn站点：Windows Server Hyper-V 和虚拟化 官方文档：Windows上的Hyper-V 常用命令：Hyper-V Commands WSL使用帮">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hyper-V的使用技巧">
+<meta property="og:url" content="https://www.sujx.net/2023/12/30/HyperV-tips/index.html">
+<meta property="og:site_name" content="靖轩">
+<meta property="og:description" content="我日常在WSL+VMware Workstation环境中发现，虽然当前环境已经解决了多品牌虚拟化的问题，但还是经常会出现CPU飙升、内核报错的问题。最后，还是决定全盘Hyper-V化。  功能启用帮助文档 Microsoft Learn站点：Windows Server Hyper-V 和虚拟化 官方文档：Windows上的Hyper-V 常用命令：Hyper-V Commands WSL使用帮">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.sujx.net/2023/12/hyper-v.jpg">
+<meta property="article:published_time" content="2023-12-30T01:04:07.000Z">
+<meta property="article:modified_time" content="2026-09-26T02:25:04.148Z">
+<meta property="article:author" content="靖轩">
+<meta property="article:tag" content="Hyper-V">
+<meta property="article:tag" content="Powershell">
+<meta property="article:tag" content="Virtual Machines">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.sujx.net/2023/12/hyper-v.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Hyper-V的使用技巧",
+  "url": "https://www.sujx.net/2023/12/30/HyperV-tips/",
+  "image": "https://cdn.sujx.net/2023/12/hyper-v.jpg",
+  "datePublished": "2023-12-30T01:04:07.000Z",
+  "dateModified": "2026-09-26T02:25:04.148Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "靖轩",
+      "url": "https://www.sujx.net"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://cdn.sujx.net/about/favicon.png"><link rel="canonical" href="https://www.sujx.net/2023/12/30/HyperV-tips/index.html"><link rel="preconnect" href="//cdnjs.cloudflare.com"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css?v=5.5.5"><link rel="stylesheet" href="/fonts/css/all.min.css"><link rel="stylesheet" href="/libs/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?417b20ac1984432f821159fac27d3bb5";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><link rel="stylesheet" href="/fonts/titillium-web.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: '/libs/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: true,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Hyper-V的使用技巧',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="alternate" href="/atom.xml" title="靖轩" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">靖轩</span></a><a class="nav-page-title" href="/"><span class="site-name">Hyper-V的使用技巧</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">Hyper-V的使用技巧</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-12-30T01:04:07.000Z" title="发表于 2023-12-30 09:04:07">2023-12-30</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-09-26T02:25:04.148Z" title="更新于 2026-09-26 10:25:04">2026-09-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%BF%90%E7%BB%B4%E6%8A%80%E5%B7%A7/">运维技巧</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">1.9k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>8分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><p>我日常在WSL+VMware Workstation环境中发现，虽然当前环境已经解决了多品牌虚拟化的问题，但还是经常会出现CPU飙升、内核报错的问题。最后，还是决定全盘Hyper-V化。</p>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023/12/hyper-v.jpg" alt="Hyper-V"></p>
+<h2 id="功能启用"><a href="#功能启用" class="headerlink" title="功能启用"></a>功能启用</h2><h3 id="帮助文档"><a href="#帮助文档" class="headerlink" title="帮助文档"></a>帮助文档</h3><ol>
+<li>Microsoft Learn站点：<a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/training/paths/windows-server-hyper-v-virtualization/">Windows Server Hyper-V 和虚拟化</a></li>
+<li>官方文档：<a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows-server/virtualization/hyper-v/hyper-v-on-windows-server">Windows上的Hyper-V</a></li>
+<li>常用命令：<a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/powershell/module/hyper-v/new-vhd?view=windowsserver2022-ps">Hyper-V Commands</a></li>
+<li>WSL使用帮助：<a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows/wsl/">适用于 Linux 的 Windows 子系统文档</a></li>
+<li>Windows命令行：<a target="_blank" rel="noopener" href="https://devblogs.microsoft.com/commandline/">命令行博客</a></li>
+</ol>
+<h3 id="功能开启"><a href="#功能开启" class="headerlink" title="功能开启"></a>功能开启</h3><figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 使用管理员权限开启powershell</span></span><br><span class="line"><span class="built_in">Install-WindowsFeature</span> <span class="literal">-Name</span> Hyper<span class="literal">-V</span> <span class="literal">-ComputerName</span> <span class="variable">$Env:COMPUTERNAME</span> <span class="literal">-IncludeManagementTools</span></span><br><span class="line"><span class="built_in">Enable-WindowsOptionalFeature</span> <span class="literal">-FeatureName</span> <span class="string">&#x27;Microsoft-Hyper-V-Tools-All&#x27;</span> <span class="literal">-Online</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 重启主机之后进行校验</span></span><br><span class="line"><span class="built_in">Get-WindowsFeature</span> <span class="literal">-ComputerName</span> <span class="variable">$Env:COMPUTERNAME</span></span><br></pre></td></tr></table></figure>
+<h3 id="网络配置"><a href="#网络配置" class="headerlink" title="网络配置"></a>网络配置</h3><p>由于Windows 10 上默认的Default Switch不可管理和卸载，同时默认交换机的IP地址是一直变化的，所以需要创建一个内部网络，搭配自定义路由来实现网络管理。</p>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line"><span class="built_in">New-VMSwitch</span> <span class="literal">-Name</span> PublicSwtich <span class="literal">-SwitchType</span> Internal</span><br></pre></td></tr></table></figure>
+<p>另外，我们创建的内部网络PublicSwitch默认是没有DHCP并且在宿主机上添加的网卡是没有IP地址，所以可以使用ikuai之类的软路由进行管理。</p>
+<h2 id="虚机管理"><a href="#虚机管理" class="headerlink" title="虚机管理"></a>虚机管理</h2><p>示例来源：<a target="_blank" rel="noopener" href="https://www.markou.me/2022/03/manage-hyper-v-virtual-machines-with-powershell/">Manage Hyper-V Virtual Machines with PowerShell</a></p>
+<h3 id="基本命令"><a href="#基本命令" class="headerlink" title="基本命令"></a>基本命令</h3><figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 创建一个名为MyVM，内存为4GB、60GB硬盘使用External Virtual Switch交换机的二代虚机，即BIOS主机</span></span><br><span class="line"><span class="built_in">New-VM</span> <span class="literal">-Name</span> <span class="string">&quot;MyVM&quot;</span> <span class="literal">-MemoryStartupBytes</span> <span class="number">4</span>GB <span class="literal">-Generation</span> <span class="number">2</span> <span class="literal">-Path</span> <span class="string">&quot;C:\VMS\&quot;</span> <span class="literal">-NewVHDPath</span> <span class="string">&quot;C:\VMS\MyVM\disk.vhdx&quot;</span> <span class="literal">-NewVHDSizeBytes</span> <span class="number">60</span>GB <span class="literal">-SwitchName</span> <span class="string">&quot;External Virtual Switch&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 同上，创建同配置的一代虚机，也即使用UEFI的虚机</span></span><br><span class="line"><span class="built_in">New-VM</span> <span class="literal">-Name</span> <span class="string">&quot;MyVM&quot;</span> <span class="literal">-MemoryStartupBytes</span> <span class="number">4</span>GB <span class="literal">-Generation</span> <span class="number">1</span> <span class="literal">-Path</span> <span class="string">&quot;C:\VMS\&quot;</span> <span class="literal">-NewVHDPath</span> <span class="string">&quot;C:\VMS\MyVM\disk.vhdx&quot;</span> <span class="literal">-NewVHDSizeBytes</span> <span class="number">60</span>GB <span class="literal">-SwitchName</span> <span class="string">&quot;External Virtual Switch&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建指定hyper-v版本虚机，当前版本为9. 0，下例指定为8. 0版本</span></span><br><span class="line"><span class="built_in">New-VM</span> <span class="literal">-Name</span> <span class="string">&quot;MyVM&quot;</span> <span class="literal">-MemoryStartupBytes</span> <span class="number">4</span>GB <span class="literal">-Generation</span> <span class="number">2</span>  <span class="literal">-Version</span> <span class="number">8</span>. <span class="number">0</span> <span class="literal">-Path</span> <span class="string">&quot;C:\VMS\&quot;</span> <span class="literal">-NewVHDPath</span> <span class="string">&quot;C:\VMS\MyVM\disk.vhdx&quot;</span> <span class="literal">-NewVHDSizeBytes</span> <span class="number">60</span>GB <span class="literal">-SwitchName</span> <span class="string">&quot;External Virtual Switch&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 配置CPU核心数量，Hyper-V只能指定CPU个数，不同于VMware可以指定CPU个数和核数</span></span><br><span class="line"><span class="built_in">Set-VM</span> <span class="literal">-Name</span> <span class="string">&quot;MyVM&quot;</span> <span class="literal">-ProcessorCount</span> <span class="number">2</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 配置虚机的内存</span></span><br><span class="line"><span class="built_in">Set-VM</span> <span class="literal">-Name</span> <span class="string">&quot;MyVM&quot;</span> <span class="literal">-MemoryStartupBytes</span> <span class="number">8</span>GB</span><br><span class="line"></span><br><span class="line"><span class="comment"># 重命名虚机，磁盘文件不会变更名字</span></span><br><span class="line"><span class="built_in">Set-VM</span> <span class="literal">-Name</span> <span class="string">&quot;MyVM&quot;</span> <span class="literal">-NewVMName</span> <span class="string">&quot;MyNewVM&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 虚机开机</span></span><br><span class="line"><span class="built_in">Start-VM</span> <span class="literal">-VMName</span> <span class="string">&quot;MyVM&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 正常关机</span></span><br><span class="line"><span class="built_in">Stop-VM</span> <span class="literal">-VMName</span> <span class="string">&quot;MyVM&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 直接断电</span></span><br><span class="line"><span class="built_in">Stop-VM</span> <span class="literal">-VMName</span> <span class="string">&quot;MyVM&quot;</span> <span class="literal">-TurnOff</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 重启虚机</span></span><br><span class="line"><span class="built_in">Restart-VM</span> <span class="literal">-VMName</span> <span class="string">&quot;MyVM&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除虚机</span></span><br><span class="line"><span class="built_in">Remove-VM</span> <span class="literal">-Name</span> <span class="string">&quot;MyVM&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除虚机的同时删除配置文件和磁盘文件</span></span><br><span class="line"><span class="variable">$vm</span> = <span class="built_in">get-vm</span> <span class="string">&quot;MyVM&quot;</span>; <span class="variable">$vmpath</span> = <span class="variable">$vm</span>.path; <span class="built_in">Remove-Item</span> <span class="variable">$vm</span>. HardDrives.path <span class="literal">-Force</span> ; <span class="built_in">Remove-VM</span> <span class="variable">$vm</span> <span class="literal">-Force</span> ; <span class="built_in">Remove-Item</span> <span class="variable">$vmpath</span> <span class="literal">-Recurse</span> <span class="literal">-Force</span></span><br></pre></td></tr></table></figure>
+<h3 id="进阶管理"><a href="#进阶管理" class="headerlink" title="进阶管理"></a>进阶管理</h3><figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 附加ISO文件，作为DVD驱动器</span></span><br><span class="line"><span class="built_in">Set-VMDvdDrive</span> Name <span class="string">&quot;MyVM&quot;</span> <span class="literal">-ControllerNumber</span> <span class="number">1</span> <span class="literal">-ControllerLocation</span> <span class="number">0</span> <span class="literal">-Path</span> <span class="string">&quot;C:\ISO\Windowsserver2022. iso&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 附加完成ISO之后，指定使用ISO文件来启动主机</span></span><br><span class="line"><span class="variable">$vmDVDDrive</span> = <span class="built_in">Get-VMDvdDrive</span> <span class="literal">-VMName</span> <span class="string">&quot;MyVM&quot;</span>; <span class="built_in">Set-VMFirmware</span> <span class="literal">-VMName</span> <span class="string">&quot;MyVM&quot;</span> <span class="literal">-FirstBootDevice</span> <span class="variable">$vmDVDDrive</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 分离虚机和ISO</span></span><br><span class="line"><span class="built_in">Get-VMDvdDrive</span> <span class="literal">-VMName</span> <span class="string">&quot;MyVM&quot;</span> | <span class="built_in">Set-VMDvdDrive</span> <span class="literal">-Path</span> <span class="variable">$null</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 迁移虚机存储位置</span></span><br><span class="line"><span class="built_in">Move-VMStorage</span> <span class="string">&quot;MyVM&quot;</span> <span class="literal">-DestinationStoragePath</span> D:\MyVM</span><br><span class="line"></span><br><span class="line"><span class="comment"># 导出虚机</span></span><br><span class="line"><span class="built_in">Export-VM</span> <span class="literal">-Name</span> <span class="string">&quot;MyVM&quot;</span> <span class="literal">-Path</span> <span class="string">&quot;C:\VMS\&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建虚机的检查点，也即VMware的快照点</span></span><br><span class="line"><span class="built_in">Checkpoint-VM</span> <span class="literal">-Name</span> <span class="string">&quot;MyVM&quot;</span> <span class="literal">-SnapshotName</span> <span class="string">&quot;Before applying . NET updates&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 应用快照点</span></span><br><span class="line"><span class="built_in">Restore-VMCheckpoint</span> <span class="literal">-Name</span> <span class="string">&quot;Before applying . NET updates&quot;</span> <span class="literal">-VMName</span> <span class="string">&quot;MyVM&quot;</span> <span class="literal">-Confirm</span>:<span class="variable">$false</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 重命名快照点</span></span><br><span class="line"><span class="built_in">Rename-VMCheckpoint</span> <span class="literal">-VMName</span> <span class="string">&quot;MyVM&quot;</span> <span class="literal">-Name</span> <span class="string">&quot;Before applying . NET updates&quot;</span> <span class="literal">-NewName</span> <span class="string">&quot;MyNewCheckpointName&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除指定快照点</span></span><br><span class="line"><span class="built_in">Remove-VMCheckpoint</span> <span class="literal">-VMName</span> <span class="string">&quot;MyVM&quot;</span> <span class="literal">-Name</span> <span class="string">&quot;MyNewCheckpointName&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除所有检查点</span></span><br><span class="line"><span class="built_in">Get-VMSnapshot</span> <span class="literal">-VMName</span> <span class="string">&quot;MyVM&quot;</span> | <span class="built_in">Remove-VMSnapshot</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 附加新硬盘</span></span><br><span class="line"><span class="built_in">Add-VMHardDiskDrive</span> <span class="literal">-VMName</span> <span class="string">&quot;MyVM&quot;</span> <span class="literal">-Path</span> <span class="string">&quot;C:\VMS\MyVM\data_disk_02. vhdx&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除其他硬盘</span></span><br><span class="line"><span class="built_in">Remove-VMHardDiskDrive</span> <span class="literal">-VMName</span> <span class="string">&quot;MyVM&quot;</span> <span class="literal">-ControllerType</span> <span class="string">&quot;SCSI&quot;</span> <span class="literal">-ControllerNumber</span> <span class="number">0</span> <span class="literal">-ControllerLocation</span> <span class="number">2</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 拓展虚机硬盘大小</span></span><br><span class="line"><span class="variable">$vm</span> = <span class="built_in">get-vm</span> <span class="string">&quot;MyVM&quot;</span>; <span class="built_in">Resize-VHD</span> <span class="literal">-Path</span> <span class="variable">$vm</span>. HardDrives.path <span class="literal">-SizeBytes</span> <span class="number">150</span>GB</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示虚机属性</span></span><br><span class="line"><span class="built_in">Get-VM</span> <span class="literal">-VMName</span> <span class="string">&quot;MyVM&quot;</span> | <span class="built_in">Select</span> * | <span class="built_in">Out-GridView</span></span><br></pre></td></tr></table></figure>
+<h4 id="高阶命令"><a href="#高阶命令" class="headerlink" title="高阶命令"></a>高阶命令</h4><figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 在powershell控制台中进入虚机</span></span><br><span class="line"><span class="built_in">Enter-PSSession</span> <span class="literal">-VMName</span> <span class="string">&quot;MyVM&quot;</span> <span class="literal">-Credential</span> ( <span class="built_in">Get-Credential</span> )</span><br><span class="line"></span><br><span class="line"><span class="comment"># 开启虚机的嵌套虚拟化</span></span><br><span class="line"><span class="built_in">Set-VMProcessor</span> <span class="literal">-VMName</span> <span class="string">&quot;MyVM&quot;</span> <span class="literal">-ExposeVirtualizationExtensions</span> <span class="variable">$true</span>; <span class="built_in">Set-VMNetworkAdapter</span> <span class="literal">-VMName</span> <span class="string">&quot;MyVM&quot;</span> <span class="literal">-MacAddressSpoofing</span> On</span><br><span class="line"></span><br><span class="line"><span class="comment"># 宿主机上被挂载的所有ISO文件</span></span><br><span class="line"><span class="built_in">Get-VMDvdDrive</span> <span class="literal">-VMName</span> * | <span class="built_in">Where-Object</span> &#123;<span class="variable">$_</span>. DvdMediaType <span class="operator">-eq</span> <span class="string">&#x27;ISO&#x27;</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获得创建虚机的时候间戳</span></span><br><span class="line"><span class="built_in">Get-VM</span> * | <span class="built_in">Select-Object</span> VMName, CreationTime | <span class="built_in">Sort-Object</span> CreationTime</span><br></pre></td></tr></table></figure>
+<h2 id="虚机部署"><a href="#虚机部署" class="headerlink" title="虚机部署"></a>虚机部署</h2><h3 id="图形化部署"><a href="#图形化部署" class="headerlink" title="图形化部署"></a>图形化部署</h3><p>略</p>
+<h3 id="脚本部署"><a href="#脚本部署" class="headerlink" title="脚本部署"></a>脚本部署</h3><h4 id="开启脚本执行权限"><a href="#开启脚本执行权限" class="headerlink" title="开启脚本执行权限"></a>开启脚本执行权限</h4><figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 使用管理员权限开始powershell</span></span><br><span class="line"><span class="built_in">Set-ExecutionPolicy</span> AllSigned</span><br></pre></td></tr></table></figure>
+
+<h4 id="创建部署脚本"><a href="#创建部署脚本" class="headerlink" title="创建部署脚本"></a>创建部署脚本</h4><figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line"><span class="comment">#部署虚机</span></span><br><span class="line"><span class="built_in">Write-Host</span> <span class="literal">-NoNewline</span> <span class="literal">-ForegroundColor</span> Magenta <span class="string">&#x27;请输入要创建的虚机名称（如：Master***）&#x27;</span></span><br><span class="line">[<span class="built_in">String</span>]<span class="variable">$VM_Name</span> = <span class="built_in">Read-Host</span></span><br><span class="line"><span class="built_in">Write-Host</span> <span class="literal">-NoNewline</span> <span class="literal">-ForegroundColor</span> Magenta <span class="string">&#x27;请输入需要放在哪台宿主机上（如：T14GEN4）&#x27;</span></span><br><span class="line">[<span class="built_in">String</span>]<span class="variable">$VM_HostName</span>= <span class="built_in">Read-Host</span></span><br><span class="line"><span class="built_in">Write-Host</span> <span class="literal">-NoNewline</span> <span class="literal">-ForegroundColor</span> Magenta <span class="string">&#x27;请输入虚机vCPU核数？直接回车默认是2vCPU（如：2 回车 ）&#x27;</span></span><br><span class="line">[<span class="built_in">int</span><span class="type">16</span>]<span class="variable">$VM_CpuCount</span>= <span class="built_in">Read-Host</span></span><br><span class="line"><span class="built_in">Write-Host</span> <span class="literal">-NoNewline</span> <span class="literal">-ForegroundColor</span> Magenta <span class="string">&#x27;请输入虚机Memory大小？直接回车默认是4GB（如：4 回车 ）&#x27;</span></span><br><span class="line">[<span class="built_in">int</span><span class="type">64</span>]<span class="variable">$VM_Memory</span>= <span class="built_in">Read-Host</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#要求Hyper-V上显示虚机名称为大写字母</span></span><br><span class="line"><span class="variable">$VM_Name</span>=<span class="variable">$VM_Name</span>.toUpper()</span><br><span class="line"><span class="variable">$VM_HostName</span>=<span class="variable">$VM_HostName</span>.toUpper()</span><br><span class="line"></span><br><span class="line"><span class="comment">#判断虚机vCPU是否为默认值</span></span><br><span class="line"><span class="keyword">if</span> ( [<span class="built_in">int</span><span class="type">16</span>]<span class="variable">$VM_CpuCount</span> <span class="operator">-eq</span> <span class="string">&#x27;0&#x27;</span> )</span><br><span class="line">     &#123;<span class="variable">$VM_CpuCount</span>=<span class="number">2</span>&#125;     </span><br><span class="line"><span class="keyword">Else</span></span><br><span class="line">     &#123; &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">#判断虚机Memory是否为默认值</span></span><br><span class="line"><span class="keyword">if</span> ( <span class="variable">$VM_Memory</span> <span class="operator">-eq</span> <span class="string">&#x27; &#x27;</span> )</span><br><span class="line">     &#123;<span class="variable">$VM_Memory</span>=<span class="number">4</span></span><br><span class="line">      <span class="variable">$VM_Memory</span>=<span class="variable">$VM_Memory</span>*<span class="number">1</span>GB</span><br><span class="line">	  &#125;     </span><br><span class="line"><span class="keyword">Else</span></span><br><span class="line">     &#123;<span class="variable">$VM_Memory</span>=<span class="variable">$VM_Memory</span>*<span class="number">1</span>GB&#125;  </span><br><span class="line"></span><br><span class="line"><span class="variable">$Template_VHDX</span> = <span class="string">&quot;SERVICE. vhdx&quot;</span></span><br><span class="line"><span class="variable">$VM_HostName</span> = <span class="variable">$Env:COMPUTERNAME</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#以下命令受限于在Hyper-V Platform上执行。</span></span><br><span class="line"><span class="variable">$NetworkSwitch</span>=( <span class="built_in">Get-VMSwitch</span> | <span class="built_in">Where-Object</span> &#123;<span class="variable">$_</span>. Name <span class="operator">-match</span> <span class="string">&#x27;PublicSwitch&#x27;</span>&#125; ). Name   </span><br><span class="line"><span class="variable">$Template_VHDX_FilePath</span> = <span class="string">&quot;D:\Virtual_Disks\&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#设置磁盘路径  </span></span><br><span class="line"><span class="variable">$VM_Path</span> = <span class="string">&#x27;D:\Virtual_Machines&#x27;</span></span><br><span class="line"><span class="variable">$VM_RemotePath</span> = <span class="string">&quot;D:\Virtual_Machines&quot;</span>	 </span><br><span class="line"><span class="variable">$VM_VHDPath</span> = <span class="variable">$VM_Path</span> + <span class="string">&#x27;\&#x27;</span> + <span class="variable">$VM_Name</span> + <span class="string">&#x27;\Virtual Hard Disks\&#x27;</span>+ <span class="variable">$VM_Name</span> + <span class="string">&#x27;. vhdx&#x27;</span></span><br><span class="line"><span class="variable">$VM_VHDRemotePath</span> = <span class="variable">$VM_RemotePath</span> + <span class="string">&#x27;\&#x27;</span> + <span class="variable">$VM_Name</span> + <span class="string">&#x27;\Virtual Hard Disks\&#x27;</span> + <span class="variable">$VM_Name</span> + <span class="string">&#x27;. vhdx&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#新建新虚机硬盘目录，并将目标硬盘Copy到新虚拟硬盘目录下</span></span><br><span class="line"><span class="built_in">New-item</span> <span class="literal">-path</span> <span class="variable">$VM_RemotePath</span>\<span class="variable">$VM_Name</span> <span class="literal">-name</span> <span class="string">&quot;Virtual Hard Disks&quot;</span> <span class="literal">-type</span> directory  |<span class="built_in">Out-Null</span></span><br><span class="line"><span class="built_in">Copy-Item</span> <span class="literal">-Path</span> <span class="variable">$Template_VHDX_FilePath</span>\<span class="variable">$Template_VHDX</span>  <span class="literal">-Destination</span> <span class="variable">$VM_VHDRemotePath</span> |<span class="built_in">Out-Null</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#新建虚机   备注：如果提示New-VM报错，很可能是有别名导致的，可以先取消别名。</span></span><br><span class="line"><span class="variable">$VM_Mem</span>=<span class="variable">$VM_Memory</span>/<span class="number">1</span>GB</span><br><span class="line"><span class="built_in">Write-Host</span> <span class="literal">-ForegroundColor</span> White <span class="string">&quot;Gather info VMName: <span class="variable">$VM_Name</span>， HostName: <span class="variable">$VM_HostName</span>， Memory:<span class="variable">$VM_Mem</span> GB， vCPU:<span class="variable">$VM_CpuCount</span>，OSVersion:RockyLinux9&quot;</span></span><br><span class="line"><span class="built_in">New-VM</span> –Name <span class="variable">$VM_Name</span> <span class="literal">-ComputerName</span> <span class="variable">$VM_HostName</span> –Generation <span class="number">1</span> <span class="literal">-MemoryStartupBytes</span> <span class="variable">$VM_Memory</span> <span class="literal">-BootDevice</span> VHD <span class="literal">-SwitchName</span> <span class="variable">$NetworkSwitch</span> –Path <span class="variable">$VM_Path</span> <span class="literal">-VHDPath</span> <span class="variable">$VM_VHDPath</span> |<span class="built_in">Out-Null</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#设置CPU核数</span></span><br><span class="line"><span class="built_in">Set-VM</span> <span class="literal">-Name</span> <span class="variable">$VM_Name</span> <span class="literal">-ComputerName</span> <span class="variable">$VM_HostName</span> <span class="literal">-ProcessorCount</span> <span class="variable">$VM_CpuCount</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 启动来宾服务（ 中文环境下这个名字就似乎中文的，需要通过中文来配置 ）</span></span><br><span class="line"><span class="built_in">Enable-VMIntegrationService</span> <span class="literal">-Name</span> <span class="string">&quot;来宾服务接口&quot;</span>  <span class="literal">-VMName</span> <span class="variable">$VM_Name</span> </span><br><span class="line"></span><br><span class="line"><span class="comment">#禁用动态内存</span></span><br><span class="line"><span class="built_in">Set-VMMemory</span> <span class="literal">-VMName</span> <span class="variable">$VM_Name</span> <span class="literal">-ComputerName</span> <span class="variable">$VM_HostName</span> <span class="literal">-DynamicMemoryEnabled</span> <span class="variable">$False</span>  </span><br><span class="line"></span><br><span class="line"><span class="comment"># 关闭自动创建检查点</span></span><br><span class="line"><span class="built_in">Set-VM</span> <span class="literal">-VMName</span> <span class="variable">$VM_Name</span> <span class="literal">-AutomaticCheckpointsEnabled</span> <span class="variable">$False</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#启动虚机</span></span><br><span class="line"><span class="built_in">Start-VM</span> <span class="literal">-Name</span> <span class="variable">$VM_Name</span> <span class="literal">-ComputerName</span> <span class="variable">$VM_HostName</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="使用技巧"><a href="#使用技巧" class="headerlink" title="使用技巧"></a>使用技巧</h2><h3 id="WSL"><a href="#WSL" class="headerlink" title="WSL"></a>WSL</h3><h4 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h4><figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">wsl <span class="literal">--install</span></span><br><span class="line">wsl <span class="literal">--update</span></span><br></pre></td></tr></table></figure>
+<h4 id="重启"><a href="#重启" class="headerlink" title="重启"></a>重启</h4><figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">wsl <span class="literal">--shutdown</span></span><br></pre></td></tr></table></figure>
+<h4 id="关闭-etc-hosts自动刷新"><a href="#关闭-etc-hosts自动刷新" class="headerlink" title="关闭&#x2F;etc&#x2F;hosts自动刷新"></a>关闭&#x2F;etc&#x2F;hosts自动刷新</h4><figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 添加如下代码</span></span><br><span class="line"><span class="built_in">cat</span> &gt;&gt;/etc/hosts &lt;&lt;EOF</span><br><span class="line">[<span class="type">network</span>]</span><br><span class="line">generateHosts = false</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+
+<h4 id="部署ALmaLinux9"><a href="#部署ALmaLinux9" class="headerlink" title="部署ALmaLinux9"></a>部署ALmaLinux9</h4><p>使用微软Store来部署 <a target="_blank" rel="noopener" href="https://apps.microsoft.com/detail/9P5RWLM70SN9?hl=zh-cn&gl=US">Microsoft|Store</a></p>
+<h3 id="激活"><a href="#激活" class="headerlink" title="激活"></a>激活</h3><p>Hyper-V主机能够不依赖网络KMS来实现自动激活宿主机的虚机。</p>
+<h4 id="前提"><a href="#前提" class="headerlink" title="前提"></a>前提</h4><ol>
+<li>使用数据中心版的Windows Server( 2012、2016、2019、2022 )</li>
+<li>启动了Hyper-V的角色</li>
+</ol>
+<h4 id="AVMA-Key"><a href="#AVMA-Key" class="headerlink" title="AVMA Key"></a>AVMA Key</h4><p><strong>AVMA</strong> ( Automatic Virtual Machine Activation ) 自动实现虚机批量自动激活的特定机制，就是该宿主机配置AVMA key之后，该主机上的所有Hyper-V虚机自动激活，无需额外配置。</p>
+<p>使用方法：</p>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">slmgr /ipk <span class="string">&quot;AVMA Key&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="常用Key"><a href="#常用Key" class="headerlink" title="常用Key"></a>常用Key</h4><ul>
+<li><strong>AVMA</strong> keys for Windows Server 2019.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">Edition</th>
+<th align="center">AVMA key</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Datacenter</td>
+<td align="center">H3RNG-8C32Q-Q8FRX-6TDXV-WMBMW</td>
+</tr>
+<tr>
+<td align="center">Standard</td>
+<td align="center">TNK62-RXVTB-4P47B-2D623-4GF74</td>
+</tr>
+<tr>
+<td align="center">Essentials</td>
+<td align="center">2CTP7-NHT64-BP62M-FV6GG-HFV28</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>AVMA</strong> keys for Windows Server version 1809.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">Edition</th>
+<th align="center">AVMA key</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Datacenter</td>
+<td align="center">H3RNG-8C32Q-Q8FRX-6TDXV-WMBMW</td>
+</tr>
+<tr>
+<td align="center">Standard</td>
+<td align="center">TNK62-RXVTB-4P47B-2D623-4GF74</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>AVMA</strong> keys for Windows Server 2016.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th><strong>Edition</strong></th>
+<th><strong>AVMA key</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Datacenter</td>
+<td>TMJ3Y-NTRTM-FJYXT-T22BY-CWG3J</td>
+</tr>
+<tr>
+<td>Standard</td>
+<td>C3RCX-M6NRP-6CXC9-TW2F2-4RHYD</td>
+</tr>
+<tr>
+<td>Essentials</td>
+<td>B4YNW-62DX9-W8V6M-82649-MHBKQ</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>AVMA</strong> keys for Windows Server 2012R2.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th><strong>Edition</strong></th>
+<th><strong>AVMA key</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Datacenter</td>
+<td>Y4TGP-NPTV9-HTC2H-7MGQ3-DV4TW</td>
+</tr>
+<tr>
+<td>Standard</td>
+<td>DBGBW-NPF86-BJVTX-K3WKJ-MTB6V</td>
+</tr>
+<tr>
+<td>Essentials</td>
+<td>K2XGM-NMBT3-2R6Q8-WF2FK-P36R2</td>
+</tr>
+</tbody></table>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>以下是两个写的很好的Hyper-V MVP的blog：</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://www.markou.me/">GEORGE MARKOU</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.thomasmaurer.ch/">THOMAS MAURER</a> ( 这位是Azure混合云的老大 )</li>
+<li><a target="_blank" rel="noopener" href="https://charbelnemnom.com/">Charbelnemom</a>、</li>
+</ol>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Hyper-V/">Hyper-V</a><a class="post-meta__tags" href="/tags/Virtual-Machines/">Virtual Machines</a><a class="post-meta__tags" href="/tags/Powershell/">Powershell</a></div><div class="post-share"><div class="social-share" data-image="https://cdn.sujx.net/2023/12/hyper-v.jpg" data-sites="facebook,twitter,weibo,qq"></div><link rel="stylesheet" href="/libs/sharejs/css/share.min.css" media="print" onload="this.media='all'"><script src="/libs/sharejs/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>能否请我喝一杯咖啡？</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.jpg" target="_blank"><img class="post-qr-code-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/wechat.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2023/12/31/happynewyear2024/" title="Happy New Year"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/1/wallhaven-vq3e15.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Happy New Year</div></div><div class="info-2"><div class="info-item-1"> 2023，真是不开心的一年，失去了很多，错过了很多、被打击了很多。 哎，就这样吧，让它随风而去吧。  2023年，纷繁忙碌的一年，就此拜别。  春经历的疫情大转折的痛苦时。折腾了半年的装修终于完成了收尾，结束了和装修队的勾心斗角。就像其他人的装修总会留有遗憾一样，墙壁开裂、定制柜味大、洗手池买错了、插座位置不合理等等等。二十多万的投入，跟理想象中舒适小窝的还差国贸到公主坟的距离。 陪老婆出差又去了广州，刨除路过之外，算是第一次去广州。 夏突如其来又如约而至的收到了裁员通知，我于是就考了一个红十字的急救员证书，然后开车先后去了正定、雄安、淄博、临沂、郑州、开封、洛阳、登封、临漳、天津、山海关、葫芦岛、秦皇岛，过了四次黄河、渤海边上浪一回、围着华北平原转了一圈，最后的结论是河北老百姓真穷，比我都穷。 还好的是，去杭州过了阿里云的ACE面试，第一次见识了沙尘暴下的西湖。接下来，接了朋友公司的一些业务，开始折腾阿里云的各种上云业务，顺手还接了一单给美年大健康办公室升级系统的体力活。 秋岳母在做胰腺癌的复查时，出现指标异常，然后又查出来肝癌，住院一个多月切除了肝脏的一部分。岳父在岳母康复...</div></div></div></a><a class="pagination-related" href="/2023/12/23/Server-Host-Check-Template/" title="「服务器巡检和维护报告」模板"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023/12/wallhaven-439e19.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">「服务器巡检和维护报告」模板</div></div><div class="info-2"><div class="info-item-1"> 服务器巡检和维护报告巡检时间2022年12月30日 巡检人员小明 基础信息服务器名称：WebServer001IP地址：192. 168. 1. 100服务器类型：虚拟化应用服务器巡检内容系统状态   监控项目 主机状态    CPU使用率 50%   内存使用率 70%   硬盘使用率 40%   网络流量 12. 8GB   服务状态   服务名称 服务状态    WEB服务 运行正常   数据库服务 运行正常   邮件服务 运行正常   其他服务 运行正常   安全检查   安全项目 运行状态    防火墙设置 已启用   安全漏洞扫描 无高危漏洞   病毒扫描 无病毒感染   备份检查   备份项目 检查状态    系统备份 已备份   数据备份 已备份   存在风险问题记录、解决方案及预期解决时间表   问题编号 问题描述 问题表现 影响范围 发生频率 解决方案 操作步骤 预计解决时间    1 系统日志管理不善 日志堆积，未及时清理，占用磁盘空间 本地主机 每季度 优化日志管理策略 建立日志轮转清理脚本 2023年1月10日   风险分析优化日志管理策略，可能会需要...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/07/16/Hyper-V_Server_is_Over/" title="免费Hyper-V发行版的终结"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover117.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-07-16</div><div class="info-item-2">免费Hyper-V发行版的终结</div></div><div class="info-2"><div class="info-item-1">微软已经正式淘汰了Windows Server 2025免费版本的Hyper V。这一变化标志着依赖经济高效的IT专业人员和组织的重大转变虚拟化。这对您的基础设施和预算意味着什么？    06 陕西·秦岭    微软的Hyper-V Server是过去付费虚拟机管理程序解决方案的免费替代方案。在市场竞争中，它并没有改变游戏规则，但作为免费提供的企业级虚拟化解决方案，一直是重要而有影响力的基础工具。但是，随着Windows Server 2022和2025的发布，免费Hyper-V的时候代已经结束。对于依赖Hyper-V满足虚拟化需求的IT专业人员和组织来说，这一转变标志着一个重大变化。在2022-2023年期间，许多Hyper-V用户开始向微软询问Hyper-V发生了什么？答案很简单：微软淘汰了这个版本，所以你现在唯一的选择就是安装和部署Windows Server 2025 core版本（没有GUI的版本），您将在其上激活Hyper-V角色。这个版本的操作系统，你可以想象，不是免费的。但在我们讨论之前，让我们回顾一下发生了什么。 Hyper-V Server 的兴起Hyper-...</div></div></div></a><a class="pagination-related" href="/2021/06/28/ubuntu-template-on-hyperv/" title="制作Hyper-V的Ubuntu虚机模板"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/04/wallhaven-mdj888.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-28</div><div class="info-item-2">制作Hyper-V的Ubuntu虚机模板</div></div><div class="info-2"><div class="info-item-1">硬件准备 主机信息  CPU：默认创建1核处理器 内存：1GB 硬盘：50GB 系统盘，使用LVM动态磁盘 IP地址： 172. 31. 107. 15&#x2F;16 安装镜像：https://releases.ubuntu.com/20.04/ubuntu-20.04. 2-live-server-amd64. iso ( SHA256SUMS校验值为: d1f2bf834bbe9bb43faf16f9be992a6f3935e65be0edece1dee2aa6eb1767423 ) 软件源为： http://cn.archive.ubuntu.com/ubuntu   创建主机 # 使用管理员权限开启PHPV153003主机的powershell控制台# 创建虚机，并指定第二代且版本为5. 0以及路径New-VM -Name ubuntutemplate -MemoryStartupBytes 1GB -Generation 2 -Version 5. 0 -Path d:\VMs\ -Novhd# 创建硬盘文件夹mkdir &quot;D:\VMs\ubuntutemp...</div></div></div></a><a class="pagination-related" href="/2024/07/16/WSL-Docker-GPU/" title="在Windows中使用Docker搭建大模型RAG"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/909bigship.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-07-16</div><div class="info-item-2">在Windows中使用Docker搭建大模型RAG</div></div><div class="info-2"><div class="info-item-1">本文将使用Windows环境来构建基于Qwen2-7b大模型的小型本地知识库。涉及到的内容包括：  Windows环境的Docker部署； Qwen2-7b大模型的获取； 基于Ollama的大模型部署； Open-webui的前台展示     07 摄于广州黄埔·鱼珠码头 909功勋试验舰   系统准备部署WSL需要先启用“适用于 Linux 的 Windows 子系统”可选功能，然后才能在 Windows 上安装 Linux 分发。 以管理员身份打开 PowerShell（“开始”菜单 &gt;“PowerShell” &gt;单击右键 &gt;“以管理员身份运行”），然后输入以下命令： # 启用WSLdism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart# 安装虚拟化dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart# 下载内...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">靖轩</div><div class="author-info-description">逝者如斯夫,不舍昼夜</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/grepsu"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://gitee.com/grepsu" target="_blank" title="Gitee"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:sujx@live.cn" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS链接"><i class="fa  fa-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8A%9F%E8%83%BD%E5%90%AF%E7%94%A8"><span class="toc-number">1.</span> <span class="toc-text">功能启用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%AE%E5%8A%A9%E6%96%87%E6%A1%A3"><span class="toc-number">1.1.</span> <span class="toc-text">帮助文档</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%9F%E8%83%BD%E5%BC%80%E5%90%AF"><span class="toc-number">1.2.</span> <span class="toc-text">功能开启</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE"><span class="toc-number">1.3.</span> <span class="toc-text">网络配置</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%99%9A%E6%9C%BA%E7%AE%A1%E7%90%86"><span class="toc-number">2.</span> <span class="toc-text">虚机管理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4"><span class="toc-number">2.1.</span> <span class="toc-text">基本命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9B%E9%98%B6%E7%AE%A1%E7%90%86"><span class="toc-number">2.2.</span> <span class="toc-text">进阶管理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%AB%98%E9%98%B6%E5%91%BD%E4%BB%A4"><span class="toc-number">2.2.1.</span> <span class="toc-text">高阶命令</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%99%9A%E6%9C%BA%E9%83%A8%E7%BD%B2"><span class="toc-number">3.</span> <span class="toc-text">虚机部署</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%BE%E5%BD%A2%E5%8C%96%E9%83%A8%E7%BD%B2"><span class="toc-number">3.1.</span> <span class="toc-text">图形化部署</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%84%9A%E6%9C%AC%E9%83%A8%E7%BD%B2"><span class="toc-number">3.2.</span> <span class="toc-text">脚本部署</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BC%80%E5%90%AF%E8%84%9A%E6%9C%AC%E6%89%A7%E8%A1%8C%E6%9D%83%E9%99%90"><span class="toc-number">3.2.1.</span> <span class="toc-text">开启脚本执行权限</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E9%83%A8%E7%BD%B2%E8%84%9A%E6%9C%AC"><span class="toc-number">3.2.2.</span> <span class="toc-text">创建部署脚本</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7"><span class="toc-number">4.</span> <span class="toc-text">使用技巧</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#WSL"><span class="toc-number">4.1.</span> <span class="toc-text">WSL</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%83%A8%E7%BD%B2"><span class="toc-number">4.1.1.</span> <span class="toc-text">部署</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%87%8D%E5%90%AF"><span class="toc-number">4.1.2.</span> <span class="toc-text">重启</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B3%E9%97%AD-etc-hosts%E8%87%AA%E5%8A%A8%E5%88%B7%E6%96%B0"><span class="toc-number">4.1.3.</span> <span class="toc-text">关闭&#x2F;etc&#x2F;hosts自动刷新</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%83%A8%E7%BD%B2ALmaLinux9"><span class="toc-number">4.1.4.</span> <span class="toc-text">部署ALmaLinux9</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%BF%80%E6%B4%BB"><span class="toc-number">4.2.</span> <span class="toc-text">激活</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%89%8D%E6%8F%90"><span class="toc-number">4.2.1.</span> <span class="toc-text">前提</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#AVMA-Key"><span class="toc-number">4.2.2.</span> <span class="toc-text">AVMA Key</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8Key"><span class="toc-number">4.2.3.</span> <span class="toc-text">常用Key</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96"><span class="toc-number">5.</span> <span class="toc-text">其他</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/07/03/AIGC_FoxHole/" title="海鹰">海鹰</a><time datetime="2026-07-03T01:04:07.000Z" title="发表于 2026-07-03 09:04:07">2026-07-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/11/fristVibeCoding/" title="鹊随金印：我的第一个完整的AI编程项目">鹊随金印：我的第一个完整的AI编程项目</a><time datetime="2026-06-11T01:04:07.000Z" title="发表于 2026-06-11 09:04:07">2026-06-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/03/VI_Howto/" title="VI编辑器简介">VI编辑器简介</a><time datetime="2026-06-03T01:04:07.000Z" title="发表于 2026-06-03 09:04:07">2026-06-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/28/HNCitic_2605/" title="我要上头条">我要上头条</a><time datetime="2026-05-28T01:04:07.000Z" title="发表于 2026-05-28 09:04:07">2026-05-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/12/TS-Domain-Controller-Sync-Failure/" title="记一次Windows AD域控制器同步故障排错">记一次Windows AD域控制器同步故障排错</a><time datetime="2026-05-12T03:04:07.000Z" title="发表于 2026-05-12 11:04:07">2026-05-12</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2008 - 2026 By 靖轩</span></div><div class="footer_custom_text">京ICP备17034757号</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.5"></script><script src="/js/main.js?v=5.5.5"></script><script src="/libs/fancybox/fancybox.umd.js"></script><script src="/js/instantpage.js" type="module"></script><script src="/libs/lazyload/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const parseViewBox = viewBox => {
+    if (!viewBox) return null
+    const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
+    if (parts.length !== 4 || parts.some(n => Number.isNaN(n))) return null
+    return parts
+  }
+
+  const getSvgViewBox = svg => {
+    const attr = parseViewBox(svg.getAttribute('viewBox'))
+    if (attr) return attr
+
+    // Fallback: use bbox to build a viewBox
+    try {
+      const bbox = svg.getBBox()
+      if (bbox && bbox.width && bbox.height) return [bbox.x, bbox.y, bbox.width, bbox.height]
+    } catch (e) {
+      // getBBox may fail on some edge cases; ignore
+    }
+
+    const w = Number(svg.getAttribute('width')) || 0
+    const h = Number(svg.getAttribute('height')) || 0
+    if (w > 0 && h > 0) return [0, 0, w, h]
+    return [0, 0, 100, 100]
+  }
+
+  const setSvgViewBox = (svg, vb) => {
+    svg.setAttribute('viewBox', `${vb[0]} ${vb[1]} ${vb[2]} ${vb[3]}`)
+  }
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v))
+
+  const openSvgInNewTab = ({ source, initViewBox }) => {
+    const getClonedSvg = () => {
+      if (typeof source === 'string') {
+        const template = document.createElement('template')
+        template.innerHTML = source.trim()
+        const svg = template.content.querySelector('svg')
+        return svg ? svg.cloneNode(true) : null
+      }
+      if (source && typeof source.cloneNode === 'function') {
+        return source.cloneNode(true)
+      }
+      return null
+    }
+
+    const clone = getClonedSvg()
+    if (!clone) return
+    if (initViewBox && initViewBox.length === 4) {
+      clone.setAttribute('viewBox', initViewBox.join(' '))
+    }
+    if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+    if (!clone.getAttribute('xmlns:xlink') && clone.outerHTML.includes('xlink:')) {
+      clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+    }
+    // inject background to match current theme
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    const bg = getComputedStyle(document.body).backgroundColor || (isDark ? '#1e1e1e' : '#ffffff')
+    if (!clone.style.background) clone.style.background = bg
+
+    const serializer = new XMLSerializer()
+    const svgSource = serializer.serializeToString(clone)
+    const htmlSource = `<!doctype html><html><head><meta charset="utf-8" />
+      <style>
+        html, body { width: 100%; height: 100%; margin: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; }
+        svg { max-width: 100%; max-height: 100%; height: auto; width: auto; }
+      </style>
+      </head><body>${svgSource}</body></html>`
+    const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank', 'noopener')
+    setTimeout(() => URL.revokeObjectURL(url), 30000)
+  }
+
+  const attachMermaidViewerButton = wrap => {
+    let btn = wrap.querySelector('.mermaid-open-btn')
+    if (!btn) {
+      btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'mermaid-open-btn'
+      wrap.appendChild(btn)
+    }
+
+    btn.innerHTML = '<i class="fa fa-search fa-fw" aria-hidden="true"></i>'
+
+    if (!btn.__mermaidViewerBound) {
+      btn.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        const svg = wrap.__mermaidOriginalSvg || wrap.querySelector('svg')
+        if (!svg) return
+        const initViewBox = wrap.__mermaidInitViewBox
+        if (typeof svg === 'string') {
+          openSvgInNewTab({ source: svg, initViewBox })
+          return
+        }
+        openSvgInNewTab({ source: svg, initViewBox })
+      })
+      btn.__mermaidViewerBound = true
+    }
+  }
+
+  // Zoom around a point (px, py) in the SVG viewport (in viewBox coordinates)
+  const zoomAtPoint = (vb, factor, px, py) => {
+    const w = vb[2] * factor
+    const h = vb[3] * factor
+    const nx = px - (px - vb[0]) * factor
+    const ny = py - (py - vb[1]) * factor
+    return [nx, ny, w, h]
+  }
+
+  const initMermaidGestures = wrap => {
+    const svg = wrap.querySelector('svg')
+    if (!svg) return
+
+    // Ensure viewBox exists so gestures always work
+    const initVb = getSvgViewBox(svg)
+    wrap.__mermaidInitViewBox = initVb
+    wrap.__mermaidCurViewBox = initVb.slice()
+    setSvgViewBox(svg, initVb)
+
+    // Avoid binding multiple times on themeChange/pjax
+    if (wrap.__mermaidGestureBound) return
+    wrap.__mermaidGestureBound = true
+
+    // Helper: map client (viewport) coordinate -> viewBox coordinate
+    const clientToViewBox = (clientX, clientY) => {
+      const rect = svg.getBoundingClientRect()
+      const vb = wrap.__mermaidCurViewBox || getSvgViewBox(svg)
+      const x = vb[0] + (clientX - rect.left) * (vb[2] / rect.width)
+      const y = vb[1] + (clientY - rect.top) * (vb[3] / rect.height)
+      return { x, y, rect, vb }
+    }
+
+    const state = {
+      pointers: new Map(),
+      startVb: null,
+      startDist: 0,
+      startCenter: null
+    }
+
+    const clampVb = vb => {
+      const init = wrap.__mermaidInitViewBox || vb
+      const minW = init[2] * 0.1
+      const maxW = init[2] * 10
+      const minH = init[3] * 0.1
+      const maxH = init[3] * 10
+      vb[2] = clamp(vb[2], minW, maxW)
+      vb[3] = clamp(vb[3], minH, maxH)
+      return vb
+    }
+
+    const setCurVb = vb => {
+      vb = clampVb(vb)
+      wrap.__mermaidCurViewBox = vb
+      setSvgViewBox(svg, vb)
+    }
+
+    const onPointerDown = e => {
+      // Allow only primary button for mouse
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      svg.setPointerCapture(e.pointerId)
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      if (state.pointers.size === 1) {
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      } else if (state.pointers.size === 2) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        state.startDist = Math.hypot(dx, dy)
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        state.startCenter = { x: (pts[0].x + pts[1].x) / 2, y: (pts[0].y + pts[1].y) / 2 }
+      }
+    }
+
+    const onPointerMove = e => {
+      if (!state.pointers.has(e.pointerId)) return
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      // Pan with 1 pointer
+      if (state.pointers.size === 1 && state.startVb) {
+        const p = [...state.pointers.values()][0]
+        const prev = { x: e.clientX - e.movementX, y: e.clientY - e.movementY }
+        // movementX/Y unreliable on touch, compute from stored last position
+        const last = wrap.__mermaidLastSinglePointer || p
+        const dxClient = p.x - last.x
+        const dyClient = p.y - last.y
+        wrap.__mermaidLastSinglePointer = p
+
+        const { rect } = clientToViewBox(p.x, p.y)
+        const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        const dx = dxClient * (vb[2] / rect.width)
+        const dy = dyClient * (vb[3] / rect.height)
+        setCurVb([vb[0] - dx, vb[1] - dy, vb[2], vb[3]])
+        return
+      }
+
+      // Pinch zoom with 2 pointers
+      if (state.pointers.size === 2 && state.startVb && state.startDist > 0) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        const dist = Math.hypot(dx, dy)
+        if (!dist) return
+        const factor = state.startDist / dist // dist bigger => zoom in (viewBox smaller)
+
+        const cx = (pts[0].x + pts[1].x) / 2
+        const cy = (pts[0].y + pts[1].y) / 2
+        const centerClient = { x: cx, y: cy }
+
+        const pxy = clientToViewBox(centerClient.x, centerClient.y)
+        const cpx = pxy.x
+        const cpy = pxy.y
+
+        const vb = zoomAtPoint(state.startVb, factor, cpx, cpy)
+        setCurVb(vb)
+      }
+    }
+
+    const onPointerUpOrCancel = e => {
+      state.pointers.delete(e.pointerId)
+      if (state.pointers.size === 0) {
+        state.startVb = null
+        state.startDist = 0
+        state.startCenter = null
+        wrap.__mermaidLastSinglePointer = null
+      } else if (state.pointers.size === 1) {
+        // reset single pointer baseline to avoid jump
+        wrap.__mermaidLastSinglePointer = [...state.pointers.values()][0]
+      }
+    }
+
+    // Wheel zoom (mouse/trackpad)
+    const onWheel = e => {
+      // ctrlKey on mac trackpad pinch; we treat both as zoom
+      e.preventDefault()
+      const delta = e.deltaY
+      const zoomFactor = delta > 0 ? 1.1 : 0.9
+      const { x, y } = clientToViewBox(e.clientX, e.clientY)
+      const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      setCurVb(zoomAtPoint(vb, zoomFactor, x, y))
+    }
+
+    const onDblClick = () => {
+      const init = wrap.__mermaidInitViewBox
+      if (!init) return
+      wrap.__mermaidCurViewBox = init.slice()
+      setSvgViewBox(svg, init)
+    }
+
+    svg.addEventListener('pointerdown', onPointerDown)
+    svg.addEventListener('pointermove', onPointerMove)
+    svg.addEventListener('pointerup', onPointerUpOrCancel)
+    svg.addEventListener('pointercancel', onPointerUpOrCancel)
+    svg.addEventListener('wheel', onWheel, { passive: false })
+    svg.addEventListener('dblclick', onDblClick)
+  }
+
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+
+      // Clear old render (themeChange/pjax will rerun)
+      const oldSvg = item.querySelector('svg')
+      if (oldSvg) oldSvg.remove()
+      item.__mermaidGestureBound = false
+
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+        if (true) initMermaidGestures(item)
+        item.__mermaidOriginalSvg = svg
+        if (true) attachMermaidViewerButton(item)
+      }
+
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('/libs/mermaid/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.5"></script></div></div></body></html>

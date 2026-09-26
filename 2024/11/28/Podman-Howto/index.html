@@ -1,0 +1,523 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Podman的入门 | 靖轩</title><meta name="author" content="靖轩"><meta name="copyright" content="靖轩"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Podman是一个开源的容器运行时项目，提供与Docker相似的功能，可以管理和运行任何符合OCI规范的容器和镜像。Podman提供了一个与Docker兼容的命令行前端来管理容器镜像。其主要的优点有：  无根模式运行，没有任何额外特权需要； 不需要守护进程3。 原生systemd集成，允许用户创建systemd单元文件并将容器作为系统服务运行。     11 天津·和平区·解放北路·利顺德大酒店">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Podman的入门">
+<meta property="og:url" content="https://www.sujx.net/2024/11/28/Podman-Howto/index.html">
+<meta property="og:site_name" content="靖轩">
+<meta property="og:description" content="Podman是一个开源的容器运行时项目，提供与Docker相似的功能，可以管理和运行任何符合OCI规范的容器和镜像。Podman提供了一个与Docker兼容的命令行前端来管理容器镜像。其主要的优点有：  无根模式运行，没有任何额外特权需要； 不需要守护进程3。 原生systemd集成，允许用户创建systemd单元文件并将容器作为系统服务运行。     11 天津·和平区·解放北路·利顺德大酒店">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.sujx.net/covers/cover73.jpg">
+<meta property="article:published_time" content="2024-11-28T07:04:07.000Z">
+<meta property="article:modified_time" content="2026-09-26T02:25:04.185Z">
+<meta property="article:author" content="靖轩">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="Podman">
+<meta property="article:tag" content="Sysadmin">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.sujx.net/covers/cover73.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Podman的入门",
+  "url": "https://www.sujx.net/2024/11/28/Podman-Howto/",
+  "image": "https://cdn.sujx.net/covers/cover73.jpg",
+  "datePublished": "2024-11-28T07:04:07.000Z",
+  "dateModified": "2026-09-26T02:25:04.185Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "靖轩",
+      "url": "https://www.sujx.net"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://cdn.sujx.net/about/favicon.png"><link rel="canonical" href="https://www.sujx.net/2024/11/28/Podman-Howto/index.html"><link rel="preconnect" href="//cdnjs.cloudflare.com"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css?v=5.5.5"><link rel="stylesheet" href="/fonts/css/all.min.css"><link rel="stylesheet" href="/libs/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?417b20ac1984432f821159fac27d3bb5";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><link rel="stylesheet" href="/fonts/titillium-web.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: '/libs/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: true,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Podman的入门',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="alternate" href="/atom.xml" title="靖轩" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">靖轩</span></a><a class="nav-page-title" href="/"><span class="site-name">Podman的入门</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">Podman的入门</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-11-28T07:04:07.000Z" title="发表于 2024-11-28 15:04:07">2024-11-28</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-09-26T02:25:04.185Z" title="更新于 2026-09-26 10:25:04">2026-09-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%BF%90%E7%BB%B4%E6%8A%80%E5%B7%A7/">运维技巧</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">2.6k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>14分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><p>Podman是一个开源的容器运行时项目，提供与Docker相似的功能，可以管理和运行任何符合OCI规范的容器和镜像。Podman提供了一个与Docker兼容的命令行前端来管理容器镜像。其主要的优点有：</p>
+<ol>
+<li>无根模式运行，没有任何额外特权需要；</li>
+<li>不需要守护进程<br>3。 原生systemd集成，允许用户创建systemd单元文件并将容器作为系统服务运行。</li>
+</ol>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover73.jpg"></p>
+<blockquote>
+<ol start="2024">
+<li>11 天津·和平区·解放北路·利顺德大酒店</li>
+</ol>
+</blockquote>
+<h2 id="初始安装"><a href="#初始安装" class="headerlink" title="初始安装"></a>初始安装</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">部署</span></span><br><span class="line">[root@podman ~]# dnf install -y podman podman-docker podman-compose</span><br><span class="line">touch /etc/containers/nodocker</span><br><span class="line">[root@podman ~]# podman -v</span><br><span class="line">podman version 5. 3. 1</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">配置镜像代理</span></span><br><span class="line">[root@podman ~]# vim /etc/containers/registries.conf</span><br><span class="line">unqualified-search-registries = [&quot;docker.io&quot;]</span><br><span class="line">[[registry]]</span><br><span class="line">prefix=&quot;docker.io&quot;</span><br><span class="line">location=&quot;docker. 1ms.run&quot;</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">重启服务</span></span><br><span class="line">[root@podman ~]# systemctl enable podman</span><br><span class="line">[root@podman ~]# systemctl restart podman</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">拉取镜像</span></span><br><span class="line">[root@podman ~]# podman run hello-world</span><br><span class="line">!... Hello Podman World ...!</span><br><span class="line"></span><br><span class="line">         .--&quot;--.           </span><br><span class="line">       / -     - \         </span><br><span class="line">      / ( O )   ( O ) \        </span><br><span class="line">   ~~~| -=( , Y,  )=- |         </span><br><span class="line">    .---. /`  \   |~~      </span><br><span class="line"> ~/  o  o \~~~~.----. ~~   </span><br><span class="line">  | =( X )= |~  / ( O ( O ) \   </span><br><span class="line">   ~~~~~~~  ~| =( Y_ )=-  |   </span><br><span class="line">  ~~~~    ~~~|   U      |~~ </span><br><span class="line"></span><br><span class="line">Project:   https://github.com/containers/podman</span><br><span class="line">Website:   https://podman.io</span><br><span class="line">Desktop:   https://podman-desktop.io</span><br><span class="line">Documents: https://docs.podman.io</span><br><span class="line">YouTube:   https://youtube.com/@Podman</span><br><span class="line">X/Twitter: @Podman_io</span><br><span class="line">Mastodon:  @Podman_io@fosstodon.org</span><br></pre></td></tr></table></figure>
+<h2 id="使用管理"><a href="#使用管理" class="headerlink" title="使用管理"></a>使用管理</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">交互式运行容器</span></span><br><span class="line">[root@podman ~]# podman run -it ubuntu /bin/bash</span><br><span class="line">root@b6089f227b55:/# </span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">容器后台运行</span></span><br><span class="line">[root@podman ~]# podman run -itd --name ubuntu_test ubuntu /bin/bash</span><br><span class="line">36811becd0b716687bc8e5ab0c6c29cd64ee159ceac1d2f7b7a685e69f7b7ea1</span><br><span class="line">[root@podman ~]# podman ps</span><br><span class="line">CONTAINER ID  IMAGE                            COMMAND     CREATED         STATUS         PORTS       NAMES</span><br><span class="line">36811becd0b7  docker.io/library/ubuntu:latest  /bin/bash   11 seconds ago  Up 12 seconds              ubuntu_test</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">使用容器ID进入容器</span></span><br><span class="line">[root@podman ~]# podman exec -it 368 /bin/bash</span><br><span class="line">root@36811becd0b7:/# </span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">启动容器</span></span><br><span class="line">[root@podman ~]# podman start ubuntu_test</span><br><span class="line">ubuntu_test</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">停止容器</span></span><br><span class="line">[root@podman ~]# podman stop ubuntu_test</span><br><span class="line">WARN[0010] StopSignal SIGTERM failed to stop container ubuntu_test in 10 seconds, resorting to SIGKILL </span><br><span class="line">ubuntu_test</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">重启容器</span></span><br><span class="line">[root@podman ~]# podman restart ubuntu_test</span><br><span class="line">ubuntu_test</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">删除容器</span></span><br><span class="line">[root@podman ~]# podman rm -f ubuntu_test</span><br><span class="line">WARN[0010] StopSignal SIGTERM failed to stop container ubuntu_test in 10 seconds, resorting to SIGKILL </span><br><span class="line">ubuntu_test</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">删除所有容器</span></span><br><span class="line">[root@podman ~]# podman rm -f $( podman ps -aq )</span><br><span class="line">b6089f227b55</span><br><span class="line">155c6d4d9fae</span><br><span class="line">115938151fc0</span><br><span class="line">1395177f65e0</span><br><span class="line">c1f9a18de6bd</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看pod属性</span></span><br><span class="line">[root@podman ~]# podman inspect ubuntu_test</span><br><span class="line">[</span><br><span class="line">     &#123;</span><br><span class="line">          &quot;Id&quot;: &quot;98f6fb407b3cf7d3c4094ead7df7a3e1b45151bd88b2ff0df48e065476a8286c&quot;,</span><br><span class="line">          &quot;Created&quot;: &quot;2025-01-15T21:11:54. 305532006+08:00&quot;,</span><br><span class="line">          &quot;Path&quot;: &quot;/bin/bash&quot;,</span><br><span class="line">          &quot;Args&quot;: [</span><br><span class="line">               &quot;/bin/bash&quot;</span><br><span class="line">          ],</span><br><span class="line">          &quot;State&quot;: &#123;</span><br><span class="line">               &quot;OciVersion&quot;: &quot;1. 2. 0&quot;,</span><br><span class="line">               &quot;Status&quot;: &quot;running&quot;,</span><br><span class="line">               &quot;Running&quot;: true,</span><br><span class="line">               &quot;Paused&quot;: false,</span><br><span class="line">               &quot;Restarting&quot;: false,</span><br><span class="line">               &quot;OOMKilled&quot;: false,</span><br><span class="line">               &quot;Dead&quot;: false,</span><br><span class="line">               &quot;Pid&quot;: 5638,</span><br><span class="line">               &quot;ConmonPid&quot;: 5636,</span><br><span class="line">               &quot;ExitCode&quot;: 0,</span><br><span class="line">               &quot;Error&quot;: &quot;&quot;,</span><br><span class="line">               &quot;StartedAt&quot;: &quot;2025-01-15T21:11:54. 565491536+08:00&quot;,</span><br><span class="line">               &quot;FinishedAt&quot;: &quot;0001-01-01T00:00:00Z&quot;,</span><br><span class="line">               &quot;CgroupPath&quot;: &quot;/machine.slice/libpod-98f6fb407b3cf7d3c4094ead7df7a3e1b45151bd88b2ff0df48e065476a8286c.scope&quot;,</span><br><span class="line">               &quot;CheckpointedAt&quot;: &quot;0001-01-01T00:00:00Z&quot;,</span><br><span class="line">               &quot;RestoredAt&quot;: &quot;0001-01-01T00:00:00Z&quot;</span><br><span class="line">          &#125;,</span><br><span class="line">          &quot;Image&quot;: &quot;b1d9df8ab81559494794e522b380878cf9ba82d4c1fb67293bcf931c3aa69ae4&quot;,</span><br><span class="line">          &quot;ImageDigest&quot;: &quot;sha256:80dd3c3b9c6cecb9f1667e9290b3bc61b78c2678c02cbdae5f0fea92cc6734ab&quot;,</span><br><span class="line">          &quot;ImageName&quot;: &quot;docker.io/library/ubuntu:latest&quot;,</span><br><span class="line">          &quot;Rootfs&quot;: &quot;&quot;,</span><br><span class="line">          &quot;Pod&quot;: &quot;&quot;,</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">从宿主机向容器复制文件</span></span><br><span class="line">[root@podman ~]# cat helloworld.txt </span><br><span class="line">Hello World!</span><br><span class="line">[root@podman ~]# podman cp helloworld.txt ubuntu_test:/home</span><br><span class="line">[root@podman ~]# podman exec -it ubuntu_test /bin/bash</span><br><span class="line">root@98f6fb407b3c:/# cd /home/</span><br><span class="line">root@98f6fb407b3c:/home# ls</span><br><span class="line">helloworld.txt  ubuntu</span><br><span class="line">root@98f6fb407b3c:/home# cat helloworld.txt </span><br><span class="line">Hello World!</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">从容器向宿主机复制文件</span></span><br><span class="line">root@98f6fb407b3c:/home# mv helloworld.txt OneWorld.txt</span><br><span class="line">[root@podman ~]# podman cp ubuntu_test:/home/OneWorld.txt /tmp</span><br><span class="line">[root@podman ~]# cat /tmp/OneWorld.txt </span><br><span class="line">Hello World!</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">资源限制，限制使用1核cpu，2GB内存</span></span><br><span class="line">podman run --cpus=1 -m=2g --name nginx -d docker.io/library/nginx</span><br><span class="line">Trying to pull docker.io/library/nginx:latest...</span><br><span class="line"></span><br><span class="line">[root@podman ~]# podman stats</span><br><span class="line">ID            NAME        CPU %       MEM USAGE / LIMIT  MEM %       NET IO          BLOCK IO           PIDS        CPU TIME    AVG CPU %</span><br><span class="line">070a8c63fb69  nginx       0. 00%       1. 884MB / 2. 147GB  0. 09%       1. 726kB / 838B  8. 192kB / 20. 48kB  2           15. 93ms     0. 02%</span><br></pre></td></tr></table></figure>
+
+<h2 id="镜像管理"><a href="#镜像管理" class="headerlink" title="镜像管理"></a>镜像管理</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">拉取镜像</span></span><br><span class="line">[root@podman ~]# podman pull node:22-alpine</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看已有镜像</span></span><br><span class="line">[root@podman ~]# podman images</span><br><span class="line">REPOSITORY                 TAG         IMAGE ID      CREATED        SIZE</span><br><span class="line">docker.io/library/node     22-alpine   546c0b137912  10 days ago    161 MB</span><br><span class="line">docker.io/library/nginx    latest      9bea9f2796e2  7 weeks ago    196 MB</span><br><span class="line">docker.io/library/ubuntu   latest      b1d9df8ab815  8 weeks ago    80. 6 MB</span><br><span class="line">docker.io/library/busybox  latest      af4709625109  3 months ago   4. 52 MB</span><br><span class="line">docker.io/traefik/whoami   latest      aeef15490f2b  4 months ago   7. 01 MB</span><br><span class="line">quay.io/podman/hello       latest      5dd467fce50b  7 months ago   787 kB</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">删除镜像</span></span><br><span class="line">[root@podman ~]# podman rmi 5dd</span><br><span class="line">Untagged: quay.io/podman/hello:latest</span><br><span class="line">Deleted: 5dd467fce50b56951185da365b5feee75409968cbab5767b9b59e325fb2ecbc0</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">生成镜像</span></span><br><span class="line">[root@podman ~]# podman run -it ubuntu:24. 04 </span><br><span class="line">Resolved &quot;ubuntu&quot; as an alias ( /etc/containers/registries.conf.d/000-shortnames.conf )</span><br><span class="line">Trying to pull docker.io/library/ubuntu:24. 04...</span><br><span class="line">Getting image source signatures</span><br><span class="line">Copying blob de44b265507a skipped: already exists  </span><br><span class="line">Copying config b1d9df8ab8 done   | </span><br><span class="line">Writing manifest to image destination</span><br><span class="line">root@3f5c2dbde6c0:/# apt update &amp;&amp; apt upgrade -y &amp;&amp; apt install vim</span><br><span class="line">root@3f5c2dbde6c0:/# exit</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">podman不支持-m参数</span></span><br><span class="line">[root@podman ~]# podman commit -a &quot;sujx@live.cn&quot; 3f5c2 ubuntu:24. 04. 1</span><br><span class="line">Getting image source signatures</span><br><span class="line">Copying blob 687d50f2f6a6 skipped: already exists  </span><br><span class="line">Copying blob 01b59003fab2 done   | </span><br><span class="line">Copying config 4c10e10b43 done   | </span><br><span class="line">Writing manifest to image destination</span><br><span class="line">4c10e10b437b46c62f3175097dce553d01ef3b9ec4a390c68da35b93a2e42b44</span><br><span class="line"></span><br><span class="line">[root@podman ~]# podman images</span><br><span class="line">REPOSITORY                    TAG         IMAGE ID      CREATED         SIZE</span><br><span class="line">localhost/ubuntu              24. 04. 1     4c10e10b437b  21 seconds ago  199 MB</span><br></pre></td></tr></table></figure>
+<h3 id="自定义镜像"><a href="#自定义镜像" class="headerlink" title="自定义镜像"></a>自定义镜像</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">创建Podmanfile</span></span><br><span class="line">[root@podman ~]# cat &gt; ./Podmanfile &lt;&lt;EOF</span><br><span class="line">FROM node:22-alpine</span><br><span class="line">MAINTAINER sujx@live.cn</span><br><span class="line">EXPOSE 4000</span><br><span class="line"></span><br><span class="line">RUN npm config set registry https://registry.npmmirror.com \</span><br><span class="line">&amp;&amp; npm install -g hexo-cli --save \</span><br><span class="line">&amp;&amp; mkdir /opt/blog \</span><br><span class="line">&amp;&amp; cd /opt \</span><br><span class="line">&amp;&amp; hexo init blog \</span><br><span class="line">&amp;&amp; cd /opt/blog \</span><br><span class="line">&amp;&amp; npm install hexo-renderer-pug hexo-renderer-stylus --save \</span><br><span class="line">&amp;&amp; npm install hexo-wordcount --save \</span><br><span class="line">&amp;&amp; npm install hexo-douban --save \</span><br><span class="line">&amp;&amp; npm install hexo-generator-sitemap --save \</span><br><span class="line">&amp;&amp; npm install hexo-generator-feed --save \</span><br><span class="line">&amp;&amp; npm install hexo-generator-baidu-sitemap --save\</span><br><span class="line">&amp;&amp; npm install hexo-generator-searchdb --save \</span><br><span class="line">&amp;&amp; npm install hexo-theme-butterfly --save \</span><br><span class="line">&amp;&amp; npm install hexo-butterfly-extjs --save \</span><br><span class="line">&amp;&amp; npm install hexo-butterfly-tag-plugins-plus --save \</span><br><span class="line">&amp;&amp; npm install hexo-pdf --save \</span><br><span class="line">&amp;&amp; npm install hexo-deployer-git --save \</span><br><span class="line">&amp;&amp; npm install hexo-deployer-ali-oss --save \</span><br><span class="line">&amp;&amp; npm uninstall hexo-generator-index --save \</span><br><span class="line">&amp;&amp; npm install hexo-generator-index-pin-top --save \</span><br><span class="line">&amp;&amp; npm install hexo-asset-image --save</span><br><span class="line"></span><br><span class="line">CMD cd /opt/blog &amp;&amp; hexo clean &amp;&amp; hexo g &amp;&amp; hexo server</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line">[root@podman ~]# podman build -f Podmanfile -t hexo:v1</span><br><span class="line">[root@podman ~]# podman images</span><br><span class="line">REPOSITORY                    TAG         IMAGE ID      CREATED         SIZE</span><br><span class="line">localhost/hexo                v1          5a535420cf24  6 minutes ago   962 MB</span><br></pre></td></tr></table></figure>
+<h2 id="容器网络"><a href="#容器网络" class="headerlink" title="容器网络"></a>容器网络</h2><h3 id="端口暴露"><a href="#端口暴露" class="headerlink" title="端口暴露"></a>端口暴露</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">端口暴露</span></span><br><span class="line">[root@podman ~]# podman run -itd --name busybox-test -p80 busybox</span><br><span class="line">b02b05b1881f8aa0cbca93f905a6559729e0a5c0e3be69adae2877d146579143</span><br><span class="line">[root@podman ~]# podman ps</span><br><span class="line">CONTAINER ID  IMAGE                             COMMAND     CREATED        STATUS        PORTS                  NAMES</span><br><span class="line">b02b05b1881f  docker.io/library/busybox:latest  sh          5 seconds ago  Up 6 seconds  0. 0. 0. 0:38171-&gt;80/tcp  busybox-test</span><br><span class="line">[root@podman ~]# podman exec -it b02 /bin/sh</span><br><span class="line">/ # cd /var/</span><br><span class="line">/var # ls</span><br><span class="line">spool  www</span><br><span class="line">/var # httpd -h www</span><br><span class="line">/var # netstat -tlnp</span><br><span class="line">Active Internet connections ( only servers )</span><br><span class="line">Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    </span><br><span class="line">tcp        0      0 :::80                   :::*                    LISTEN      5/httpd</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">端口映射，把容器的端口映射为宿主机的一个特定或者随机端口，使得外部用户可以访问服务器内部服务，其原理是在容器底层做了iptables的地址转发，转出的流量做SNAT源地址转发，转入的流量做DNAT目标地址转发。</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">指定端口转发</span></span><br><span class="line">[root@podman ~]# podman run -itd --name myipaddr -p 80:80 traefik/whoami</span><br><span class="line">bbcc67b5fb1ce98b51335755c13498e87ace3da420b5a430001738cb27768e28</span><br><span class="line">[root@podman ~]# curl 127. 0. 0. 1</span><br><span class="line">Hostname: bbcc67b5fb1c</span><br><span class="line">IP: 127. 0. 0. 1</span><br><span class="line">IP: ::1</span><br><span class="line">IP: 10. 88. 0. 5</span><br><span class="line">IP: fe80::c79:daff:fe48:4cb8</span><br><span class="line">RemoteAddr: 10. 88. 0. 1:55560</span><br><span class="line">GET / HTTP/1. 1</span><br><span class="line">Host: 127. 0. 0. 1</span><br><span class="line">User-Agent: curl/8. 6. 0</span><br><span class="line">Accept: */*</span><br></pre></td></tr></table></figure>
+<h3 id="网络架构"><a href="#网络架构" class="headerlink" title="网络架构"></a>网络架构</h3><p>Podman的网络架构有4种模式：</p>
+<ol>
+<li>桥接模式（默认）</li>
+<li>non模式（仅本地回环）</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">桥接模式（默认）</span></span><br><span class="line">[root@podman ~]# podman inspect myipaddr |grep IPAdd*</span><br><span class="line">               &quot;IPAddress&quot;: &quot;10. 88. 0. 5&quot;,</span><br><span class="line">                         &quot;IPAddress&quot;: &quot;10. 88. 0. 5&quot;,</span><br><span class="line">                         </span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">none模式（仅本地回环）</span></span><br><span class="line">[root@podman ~]# podman run -d --name=network-none --net=none nginx</span><br><span class="line">539143ba161c73617ac1fd15e74a599753a71ce9658326bc5b8ebacaae114b86</span><br><span class="line">[root@podman ~]# podman inspect 539143 |grep IPAdd*</span><br><span class="line">               &quot;IPAddress&quot;: &quot;&quot;,</span><br><span class="line">                         &quot;IPAddress&quot;: &quot;&quot;,</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">host模式，容器使用当前主机IP</span></span><br><span class="line">root@podman ~]# podman run --network=host nginx</span><br><span class="line">/docker-entrypoint.sh: /docker-entrypoint.d/ is not empty, will attempt to perform configuration</span><br><span class="line">/docker-entrypoint.sh: Looking for shell scripts in /docker-entrypoint.d/</span><br><span class="line">/docker-entrypoint.sh: Launching /docker-entrypoint.d/10-listen-on-ipv6-by-default.sh</span><br><span class="line">10-listen-on-ipv6-by-default.sh: info: Getting the checksum of /etc/nginx/conf.d/default.conf</span><br><span class="line">10-listen-on-ipv6-by-default.sh: info: Enabled listen on IPv6 in /etc/nginx/conf.d/default.conf</span><br><span class="line">/docker-entrypoint.sh: Sourcing /docker-entrypoint.d/15-local-resolvers.envsh</span><br><span class="line">/docker-entrypoint.sh: Launching /docker-entrypoint.d/20-envsubst-on-templates.sh</span><br><span class="line">/docker-entrypoint.sh: Launching /docker-entrypoint.d/30-tune-worker-processes.sh</span><br><span class="line">/docker-entrypoint.sh: Configuration complete; ready for start up</span><br><span class="line">2025/01/18 16:47:15 [notice] 1#1: using the &quot;epoll&quot; event method</span><br><span class="line">2025/01/18 16:47:15 [notice] 1#1: nginx/1. 27. 3</span><br><span class="line">2025/01/18 16:47:15 [notice] 1#1: built by gcc 12. 2. 0 ( Debian 12. 2. 0-14 ) </span><br><span class="line">2025/01/18 16:47:15 [notice] 1#1: OS: Linux 6. 12. 9-100. fc40. x86_64</span><br><span class="line">2025/01/18 16:47:15 [notice] 1#1: getrlimit( RLIMIT_NOFILE ): 1048576:1048576</span><br><span class="line">2025/01/18 16:47:15 [notice] 1#1: start worker processes</span><br><span class="line">2025/01/18 16:47:15 [notice] 1#1: start worker process 24</span><br><span class="line">127. 0. 0. 1 - - [18/Jan/2025:16:47:22 +0000] &quot;GET / HTTP/1. 1&quot; 200 615 &quot;-&quot; &quot;curl/8. 6. 0&quot; &quot;-&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">container:&lt;<span class="built_in">id</span>&gt;模式，容器之间共享Network Namespace，荣期间进程通过lo网卡通信</span></span><br><span class="line">[root@podman ~]# podman run -itd --name bb busybox</span><br><span class="line">365cf25286131e596f3aef54c43fed1b83e5be5ecc5f18e4de98242812f4002d</span><br><span class="line">[root@podman ~]# podman run -d --name nginx --network=container:bb nginx</span><br><span class="line">1287874746dcc6f72158b8fdb1ddf07ba13bdda06bd5a04bfdecaf86426fb927</span><br><span class="line">[root@podman ~]# podman exec -it bb /bin/sh</span><br><span class="line">[root@podman ~]# curl 10. 88. 0. 7</span><br><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;title&gt;Welcome to nginx!&lt;/title&gt;</span><br><span class="line">&lt;style&gt;</span><br><span class="line">html &#123; color-scheme: light dark; &#125;</span><br><span class="line">body &#123; width: 35em; margin: 0 auto;</span><br><span class="line">font-family: Tahoma, Verdana, Arial, sans-serif; &#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;h1&gt;Welcome to nginx!&lt;/h1&gt;</span><br><span class="line">&lt;p&gt;If you see this page, the nginx web server is successfully installed and</span><br><span class="line">working. Further configuration is required.&lt;/p&gt;</span><br><span class="line"></span><br><span class="line">&lt;p&gt;For online documentation and support please refer to</span><br><span class="line">&lt;a href=&quot;http://nginx.org/&quot;&gt;nginx.org&lt;/a&gt;.&lt;br/&gt;</span><br><span class="line">Commercial support is available at</span><br><span class="line">&lt;a href=&quot;http://nginx.com/&quot;&gt;nginx.com&lt;/a&gt;.&lt;/p&gt;</span><br><span class="line"></span><br><span class="line">&lt;p&gt;&lt;em&gt;Thank you for using nginx.&lt;/em&gt;&lt;/p&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="网络实现"><a href="#网络实现" class="headerlink" title="网络实现"></a>网络实现</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看网络模式，可以看到名为podman的网桥</span></span><br><span class="line">[root@podman ~]# podman network ls</span><br><span class="line">NETWORK ID    NAME        DRIVER</span><br><span class="line">2f259bab93aa  podman      bridge</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看podman网桥信息</span></span><br><span class="line">[root@podman ~]# ip a</span><br><span class="line">……</span><br><span class="line">5: podman0: &lt;BROADCAST, MULTICAST, UP, LOWER_UP&gt; mtu 1500 qdisc noqueue state UP group default qlen 1000</span><br><span class="line">    link/ether ca:2c:2d:8d:b8:21 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 10. 88. 0. 1/16 brd 10. 88. 255. 255 scope global podman0</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">    inet6 fe80::c82c:2dff:fe8d:b821/64 scope link proto kernel_ll </span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">6: veth0@if2: &lt;BROADCAST, MULTICAST, UP, LOWER_UP&gt; mtu 1500 qdisc noqueue master podman0 state UP group default qlen 1000</span><br><span class="line">    link/ether fa:55:23:21:f6:c3 brd ff:ff:ff:ff:ff:ff link-netns netns-0e73c46a-0951-048b-fbc8-5e25f3d52e72</span><br><span class="line">    inet6 fe80::18b5:62ff:fec9:3476/64 scope link proto kernel_ll </span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看NAT规则</span></span><br><span class="line">[root@podman ~]# iptables -L -t nat</span><br><span class="line"></span><br><span class="line">Chain POSTROUTING ( policy ACCEPT )</span><br><span class="line">target     prot opt source               destination         </span><br><span class="line">NETAVARK-HOSTPORT-MASQ  all  --  anywhere             anywhere            </span><br><span class="line">NETAVARK-1D8721804F16F  all  --  10. 88. 0. 0/16         anywhere            </span><br><span class="line"></span><br><span class="line">Chain NETAVARK-1D8721804F16F ( 1 references )</span><br><span class="line">target     prot opt source               destination         </span><br><span class="line">ACCEPT     all  --  anywhere             10. 88. 0. 0/16        </span><br><span class="line">MASQUERADE  all  --  anywhere            !base-address.mcast.net/4 </span><br></pre></td></tr></table></figure>
+<h2 id="本地存储"><a href="#本地存储" class="headerlink" title="本地存储"></a>本地存储</h2><h3 id="存储卷"><a href="#存储卷" class="headerlink" title="存储卷"></a>存储卷</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">将本地web文件夹挂载到容器中，使用本地文件进行存储</span></span><br><span class="line">podman run -itd -v /root/web:/var/www/html -p 8080:80 httpd</span><br></pre></td></tr></table></figure>
+<h3 id="存储容器"><a href="#存储容器" class="headerlink" title="存储容器"></a>存储容器</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">通过创建多个容器，使用容器来存储数据</span></span><br><span class="line">[root@podman ~]# podman run -itd --name db_data -v /db_data ubuntu</span><br><span class="line">8e48de5ce3d36803352052643734689b2a2250ef9e3558253342e603b315b94a</span><br><span class="line">[root@podman ~]# podman run -id --name db1 --volumes-from db_data ubuntu</span><br><span class="line">83c227c5c077582cd700862508958d41e0532023ead11c95953aae0c4bc6faef</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看存储容器内容</span></span><br><span class="line">[root@podman ~]# podman exec -it 8e48de /bin/bash</span><br><span class="line">root@8e48de5ce3d3:/# ls</span><br><span class="line">bin  boot  db_data  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var</span><br><span class="line">root@8e48de5ce3d3:/# ls db_data/</span><br><span class="line">root@8e48de5ce3d3:/# cd db_data/</span><br><span class="line">root@8e48de5ce3d3:/db_data# touch TestDB</span><br><span class="line">root@8e48de5ce3d3:/db_data# exit</span><br><span class="line">exit</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看应用容器内容</span></span><br><span class="line">[root@podman ~]# podman exec -it 83c227 /bin/bash</span><br><span class="line">root@83c227c5c077:/# ls /db_data/</span><br><span class="line">TestDB</span><br><span class="line">root@83c227c5c077:/# exit</span><br><span class="line">exit</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看文件实际位置</span>            </span><br><span class="line">[root@podman ~]# ls /var/lib/containers/storage/volumes/84a3b4a00b1557b6754f1ed9633294df117697d1608adc91701b335297caa61f/_data/</span><br><span class="line">TestDB</span><br></pre></td></tr></table></figure>
+<h2 id="性能监控"><a href="#性能监控" class="headerlink" title="性能监控"></a>性能监控</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">stats命令 查看当前主机上容器的具体资源占用情况</span></span><br><span class="line">[root@podman _data]# podman stats </span><br><span class="line">ID            NAME        CPU %       MEM USAGE / LIMIT  MEM %       NET IO          BLOCK IO          PIDS        CPU TIME    AVG CPU %</span><br><span class="line">8e48de5ce3d3  db_data     0. 01%       606. 2kB / 4. 044GB  0. 01%       1. 942kB / 978B  9. 97MB / 4. 096kB  1           29. 762ms    0. 01%</span><br><span class="line">83c227c5c077  db1         0. 00%       241. 7kB / 4. 044GB  0. 01%       1. 216kB / 978B  0B / 4. 096kB      1           10. 716ms    0. 00%</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">top命令 查看容器内的应用使用情况</span></span><br><span class="line">[root@podman _data]# podman top 83c22</span><br><span class="line">USER        PID         PPID        %CPU        ELAPSED          TTY         TIME        COMMAND</span><br><span class="line">root        1           0           0. 000       7m29. 133340188s  ?           0s          /bin/bash </span><br></pre></td></tr></table></figure>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Linux/">Linux</a><a class="post-meta__tags" href="/tags/Sysadmin/">Sysadmin</a><a class="post-meta__tags" href="/tags/Podman/">Podman</a></div><div class="post-share"><div class="social-share" data-image="https://cdn.sujx.net/covers/cover73.jpg" data-sites="facebook,twitter,weibo,qq"></div><link rel="stylesheet" href="/libs/sharejs/css/share.min.css" media="print" onload="this.media='all'"><script src="/libs/sharejs/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>能否请我喝一杯咖啡？</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.jpg" target="_blank"><img class="post-qr-code-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/wechat.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2024/12/03/Chinese_Republics_In_Borneo/" title="「消逝的海外华邦」"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover66.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">「消逝的海外华邦」</div></div><div class="info-2"><div class="info-item-1">和大多数人一样，我最早对于东南亚和海外华人的理解，还是来自于地理课本上的一两页纸的描述以及梁静茹、孙燕姿等歌手。而我实体上对海外华人最早的接触则来自于当年一款希腊人开发的基于Google Earth的网页游戏GEwar。大概是06年夏天的时候候，在单位值班无聊的期间发现了这款玩法独特的网络游戏，然后就接触到了很多马来西亚、新加坡、印尼的华人。印象最深刻的一个是在希捷硬盘厂当工头的新加坡老登，天天在叼越南女工、新加坡政府和马来西亚的堵车；一个是印尼的不会说中文的华人大学生在群里跟着工会屠日灭美。后来，随着互联网的发展，我在新浪微博上看到了马来西亚华人政党宣传和街头运动、在B站看到大马当地的up主春小喜以及一路黑化的黄明志、在Youtube上看BBK的视频和脱口秀。再然后，我侄女的公婆竟然是60年的印尼归国华侨。   11 亲友摄于菲律宾·马尼拉   随着大陆与东南亚的经济、政治交流的加深，我们也应当更多的了解这片土地和其上的历史。兰芳共和国，是华人历史上的第一个共和国。我早已闻名，却一直对其云里雾里，并不知道到底是一群什么样的人，在故土万里之遥、异族环伺的建立了什么样的国家。因缘际...</div></div></div></a><a class="pagination-related" href="/2024/11/22/Guide-Speech-Beijing/" title="北京导游综合能力测试"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/11/23/beijing-08.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">北京导游综合能力测试</div></div><div class="info-2"><div class="info-item-1"> 以下为参加北京地区导游资格考试科目五的导游词，包括天安门、故宫、长城、颐和园、十三陵。内容参考了多个导游课程、B站、知乎、北京导游手册的多个内容来源，恕不一一备注了。  考试要求基本概况 人机景点讲解10分钟，分值占比55分 综合能力题时间为27分钟，共计33道题，分值占比45分  第一单元考试形式1。 考试开始后，系统自动进入第1单元并抽取景点讲解题1道，考生在准备完成后，手动点击“开始录制”按钮进行录制作答。2。 试题回答完毕后，考生可点击“回放视频”按钮回放录制的答题信息，回放过程中可随时点击“结束回放”按钮停止回放。3。 如需重新回答，则点击“重新录制”按钮进行重新录制。重新录制后，之前录制的答题信息将被覆盖，考生需再次点击“回放视频”按钮回放录制的答题信息。如4。 确认本题答题完成则等待本单元倒计时结束。 考试内容以下题目抽取讲解题一道，录音作答： 1。 天安门：介绍天安门城楼及建筑特点，介绍金水桥、国旗及旗杆、人民英雄纪念碑、毛主席纪念堂、正阳门、人民大会堂、国家博物馆。2。 故宫：介绍故宫的历史沿革；详细介绍整体布局；中轴线上的主要建筑和陈设的功能及特点；列入世界...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/01/14/Prometheus_Howto/" title="Prometheus使用初步"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover77.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-01-14</div><div class="info-item-2">Prometheus使用初步</div></div><div class="info-2"><div class="info-item-1">概述Prometheus是新一代监控系统解决方案，可以和Kubernetes无缝对接，是容器监控的不二之选，其功能组件有：  Prometheus Server，主程序，同时也是一个时序数据库 AlertManager，告警组件 Pushgateway 中间网管组件 Data visualization and export 数据展示组件 Service discovery 服务发现组件   部署Server# promtheus server 的部署podman pull prom/prometheus:v. 3. 1. 0mkdir ~/prometheus# 创建配置文件cat &gt; ~/prometheus/prometheus.yml &lt;&lt;EOFglobal:  scrape_interval: 15s   scrape_timeout: 10s   evaluation_interval: 15s alerting:  alertmanagers:  - follow_redirects: true    scheme: http    timeout...</div></div></div></a><a class="pagination-related" href="/2026/02/13/CPU-Usage/" title="CPU高占用的排查"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover141.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-02-13</div><div class="info-item-2">CPU高占用的排查</div></div><div class="info-2"><div class="info-item-1">作为一名 Linux 系统工程师，我确信你们都使用过 top 命令。它一直是几十年来首选的工具——简单、可靠，并且在你需要时总是存在。但你有没有注意到一件事？偶尔，你可能会发现一个进程的 CPU 使用率飙升到 150%、200%甚至 400%！这里发生了什么？这是怎么可能的？ 乍一看，这些数字可能看起来像是个错误——毕竟，什么东西会使用超过 100%的 CPU 呢？系统是出问题了吗？还是被黑了？但实际上，这完全正常。原因在于 Linux 报告 CPU 使用率的方式以及多核处理器的工作原理。 在本文中，我们将探讨为什么会发生这种情况，并使用实用工具和实际案例来证明这一点。     02 山东·青岛   使用 top 检查 CPU 利用率CPU 是任何操作系统的核心，执行指令以允许程序运行。在 Linux 中，top 命令是一个方便的工具，提供实时性能洞察。它显示关键系统指标，例如：  进程使用情况 内存消耗 CPU 负载  当系统出现高 CPU 利用率时，top 有助于识别哪些进程占用了最多的资源，从而更容易诊断性能问题。 要检查 CPU 利用率，请打开终端并运行： top  该命...</div></div></div></a><a class="pagination-related" href="/2025/03/03/Podman-Secrity/" title="Podman的安全"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover88.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-03-03</div><div class="info-item-2">Podman的安全</div></div><div class="info-2"><div class="info-item-1">独栋别墅等同于在单个隔离节点上运行一个应用程序，双拼别墅等同于在单独的虚拟机中运行每个应用容器。酒店或者公寓楼类似于容器。你有自己的公寓，但你依赖前台的安全性来控制对你的居住空间的访问。如果前台被攻陷，那么你的公寓也会被攻陷。容器也类似于此，因为它们依赖内核的安全性。如果一个容器可以接管主机内核，那么它就可以接管系统上运行的所有容器化应用程序。此外，如果它们逃逸到底层文件系统，就可能读取和写入系统上的所有容器数据。 容器安全的最重要目标是保护主机内核和文件系统免受容器进程的影响。如果内核存在漏洞，那么系统的其余部分和所有容器都将易受攻击。大多数情况下，容器和主机之间唯一的接触点就是主机内核本身。    02 广州·荔湾区·圆大厦   安全隔离只读的内核伪文件系统 Podman以只读方式挂载&#x2F;sys、&#x2F;sys&#x2F;fs&#x2F;cgroup、&#x2F;sys&#x2F;fs&#x2F;selinux 容器内部&#x2F;proc不是主机的&#x2F;proc，容器内部进程只能影响容器内的其他进程 在&#x2F;proc&#x2F;acpi、&#x2F;...</div></div></div></a><a class="pagination-related" href="/2025/12/23/UserAdd-Howto/" title="Linux账户管理最佳实践"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover140.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-23</div><div class="info-item-2">Linux账户管理最佳实践</div></div><div class="info-2"><div class="info-item-1">对于 Linux 用户，尤其是新手来说，安全账户管理比以往任何时候都更加紧迫。强密码和智能管理不仅仅是建议——它们是在黑客自动化攻击和新漏洞几乎每天都在发生的背景下您的第一道有效防线。 在本指南中，我们将为您介绍在 Linux 上设置密码的不同方法。我们将从简单方法开始，然后过渡到自动化脚本，甚至涵盖企业环境中使用的专业级方法。到结束时，您将能够自信且安全高效地管理密码。    12 天津·天津中医药大学   安全地创建用户账户第一步是为用户创建一个包含主目录和默认 shell 的账户： sudo useradd -m -s /bin/bash newuser  Explanation: 解释：  m → Creates a home directory for the userm → 为用户创建主目录 s /bin/bash → Sets the default shells /bin/bash → 设置默认 shell  You can check the account:你可以检查账户： id newuser  强密码是必须的强密码不仅仅是复杂性，它还关乎不可预测性和长度。...</div></div></div></a><a class="pagination-related" href="/2023/05/14/magedu-week-2/" title="Linux系统基础知识·2"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/wallhaven-43wj9y.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-05-14</div><div class="info-item-2">Linux系统基础知识·2</div></div><div class="info-2"><div class="info-item-1"> 本文基于马哥教育就业班第二周课程总结  系统设计 请总结Linux的安全模型  Linux的安全模型基于许多不同的安全措施，包括访问控制、加密、审计和漏洞修补以下是Linux安全模型的主要要点：1. 访问控制：Linux使用许多不同的访问控制机制来保护系统和数据其中最常见的是基于用户和组的访问控制，它允许管理员为每个用户和组分配不同的权限此外，Linux还支持访问控制列表（ACL）和强制访问控制（MAC）等高级访问控制机制；2. 加密：Linux支持许多不同的加密技术，包括SSL / TLS、SSH、IPSec和GPG等这些技术可以用于保护数据传输和存储，以及验证用户身份；3. 审计：Linux支持系统级别的审计，可以记录用户活动、系统事件和安全事件等这些日志可以用于监控系统安全性，并帮助管理员识别潜在的安全问题；4. 漏洞修补：Linux社区积极修补系统中发现的漏洞，并发布安全更新管理员应该定期更新系统以确保最新的安全补丁已安装；总之，Linux的安全模型是一个多层次的、综合的安全框架，它提供了许多不同的安全措施来保护系统和数据管理员应该了解这些措施，并采取适当的措施来保护他...</div></div></div></a><a class="pagination-related" href="/2023/04/10/magedu-week-1/" title="Linux系统基础知识·1"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/05/wallhaven-833vpo.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-04-10</div><div class="info-item-2">Linux系统基础知识·1</div></div><div class="info-2"><div class="info-item-1"> 一个完整计算系统的简要介绍 一个完整的计算系统通常包含以下几个组成部分：1。 输入设备：用于输入数据和指令的设备，例如键盘、鼠标、触控屏等。2。 输出设备：用于显示计算结果和其他信息的设备，例如显示器、打印机等。3。 中央处理器（CPU）：执行计算机指令、控制数据处理流程的核心部件。4。 存储器：用于存储程序和数据的设备，包括内存和外存。5。 总线：连接各个硬件组件的通信路径。6。 操作系统：控制计算机各个部分的软件系统，管理计算机资源，提供用户接口等功能。7。 应用程序：各种用于完成特定任务的软件程序，例如文字处理、图像处理、音频制作等。在一个完整的计算系统中，这些部件通常紧密配合、相互协作，共同完成各种复杂的计算任务。 简述进制转换，并举例 进制转换是指将一个数字从一种进制表示方式转换为另一种进制表示方式的过程。常见的进制包括二进制、八进制、十进制和十六进制。下面以十进制为例，简述一下如何将一个十进制数转换成其他进制的表示方式。1。 转换成二进制：利用除法取余法，将十进制数不断除以2，直到商为0为止，将余数倒序排列即为该数的二进制表示。例如：将十进制数27转换成二进制，过程...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">靖轩</div><div class="author-info-description">逝者如斯夫,不舍昼夜</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/grepsu"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://gitee.com/grepsu" target="_blank" title="Gitee"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:sujx@live.cn" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS链接"><i class="fa  fa-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E5%AE%89%E8%A3%85"><span class="toc-number">1.</span> <span class="toc-text">初始安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E7%AE%A1%E7%90%86"><span class="toc-number">2.</span> <span class="toc-text">使用管理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%95%9C%E5%83%8F%E7%AE%A1%E7%90%86"><span class="toc-number">3.</span> <span class="toc-text">镜像管理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E9%95%9C%E5%83%8F"><span class="toc-number">3.1.</span> <span class="toc-text">自定义镜像</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%B9%E5%99%A8%E7%BD%91%E7%BB%9C"><span class="toc-number">4.</span> <span class="toc-text">容器网络</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AB%AF%E5%8F%A3%E6%9A%B4%E9%9C%B2"><span class="toc-number">4.1.</span> <span class="toc-text">端口暴露</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E6%9E%B6%E6%9E%84"><span class="toc-number">4.2.</span> <span class="toc-text">网络架构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E5%AE%9E%E7%8E%B0"><span class="toc-number">4.3.</span> <span class="toc-text">网络实现</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%AC%E5%9C%B0%E5%AD%98%E5%82%A8"><span class="toc-number">5.</span> <span class="toc-text">本地存储</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%98%E5%82%A8%E5%8D%B7"><span class="toc-number">5.1.</span> <span class="toc-text">存储卷</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%98%E5%82%A8%E5%AE%B9%E5%99%A8"><span class="toc-number">5.2.</span> <span class="toc-text">存储容器</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7"><span class="toc-number">6.</span> <span class="toc-text">性能监控</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/07/03/AIGC_FoxHole/" title="海鹰">海鹰</a><time datetime="2026-07-03T01:04:07.000Z" title="发表于 2026-07-03 09:04:07">2026-07-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/11/fristVibeCoding/" title="鹊随金印：我的第一个完整的AI编程项目">鹊随金印：我的第一个完整的AI编程项目</a><time datetime="2026-06-11T01:04:07.000Z" title="发表于 2026-06-11 09:04:07">2026-06-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/03/VI_Howto/" title="VI编辑器简介">VI编辑器简介</a><time datetime="2026-06-03T01:04:07.000Z" title="发表于 2026-06-03 09:04:07">2026-06-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/28/HNCitic_2605/" title="我要上头条">我要上头条</a><time datetime="2026-05-28T01:04:07.000Z" title="发表于 2026-05-28 09:04:07">2026-05-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/12/TS-Domain-Controller-Sync-Failure/" title="记一次Windows AD域控制器同步故障排错">记一次Windows AD域控制器同步故障排错</a><time datetime="2026-05-12T03:04:07.000Z" title="发表于 2026-05-12 11:04:07">2026-05-12</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2008 - 2026 By 靖轩</span></div><div class="footer_custom_text">京ICP备17034757号</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.5"></script><script src="/js/main.js?v=5.5.5"></script><script src="/libs/fancybox/fancybox.umd.js"></script><script src="/js/instantpage.js" type="module"></script><script src="/libs/lazyload/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const parseViewBox = viewBox => {
+    if (!viewBox) return null
+    const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
+    if (parts.length !== 4 || parts.some(n => Number.isNaN(n))) return null
+    return parts
+  }
+
+  const getSvgViewBox = svg => {
+    const attr = parseViewBox(svg.getAttribute('viewBox'))
+    if (attr) return attr
+
+    // Fallback: use bbox to build a viewBox
+    try {
+      const bbox = svg.getBBox()
+      if (bbox && bbox.width && bbox.height) return [bbox.x, bbox.y, bbox.width, bbox.height]
+    } catch (e) {
+      // getBBox may fail on some edge cases; ignore
+    }
+
+    const w = Number(svg.getAttribute('width')) || 0
+    const h = Number(svg.getAttribute('height')) || 0
+    if (w > 0 && h > 0) return [0, 0, w, h]
+    return [0, 0, 100, 100]
+  }
+
+  const setSvgViewBox = (svg, vb) => {
+    svg.setAttribute('viewBox', `${vb[0]} ${vb[1]} ${vb[2]} ${vb[3]}`)
+  }
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v))
+
+  const openSvgInNewTab = ({ source, initViewBox }) => {
+    const getClonedSvg = () => {
+      if (typeof source === 'string') {
+        const template = document.createElement('template')
+        template.innerHTML = source.trim()
+        const svg = template.content.querySelector('svg')
+        return svg ? svg.cloneNode(true) : null
+      }
+      if (source && typeof source.cloneNode === 'function') {
+        return source.cloneNode(true)
+      }
+      return null
+    }
+
+    const clone = getClonedSvg()
+    if (!clone) return
+    if (initViewBox && initViewBox.length === 4) {
+      clone.setAttribute('viewBox', initViewBox.join(' '))
+    }
+    if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+    if (!clone.getAttribute('xmlns:xlink') && clone.outerHTML.includes('xlink:')) {
+      clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+    }
+    // inject background to match current theme
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    const bg = getComputedStyle(document.body).backgroundColor || (isDark ? '#1e1e1e' : '#ffffff')
+    if (!clone.style.background) clone.style.background = bg
+
+    const serializer = new XMLSerializer()
+    const svgSource = serializer.serializeToString(clone)
+    const htmlSource = `<!doctype html><html><head><meta charset="utf-8" />
+      <style>
+        html, body { width: 100%; height: 100%; margin: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; }
+        svg { max-width: 100%; max-height: 100%; height: auto; width: auto; }
+      </style>
+      </head><body>${svgSource}</body></html>`
+    const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank', 'noopener')
+    setTimeout(() => URL.revokeObjectURL(url), 30000)
+  }
+
+  const attachMermaidViewerButton = wrap => {
+    let btn = wrap.querySelector('.mermaid-open-btn')
+    if (!btn) {
+      btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'mermaid-open-btn'
+      wrap.appendChild(btn)
+    }
+
+    btn.innerHTML = '<i class="fa fa-search fa-fw" aria-hidden="true"></i>'
+
+    if (!btn.__mermaidViewerBound) {
+      btn.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        const svg = wrap.__mermaidOriginalSvg || wrap.querySelector('svg')
+        if (!svg) return
+        const initViewBox = wrap.__mermaidInitViewBox
+        if (typeof svg === 'string') {
+          openSvgInNewTab({ source: svg, initViewBox })
+          return
+        }
+        openSvgInNewTab({ source: svg, initViewBox })
+      })
+      btn.__mermaidViewerBound = true
+    }
+  }
+
+  // Zoom around a point (px, py) in the SVG viewport (in viewBox coordinates)
+  const zoomAtPoint = (vb, factor, px, py) => {
+    const w = vb[2] * factor
+    const h = vb[3] * factor
+    const nx = px - (px - vb[0]) * factor
+    const ny = py - (py - vb[1]) * factor
+    return [nx, ny, w, h]
+  }
+
+  const initMermaidGestures = wrap => {
+    const svg = wrap.querySelector('svg')
+    if (!svg) return
+
+    // Ensure viewBox exists so gestures always work
+    const initVb = getSvgViewBox(svg)
+    wrap.__mermaidInitViewBox = initVb
+    wrap.__mermaidCurViewBox = initVb.slice()
+    setSvgViewBox(svg, initVb)
+
+    // Avoid binding multiple times on themeChange/pjax
+    if (wrap.__mermaidGestureBound) return
+    wrap.__mermaidGestureBound = true
+
+    // Helper: map client (viewport) coordinate -> viewBox coordinate
+    const clientToViewBox = (clientX, clientY) => {
+      const rect = svg.getBoundingClientRect()
+      const vb = wrap.__mermaidCurViewBox || getSvgViewBox(svg)
+      const x = vb[0] + (clientX - rect.left) * (vb[2] / rect.width)
+      const y = vb[1] + (clientY - rect.top) * (vb[3] / rect.height)
+      return { x, y, rect, vb }
+    }
+
+    const state = {
+      pointers: new Map(),
+      startVb: null,
+      startDist: 0,
+      startCenter: null
+    }
+
+    const clampVb = vb => {
+      const init = wrap.__mermaidInitViewBox || vb
+      const minW = init[2] * 0.1
+      const maxW = init[2] * 10
+      const minH = init[3] * 0.1
+      const maxH = init[3] * 10
+      vb[2] = clamp(vb[2], minW, maxW)
+      vb[3] = clamp(vb[3], minH, maxH)
+      return vb
+    }
+
+    const setCurVb = vb => {
+      vb = clampVb(vb)
+      wrap.__mermaidCurViewBox = vb
+      setSvgViewBox(svg, vb)
+    }
+
+    const onPointerDown = e => {
+      // Allow only primary button for mouse
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      svg.setPointerCapture(e.pointerId)
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      if (state.pointers.size === 1) {
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      } else if (state.pointers.size === 2) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        state.startDist = Math.hypot(dx, dy)
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        state.startCenter = { x: (pts[0].x + pts[1].x) / 2, y: (pts[0].y + pts[1].y) / 2 }
+      }
+    }
+
+    const onPointerMove = e => {
+      if (!state.pointers.has(e.pointerId)) return
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      // Pan with 1 pointer
+      if (state.pointers.size === 1 && state.startVb) {
+        const p = [...state.pointers.values()][0]
+        const prev = { x: e.clientX - e.movementX, y: e.clientY - e.movementY }
+        // movementX/Y unreliable on touch, compute from stored last position
+        const last = wrap.__mermaidLastSinglePointer || p
+        const dxClient = p.x - last.x
+        const dyClient = p.y - last.y
+        wrap.__mermaidLastSinglePointer = p
+
+        const { rect } = clientToViewBox(p.x, p.y)
+        const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        const dx = dxClient * (vb[2] / rect.width)
+        const dy = dyClient * (vb[3] / rect.height)
+        setCurVb([vb[0] - dx, vb[1] - dy, vb[2], vb[3]])
+        return
+      }
+
+      // Pinch zoom with 2 pointers
+      if (state.pointers.size === 2 && state.startVb && state.startDist > 0) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        const dist = Math.hypot(dx, dy)
+        if (!dist) return
+        const factor = state.startDist / dist // dist bigger => zoom in (viewBox smaller)
+
+        const cx = (pts[0].x + pts[1].x) / 2
+        const cy = (pts[0].y + pts[1].y) / 2
+        const centerClient = { x: cx, y: cy }
+
+        const pxy = clientToViewBox(centerClient.x, centerClient.y)
+        const cpx = pxy.x
+        const cpy = pxy.y
+
+        const vb = zoomAtPoint(state.startVb, factor, cpx, cpy)
+        setCurVb(vb)
+      }
+    }
+
+    const onPointerUpOrCancel = e => {
+      state.pointers.delete(e.pointerId)
+      if (state.pointers.size === 0) {
+        state.startVb = null
+        state.startDist = 0
+        state.startCenter = null
+        wrap.__mermaidLastSinglePointer = null
+      } else if (state.pointers.size === 1) {
+        // reset single pointer baseline to avoid jump
+        wrap.__mermaidLastSinglePointer = [...state.pointers.values()][0]
+      }
+    }
+
+    // Wheel zoom (mouse/trackpad)
+    const onWheel = e => {
+      // ctrlKey on mac trackpad pinch; we treat both as zoom
+      e.preventDefault()
+      const delta = e.deltaY
+      const zoomFactor = delta > 0 ? 1.1 : 0.9
+      const { x, y } = clientToViewBox(e.clientX, e.clientY)
+      const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      setCurVb(zoomAtPoint(vb, zoomFactor, x, y))
+    }
+
+    const onDblClick = () => {
+      const init = wrap.__mermaidInitViewBox
+      if (!init) return
+      wrap.__mermaidCurViewBox = init.slice()
+      setSvgViewBox(svg, init)
+    }
+
+    svg.addEventListener('pointerdown', onPointerDown)
+    svg.addEventListener('pointermove', onPointerMove)
+    svg.addEventListener('pointerup', onPointerUpOrCancel)
+    svg.addEventListener('pointercancel', onPointerUpOrCancel)
+    svg.addEventListener('wheel', onWheel, { passive: false })
+    svg.addEventListener('dblclick', onDblClick)
+  }
+
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+
+      // Clear old render (themeChange/pjax will rerun)
+      const oldSvg = item.querySelector('svg')
+      if (oldSvg) oldSvg.remove()
+      item.__mermaidGestureBound = false
+
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+        if (true) initMermaidGestures(item)
+        item.__mermaidOriginalSvg = svg
+        if (true) attachMermaidViewerButton(item)
+      }
+
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('/libs/mermaid/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.5"></script></div></div></body></html>

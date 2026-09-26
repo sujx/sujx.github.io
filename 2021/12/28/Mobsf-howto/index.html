@@ -1,0 +1,510 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>移动端APP安全框架Mobsf的部署 | 靖轩</title><meta name="author" content="靖轩"><meta name="copyright" content="靖轩"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="简介Mobile Security Framework ( MobSF )是一个印度人写的Allinone的全自动APP检测工具，可用于渗透测试、恶意软件、安全基线检查等用途，当前最新版本为3. 4. 5 beta。它支持安卓和苹果主机程序格式，比如apk、xapk、ipa、appx，进行静态或者动态安全分析。同时，它也提供APIs接口用于现有开发环境CI&#x2F;CD流水线。  标准部署# 环">
+<meta property="og:type" content="article">
+<meta property="og:title" content="移动端APP安全框架Mobsf的部署">
+<meta property="og:url" content="https://www.sujx.net/2021/12/28/Mobsf-howto/index.html">
+<meta property="og:site_name" content="靖轩">
+<meta property="og:description" content="简介Mobile Security Framework ( MobSF )是一个印度人写的Allinone的全自动APP检测工具，可用于渗透测试、恶意软件、安全基线检查等用途，当前最新版本为3. 4. 5 beta。它支持安卓和苹果主机程序格式，比如apk、xapk、ipa、appx，进行静态或者动态安全分析。同时，它也提供APIs接口用于现有开发环境CI&#x2F;CD流水线。  标准部署# 环">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.sujx.net/2023pic/20230411120309.jpg">
+<meta property="article:published_time" content="2021-12-28T02:35:28.000Z">
+<meta property="article:modified_time" content="2026-09-26T02:25:04.174Z">
+<meta property="article:author" content="靖轩">
+<meta property="article:tag" content="MobSF">
+<meta property="article:tag" content="Security - Docker">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.sujx.net/2023pic/20230411120309.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "移动端APP安全框架Mobsf的部署",
+  "url": "https://www.sujx.net/2021/12/28/Mobsf-howto/",
+  "image": "https://cdn.sujx.net/2023pic/20230411120309.jpg",
+  "datePublished": "2021-12-28T02:35:28.000Z",
+  "dateModified": "2026-09-26T02:25:04.174Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "靖轩",
+      "url": "https://www.sujx.net"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://cdn.sujx.net/about/favicon.png"><link rel="canonical" href="https://www.sujx.net/2021/12/28/Mobsf-howto/index.html"><link rel="preconnect" href="//cdnjs.cloudflare.com"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css?v=5.5.5"><link rel="stylesheet" href="/fonts/css/all.min.css"><link rel="stylesheet" href="/libs/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?417b20ac1984432f821159fac27d3bb5";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><link rel="stylesheet" href="/fonts/titillium-web.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: '/libs/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: true,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '移动端APP安全框架Mobsf的部署',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="alternate" href="/atom.xml" title="靖轩" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">靖轩</span></a><a class="nav-page-title" href="/"><span class="site-name">移动端APP安全框架Mobsf的部署</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">移动端APP安全框架Mobsf的部署</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-12-28T02:35:28.000Z" title="发表于 2021-12-28 10:35:28">2021-12-28</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-09-26T02:25:04.174Z" title="更新于 2026-09-26 10:25:04">2026-09-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8/">信息安全</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">1.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>5分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p><a target="_blank" rel="noopener" href="https://mobsf.github.io/Mobile-Security-Framework-MobSF/">Mobile Security Framework ( MobSF )</a>是一个印度人写的Allinone的全自动APP检测工具，可用于渗透测试、恶意软件、安全基线检查等用途，当前最新版本为3. 4. 5 beta。它支持安卓和苹果主机程序格式，比如apk、xapk、ipa、appx，进行静态或者动态安全分析。同时，它也提供APIs接口用于现有开发环境CI&#x2F;CD流水线。</p>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/mobsf-info.gif"></p>
+<h2 id="标准部署"><a href="#标准部署" class="headerlink" title="标准部署"></a>标准部署</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">环境准备</span></span><br><span class="line">apt update</span><br><span class="line">apt upgrade -y</span><br><span class="line">apt install -y python3-pip python3-setuptools python3-venv python-is-python3</span><br><span class="line">apt install -y openjdk-16-jdk git mlocate</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装wkhtmltox，Ubuntu官方源中的wkhtmltox依赖包太多了，可以使用开发商自打包</span></span><br><span class="line">apt install -y xfonts-75dpi xfonts-base xfonts-encodings xfonts-utils</span><br><span class="line">apt install -y language-pack-zh-hans fonts-wqy-*</span><br><span class="line">fc-cache -f -v</span><br><span class="line">wget https://github.com/wkhtmltopdf/packaging/releases/download/0. 12. 6-1/wkhtmltox_0. 12. 6-1. focal_amd64. deb</span><br><span class="line">dpkg -i wkhtmltox_0. 12. 6-1. focal_amd64. deb</span><br><span class="line"></span><br><span class="line">ldconfig</span><br><span class="line">sync</span><br><span class="line">pip3 install pip --upgrade</span><br><span class="line">pip3 install launchpadlib --upgrade</span><br><span class="line">pip3 install --no-cache-dir wheel</span><br><span class="line">pip3 wheel --wheel-dir=yara-python-dex git+https://github.com/MobSF/yara-python-dex.git</span><br><span class="line">pip3 install --no-cache-dir --no-index --find-links=yara-python-dex yara-python-dex</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">部署程序</span></span><br><span class="line">git clone https://github.com/MobSF/Mobile-Security-Framework-MobSF. git</span><br><span class="line">cd /opt/Mobile-Security-Framework-MobSF/</span><br><span class="line">pip3 install -r requirements.txt</span><br><span class="line">./setup.sh</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">建立数据库</span></span><br><span class="line">python manage.py makemigrations</span><br><span class="line">python manage.py migrate</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">运行于本机0. 0. 0. 0:8000</span></span><br><span class="line">./run.sh</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">运行于127. 0. 0. 1:8000</span></span><br><span class="line">./run.sh 127. 0. 0. 1:8000</span><br></pre></td></tr></table></figure>
+
+<h2 id="容器部署"><a href="#容器部署" class="headerlink" title="容器部署"></a>容器部署</h2><h3 id="Dockerfile"><a href="#Dockerfile" class="headerlink" title="Dockerfile"></a>Dockerfile</h3><p>原始mobsf镜像没有安装中文字体，导致输出PDF时会出现口口口的乱码，所需需要对默认DockerFile进行一点点的小修改，其他保留原始配置。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Base image</span></span><br><span class="line">FROM ubuntu:20. 04</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Labels and Credits</span></span><br><span class="line">LABEL \</span><br><span class="line">    name=&quot;MobSF&quot; \</span><br><span class="line">    author=&quot;Ajin Abraham &lt;ajin25@gmail.com&gt;&quot; \</span><br><span class="line">    maintainer=&quot;Ajin Abraham &lt;ajin25@gmail.com&gt;&quot; \</span><br><span class="line">    contributor_1=&quot;OscarAkaElvis &lt;oscar.alfonso.diaz@gmail.com&gt;&quot; \</span><br><span class="line">    contributor_2=&quot;Vincent Nadal &lt;vincent.nadal@orange.fr&gt;&quot; \</span><br><span class="line">    description=&quot;Mobile Security Framework ( MobSF ) is an automated, all-in-one mobile application ( Android/iOS/Windows ) pen-testing, malware analysis and security assessment framework capable of performing static and dynamic analysis.&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Environment vars</span></span><br><span class="line">ENV DEBIAN_FRONTEND=&quot;noninteractive&quot; \</span><br><span class="line">    ANALYZER_IDENTIFIER=&quot;&quot; \</span><br><span class="line">    JDK_FILE=&quot;openjdk-16. 0. 1_linux-x64_bin.tar.gz&quot; \</span><br><span class="line">    JDK_FILE_ARM=&quot;openjdk-16. 0. 1_linux-aarch64_bin.tar.gz&quot; \</span><br><span class="line">    WKH_FILE=&quot;wkhtmltox_0. 12. 6-1. focal_amd64. deb&quot; \</span><br><span class="line">    WKH_FILE_ARM=&quot;wkhtmltox_0. 12. 6-1. focal_arm64. deb&quot; \</span><br><span class="line">    JAVA_HOME=&quot;/jdk-16. 0. 1&quot;</span><br><span class="line"></span><br><span class="line">ENV PATH=&quot;$JAVA_HOME/bin:$PATH&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">See https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#run</span></span><br><span class="line">RUN sed -i s@/archive.ubuntu.com/@/mirrors.huaweicloud.com/@g /etc/apt/sources.list</span><br><span class="line">RUN apt update -y &amp;&amp; apt install -y  --no-install-recommends \</span><br><span class="line">    build-essential \</span><br><span class="line">    language-pack-zh-hans \</span><br><span class="line">    fonts-wqy-microhei \</span><br><span class="line">    fonts-wqy-zenhei \</span><br><span class="line">    xfonts-wqy \</span><br><span class="line">    locales \</span><br><span class="line">    sqlite3 \</span><br><span class="line">    fontconfig-config \</span><br><span class="line">    libjpeg-turbo8 \</span><br><span class="line">    libxrender1 \</span><br><span class="line">    libfontconfig1 \</span><br><span class="line">    libxext6 \</span><br><span class="line">    fontconfig \</span><br><span class="line">    xfonts-75dpi \</span><br><span class="line">    xfonts-base \</span><br><span class="line">    python3. 9 \</span><br><span class="line">    python3-dev \</span><br><span class="line">    python3-pip \</span><br><span class="line">    wget \</span><br><span class="line">    curl \</span><br><span class="line">    git \</span><br><span class="line">    tzdata \</span><br><span class="line">    android-tools-adb</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Set locales</span></span><br><span class="line">RUN locale-gen en_US. UTF-8</span><br><span class="line">ENV TZ Asia/Shanghai</span><br><span class="line">RUN echo &#x27;LC_TIME=en_US. UTF-8&#x27; &gt;&gt; /etc/default/locale</span><br><span class="line">RUN echo &#x27;LC_ALL=en_US. UTF-8&#x27; &gt;&gt; /etc/default/locale</span><br><span class="line">ENV LANG=&#x27;en_US. UTF-8&#x27; LANGUAGE=&#x27;en_US:en&#x27; LC_ALL=&#x27;en_US. UTF-8&#x27;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Install wkhtmltopdf &amp; OpenJDK</span></span><br><span class="line">ARG TARGETPLATFORM</span><br><span class="line"></span><br><span class="line">COPY scripts/install_java_wkhtmltopdf.sh .</span><br><span class="line">RUN ./install_java_wkhtmltopdf.sh</span><br><span class="line"></span><br><span class="line">RUN groupadd -g 9901 mobsf</span><br><span class="line">RUN adduser mobsf --shell /bin/false -u 9901 --ingroup mobsf --gecos &quot;&quot; --disabled-password</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Install Requirements</span></span><br><span class="line">COPY requirements.txt .</span><br><span class="line">RUN pip3 install --upgrade --no-cache-dir setuptools pip &amp;&amp; \</span><br><span class="line">    pip3 install --quiet --no-cache-dir -r requirements.txt</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Cleanup</span></span><br><span class="line">RUN \</span><br><span class="line">    apt remove -y \</span><br><span class="line">        libssl-dev \</span><br><span class="line">        libffi-dev \</span><br><span class="line">        libxml2-dev \</span><br><span class="line">        libxslt1-dev \</span><br><span class="line">        python3-dev \</span><br><span class="line">        wget &amp;&amp; \</span><br><span class="line">    apt clean &amp;&amp; \</span><br><span class="line">    apt autoclean &amp;&amp; \</span><br><span class="line">    apt autoremove -y &amp;&amp; \</span><br><span class="line">    rm -rf /var/lib/apt/lists/* /tmp/* &gt; /dev/null 2&gt;&amp;1</span><br><span class="line"></span><br><span class="line">WORKDIR /home/mobsf/Mobile-Security-Framework-MobSF</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Copy <span class="built_in">source</span> code</span></span><br><span class="line">COPY . .</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Set adb binary path and apktool directory</span></span><br><span class="line">RUN sed -i &quot;s#ADB_BINARY = &#x27;&#x27;#ADB_BINARY = &#x27;/usr/bin/adb&#x27;#&quot; mobsf/MobSF/settings.py &amp;&amp; \</span><br><span class="line">    mkdir -p /home/mobsf/. local/share/apktool/framework</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Postgres support is <span class="built_in">set</span> to <span class="literal">false</span> by default</span></span><br><span class="line">ARG POSTGRES=False</span><br><span class="line"></span><br><span class="line">ENV POSTGRES_USER=postgres</span><br><span class="line">ENV POSTGRES_PASSWORD=password</span><br><span class="line">ENV POSTGRES_DB=mobsf</span><br><span class="line">ENV POSTGRES_HOST=postgres</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Check <span class="keyword">if</span> Postgres support needs to be enabled</span></span><br><span class="line">RUN ./scripts/postgres_support.sh $POSTGRES</span><br><span class="line"></span><br><span class="line">HEALTHCHECK CMD curl --fail http://host.docker.internal:8000/ || exit 1</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Expose MobSF Port and Proxy Port</span></span><br><span class="line">EXPOSE 8000 8000 1337 1337</span><br><span class="line"></span><br><span class="line">RUN chown -R mobsf:mobsf /home/mobsf/Mobile-Security-Framework-MobSF</span><br><span class="line">USER mobsf</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Run MobSF</span></span><br><span class="line">CMD [&quot;/home/mobsf/Mobile-Security-Framework-MobSF/scripts/entrypoint.sh&quot;]</span><br></pre></td></tr></table></figure>
+
+<h3 id="DockerBuild"><a href="#DockerBuild" class="headerlink" title="DockerBuild"></a>DockerBuild</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker build mobsf .</span><br><span class="line"></span><br><span class="line">[root@docker ~]# docker images</span><br><span class="line">REPOSITORY                                     TAG       IMAGE ID       CREATED        SIZE</span><br><span class="line">mobsf                                          latest    17ec050a7c8c   41 hours ago   2. 1GB</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">由于打包机器在开发网络，而部署机器在服务网络，所以需要导出并导入</span></span><br><span class="line">docker save -o mobsf.tar mobsf</span><br></pre></td></tr></table></figure>
+
+<h3 id="DockerLoad"><a href="#DockerLoad" class="headerlink" title="DockerLoad"></a>DockerLoad</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">使用load导入，而不使用import</span></span><br><span class="line">docker load --input mobsf.tar</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">打标签</span></span><br><span class="line">docker tag 77cb7 firstshare/mobsf:v1</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">拉起容器并指定8000端口，并设定开机自启</span></span><br><span class="line">docker run -itd --restart=always -p 8000:8000 mobsf</span><br></pre></td></tr></table></figure>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ol>
+<li>Mobsf是一个使用Python+Djongo编写的免费、开源工具，它的检测结果是被专业机构接受和认可的有效报告，可以用于等保以及其他安全认证事宜；</li>
+<li>Mobsf认为使用外部存储设备、GPS、摄像头都是高风险行为，这点见仁见智，看报告接收方的态度；<br>3。 Mobsf输出PDF版本报告存在问题，不能按照A4格式标准输出，应该是某处的css格式引起，需要后续修正。</li>
+</ol>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/MobSF/">MobSF</a><a class="post-meta__tags" href="/tags/Security-Docker/">Security - Docker</a></div><div class="post-share"><div class="social-share" data-image="https://cdn.sujx.net/2023pic/20230411120309.jpg" data-sites="facebook,twitter,weibo,qq"></div><link rel="stylesheet" href="/libs/sharejs/css/share.min.css" media="print" onload="this.media='all'"><script src="/libs/sharejs/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>能否请我喝一杯咖啡？</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.jpg" target="_blank"><img class="post-qr-code-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/wechat.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2022/01/01/Wazuh-Howto/" title="WAZUH的从入门到上线"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/data_flow1.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">WAZUH的从入门到上线</div></div><div class="info-2"><div class="info-item-1">[Wazuh]( Wazuh · The Open Source Security Platform)是一整套基于ossec安全检测工具和EFK日志工具构成的终端安全管理工具。不管是将其分类至HIDS，还是EDR，它都是一套通过监控主机日志行为，提供安全检测、分析和完整报告的开源、免费利器。Wazuh基于C&#x2F;S架构，它的Agent支持Windows、MacOS、Linux、HP-UX、AIX等主流操作系统。其服务端负责提供认证和数据收集，然后通过filebeat进行日志清洗，最后导入ElasticSearch，通过Kinbana进行展示和输出日志。它不仅可以收集主机的事件日志进行一般的入侵检测功能，还可以通过第三方提供的系统漏洞检测feed文件，来实现主机的漏洞扫描和合规检查。 基本概念功能示例 组件模块Wazuh的组件分为三部分：  客户端的功能  收集日志和事件日志； 文件和注册表的监控； 运行进程和安装软件的信息收集； 监控系统端口和网络配置； 检测恶意软件； 配置管理和策略监控 检测主机响应   服务端   客户端的服务器注册； 实现客户端的连接服务； 根据各项...</div></div></div></a><a class="pagination-related" href="/2021/12/23/hfs-how-to/" title="使用HFS提供简单文件共享服务"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/wallhaven-0j2llm.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">使用HFS提供简单文件共享服务</div></div><div class="info-2"><div class="info-item-1">背景 财务部门有台银行业务前置机，按银行IT要求是是非域独立部署的Windows客户端主机； 开发需要调用上面接收的票务数据，要求是需要走http协议； 所有变更不能和现有银行部署软件相冲突； 易于维护，并能够记录所有访问纪录以便审计；  介绍 HFS是一个简易、快速的单文件免安装HTTP Server 官方有简体中文帮助文件 支持随Windows启动、支持自定义端口号、支持专家&#x2F;易用模式切换  部署 找个文件夹存放，并双击启动 可以将文件或者文件夹拖入程序界面就可以添加； 默认为虚拟目录，是将目标文件夹复制到软件支持的VFS文件系统内，修改虚拟目录下文件夹不影响真实文件，但虚拟目录的支持的文件数受限； 真实目录是将给硬盘上的实际文件夹建立一个软连接，实际操作真实文件； 指定访问端口 多网卡情况下，绑定指定网卡IP 添加用户并指定权限，只有设定用了访问用户，才能设置上传权限 随Windows启动并最小化显示 设定日志记录内容 默认日志只是在程序界面显示，可以使用“Log to file”来保存日志记录  其他 HFS默认允许所有人可访问，可以通过配置limit来ban掉...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">靖轩</div><div class="author-info-description">逝者如斯夫,不舍昼夜</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/grepsu"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://gitee.com/grepsu" target="_blank" title="Gitee"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:sujx@live.cn" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS链接"><i class="fa  fa-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%87%E5%87%86%E9%83%A8%E7%BD%B2"><span class="toc-number">2.</span> <span class="toc-text">标准部署</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%B9%E5%99%A8%E9%83%A8%E7%BD%B2"><span class="toc-number">3.</span> <span class="toc-text">容器部署</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Dockerfile"><span class="toc-number">3.1.</span> <span class="toc-text">Dockerfile</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DockerBuild"><span class="toc-number">3.2.</span> <span class="toc-text">DockerBuild</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DockerLoad"><span class="toc-number">3.3.</span> <span class="toc-text">DockerLoad</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/07/03/AIGC_FoxHole/" title="海鹰">海鹰</a><time datetime="2026-07-03T01:04:07.000Z" title="发表于 2026-07-03 09:04:07">2026-07-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/11/fristVibeCoding/" title="鹊随金印：我的第一个完整的AI编程项目">鹊随金印：我的第一个完整的AI编程项目</a><time datetime="2026-06-11T01:04:07.000Z" title="发表于 2026-06-11 09:04:07">2026-06-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/03/VI_Howto/" title="VI编辑器简介">VI编辑器简介</a><time datetime="2026-06-03T01:04:07.000Z" title="发表于 2026-06-03 09:04:07">2026-06-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/28/HNCitic_2605/" title="我要上头条">我要上头条</a><time datetime="2026-05-28T01:04:07.000Z" title="发表于 2026-05-28 09:04:07">2026-05-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/12/TS-Domain-Controller-Sync-Failure/" title="记一次Windows AD域控制器同步故障排错">记一次Windows AD域控制器同步故障排错</a><time datetime="2026-05-12T03:04:07.000Z" title="发表于 2026-05-12 11:04:07">2026-05-12</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2008 - 2026 By 靖轩</span></div><div class="footer_custom_text">京ICP备17034757号</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.5"></script><script src="/js/main.js?v=5.5.5"></script><script src="/libs/fancybox/fancybox.umd.js"></script><script src="/js/instantpage.js" type="module"></script><script src="/libs/lazyload/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const parseViewBox = viewBox => {
+    if (!viewBox) return null
+    const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
+    if (parts.length !== 4 || parts.some(n => Number.isNaN(n))) return null
+    return parts
+  }
+
+  const getSvgViewBox = svg => {
+    const attr = parseViewBox(svg.getAttribute('viewBox'))
+    if (attr) return attr
+
+    // Fallback: use bbox to build a viewBox
+    try {
+      const bbox = svg.getBBox()
+      if (bbox && bbox.width && bbox.height) return [bbox.x, bbox.y, bbox.width, bbox.height]
+    } catch (e) {
+      // getBBox may fail on some edge cases; ignore
+    }
+
+    const w = Number(svg.getAttribute('width')) || 0
+    const h = Number(svg.getAttribute('height')) || 0
+    if (w > 0 && h > 0) return [0, 0, w, h]
+    return [0, 0, 100, 100]
+  }
+
+  const setSvgViewBox = (svg, vb) => {
+    svg.setAttribute('viewBox', `${vb[0]} ${vb[1]} ${vb[2]} ${vb[3]}`)
+  }
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v))
+
+  const openSvgInNewTab = ({ source, initViewBox }) => {
+    const getClonedSvg = () => {
+      if (typeof source === 'string') {
+        const template = document.createElement('template')
+        template.innerHTML = source.trim()
+        const svg = template.content.querySelector('svg')
+        return svg ? svg.cloneNode(true) : null
+      }
+      if (source && typeof source.cloneNode === 'function') {
+        return source.cloneNode(true)
+      }
+      return null
+    }
+
+    const clone = getClonedSvg()
+    if (!clone) return
+    if (initViewBox && initViewBox.length === 4) {
+      clone.setAttribute('viewBox', initViewBox.join(' '))
+    }
+    if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+    if (!clone.getAttribute('xmlns:xlink') && clone.outerHTML.includes('xlink:')) {
+      clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+    }
+    // inject background to match current theme
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    const bg = getComputedStyle(document.body).backgroundColor || (isDark ? '#1e1e1e' : '#ffffff')
+    if (!clone.style.background) clone.style.background = bg
+
+    const serializer = new XMLSerializer()
+    const svgSource = serializer.serializeToString(clone)
+    const htmlSource = `<!doctype html><html><head><meta charset="utf-8" />
+      <style>
+        html, body { width: 100%; height: 100%; margin: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; }
+        svg { max-width: 100%; max-height: 100%; height: auto; width: auto; }
+      </style>
+      </head><body>${svgSource}</body></html>`
+    const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank', 'noopener')
+    setTimeout(() => URL.revokeObjectURL(url), 30000)
+  }
+
+  const attachMermaidViewerButton = wrap => {
+    let btn = wrap.querySelector('.mermaid-open-btn')
+    if (!btn) {
+      btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'mermaid-open-btn'
+      wrap.appendChild(btn)
+    }
+
+    btn.innerHTML = '<i class="fa fa-search fa-fw" aria-hidden="true"></i>'
+
+    if (!btn.__mermaidViewerBound) {
+      btn.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        const svg = wrap.__mermaidOriginalSvg || wrap.querySelector('svg')
+        if (!svg) return
+        const initViewBox = wrap.__mermaidInitViewBox
+        if (typeof svg === 'string') {
+          openSvgInNewTab({ source: svg, initViewBox })
+          return
+        }
+        openSvgInNewTab({ source: svg, initViewBox })
+      })
+      btn.__mermaidViewerBound = true
+    }
+  }
+
+  // Zoom around a point (px, py) in the SVG viewport (in viewBox coordinates)
+  const zoomAtPoint = (vb, factor, px, py) => {
+    const w = vb[2] * factor
+    const h = vb[3] * factor
+    const nx = px - (px - vb[0]) * factor
+    const ny = py - (py - vb[1]) * factor
+    return [nx, ny, w, h]
+  }
+
+  const initMermaidGestures = wrap => {
+    const svg = wrap.querySelector('svg')
+    if (!svg) return
+
+    // Ensure viewBox exists so gestures always work
+    const initVb = getSvgViewBox(svg)
+    wrap.__mermaidInitViewBox = initVb
+    wrap.__mermaidCurViewBox = initVb.slice()
+    setSvgViewBox(svg, initVb)
+
+    // Avoid binding multiple times on themeChange/pjax
+    if (wrap.__mermaidGestureBound) return
+    wrap.__mermaidGestureBound = true
+
+    // Helper: map client (viewport) coordinate -> viewBox coordinate
+    const clientToViewBox = (clientX, clientY) => {
+      const rect = svg.getBoundingClientRect()
+      const vb = wrap.__mermaidCurViewBox || getSvgViewBox(svg)
+      const x = vb[0] + (clientX - rect.left) * (vb[2] / rect.width)
+      const y = vb[1] + (clientY - rect.top) * (vb[3] / rect.height)
+      return { x, y, rect, vb }
+    }
+
+    const state = {
+      pointers: new Map(),
+      startVb: null,
+      startDist: 0,
+      startCenter: null
+    }
+
+    const clampVb = vb => {
+      const init = wrap.__mermaidInitViewBox || vb
+      const minW = init[2] * 0.1
+      const maxW = init[2] * 10
+      const minH = init[3] * 0.1
+      const maxH = init[3] * 10
+      vb[2] = clamp(vb[2], minW, maxW)
+      vb[3] = clamp(vb[3], minH, maxH)
+      return vb
+    }
+
+    const setCurVb = vb => {
+      vb = clampVb(vb)
+      wrap.__mermaidCurViewBox = vb
+      setSvgViewBox(svg, vb)
+    }
+
+    const onPointerDown = e => {
+      // Allow only primary button for mouse
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      svg.setPointerCapture(e.pointerId)
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      if (state.pointers.size === 1) {
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      } else if (state.pointers.size === 2) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        state.startDist = Math.hypot(dx, dy)
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        state.startCenter = { x: (pts[0].x + pts[1].x) / 2, y: (pts[0].y + pts[1].y) / 2 }
+      }
+    }
+
+    const onPointerMove = e => {
+      if (!state.pointers.has(e.pointerId)) return
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      // Pan with 1 pointer
+      if (state.pointers.size === 1 && state.startVb) {
+        const p = [...state.pointers.values()][0]
+        const prev = { x: e.clientX - e.movementX, y: e.clientY - e.movementY }
+        // movementX/Y unreliable on touch, compute from stored last position
+        const last = wrap.__mermaidLastSinglePointer || p
+        const dxClient = p.x - last.x
+        const dyClient = p.y - last.y
+        wrap.__mermaidLastSinglePointer = p
+
+        const { rect } = clientToViewBox(p.x, p.y)
+        const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        const dx = dxClient * (vb[2] / rect.width)
+        const dy = dyClient * (vb[3] / rect.height)
+        setCurVb([vb[0] - dx, vb[1] - dy, vb[2], vb[3]])
+        return
+      }
+
+      // Pinch zoom with 2 pointers
+      if (state.pointers.size === 2 && state.startVb && state.startDist > 0) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        const dist = Math.hypot(dx, dy)
+        if (!dist) return
+        const factor = state.startDist / dist // dist bigger => zoom in (viewBox smaller)
+
+        const cx = (pts[0].x + pts[1].x) / 2
+        const cy = (pts[0].y + pts[1].y) / 2
+        const centerClient = { x: cx, y: cy }
+
+        const pxy = clientToViewBox(centerClient.x, centerClient.y)
+        const cpx = pxy.x
+        const cpy = pxy.y
+
+        const vb = zoomAtPoint(state.startVb, factor, cpx, cpy)
+        setCurVb(vb)
+      }
+    }
+
+    const onPointerUpOrCancel = e => {
+      state.pointers.delete(e.pointerId)
+      if (state.pointers.size === 0) {
+        state.startVb = null
+        state.startDist = 0
+        state.startCenter = null
+        wrap.__mermaidLastSinglePointer = null
+      } else if (state.pointers.size === 1) {
+        // reset single pointer baseline to avoid jump
+        wrap.__mermaidLastSinglePointer = [...state.pointers.values()][0]
+      }
+    }
+
+    // Wheel zoom (mouse/trackpad)
+    const onWheel = e => {
+      // ctrlKey on mac trackpad pinch; we treat both as zoom
+      e.preventDefault()
+      const delta = e.deltaY
+      const zoomFactor = delta > 0 ? 1.1 : 0.9
+      const { x, y } = clientToViewBox(e.clientX, e.clientY)
+      const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      setCurVb(zoomAtPoint(vb, zoomFactor, x, y))
+    }
+
+    const onDblClick = () => {
+      const init = wrap.__mermaidInitViewBox
+      if (!init) return
+      wrap.__mermaidCurViewBox = init.slice()
+      setSvgViewBox(svg, init)
+    }
+
+    svg.addEventListener('pointerdown', onPointerDown)
+    svg.addEventListener('pointermove', onPointerMove)
+    svg.addEventListener('pointerup', onPointerUpOrCancel)
+    svg.addEventListener('pointercancel', onPointerUpOrCancel)
+    svg.addEventListener('wheel', onWheel, { passive: false })
+    svg.addEventListener('dblclick', onDblClick)
+  }
+
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+
+      // Clear old render (themeChange/pjax will rerun)
+      const oldSvg = item.querySelector('svg')
+      if (oldSvg) oldSvg.remove()
+      item.__mermaidGestureBound = false
+
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+        if (true) initMermaidGestures(item)
+        item.__mermaidOriginalSvg = svg
+        if (true) attachMermaidViewerButton(item)
+      }
+
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('/libs/mermaid/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.5"></script></div></div></body></html>

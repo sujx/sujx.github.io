@@ -1,0 +1,525 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Ansible管理平台AWX的部署 | 靖轩</title><meta name="author" content="靖轩"><meta name="copyright" content="靖轩"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="概念K3sK3s 是一个轻量级的 Kubernetes 发行版，非常简单易用而且轻量。只需要一个简单的安装脚本即可把 K3s 安装到主机。 AWXAWX是由Redhat运营的Ansible自动化运营平台Ansible Tower的上游项目，是将Ansible的管理和维护通过可视化的WEB GUI来进行展现。借用Ansible Tower的一张图来表示其具体架构：相关的内容可见以下链接：  Ansi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ansible管理平台AWX的部署">
+<meta property="og:url" content="https://www.sujx.net/2023/09/17/Ansible-AWX-K3s/index.html">
+<meta property="og:site_name" content="靖轩">
+<meta property="og:description" content="概念K3sK3s 是一个轻量级的 Kubernetes 发行版，非常简单易用而且轻量。只需要一个简单的安装脚本即可把 K3s 安装到主机。 AWXAWX是由Redhat运营的Ansible自动化运营平台Ansible Tower的上游项目，是将Ansible的管理和维护通过可视化的WEB GUI来进行展现。借用Ansible Tower的一张图来表示其具体架构：相关的内容可见以下链接：  Ansi">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.sujx.net/2023/08/Anbile-Tower-strategy.png">
+<meta property="article:published_time" content="2023-09-17T11:04:07.000Z">
+<meta property="article:modified_time" content="2026-09-26T02:25:04.097Z">
+<meta property="article:author" content="靖轩">
+<meta property="article:tag" content="AWX">
+<meta property="article:tag" content="Ansible">
+<meta property="article:tag" content="K3s">
+<meta property="article:tag" content="Kubernetes">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.sujx.net/2023/08/Anbile-Tower-strategy.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Ansible管理平台AWX的部署",
+  "url": "https://www.sujx.net/2023/09/17/Ansible-AWX-K3s/",
+  "image": "https://cdn.sujx.net/2023/08/Anbile-Tower-strategy.png",
+  "datePublished": "2023-09-17T11:04:07.000Z",
+  "dateModified": "2026-09-26T02:25:04.097Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "靖轩",
+      "url": "https://www.sujx.net"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://cdn.sujx.net/about/favicon.png"><link rel="canonical" href="https://www.sujx.net/2023/09/17/Ansible-AWX-K3s/index.html"><link rel="preconnect" href="//cdnjs.cloudflare.com"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css?v=5.5.5"><link rel="stylesheet" href="/fonts/css/all.min.css"><link rel="stylesheet" href="/libs/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?417b20ac1984432f821159fac27d3bb5";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><link rel="stylesheet" href="/fonts/titillium-web.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: '/libs/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: true,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Ansible管理平台AWX的部署',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="alternate" href="/atom.xml" title="靖轩" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">靖轩</span></a><a class="nav-page-title" href="/"><span class="site-name">Ansible管理平台AWX的部署</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">Ansible管理平台AWX的部署</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-09-17T11:04:07.000Z" title="发表于 2023-09-17 19:04:07">2023-09-17</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-09-26T02:25:04.097Z" title="更新于 2026-09-26 10:25:04">2026-09-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F/">应用程序</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">2.4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>12分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><h3 id="K3s"><a href="#K3s" class="headerlink" title="K3s"></a>K3s</h3><p>K3s 是一个轻量级的 Kubernetes 发行版，非常简单易用而且轻量。只需要一个简单的安装脚本即可把 K3s 安装到主机。<br><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://k3s.io/img/how-it-works-k3s-revised.svg" alt="k3s"></p>
+<h3 id="AWX"><a href="#AWX" class="headerlink" title="AWX"></a>AWX</h3><p>AWX是由Redhat运营的Ansible自动化运营平台Ansible Tower的上游项目，是将Ansible的管理和维护通过可视化的WEB GUI来进行展现。借用Ansible Tower的一张图来表示其具体架构：<br><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023/08/Anbile-Tower-strategy.png"><br>相关的内容可见以下链接：</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://www.ansible.com/">Ansible</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/ansible/awx/">AWX</a></li>
+</ol>
+<p>由于Ansible AWX平台自v18之后，不在支持单机或者docker部署，要求必须部署到Kubernetes中，为了简化部署环境和步骤，现采用单节点的K3s来作为基础环境部署AWX。</p>
+<h2 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h2><h3 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">本次部署基于RockyLinux 9. 2</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">主机配置为2core CPU/4GB MEM/40GB Disk</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">需要提前部署Dokcer和Kubectl</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">设置防火墙</span></span><br><span class="line">firewall-cmd --set-default-zone=trusted</span><br><span class="line">firewall-cmd --reload</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">关闭selinux</span></span><br><span class="line">sed -i &#x27;s/enforceing/disabled&#x27; /etc/selinux/config</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">关闭SWAP</span></span><br><span class="line">swapoff -a ; sed -i &#x27;/swap/d&#x27; /etc/fstab</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">修改内核加载模块</span></span><br><span class="line">cat &gt; /etc/modules-load.d/containerd.conf &lt;&lt;EOF</span><br><span class="line">overlay</span><br><span class="line">br_netfilter</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line">cat &gt;&gt; /etc/sysctl.conf &lt;&lt;EOF </span><br><span class="line">net.bridge.bridge-nf-call-ip6tables = 1</span><br><span class="line">net.bridge.bridge-nf-call-iptables = 1</span><br><span class="line">net.ipv4. ip_forward = 1</span><br><span class="line">EOF</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">卸载Podman</span></span><br><span class="line">dnf remove -y podman*</span><br><span class="line">dnf install -y yum-utils device-mapper-persistent-data lvm2</span><br><span class="line">dnf install -y ipvsadm bridge-utils jq</span><br><span class="line">dnf install -y bash-completion</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">添加软件源信息</span></span><br><span class="line">dnf config-manager --add-repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo</span><br><span class="line">sed -i &#x27;s+download.docker.com+mirrors.aliyun.com/docker-ce+&#x27; /etc/yum.repos.d/docker-ce.repo</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">更新并安装Docker-CE</span></span><br><span class="line">dnf makecache</span><br><span class="line">dnf install -y containerd.io python3-dnf-plugin-versionlock</span><br><span class="line">dnf versionlock add containerd.io</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">创建服务启动配置文件</span></span><br><span class="line">containerd config default &gt; /etc/containerd/config.toml</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">添加加速器地址</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">将OOM限制由0改为-999，即遇到OOM情况时杀死容器而不是进程</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">pause镜像地址使用lank8s.cn做代理</span></span><br><span class="line">sed -e &#x27;s|oom_score = 0|oom_score = -999|g&#x27; -e &#x27;s|registry.k8s.io|lank8s.cn|g&#x27; -e &#x27;s|config_path = &quot;&quot;|config_path = &quot;/etc/containerd/certs.d&quot;|g&#x27; -i.bak /etc/containerd/config.toml</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">创建加速器配置文件</span></span><br><span class="line">mkdir -pv /etc/containerd/certs.d/docker.io/</span><br><span class="line">cat &gt;&gt; /etc/containerd/certs.d/docker.io/hosts.toml &lt;&lt;EOF</span><br><span class="line">[host.&quot;https://37y8py0j.mirror.aliyuncs.com&quot;]</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line">mkdir -pv /etc/containerd/certs.d/registry.k8s.io/</span><br><span class="line">cat &gt;&gt; /etc/containerd/certs.d/registry.k8s.io/hosts.toml &lt;&lt;EOF</span><br><span class="line">[host.&quot;https://lank8s.cn&quot;]</span><br><span class="line">EOF</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">下载管理工具NerdCtl</span></span><br><span class="line">wget https://github.com/containerd/nerdctl/releases/download/v1. 6. 2/nerdctl-1. 6. 2-linux-amd64. tar.gz</span><br><span class="line">tar zxvf -C nerdctl-1. 6. 2-linux-amd64. tar.gz /usr/local/bin/</span><br><span class="line">chmod +x /usr/local/bin/nerdctl</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">配置NerdCtl自动补全</span></span><br><span class="line">echo &quot;source &lt;( nerdctl completion bash )&quot; &gt;&gt; ~/. bashrc</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">重新加载并配置开机启动</span></span><br><span class="line">systemctl daemon-reload</span><br><span class="line">systemctl enable --now containerd</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">加载github的Hosts地址</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">sh -c <span class="string">&#x27;sed -i &quot;/# GitHub520 Host Start/Q&quot; /etc/hosts &amp;&amp; curl https://raw.hellogithub.com/hosts &gt;&gt; /etc/hosts&#x27;</span></span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">重启</span></span><br><span class="line">sync</span><br><span class="line">ldconfig</span><br><span class="line">reboot</span><br></pre></td></tr></table></figure>
+
+<h3 id="部署K3s"><a href="#部署K3s" class="headerlink" title="部署K3s"></a>部署K3s</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">使用官方社区提供的国内源进行部署</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">首先，安装 K3s 使用的是存储在阿里云对象存储上的 K3s 安装脚本，并且使用存储在国内 channel 去解析对应的 K3s 版本。</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">其次，通过 INSTALL_K3S_MIRROR=cn 环境变量来指定 K3s 的二进制文件从国内的阿里云对象存储上去拉取。</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">最后，通过 --system-default-registry 参数来指定 K3s 的系统镜像从国内的阿里云镜像仓库（ registry.cn-hangzhou.aliyuncs.com ） 去拉取</span></span><br><span class="line">curl –sfL \</span><br><span class="line">     https://rancher-mirror.oss-cn-beijing.aliyuncs.com/k3s/k3s-install.sh | \</span><br><span class="line">     INSTALL_K3S_MIRROR=cn sh -s - \</span><br><span class="line">     --system-default-registry &quot;registry.cn-hangzhou.aliyuncs.com&quot;</span><br><span class="line">     </span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">检查节点</span></span><br><span class="line">[root@Ansbile ~]# kubectl get nodes</span><br><span class="line">NAME      STATUS   ROLES                  AGE   VERSION</span><br><span class="line">ansbile   Ready    control-plane, master   13m   v1. 27. 6+k3s1</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">检查性能属性</span></span><br><span class="line">[root@Ansbile ~]# kubectl top nodes</span><br><span class="line">NAME      CPU( cores )   CPU%   MEMORY( bytes )   MEMORY%   </span><br><span class="line">ansbile   74m          3%     1475Mi          76%    </span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">检查版本信息</span></span><br><span class="line">[root@Ansbile ~]# kubectl version --short</span><br><span class="line">Client Version: v1. 27. 6+k3s1</span><br><span class="line">Kustomize Version: v5. 0. 1</span><br><span class="line">Server Version: v1. 27. 6+k3s1</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">配置K3S用的镜像代理</span></span><br><span class="line">cat &gt;&gt; /etc/rancher/k3s/registries.yaml &lt;&lt;EOF</span><br><span class="line">mirrors:  </span><br><span class="line">  docker.io:</span><br><span class="line">    endpoint:</span><br><span class="line">      - &quot;https://docker.mirrors.ustc.edu.cn&quot; </span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line">cat &gt;&gt; /etc/rancher/k3s/registries.yaml &lt;&lt;EOF</span><br><span class="line">mirrors:  </span><br><span class="line">  gcr.io:</span><br><span class="line">    endpoint:</span><br><span class="line">      - &quot;https://gcr.lank8s.cn&quot; </span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line">cat &gt;&gt; /etc/rancher/k3s/registries.yaml &lt;&lt;EOF</span><br><span class="line">mirrors:  </span><br><span class="line">  registry.k8s.io:</span><br><span class="line">    endpoint:</span><br><span class="line">      - &quot;https://registry.lank8s.cn&quot; </span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line">systemctl restart k3s</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">部署helm</span></span><br><span class="line">curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3</span><br><span class="line">chmod 700 get_helm.sh </span><br><span class="line">sh get_helm.sh</span><br><span class="line">helm version</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">添加helm源</span></span><br><span class="line">helm repo add stable https://charts.helm.sh/stable</span><br><span class="line">helm repo update</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">配置helm的自动补全</span></span><br><span class="line">helm completion bash &gt; ~/. helmrc</span><br><span class="line">echo &quot;source ~/. helmrc&quot; &gt;&gt; ~/. bashrc</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">配置kubectl的自动补全</span></span><br><span class="line">echo &quot;source &lt;( kubectl completion bash )&quot; &gt;&gt; ~/. bashrc</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装kubens, 用于切换命名空间</span></span><br><span class="line">curl -L https://github.com/ahmetb/kubectx/releases/download/v0. 9. 1/kubens -o /usr/local/bin/kubens</span><br><span class="line">chmod +x /usr/local/bin/kubens</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">执行环境变量</span></span><br><span class="line">source ~/. bashrc</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">指定kubeconfig配置文件</span></span><br><span class="line">kubectl --kubeconfig /etc/rancher/k3s/k3s.yaml get pods --all-namespaces</span><br><span class="line">helm --kubeconfig /etc/rancher/k3s/k3s.yaml ls --all-namespaces</span><br></pre></td></tr></table></figure>
+<h3 id="测试用例"><a href="#测试用例" class="headerlink" title="测试用例"></a>测试用例</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@Ansbile ~]# kubectl create deploy whoami --image=traefik/whoami --replicas=2</span><br><span class="line">deployment.apps/whoami created</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">测试LoadBalancer</span></span><br><span class="line">[root@Ansbile ~]# kubectl expose deploy whoami --type=LoadBalancer --port=80 --external-ip 192. 168. 10. 102</span><br><span class="line">service/whoami exposed</span><br><span class="line">[root@Ansbile ~]# kubectl get svc</span><br><span class="line">NAME         TYPE           CLUSTER-IP      EXTERNAL-IP      PORT( S )        AGE</span><br><span class="line">kubernetes   ClusterIP      10. 43. 0. 1       &lt;none&gt;           443/TCP        162m</span><br><span class="line">whoami       LoadBalancer   10. 43. 193. 248   192. 168. 10. 102   80:30573/TCP   31m</span><br><span class="line">[root@Ansbile ~]# curl 192. 168. 10. 102</span><br><span class="line">Hostname: whoami-6f57d5d6b5-7qmp5</span><br><span class="line">IP: 127. 0. 0. 1</span><br><span class="line">IP: ::1</span><br><span class="line">IP: 10. 42. 0. 38</span><br><span class="line">IP: fe80::209c:10ff:fe71:6db8</span><br><span class="line">RemoteAddr: 10. 42. 0. 1:44357</span><br><span class="line">GET / HTTP/1. 1</span><br><span class="line">Host: 192. 168. 10. 102</span><br><span class="line">User-Agent: curl/7. 76. 1</span><br><span class="line">Accept: */*</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">测试NodePort</span></span><br><span class="line">[root@Ansbile ~]# kubectl delete svc whoami </span><br><span class="line">service &quot;whoami&quot; deleted</span><br><span class="line">[root@Ansbile ~]# kubectl expose deploy whoami --type=NodePort --port=80</span><br><span class="line">service/whoami exposed</span><br><span class="line">[root@Ansbile ~]# kubectl get svc</span><br><span class="line">NAME         TYPE        CLUSTER-IP     EXTERNAL-IP   PORT( S )        AGE</span><br><span class="line">kubernetes   ClusterIP   10. 43. 0. 1      &lt;none&gt;        443/TCP        178m</span><br><span class="line">whoami       NodePort    10. 43. 75. 150   &lt;none&gt;        80:30047/TCP   6s</span><br><span class="line">[root@Ansbile ~]# curl 192. 168. 10. 5:30047</span><br><span class="line">Hostname: whoami-6f57d5d6b5-7qmp5</span><br><span class="line">IP: 127. 0. 0. 1</span><br><span class="line">IP: ::1</span><br><span class="line">IP: 10. 42. 0. 38</span><br><span class="line">IP: fe80::209c:10ff:fe71:6db8</span><br><span class="line">RemoteAddr: 10. 42. 0. 1:39611</span><br><span class="line">GET / HTTP/1. 1</span><br><span class="line">Host: 192. 168. 10. 5:30047</span><br><span class="line">User-Agent: curl/7. 76. 1</span><br><span class="line">Accept: */*</span><br><span class="line"></span><br><span class="line">[root@Ansbile ~]# curl 192. 168. 10. 5:30047</span><br><span class="line">Hostname: whoami-6f57d5d6b5-pzgg8</span><br><span class="line">IP: 127. 0. 0. 1</span><br><span class="line">IP: ::1</span><br><span class="line">IP: 10. 42. 0. 39</span><br><span class="line">IP: fe80::dccd:bff:fe91:b7b7</span><br><span class="line">RemoteAddr: 10. 42. 0. 1:37584</span><br><span class="line">GET / HTTP/1. 1</span><br><span class="line">Host: 192. 168. 10. 5:30047</span><br><span class="line">User-Agent: curl/7. 76. 1</span><br><span class="line">Accept: */*</span><br></pre></td></tr></table></figure>
+
+<h2 id="AWX安装"><a href="#AWX安装" class="headerlink" title="AWX安装"></a>AWX安装</h2><h3 id="部署-1"><a href="#部署-1" class="headerlink" title="部署"></a>部署</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">添加awx的helm库</span></span><br><span class="line">[root@Ansible ~]# helm repo add awx-operator https://ansible.github.io/awx-operator/</span><br><span class="line">&quot;awx-operator&quot; has been added to your repositories</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">刷新库</span></span><br><span class="line">[root@Ansible ~]# helm repo update</span><br><span class="line">Hang tight while we grab the latest from your chart repositories...</span><br><span class="line">... Successfully got an update from the &quot;awx-operator&quot; chart repository</span><br><span class="line">... Successfully got an update from the &quot;stable&quot; chart repository</span><br><span class="line">Update Complete. ⎈Happy Helming!⎈</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">检索awx-operator</span></span><br><span class="line">[root@Ansible ~]# helm search repo awx-operator</span><br><span class="line">NAME                     	CHART VERSION	APP VERSION	DESCRIPTION                      </span><br><span class="line">awx-operator/awx-operator	2. 7. 0        	2. 7. 0      	A Helm chart for the AWX Operator</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">下载awx-operator的Chart</span></span><br><span class="line">[root@Ansible ~]# helm pull awx-operator/awx-operator --version=2. 7. 0</span><br><span class="line">[root@Ansible ~]# tar zxf awx-operator-2. 7. 0. tgz </span><br><span class="line">[root@Ansible ~]# tree awx-operator</span><br><span class="line">awx-operator</span><br><span class="line">├── Chart.yaml</span><br><span class="line">├── crds</span><br><span class="line">│   ├── customresourcedefinition-awxbackups.awx.ansible.com.yaml</span><br><span class="line">│   ├── customresourcedefinition-awxrestores.awx.ansible.com.yaml</span><br><span class="line">│   └── customresourcedefinition-awxs.awx.ansible.com.yaml</span><br><span class="line">├── README. md</span><br><span class="line">├── templates</span><br><span class="line">│   ├── awx-deploy.yaml</span><br><span class="line">│   ├── clusterrole-awx-operator-metrics-reader.yaml</span><br><span class="line">│   ├── clusterrole-awx-operator-proxy-role.yaml</span><br><span class="line">│   ├── clusterrolebinding-awx-operator-proxy-rolebinding.yaml</span><br><span class="line">│   ├── configmap-awx-operator-awx-manager-config.yaml</span><br><span class="line">│   ├── deployment-awx-operator-controller-manager.yaml</span><br><span class="line">│   ├── _helpers.tpl</span><br><span class="line">│   ├── NOTES. txt</span><br><span class="line">│   ├── postgres-config.yaml</span><br><span class="line">│   ├── role-awx-operator-awx-manager-role.yaml</span><br><span class="line">│   ├── role-awx-operator-leader-election-role.yaml</span><br><span class="line">│   ├── rolebinding-awx-operator-awx-manager-rolebinding.yaml</span><br><span class="line">│   ├── rolebinding-awx-operator-leader-election-rolebinding.yaml</span><br><span class="line">│   ├── serviceaccount-awx-operator-controller-manager.yaml</span><br><span class="line">│   └── service-awx-operator-controller-manager-metrics-service.yaml</span><br><span class="line">└── values.yaml</span><br><span class="line"></span><br><span class="line">2 directories, 21 files</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">获取部署容器镜像， 需要修改下述yaml文件的image属性，添加 imagePullPolicy: IfNotPresent</span></span><br><span class="line">[root@Ansible awx-operator]# grep image: templates/deployment-awx-operator-controller-manager.yaml</span><br><span class="line">templates/deployment-awx-operator-controller-manager.yaml:          image: gcr.io/kubebuilder/kube-rbac-proxy:v0. 14. 1</span><br><span class="line">templates/deployment-awx-operator-controller-manager.yaml:          image: quay.io/ansible/awx-operator:2. 7. 0</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">拉取镜像，需要使用代理镜像，或者在外网vps上下载再回传</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">docker pull quay.io/ansible/awx-operator:2. 7. 0</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">docker pull gcr.io/kubebuilder/kube-rbac-proxy:v0. 14. 1</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">docker save gcr.io/kubebuilder/kube-rbac-proxy quay.io/ansible/awx-operator &gt; awx-operator.tar</span></span><br><span class="line"></span><br><span class="line">[root@Ansible ~]# docker load -i awx-operator.tar </span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">从本地安装</span></span><br><span class="line">[root@Ansible ~]# export KUBECONFIG=/etc/rancher/k3s/k3s.yaml</span><br><span class="line">[root@Ansible awx-operator]# helm install -n awx --create-namespace my-awx-operator .</span><br><span class="line">NAME: my-awx-operator</span><br><span class="line">LAST DEPLOYED: Fri Oct 13 19:10:19 2023</span><br><span class="line">NAMESPACE: awx</span><br><span class="line">STATUS: deployed</span><br><span class="line">REVISION: 1</span><br><span class="line">TEST SUITE: None</span><br><span class="line">NOTES:</span><br><span class="line">AWX Operator installed with Helm Chart version 2. 7. 0</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">部署要求必须要有双核CPU，导致pending</span></span><br><span class="line">[root@Ansible awx-operator]# kubectl get pods --namespace awx</span><br><span class="line">NAME                                               READY   STATUS    RESTARTS   AGE</span><br><span class="line">awx-operator-controller-manager-5644f9898c-x7xqh   0/2     Pending   0          40s</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">删除helm部署，增配之后再来</span></span><br><span class="line">[root@Ansible awx-operator]# helm uninstall my-awx-operator --namespace awx</span><br><span class="line">release &quot;my-awx-operator&quot; uninstalled</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">切换awx命名空间</span></span><br><span class="line">[root@Ansbile ~]# kubens awx</span><br><span class="line">Context &quot;default&quot; modified.</span><br><span class="line">Active namespace is &quot;awx&quot;.</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">再次部署，并检查运行结果</span></span><br><span class="line">[root@Ansible awx-operator]# helm install --create-namespace my-awx-operator .</span><br><span class="line">[root@ansible awx-operator]# kubectl get pods</span><br><span class="line">NAME                                               READY   STATUS </span><br><span class="line">awx-operator-controller-manager-5644f9898c-dfd82   2/2     Running</span><br><span class="line"></span><br><span class="line">[root@ansible awx-operator]# kubectl get svc</span><br><span class="line">NAME                                              TYPE        CLUSTER-IP    EXTERNAL-IP   PORT( S ) </span><br><span class="line">awx-operator-controller-manager-metrics-service   ClusterIP   10. 96. 80. 75   &lt;none&gt;        8443/TCP</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">创建动态卷供应（ 可选 ）</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">[root@Kind AWX]# <span class="built_in">cat</span> local-storage-class.yaml</span> </span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">apiVersion: storage.k8s.io/v1</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">kind: StorageClass</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">metadata:</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"> name: local-path</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"> namespace: awx</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">provisioner: rancher.io/local-path</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">volumeBindingMode: WaitForFirstConsumer</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">[root@Ansbile AWX]# kubectl create -f pvc.yaml</span> </span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">创建pvc</span></span><br><span class="line">[root@Kind AWX]# cat pvc.yaml </span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: PersistentVolumeClaim</span><br><span class="line">metadata:</span><br><span class="line">  name: static-data-pvc</span><br><span class="line">  namespace: awx</span><br><span class="line">spec:</span><br><span class="line">  storageClassName: local-path</span><br><span class="line">  accessModes:</span><br><span class="line">    - ReadWriteOnce</span><br><span class="line">  resources:</span><br><span class="line">    requests:</span><br><span class="line">      storage: 5Gi</span><br><span class="line">[root@Ansbile AWX]# kubectl create -f pvc.yaml </span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">创建AWX站点部署文件</span></span><br><span class="line">[root@Ansbile AWX]# cat ansible-awx.yaml </span><br><span class="line">---</span><br><span class="line">apiVersion: awx.ansible.com/v1beta1</span><br><span class="line">kind: AWX</span><br><span class="line">metadata:</span><br><span class="line">  name: ansible-awx</span><br><span class="line">  namespace: awx</span><br><span class="line">spec:</span><br><span class="line">  service_type: nodeport</span><br><span class="line">  projects_persistence: true</span><br><span class="line">  projects_storage_access_mode: ReadWriteOnce</span><br><span class="line">  web_extra_volume_mounts: |</span><br><span class="line">    - name: static-data</span><br><span class="line">      mountPath: /var/lib/projects</span><br><span class="line">  extra_volumes: |</span><br><span class="line">    - name: static-data</span><br><span class="line">      persistentVolumeClaim:</span><br><span class="line">        claimName: static-data-pvc</span><br><span class="line">[root@Ansbile AWX]# kubectl create -f ansible-awx.yaml</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">部署完成，pod运行正常</span></span><br><span class="line">[root@Ansbile AWX]# kubectl get pods -l &quot;app.kubernetes.io/managed-by=awx-operator&quot;</span><br><span class="line">NAME                                READY   STATUS    RESTARTS   AGE</span><br><span class="line">ansible-awx-postgres-13-0           1/1     Running   0          6m55s</span><br><span class="line">ansible-awx-task-684dbfd67c-vz62h   4/4     Running   0          4m42s</span><br><span class="line">ansible-awx-web-6c64879999-vkbz6    3/3     Running   0          2m35s</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">部署期间自动创建pvc和pv</span></span><br><span class="line">[root@Ansbile AWX]# kubectl get pvc</span><br><span class="line">NAME                                    STATUS   VOLUME                                    </span><br><span class="line">postgres-13-ansible-awx-postgres-13-0   Bound    pvc-bb2a8f4b-612d-4b32-9715-3a3e4c53a08a   </span><br><span class="line">static-data-pvc                         Bound    pvc-1f430871-97ff-4828-a748-cad713268497   </span><br><span class="line">ansible-awx-projects-claim              Bound    pvc-a012ecc9-8e6d-4377-aee9-1803035a8210   </span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看部署完成的service</span></span><br><span class="line">[root@Ansbile AWX]# kubectl get svc -l &quot;app.kubernetes.io/managed-by=awx-operator&quot;</span><br><span class="line">NAME                      TYPE        CLUSTER-IP      EXTERNAL-IP   PORT( S )        AGE</span><br><span class="line">ansible-awx-postgres-13   ClusterIP   None            &lt;none&gt;        5432/TCP       10m</span><br><span class="line">ansible-awx-service       NodePort    10. 43. 114. 158   &lt;none&gt;        80:30769/TCP   7m58s</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">获取默认admin用户的密码</span></span><br><span class="line">[root@Ansbile ~]# kubectl get secret ansible-awx-admin-password -o go-template=&#x27;&#123;&#123;range $k, $v := . data&#125;&#125;&#123;&#123;printf &quot;%s: &quot; $k&#125;&#125;&#123;&#123;if not $v&#125;&#125;&#123;&#123;$v&#125;&#125;&#123;&#123;else&#125;&#125;&#123;&#123;$v | base64decode&#125;&#125;&#123;&#123;end&#125;&#125;&#123;&#123;&quot;\n&quot;&#125;&#125;&#123;&#123;end&#125;&#125;&#x27;</span><br><span class="line">password: 7ryIBAw5RBUzhw0K2BvHctuncIcID8dM</span><br></pre></td></tr></table></figure>
+<h3 id="访问"><a href="#访问" class="headerlink" title="访问"></a>访问</h3><ul>
+<li>登录portal页面<br><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023/09/ansible-awx-index.PNG"></li>
+<li>查看Dashboard<br><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023/09/ansible-awx-dashbord.PNG"></li>
+<li>遗留项<ol>
+<li>使用域名访问；</li>
+<li>加载SSL证书</li>
+</ol>
+</li>
+</ul>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
+<li><a target="_blank" rel="noopener" href="https://sysin.org/blog/kind/#1-%E7%AE%80%E4%BB%8B">kind：Kubernetes in Docker，单机运行 Kubernetes 群集的最佳方案</a></li>
+<li><a target="_blank" rel="noopener" href="https://computingforgeeks.com/how-to-install-ansible-awx-on-ubuntu-linux/">如何在 Kubernetes 集群上安装 Ansible AWX</a></li>
+<li><a target="_blank" rel="noopener" href="https://moelove.info/2020/02/05/%E4%BD%BF%E7%94%A8-Kind-%E5%9C%A8%E7%A6%BB%E7%BA%BF%E7%8E%AF%E5%A2%83%E5%88%9B%E5%BB%BA-K8S-%E9%9B%86%E7%BE%A4/">使用 Kind 在离线环境创建 K8S 集群</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/ansible/awx-operator/tree/devel/docs/installation">AWX-operator官方文档</a></li>
+</ol>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Kubernetes/">Kubernetes</a><a class="post-meta__tags" href="/tags/K3s/">K3s</a><a class="post-meta__tags" href="/tags/Ansible/">Ansible</a><a class="post-meta__tags" href="/tags/AWX/">AWX</a></div><div class="post-share"><div class="social-share" data-image="https://cdn.sujx.net/2023/08/Anbile-Tower-strategy.png" data-sites="facebook,twitter,weibo,qq"></div><link rel="stylesheet" href="/libs/sharejs/css/share.min.css" media="print" onload="this.media='all'"><script src="/libs/sharejs/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>能否请我喝一杯咖啡？</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.jpg" target="_blank"><img class="post-qr-code-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/wechat.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2023/09/23/Infrastructure-DNS-CERT-GIT-Cache/" title="快速构建实验环境的基础服务"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover76.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">快速构建实验环境的基础服务</div></div><div class="info-2"><div class="info-item-1">在单机试验环境中，经常需要配置DNS解析、生成SSL证书、保存或者拉取配置脚本，这些操作往往散布到各个节点的实际操作中，较为繁琐且容易出错，所以创建一个虚机镜像来提供统一的服务就是有需求的。以下就是通过在VM上部署实现相关功能的操作实践。    类别 内容    功能 基础架构服务   主机名 infra.contoso.com   IP 192. 168. 10. 254   配置 2core 2G mem 40GB disk   承载服务 DNS以及DNS缓存、时间服务、SSL证书生成和下载、git服务、导航页、Ansible控制台、主机管理   包管理安装主机准备基础环境准备主机环境的准备执行准备：RockyLinux9的主机部署 # 系统更新dnf makecachednf update -y# 由于主机模板只给了20G硬盘，所以需要扩容dnf install cloud-utils-growpart-0. 33-1. el9. x86_64growpart /dev/sda 2lvextend -l +100%free  /dev/rl/rootxfs_growfs /...</div></div></div></a><a class="pagination-related" href="/2023/09/11/How-To-Be-A-Security-Services-Engineer/" title="安服仔的自我修养"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023/09/secxinfu-book.PNG" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">安服仔的自我修养</div></div><div class="info-2"><div class="info-item-1">从首都图书馆无意间翻到的一本工具书《深信服安全服务工程师实战》，我实在惊讶于深信服把售前资料从内部文档库里面输出一个PDF就拿来卖钱了。虽然里面有不少的销售话术和广告推销以及前后重复的内容，但不失其为本好的一次性工具书，对于了解乙方的现阶段企业安全建设的思路还是有帮助的。 风险评估风险评估是对一个事件后者事物可能造成的影响或损失造成的影响或损失的程度进行量化。 评估目的 资产识别 平衡安全风险与成本 风险识别 建设指导 业务保障  评估模型评估方式 自我评估 上级主管或者业务主管发起的、基于法规或标准的强制性检查活动 外协专业安全服务组织进行  评估原则 标准化原则 业务主导原则 规划性原则 保密性原则 最小影响原则 互动性原则  评估方法类别 基于知识的分析方法  定性分析方法  定量分析方法   方法 访谈调研 人工审计 工具扫描 渗透测试  评估范围技术评估范围 物理环境 网络结构 主机及数据系统 应用系统 业务流程  管理评估维度 安全管理制度 文档，包括策略、制度、规程、表格、记录   安全管理机构 安全管理的岗位设置、人员配备、授权和审批、沟通   人员安全管理 信息...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2023/08/16/Kubernetes-Kind/" title="使用Kind快速部署Kubernetes实验环境"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023/08/kind-diagram.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-16</div><div class="info-item-2">使用Kind快速部署Kubernetes实验环境</div></div><div class="info-2"><div class="info-item-1"> 其实就是Docker上面跑了一个Docker  概念Kindkind 即 Kubernetes In Docker，顾名思义，就是将 k8s 所需要的所有组件，全部部署在一个docker容器中，是一套开箱即用的 k8s 环境搭建方案，适用于快速构建本地开发和测试环境。kind 由以下组件构成:  Go packages implementing cluster creation, image build, etc. A command line interface ( kind) built on these packages. Docker image( s ) written to run systemd, Kubernetes, etc. kubetest integration also built on these packages ( WIP )kind 使用 kubeadm 创建和启动群集节点。kind 使用 containerd 作为容器运行时，所以弃用 Dockershim 对 kind 没有影响。  部署环境准备# 本次部署基于RockyLinux 9. 2...</div></div></div></a><a class="pagination-related" href="/2022/09/19/Kubernetes-Deploy/" title="Kubernetes的部署"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/wallhaven-4dzk5g.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2022-09-19</div><div class="info-item-2">Kubernetes的部署</div></div><div class="info-2"><div class="info-item-1">概要Kubernetes 这个名字源于希腊语，意为“舵手”或“飞行员”。k8s 这个缩写是因为 k 和 s 之间有八个字符的关系。 Kubernetes 是一个可移植、可扩展的开源平台，用于管理容器化的工作负载和服务，可促进声明式配置和自动化。 Kubernetes 拥有一个庞大且快速增长的生态，其服务、支持和工具的使用范围相当广泛。  随着容器的广泛应用，Kubernetes能够满足容器的资源管理和任务编排的需要，它可以实现：  服务发现和负载均衡  Kubernetes 可以使用 DNS 名称或自己的 IP 地址来暴露容器。 如果进入容器的流量很大， Kubernetes 可以负载均衡并分配网络流量，从而使部署稳定。  存储编排  Kubernetes 允许你自动挂载你选择的存储系统，例如本地存储、公共云提供商等。  自动部署和回滚  你可以使用 Kubernetes 描述已部署容器的所需状态， 它可以以受控的速率将实际状态更改为期望状态。 例如，你可以自动化 Kubernetes 来为你的部署创建新容器， 删除现有容器并将它们的所有资源用于新容器。  自动完成装箱计算  你...</div></div></div></a><a class="pagination-related" href="/2026/02/03/Ansible-Accelerate/" title="为你的Ansible插上翅膀"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover134.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-02-03</div><div class="info-item-2">为你的Ansible插上翅膀</div></div><div class="info-2"><div class="info-item-1"> Ansible 已成为现代基础设施自动化的基石，提供了一种直接而强大的方法来管理 IT 运营，从基本的软件包安装到协调复杂的跨节点部署，Ansible 都能胜任。然而，随着自动化规模的扩大，playbook 的执行时间可能会成为瓶颈。实施正确的优化策略对于保持高效的工作流程至关重要。本指南探讨了八种有效的方法，可以显著减少您的 Ansible playbook 执行时间。  使用回调插件诊断性能瓶颈在优化之前，您需要识别出实际导致速度变慢的原因。Ansible 的回调插件为每个任务提供详细的计时信息，帮助您定位性能问题。 在您的配置中启用 timer 、 profile_tasks 和 profile_roles 插件： [defaults]inventory = ./hostscallbacks_enabled = timer, profile_tasks, profile_roles  运行您的 playbook 时，您将看到全面的计时数据： ==================================================================...</div></div></div></a><a class="pagination-related" href="/2024/09/30/Interview-2409/" title="面试题目"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover91.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-09-30</div><div class="info-item-2">面试题目</div></div><div class="info-2"><div class="info-item-1">如何防止数据丢失在数据存储管理中，防止数据丢失和最小化故障损失需要从预防措施、实时监控、快速响应机制和容灾备份多个维度构建完整的数据保护体系。以下是结合华为存储设备的详细策略：  一、预防措施：从源头降低数据丢失风险1. 冗余架构设计 RAID级别优化   避免使用RAID 0（无冗余），优先选择RAID 6（允许双盘故障）或RAID 10（高性能+冗余）。   华为存储支持智能RAID 2。 0+技术，可将物理硬盘划分为更细粒度的块（CK），提升重建效率。   多副本与纠删码（EC）   针对分布式存储（如OceanStor Pacific），启用多副本（如3副本）或EC（如8+4），容忍节点级故障。    2. 数据保护技术 快照（Snapshot）   定期为关键业务LUN&#x2F;文件系统创建快照（如每小时一次），保留最近24小时快照。   华为存储支持秒级快照，通过“差分位图”技术减少性能影响。   克隆与远程复制   使用HyperClone创建完整数据副本，用于开发测试或应急恢复。   配置HyperReplication（异步&#x2F;同步）将数据复制到异地容...</div></div></div></a><a class="pagination-related" href="/2023/08/05/Kubernetes-Extra/" title="Kubernetes高级概念"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/05/wallhaven-md1qr8.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-05</div><div class="info-item-2">Kubernetes高级概念</div></div><div class="info-2"><div class="info-item-1">安全管理kubeconfig文件是指用于登录的文件，默认是指~&#x2F;。 kube&#x2F;config。这个文件是在刚装好kubernetes集群后按提示复制过来的，它和&#x2F;etc&#x2F;kubernetes&#x2F;admin。 conf是一样的，里面包括了集群的地址、admin用户以及各种证书和密钥的信息。创建kubernetes集群时，文件中的admin已被授予最大权限。 # 只要有了admin.conf文件就可管理集群[root@kmaster ~]# sz /etc/kubernetes/admin.conf # Windows系统部署kubectl也可管理PowerShell 7. 3. 7PS C:\Users\root&gt; kubectl get nodes --kubeconfig=admin.confNAME      STATUS   ROLES                  AGE   VERSIONkmaster   Ready    control-plane, master   35d   v1. 21. 14knode...</div></div></div></a><a class="pagination-related" href="/2023/08/10/Kubernetes-CICD/" title="CI&#x2F;CD初步"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/wallhaven-4lekzl.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-10</div><div class="info-item-2">CI&#x2F;CD初步</div></div><div class="info-2"><div class="info-item-1"> 现在利用已有的k8s环境部署一套CI&#x2F;CD环境  DevOps理解CI&#x2F;CD，持续集成和持续交付的基本过程包括如下几个步骤：  软件更新或者迭代——Gitlab 新版软件打包成镜像——Jenkins 新的镜像在k8s中集成——Registry  当代码提交到gitlab之后，会立马触发jenkins将新代码编译成镜像，然后再在kmaster上部署新的镜像。  镜像仓库Registry部署# 部署docker并修改docker启动参数[root@Gitlab ~]# vim /usr/lib/systemd/system/docker.service# 新增--insecure-registry=192. 168. 10. 9:5000 -H tcp://0. 0. 0. 0:2376 ExecStart=/usr/bin/dockerd --insecure-registry=192. 168. 10. 9:5000 -H tcp://0. 0. 0. 0:2376 -H fd:// --containerd=/run/containerd/containe...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">靖轩</div><div class="author-info-description">逝者如斯夫,不舍昼夜</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/grepsu"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://gitee.com/grepsu" target="_blank" title="Gitee"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:sujx@live.cn" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS链接"><i class="fa  fa-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A6%82%E5%BF%B5"><span class="toc-number">1.</span> <span class="toc-text">概念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#K3s"><span class="toc-number">1.1.</span> <span class="toc-text">K3s</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#AWX"><span class="toc-number">1.2.</span> <span class="toc-text">AWX</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%83%A8%E7%BD%B2"><span class="toc-number">2.</span> <span class="toc-text">部署</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87"><span class="toc-number">2.1.</span> <span class="toc-text">环境准备</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%83%A8%E7%BD%B2K3s"><span class="toc-number">2.2.</span> <span class="toc-text">部署K3s</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B"><span class="toc-number">2.3.</span> <span class="toc-text">测试用例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#AWX%E5%AE%89%E8%A3%85"><span class="toc-number">3.</span> <span class="toc-text">AWX安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%83%A8%E7%BD%B2-1"><span class="toc-number">3.1.</span> <span class="toc-text">部署</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BF%E9%97%AE"><span class="toc-number">3.2.</span> <span class="toc-text">访问</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">4.</span> <span class="toc-text">参考</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/07/03/AIGC_FoxHole/" title="海鹰">海鹰</a><time datetime="2026-07-03T01:04:07.000Z" title="发表于 2026-07-03 09:04:07">2026-07-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/11/fristVibeCoding/" title="鹊随金印：我的第一个完整的AI编程项目">鹊随金印：我的第一个完整的AI编程项目</a><time datetime="2026-06-11T01:04:07.000Z" title="发表于 2026-06-11 09:04:07">2026-06-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/03/VI_Howto/" title="VI编辑器简介">VI编辑器简介</a><time datetime="2026-06-03T01:04:07.000Z" title="发表于 2026-06-03 09:04:07">2026-06-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/28/HNCitic_2605/" title="我要上头条">我要上头条</a><time datetime="2026-05-28T01:04:07.000Z" title="发表于 2026-05-28 09:04:07">2026-05-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/12/TS-Domain-Controller-Sync-Failure/" title="记一次Windows AD域控制器同步故障排错">记一次Windows AD域控制器同步故障排错</a><time datetime="2026-05-12T03:04:07.000Z" title="发表于 2026-05-12 11:04:07">2026-05-12</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2008 - 2026 By 靖轩</span></div><div class="footer_custom_text">京ICP备17034757号</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.5"></script><script src="/js/main.js?v=5.5.5"></script><script src="/libs/fancybox/fancybox.umd.js"></script><script src="/js/instantpage.js" type="module"></script><script src="/libs/lazyload/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const parseViewBox = viewBox => {
+    if (!viewBox) return null
+    const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
+    if (parts.length !== 4 || parts.some(n => Number.isNaN(n))) return null
+    return parts
+  }
+
+  const getSvgViewBox = svg => {
+    const attr = parseViewBox(svg.getAttribute('viewBox'))
+    if (attr) return attr
+
+    // Fallback: use bbox to build a viewBox
+    try {
+      const bbox = svg.getBBox()
+      if (bbox && bbox.width && bbox.height) return [bbox.x, bbox.y, bbox.width, bbox.height]
+    } catch (e) {
+      // getBBox may fail on some edge cases; ignore
+    }
+
+    const w = Number(svg.getAttribute('width')) || 0
+    const h = Number(svg.getAttribute('height')) || 0
+    if (w > 0 && h > 0) return [0, 0, w, h]
+    return [0, 0, 100, 100]
+  }
+
+  const setSvgViewBox = (svg, vb) => {
+    svg.setAttribute('viewBox', `${vb[0]} ${vb[1]} ${vb[2]} ${vb[3]}`)
+  }
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v))
+
+  const openSvgInNewTab = ({ source, initViewBox }) => {
+    const getClonedSvg = () => {
+      if (typeof source === 'string') {
+        const template = document.createElement('template')
+        template.innerHTML = source.trim()
+        const svg = template.content.querySelector('svg')
+        return svg ? svg.cloneNode(true) : null
+      }
+      if (source && typeof source.cloneNode === 'function') {
+        return source.cloneNode(true)
+      }
+      return null
+    }
+
+    const clone = getClonedSvg()
+    if (!clone) return
+    if (initViewBox && initViewBox.length === 4) {
+      clone.setAttribute('viewBox', initViewBox.join(' '))
+    }
+    if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+    if (!clone.getAttribute('xmlns:xlink') && clone.outerHTML.includes('xlink:')) {
+      clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+    }
+    // inject background to match current theme
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    const bg = getComputedStyle(document.body).backgroundColor || (isDark ? '#1e1e1e' : '#ffffff')
+    if (!clone.style.background) clone.style.background = bg
+
+    const serializer = new XMLSerializer()
+    const svgSource = serializer.serializeToString(clone)
+    const htmlSource = `<!doctype html><html><head><meta charset="utf-8" />
+      <style>
+        html, body { width: 100%; height: 100%; margin: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; }
+        svg { max-width: 100%; max-height: 100%; height: auto; width: auto; }
+      </style>
+      </head><body>${svgSource}</body></html>`
+    const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank', 'noopener')
+    setTimeout(() => URL.revokeObjectURL(url), 30000)
+  }
+
+  const attachMermaidViewerButton = wrap => {
+    let btn = wrap.querySelector('.mermaid-open-btn')
+    if (!btn) {
+      btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'mermaid-open-btn'
+      wrap.appendChild(btn)
+    }
+
+    btn.innerHTML = '<i class="fa fa-search fa-fw" aria-hidden="true"></i>'
+
+    if (!btn.__mermaidViewerBound) {
+      btn.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        const svg = wrap.__mermaidOriginalSvg || wrap.querySelector('svg')
+        if (!svg) return
+        const initViewBox = wrap.__mermaidInitViewBox
+        if (typeof svg === 'string') {
+          openSvgInNewTab({ source: svg, initViewBox })
+          return
+        }
+        openSvgInNewTab({ source: svg, initViewBox })
+      })
+      btn.__mermaidViewerBound = true
+    }
+  }
+
+  // Zoom around a point (px, py) in the SVG viewport (in viewBox coordinates)
+  const zoomAtPoint = (vb, factor, px, py) => {
+    const w = vb[2] * factor
+    const h = vb[3] * factor
+    const nx = px - (px - vb[0]) * factor
+    const ny = py - (py - vb[1]) * factor
+    return [nx, ny, w, h]
+  }
+
+  const initMermaidGestures = wrap => {
+    const svg = wrap.querySelector('svg')
+    if (!svg) return
+
+    // Ensure viewBox exists so gestures always work
+    const initVb = getSvgViewBox(svg)
+    wrap.__mermaidInitViewBox = initVb
+    wrap.__mermaidCurViewBox = initVb.slice()
+    setSvgViewBox(svg, initVb)
+
+    // Avoid binding multiple times on themeChange/pjax
+    if (wrap.__mermaidGestureBound) return
+    wrap.__mermaidGestureBound = true
+
+    // Helper: map client (viewport) coordinate -> viewBox coordinate
+    const clientToViewBox = (clientX, clientY) => {
+      const rect = svg.getBoundingClientRect()
+      const vb = wrap.__mermaidCurViewBox || getSvgViewBox(svg)
+      const x = vb[0] + (clientX - rect.left) * (vb[2] / rect.width)
+      const y = vb[1] + (clientY - rect.top) * (vb[3] / rect.height)
+      return { x, y, rect, vb }
+    }
+
+    const state = {
+      pointers: new Map(),
+      startVb: null,
+      startDist: 0,
+      startCenter: null
+    }
+
+    const clampVb = vb => {
+      const init = wrap.__mermaidInitViewBox || vb
+      const minW = init[2] * 0.1
+      const maxW = init[2] * 10
+      const minH = init[3] * 0.1
+      const maxH = init[3] * 10
+      vb[2] = clamp(vb[2], minW, maxW)
+      vb[3] = clamp(vb[3], minH, maxH)
+      return vb
+    }
+
+    const setCurVb = vb => {
+      vb = clampVb(vb)
+      wrap.__mermaidCurViewBox = vb
+      setSvgViewBox(svg, vb)
+    }
+
+    const onPointerDown = e => {
+      // Allow only primary button for mouse
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      svg.setPointerCapture(e.pointerId)
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      if (state.pointers.size === 1) {
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      } else if (state.pointers.size === 2) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        state.startDist = Math.hypot(dx, dy)
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        state.startCenter = { x: (pts[0].x + pts[1].x) / 2, y: (pts[0].y + pts[1].y) / 2 }
+      }
+    }
+
+    const onPointerMove = e => {
+      if (!state.pointers.has(e.pointerId)) return
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      // Pan with 1 pointer
+      if (state.pointers.size === 1 && state.startVb) {
+        const p = [...state.pointers.values()][0]
+        const prev = { x: e.clientX - e.movementX, y: e.clientY - e.movementY }
+        // movementX/Y unreliable on touch, compute from stored last position
+        const last = wrap.__mermaidLastSinglePointer || p
+        const dxClient = p.x - last.x
+        const dyClient = p.y - last.y
+        wrap.__mermaidLastSinglePointer = p
+
+        const { rect } = clientToViewBox(p.x, p.y)
+        const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        const dx = dxClient * (vb[2] / rect.width)
+        const dy = dyClient * (vb[3] / rect.height)
+        setCurVb([vb[0] - dx, vb[1] - dy, vb[2], vb[3]])
+        return
+      }
+
+      // Pinch zoom with 2 pointers
+      if (state.pointers.size === 2 && state.startVb && state.startDist > 0) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        const dist = Math.hypot(dx, dy)
+        if (!dist) return
+        const factor = state.startDist / dist // dist bigger => zoom in (viewBox smaller)
+
+        const cx = (pts[0].x + pts[1].x) / 2
+        const cy = (pts[0].y + pts[1].y) / 2
+        const centerClient = { x: cx, y: cy }
+
+        const pxy = clientToViewBox(centerClient.x, centerClient.y)
+        const cpx = pxy.x
+        const cpy = pxy.y
+
+        const vb = zoomAtPoint(state.startVb, factor, cpx, cpy)
+        setCurVb(vb)
+      }
+    }
+
+    const onPointerUpOrCancel = e => {
+      state.pointers.delete(e.pointerId)
+      if (state.pointers.size === 0) {
+        state.startVb = null
+        state.startDist = 0
+        state.startCenter = null
+        wrap.__mermaidLastSinglePointer = null
+      } else if (state.pointers.size === 1) {
+        // reset single pointer baseline to avoid jump
+        wrap.__mermaidLastSinglePointer = [...state.pointers.values()][0]
+      }
+    }
+
+    // Wheel zoom (mouse/trackpad)
+    const onWheel = e => {
+      // ctrlKey on mac trackpad pinch; we treat both as zoom
+      e.preventDefault()
+      const delta = e.deltaY
+      const zoomFactor = delta > 0 ? 1.1 : 0.9
+      const { x, y } = clientToViewBox(e.clientX, e.clientY)
+      const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      setCurVb(zoomAtPoint(vb, zoomFactor, x, y))
+    }
+
+    const onDblClick = () => {
+      const init = wrap.__mermaidInitViewBox
+      if (!init) return
+      wrap.__mermaidCurViewBox = init.slice()
+      setSvgViewBox(svg, init)
+    }
+
+    svg.addEventListener('pointerdown', onPointerDown)
+    svg.addEventListener('pointermove', onPointerMove)
+    svg.addEventListener('pointerup', onPointerUpOrCancel)
+    svg.addEventListener('pointercancel', onPointerUpOrCancel)
+    svg.addEventListener('wheel', onWheel, { passive: false })
+    svg.addEventListener('dblclick', onDblClick)
+  }
+
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+
+      // Clear old render (themeChange/pjax will rerun)
+      const oldSvg = item.querySelector('svg')
+      if (oldSvg) oldSvg.remove()
+      item.__mermaidGestureBound = false
+
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+        if (true) initMermaidGestures(item)
+        item.__mermaidOriginalSvg = svg
+        if (true) attachMermaidViewerButton(item)
+      }
+
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('/libs/mermaid/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.5"></script></div></div></body></html>

@@ -1,0 +1,519 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>一个站点的迁移 | 靖轩</title><meta name="author" content="靖轩"><meta name="copyright" content="靖轩"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="手头有一台遗留的Web站点，使用LAMP和Nodejs技术架构的展示站点。因为技术栈老旧，还是使用17年左右的野生部署脚本编译安装的，后期维护困难较大，所以需要做一下迁移。原始版本是使用CentOS 7。 9以及PHP 7。 3。 13、MySQL 5。 7、NodeJS 16，部署于本地虚拟化系统。因为外网访问量不大，但又是必须对外展示的一部分，所以就由本地虚机向阿里云主机迁移。规划数据库使用R">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一个站点的迁移">
+<meta property="og:url" content="https://www.sujx.net/2025/04/09/Migrate-Website/index.html">
+<meta property="og:site_name" content="靖轩">
+<meta property="og:description" content="手头有一台遗留的Web站点，使用LAMP和Nodejs技术架构的展示站点。因为技术栈老旧，还是使用17年左右的野生部署脚本编译安装的，后期维护困难较大，所以需要做一下迁移。原始版本是使用CentOS 7。 9以及PHP 7。 3。 13、MySQL 5。 7、NodeJS 16，部署于本地虚拟化系统。因为外网访问量不大，但又是必须对外展示的一部分，所以就由本地虚机向阿里云主机迁移。规划数据库使用R">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.sujx.net/covers/cover93.jpg">
+<meta property="article:published_time" content="2025-04-09T07:04:07.000Z">
+<meta property="article:modified_time" content="2026-09-26T02:25:04.174Z">
+<meta property="article:author" content="靖轩">
+<meta property="article:tag" content="Nodejs">
+<meta property="article:tag" content="nginx">
+<meta property="article:tag" content="web-server">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.sujx.net/covers/cover93.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "一个站点的迁移",
+  "url": "https://www.sujx.net/2025/04/09/Migrate-Website/",
+  "image": "https://cdn.sujx.net/covers/cover93.jpg",
+  "datePublished": "2025-04-09T07:04:07.000Z",
+  "dateModified": "2026-09-26T02:25:04.174Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "靖轩",
+      "url": "https://www.sujx.net"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://cdn.sujx.net/about/favicon.png"><link rel="canonical" href="https://www.sujx.net/2025/04/09/Migrate-Website/index.html"><link rel="preconnect" href="//cdnjs.cloudflare.com"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css?v=5.5.5"><link rel="stylesheet" href="/fonts/css/all.min.css"><link rel="stylesheet" href="/libs/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?417b20ac1984432f821159fac27d3bb5";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><link rel="stylesheet" href="/fonts/titillium-web.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: '/libs/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: true,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '一个站点的迁移',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="alternate" href="/atom.xml" title="靖轩" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">靖轩</span></a><a class="nav-page-title" href="/"><span class="site-name">一个站点的迁移</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">一个站点的迁移</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-04-09T07:04:07.000Z" title="发表于 2025-04-09 15:04:07">2025-04-09</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-09-26T02:25:04.174Z" title="更新于 2026-09-26 10:25:04">2026-09-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%BF%90%E7%BB%B4%E6%8A%80%E5%B7%A7/">运维技巧</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">1.3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>6分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><p>手头有一台遗留的Web站点，使用LAMP和Nodejs技术架构的展示站点。因为技术栈老旧，还是使用17年左右的野生部署脚本编译安装的，后期维护困难较大，所以需要做一下迁移。原始版本是使用CentOS 7。 9以及PHP 7。 3。 13、MySQL 5。 7、NodeJS 16，部署于本地虚拟化系统。因为外网访问量不大，但又是必须对外展示的一部分，所以就由本地虚机向阿里云主机迁移。规划数据库使用RDS，搭配ECS（RockyLinux 9。 5 ）和CDN来使用。</p>
+<p>这里就记录一下迁移的部署方式，以作备案。</p>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover93.jpg"></p>
+<blockquote>
+<ol start="2024">
+<li>09  北京·延庆·航空工业博物馆</li>
+</ol>
+</blockquote>
+<h2 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h2><h3 id="System"><a href="#System" class="headerlink" title="System"></a>System</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">开启网络BBR模块</span></span><br><span class="line">echo &quot;net.core.default_qdisc=fq&quot; &gt;&gt; /etc/sysctl.conf</span><br><span class="line">echo &quot;net.ipv4. tcp_congestion_control=bbr&quot; &gt;&gt; /etc/sysctl.conf</span><br><span class="line">sysctl -p</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">打开连接数限制</span></span><br><span class="line">echo &quot;* hard nofile 64000&quot; &gt;&gt; /etc/security/limits.conf</span><br><span class="line">echo &quot;* soft nofile 64000&quot; &gt;&gt; /etc/security/limits.conf</span><br><span class="line">echo &quot;root hard nofile 64000&quot; &gt;&gt; /etc/security/limits.conf</span><br><span class="line">echo &quot;root soft nofile 64000&quot; &gt;&gt; /etc/security/limits.conf</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">配置vimrc</span></span><br><span class="line">cat &gt;&gt; ~/. vimrc &lt;&lt;EOF</span><br><span class="line">set autoindent</span><br><span class="line">set nobackup</span><br><span class="line">set tabstop=2</span><br><span class="line">set shiftwidth=2</span><br><span class="line">set softtabstop=2</span><br><span class="line">set expandtab</span><br><span class="line">set number</span><br><span class="line">set ruler</span><br><span class="line">set nocompatible</span><br><span class="line">set syntax=on</span><br><span class="line">set noeb</span><br><span class="line">EOF</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">系统更新</span></span><br><span class="line">dnf update -y</span><br><span class="line">dnf install -y wget curl zip unzip vim mailx mlocate telnet bash-completion </span><br><span class="line">dnf install -y epel-release</span><br><span class="line">dnf install -y htop tree lrzsz unzip</span><br><span class="line">dnf install -y device-mapper-persistent-data lvm2 psmisc net-tools</span><br><span class="line">dnf install -y mysql unzip mlocate</span><br><span class="line">dnf install -y bind-utils python3-dnf-plugin-versionlock</span><br><span class="line">dnf remove -y podman*</span><br><span class="line">updatedb</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">配置防火墙</span></span><br><span class="line">systemctl enable --now firewalld.service </span><br><span class="line">firewall-cmd --permanent --add-service=http</span><br><span class="line">firewall-cmd --permanent --add-prot=&#123;8010/tcp, 8080/tcp&#125;</span><br><span class="line">firewall-cmd --reload</span><br></pre></td></tr></table></figure>
+
+<h3 id="MySQL"><a href="#MySQL" class="headerlink" title="MySQL"></a>MySQL</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">这里使用阿里的RDS，需要在阿里云上配置RDS的版本、数据库、访问用户和访问白名单</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">导出数据库</span></span><br><span class="line">[root@sites]mysqldump --skip-lock-tables -uexample -p db_example &gt;~/mysql.sql</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">将原有数据库导入RDS</span></span><br><span class="line">[root@Web ~]# mysql -uexample -hrm-example.mysql.rds.aliyuncs.com -p</span><br><span class="line">Enter password: </span><br><span class="line"><span class="meta prompt_">mysql&gt; </span><span class="language-bash">show databases;</span></span><br><span class="line">+--------------------+</span><br><span class="line">| Database           |</span><br><span class="line">+--------------------+</span><br><span class="line">| information_schema |</span><br><span class="line">| db_example         |</span><br><span class="line">| mysql              |</span><br><span class="line">+--------------------+</span><br><span class="line">3 rows in set ( 0. 00 sec )</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">mysql&gt; </span><span class="language-bash">use db_examples;</span></span><br><span class="line">Reading table information for completion of table and column names</span><br><span class="line">You can turn off this feature to get a quicker startup with -A</span><br><span class="line"></span><br><span class="line">Database changed</span><br><span class="line"><span class="meta prompt_">mysql&gt; </span><span class="language-bash"><span class="built_in">source</span> /root/mysql.sql;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="中间件环境"><a href="#中间件环境" class="headerlink" title="中间件环境"></a>中间件环境</h2><h3 id="Httpd"><a href="#Httpd" class="headerlink" title="Httpd"></a>Httpd</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装Apache</span></span><br><span class="line">dnf install -y httpd</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">修改模块配置，让Apache运行在8080端口</span></span><br><span class="line">sed -i &#x27;s/#LoadModule mpm_prefork_module/LoadModule mpm_prefork_module/g&#x27; /etc/httpd/conf.modules.d/00-mpm.conf </span><br><span class="line">sed -i &#x27;s/LoadModule mpm_event_module/#LoadModule mpm_event_module/g&#x27; /etc/httpd/conf.modules.d/00-mpm.conf</span><br><span class="line">sed -i &#x27;s/#LoadModule heartmonitor_module/LoadModule heartmonitor_module/g&#x27; /etc/httpd/conf.modules.d/00-optional.conf</span><br><span class="line">sed -i &#x27;s/LoadModule/#LoadModule/g&#x27; /etc/httpd/conf.modules.d/10-proxy_h2. conf</span><br><span class="line">sed -i &#x27;s/LoadModule/#LoadModule/g&#x27; /etc/httpd/conf.modules.d/10-h2. conf</span><br><span class="line">sed -i &#x27;s/80/8080/g&#x27; /etc/httpd/conf/httpd.conf</span><br><span class="line">sed -i &#x27;s/index.html/index.php/g&#x27; /etc/httpd/conf/httpd.conf</span><br><span class="line"></span><br><span class="line">cat &gt;&gt; /etc/httpd/conf/httpd.conf &lt;&lt;EOF</span><br><span class="line">ServerName apiweb</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line">cat &gt;&gt; /etc/httpd/conf.d/php.conf &lt;&lt;EOF</span><br><span class="line">AddType application/x-httpd-php . php</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line">cat &gt; /etc/httpd/conf.d/localapi.conf &lt;&lt;EOF</span><br><span class="line">&lt;VirtualHost *:8080&gt;</span><br><span class="line">    ServerAdmin sujx@live.cn</span><br><span class="line">    ServerName api.example.com</span><br><span class="line">    DocumentRoot &quot;/var/www/html/public&quot;</span><br><span class="line">    </span><br><span class="line">    ErrorLog /var/log/httpd/api.example-error.log</span><br><span class="line">    CustomLog /var/log/httpd/api.example-access.log combined</span><br><span class="line">    </span><br><span class="line">    &lt;Directory &quot;/var/www/html/public&quot;&gt;</span><br><span class="line">        Options -Indexes +FollowSymLinks</span><br><span class="line">        AllowOverride All</span><br><span class="line">        Require all granted</span><br><span class="line">    &lt;/Directory&gt;</span><br><span class="line"></span><br><span class="line">&lt;/VirtualHost&gt;</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line">systemctl daemon-reload</span><br><span class="line">systemctl enable --now httpd</span><br></pre></td></tr></table></figure>
+<h3 id="PHP"><a href="#PHP" class="headerlink" title="PHP"></a>PHP</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装PHP，由于原始PHP站点使用7. 3版本，尽量不涉及大版本升级</span></span><br><span class="line">dnf install -y http://rpms.remirepo.net/enterprise/remi-release-9. rpm</span><br><span class="line">dnf module enable php:remi-7. 4</span><br><span class="line">dnf install -y php php-fpm php-cli</span><br><span class="line">dnf install -y php-xmlrpc php-intl</span><br><span class="line">dnf install -y php-&#123;mysqlnd, curl, gd, mcrypt, json, pear, common, xml, ftp, opcache, zip, xsl, soap, bcmath, mbstring, gettext, imagick&#125;</span><br><span class="line"></span><br><span class="line">systemctl daemon-reload</span><br><span class="line">systemctl enable --now php-fpm</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装memcached</span></span><br><span class="line">dnf install -y memcached php-memcached php-pecl-memcache</span><br><span class="line">systemctl enable --now memcached</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装Redis</span></span><br><span class="line">dnf install -y redis php-phpiredis php-componere php-pecl-redis6</span><br><span class="line">systemctl enable --now redis</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">重启PHP</span></span><br><span class="line">systemctl restart php-fpm httpd</span><br><span class="line">netstat -tlnp</span><br></pre></td></tr></table></figure>
+<h3 id="Nginx"><a href="#Nginx" class="headerlink" title="Nginx"></a>Nginx</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装Nginx</span></span><br><span class="line">cat &gt; /etc/yum.repos.d/nginx.repo &lt;&lt;EOF</span><br><span class="line">[nginx-stable]</span><br><span class="line">name=nginx stable repo</span><br><span class="line">baseurl=http://nginx.org/packages/centos/$releasever/$basearch/</span><br><span class="line">gpgcheck=1</span><br><span class="line">enabled=1</span><br><span class="line">gpgkey=https://nginx.org/keys/nginx_signing.key</span><br><span class="line">module_hotfixes=true</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line">dnf update -y</span><br><span class="line">dnf install -y nginx</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">准备SSL证书和配置</span></span><br><span class="line">mkdir /etc/nginx/ssl</span><br><span class="line">touch /etc/nginx/ssl/ssld.conf</span><br><span class="line">cat &gt; /etc/nginx/ssl/ssld.conf &lt;&lt;EOF</span><br><span class="line">ssl_certificate			/etc/nginx/ssl/fullchain-example.com.pem;</span><br><span class="line">ssl_certificate_key		/etc/nginx/ssl/certkey-example.pem;</span><br><span class="line">ssl_prefer_server_ciphers	on;</span><br><span class="line">ssl_protocols			TLSv1 TLSv1. 1 TLSv1. 2;</span><br><span class="line">ssl_ciphers			HIGH:!aNULL:!MD5;</span><br><span class="line">add_header 			X-Frame-Options DENY;</span><br><span class="line">add_header 			X-Content-Type-Options nosniff;</span><br><span class="line">add_header 			X-Xss-Protection 1;</span><br><span class="line"></span><br><span class="line">gzip on;</span><br><span class="line">gzip_types text/plain text/css application/javascript application/xml application/json;</span><br><span class="line">gzip_proxied any;</span><br><span class="line">gzip_comp_level 5;</span><br><span class="line">gzip_min_length 1k;</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line">cat &gt; /etc/nginx/conf.d/example.conf &lt;&lt;EOF</span><br><span class="line">server &#123;</span><br><span class="line">   listen 80;</span><br><span class="line">   server_name  www.example.com;</span><br><span class="line">   return 301 https://www.example.com$request_uri;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">    listen 443 ssl;</span><br><span class="line">    include /etc/nginx/ssl/ssld.conf;</span><br><span class="line"></span><br><span class="line">    location / &#123;</span><br><span class="line">        proxy_redirect off;</span><br><span class="line">        proxy_pass http://127. 0. 0. 1:8010;</span><br><span class="line"></span><br><span class="line">        proxy_set_header  Host                $http_host;</span><br><span class="line">        proxy_set_header  X-Real-IP           $remote_addr;</span><br><span class="line">        proxy_set_header  X-Forwarded-Ssl     on;</span><br><span class="line">        proxy_set_header  X-Forwarded-For     $proxy_add_x_forwarded_for;</span><br><span class="line">        proxy_set_header  X-Forwarded-Proto   $scheme;</span><br><span class="line">        proxy_set_header  X-Frame-Options     SAMEORIGIN;</span><br><span class="line"></span><br><span class="line">        client_max_body_size        100m;</span><br><span class="line">        client_body_buffer_size     128k;</span><br><span class="line"></span><br><span class="line">        proxy_buffer_size           4k;</span><br><span class="line">        proxy_buffers               4 32k;</span><br><span class="line">        proxy_busy_buffers_size     64k;</span><br><span class="line">        proxy_temp_file_write_size  64k;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line">systemctl enable --now nginx</span><br></pre></td></tr></table></figure>
+<h3 id="Nodejs"><a href="#Nodejs" class="headerlink" title="Nodejs"></a>Nodejs</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装Nodejs</span></span><br><span class="line">cd ~</span><br><span class="line">curl -sL https://rpm.nodesource.com/setup_18. x -o nodesource_setup.sh</span><br><span class="line"></span><br><span class="line">cat &gt; /etc/systemd/system/nodejs.service &lt;&lt; EOF</span><br><span class="line">[Unit]</span><br><span class="line">Description=NodeJS Server</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Restart=always</span><br><span class="line">User=root</span><br><span class="line">Group=root</span><br><span class="line">Environment=PORT=8010</span><br><span class="line">Environment=PATH=/usr/bin:/usr/local/bin</span><br><span class="line">Environment=NODE_ENV=production</span><br><span class="line">WorkingDirectory=/var/www/express/</span><br><span class="line">ExecStart=/usr/bin/node ./bin/www</span><br><span class="line">StandarOutput=syslog</span><br><span class="line">StandarError=syslog</span><br><span class="line">SyslogIdentifier=nodejs</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line">systemctl daemon-reload</span><br><span class="line">systemctl enable --now nodejs</span><br></pre></td></tr></table></figure>
+
+<h2 id="站点配置"><a href="#站点配置" class="headerlink" title="站点配置"></a>站点配置</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">将备份站点程序复制到指定位置</span></span><br><span class="line">cp -r ~/api/* /var/www/html/</span><br><span class="line">chown -R apache:apache /var/www/html</span><br><span class="line">cp -r ~/express /var/www/</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">将PHP程序的短写修复为正常模式</span></span><br><span class="line">find /var/www/html -type f -name &quot;*. php&quot; -exec perl -pi -e &#x27;s/&lt;\?( ?!php )/&lt;?php/g&#x27; &#123;&#125; \;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">修改站点程序的MySQL配置</span></span><br><span class="line">vim /var/www/html/src/YY/Config/app.php</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">修改API连接Node的配置</span></span><br><span class="line">vim /var/www/express/config.js</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">重启服务器</span></span><br><span class="line">sync</span><br><span class="line">ldconfig</span><br><span class="line">systemctl reboot</span><br></pre></td></tr></table></figure>
+
+<h2 id="收尾检查"><a href="#收尾检查" class="headerlink" title="收尾检查"></a>收尾检查</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">清理升级后的内核</span></span><br><span class="line">dnf remove -y --oldinstallonly --setopt installonly_limt=1 kernel</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">检查服务运行状态</span></span><br><span class="line">netstat -tlnp</span><br><span class="line">tail -f -n 45 /var/logs/httpd/api-example.log</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">经业务部门检查之后，再配置CDN</span></span><br></pre></td></tr></table></figure>
+
+
+
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/nginx/">nginx</a><a class="post-meta__tags" href="/tags/web-server/">web-server</a><a class="post-meta__tags" href="/tags/Nodejs/">Nodejs</a></div><div class="post-share"><div class="social-share" data-image="https://cdn.sujx.net/covers/cover93.jpg" data-sites="facebook,twitter,weibo,qq"></div><link rel="stylesheet" href="/libs/sharejs/css/share.min.css" media="print" onload="this.media='all'"><script src="/libs/sharejs/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>能否请我喝一杯咖啡？</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.jpg" target="_blank"><img class="post-qr-code-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/wechat.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/04/17/RackServer-Howto/" title="IDC机房中的服务器选择1U还是2U？"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover98.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">IDC机房中的服务器选择1U还是2U？</div></div><div class="info-2"><div class="info-item-1">在现代数据中心，每个硬件决策都会影响您的盈利。空间紧张，电费攀升，冷却系统超负荷运转。1U 和 2U 服务器（例如Dell PowerEdge R660 ( 1U ) 和R760 ( 2U )）之间的选择，可能会成就或破坏您的效率目标。1U 服务器承诺最大限度地利用机架空间，而 2U 服务器则提供更多存储和扩展选项。那么，从磁盘、CPU、内存、电源、冷却成本以及 AI 等特定用例的角度来看，哪个服务器更胜一筹？让我们来探讨为什么 R760 可能是现代数据中心的更明智之选。  机架空间真的是决定因素吗？与 R760 的 2U 设计（3. 5 英寸）相比， Dell PowerEdge R660 的 1U 尺寸（1. 75 英寸）允许您在机架中装入更多服务器。这使得 R660 对于垂直空间有限的数据中心来说极具吸引力。然而，机架空间不仅仅用于堆叠服务器，还在于每台服务器的功能。 假设一个数据库需要 24 个 NVMe 驱动器。R660 最多支持 10 个前置 2。 5 英寸驱动器和 2 个后置 2。 5 英寸驱动器，即每 1U 空间共计 12 个驱动器，或每 U 空间 12 个磁盘。...</div></div></div></a><a class="pagination-related" href="/2025/04/01/KunTai-R722/" title="神码鲲泰R722初始化"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover94.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">神码鲲泰R722初始化</div></div><div class="info-2"><div class="info-item-1">因为最近手头的项目上正好用到神州数码的鲲泰R722服务器，把交付前初始化的部分工作整理记录一下。个人感知它这个产品实际上是华为泰山2280服务器的OEM，基本上出现的问题到华为文档里面找就可以了。    03 天津·滨海新区·北塘   概述KunTai R722 均衡型服务器是神州数码基于鲲鹏处理器推出的新一代 ARM 数据中心服务器。具有高效能计算、安全可靠、幵放生态的优势 ， 适合为大数据、分布式存储、原生应用、高性能计算和数据库等应用高效加速，旨在满足数据中心多样性计算、绿色计算的需求。搭载面向服务器领域的 64bits 高性能多核鲲鹏处理器，系统最高能够提供 128 核、2。 6GHz 主频的计算能力，为用户提供高达 50% 的性能提升。通过高达 8个 PCIe 4。 0 插槽和多达 27 块硬盘的本地存储支持，实现卓越的扩展能力。配置冗余热插拔电源风扇，合理规划散热设计，支持 5° C~40° C 的运行环境温度，确保 7X24 小时长时间稳定运行，带来相对较高的能效回报。 iBMC 鲲泰服务器iBMC的IP地址默认为 192. 168. 2. 10 默认管理员为 Ad...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2023/11/11/Nginx-howto/" title="Nginx使用入门"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover3.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-11-11</div><div class="info-item-2">Nginx使用入门</div></div><div class="info-2"><div class="info-item-1">   05 摄于河南开封·清明上河园   HTTP协议概述 超文本：超链接和各种多媒体元素标记的文本，彼此链接形成web 超文本标记语言：HTML URI：URL URN HTTP协议：将超文本从一台主机传输到另一台主机的应用层协议  工作原理请求&#x2F;响应交互模型 浏览器分析URL 请求DNS解析 DNS将IP地址返回浏览器 浏览器与服务器建立TCP连接 浏览器请求文档：get 服务器发出响应 释放TCP连接  HTTP方法   序号 方法 描述    1 GET 请求指定的页面信息，并返回实体主体   2 HEAD 类似GET，返回信息中只有报头   3 POST 向指定资源提交数据进行处理请求，例如上传文件、提交表单   4 PUT 从客户端向服务器传送的数据取代指定的文档内容   5 DELETE 请求服务器删除指定页面   6 CONNECT 预留给能够将连接改为管道方式的代理服务器   7 OPTIONS 允许客户端查看服务器的性能   8 TRACE 回显服务器收到的请求，主要用于测试或诊断   9 PATCH 对PUT方法的补充，用来对已知资源进行局部更新 ...</div></div></div></a><a class="pagination-related" href="/2024/10/21/Goaccess-Howto/" title="使用GoAccess对Nginx日志进行分析"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover53.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-10-21</div><div class="info-item-2">使用GoAccess对Nginx日志进行分析</div></div><div class="info-2"><div class="info-item-1">GoAccess是一个用C语言编写的Web日志分析工具，具有快速、高效、漂亮且支持多种Web服务端特性的且仍在保持快速进化的特点。它不仅可以在终端展现Web Server的日志分析结果，也可以将结果输出成为具有现代外观的HTML展示页面。    09 北京怀柔 日出东方凯宾斯基酒店   功能 完全实时：所有指标在终端上每 200 毫秒更新一次，在 HTML 输出上每秒更新一次。 跟踪应用程序响应时间：跟踪服务请求所需的时候间。如果你想跟踪减慢了网站速度的网页，则非常有用。 访问者：按小时或日期确定最慢运行的请求的点击量、访问者数、带宽数和指标。 按虚拟主机的度量标准：如果有多个虚拟主机（Server），它提供了一个面板，可显示哪些虚拟主机正在消耗大部分 Web 服务器资源。  安装Goaccess现在已经可以在主流Linux发行版中直接安装了。当然，你也可以获取它的源代码，根据实际需要进行编译部署。 编译# 默认编译参数# 下载源码安装$ wget https://tar.goaccess.io/goaccess-1. 9. 3. tar.gz$ tar -xzvf goacce...</div></div></div></a><a class="pagination-related" href="/2022/12/23/Tomacat-howto/" title="Tomcat使用入门"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/07/20240803100728.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2022-12-23</div><div class="info-item-2">Tomcat使用入门</div></div><div class="info-2"><div class="info-item-1">Tomcat是一个免费的开放源代码的Web应用服务器，具有处理HTML静态资源页面的功能，同时它还是一个Servlet和JSP的容器。Tomcat于1999年发布，初始版本为3。 0，实现了Servlet2。 2和JSP1。 1的规范。 Tomcat的核心分为3个部分：  Web容器：负责处理静态页面； JSP容器：把JSP页面翻译为一般的Servlet Catalina：是一个servlet容器，用于处理servlet  部署服务# 安装JDK[root@tomcat]dnf install -y java-17-openjdk java-17-openjdk-devel[root@tomcat]alternatives --config javaThere is 1 program that provides &#x27;java&#x27;.  Selection    Command-----------------------------------------------*+ 1           java-17-openjdk.x86_64 ( /usr/lib/...</div></div></div></a><a class="pagination-related" href="/2025/11/15/OhttpsSSL/" title="使用ohttps持续部署SSl证书"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover132.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-15</div><div class="info-item-2">使用ohttps持续部署SSl证书</div></div><div class="info-2"><div class="info-item-1">   11 天津 天塔   我虽然一直使用ohttps来提供免费证书的定时更新和CDN、SLB之类云服务的证书更新，但对于ECS服务器的SSL更新一直是手动来执行。随着管理站点的增加，现在更新一次证书需要在七八台机器上折腾，虽然三个月搞一次，但还是下决心使用推送的方式来解决这个问题。 准备域名 ohttps站点的管理后台    添加免费泛域名证书  设置目标域名的证书认证解析  添加CNAME域名  认证成功后就会自动申请一个泛域名证书   准备管理账户 接下来就需要在服务器上添加一个管理SSL证书和Nginx的账户  #!/bin/bash## Script: setup_cert_user.sh# Description: Create user &#x27;cert&#x27; with SSH key-only login, sudo for nginx service,#              and write access to /etc/nginx/ssl.# Usage: sudo ./setup_cert_user.sh# Author: Linux Ad...</div></div></div></a><a class="pagination-related" href="/2024/10/11/Hexo-Mirage/" title="Hexo升级迁移"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover59.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-10-11</div><div class="info-item-2">Hexo升级迁移</div></div><div class="info-2"><div class="info-item-1">现有的Hexo架构已经用了三年年，随着Nodejs、hexo和theme-butterfly的大版本升级，现有的系统也该update一下了。基本情况是系统从RockyLinux9换成了Fedora，Nodejs由18升级到21，Butterfly主题由4。 2升级到了5。 2，Hexo也升级到了7。 3。     30 摄于内蒙古·呼和浩特市·泽成冰煮羊     基础软件 操作系统软件使用Fedora 40 dnf update -ydnf install -y wget curl htop fail2ban rsyslogmkdir -p . config/htoptouch . config/htop/htoprc 部署Nginx dnf install -y wget curl nginx dnf install -y netdatasystemctl enable --now nginxsystemctl enable --now netdata# 创建SSL目录mkdir /etc/nginx/ssl# 复制ssl证书# 创建通用SSL配置文件cat &gt;/etc/...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">靖轩</div><div class="author-info-description">逝者如斯夫,不舍昼夜</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/grepsu"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://gitee.com/grepsu" target="_blank" title="Gitee"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:sujx@live.cn" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS链接"><i class="fa  fa-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87"><span class="toc-number">1.</span> <span class="toc-text">环境准备</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#System"><span class="toc-number">1.1.</span> <span class="toc-text">System</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MySQL"><span class="toc-number">1.2.</span> <span class="toc-text">MySQL</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%AD%E9%97%B4%E4%BB%B6%E7%8E%AF%E5%A2%83"><span class="toc-number">2.</span> <span class="toc-text">中间件环境</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Httpd"><span class="toc-number">2.1.</span> <span class="toc-text">Httpd</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PHP"><span class="toc-number">2.2.</span> <span class="toc-text">PHP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Nginx"><span class="toc-number">2.3.</span> <span class="toc-text">Nginx</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Nodejs"><span class="toc-number">2.4.</span> <span class="toc-text">Nodejs</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AB%99%E7%82%B9%E9%85%8D%E7%BD%AE"><span class="toc-number">3.</span> <span class="toc-text">站点配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%94%B6%E5%B0%BE%E6%A3%80%E6%9F%A5"><span class="toc-number">4.</span> <span class="toc-text">收尾检查</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/07/03/AIGC_FoxHole/" title="海鹰">海鹰</a><time datetime="2026-07-03T01:04:07.000Z" title="发表于 2026-07-03 09:04:07">2026-07-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/11/fristVibeCoding/" title="鹊随金印：我的第一个完整的AI编程项目">鹊随金印：我的第一个完整的AI编程项目</a><time datetime="2026-06-11T01:04:07.000Z" title="发表于 2026-06-11 09:04:07">2026-06-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/03/VI_Howto/" title="VI编辑器简介">VI编辑器简介</a><time datetime="2026-06-03T01:04:07.000Z" title="发表于 2026-06-03 09:04:07">2026-06-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/28/HNCitic_2605/" title="我要上头条">我要上头条</a><time datetime="2026-05-28T01:04:07.000Z" title="发表于 2026-05-28 09:04:07">2026-05-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/12/TS-Domain-Controller-Sync-Failure/" title="记一次Windows AD域控制器同步故障排错">记一次Windows AD域控制器同步故障排错</a><time datetime="2026-05-12T03:04:07.000Z" title="发表于 2026-05-12 11:04:07">2026-05-12</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2008 - 2026 By 靖轩</span></div><div class="footer_custom_text">京ICP备17034757号</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.5"></script><script src="/js/main.js?v=5.5.5"></script><script src="/libs/fancybox/fancybox.umd.js"></script><script src="/js/instantpage.js" type="module"></script><script src="/libs/lazyload/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const parseViewBox = viewBox => {
+    if (!viewBox) return null
+    const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
+    if (parts.length !== 4 || parts.some(n => Number.isNaN(n))) return null
+    return parts
+  }
+
+  const getSvgViewBox = svg => {
+    const attr = parseViewBox(svg.getAttribute('viewBox'))
+    if (attr) return attr
+
+    // Fallback: use bbox to build a viewBox
+    try {
+      const bbox = svg.getBBox()
+      if (bbox && bbox.width && bbox.height) return [bbox.x, bbox.y, bbox.width, bbox.height]
+    } catch (e) {
+      // getBBox may fail on some edge cases; ignore
+    }
+
+    const w = Number(svg.getAttribute('width')) || 0
+    const h = Number(svg.getAttribute('height')) || 0
+    if (w > 0 && h > 0) return [0, 0, w, h]
+    return [0, 0, 100, 100]
+  }
+
+  const setSvgViewBox = (svg, vb) => {
+    svg.setAttribute('viewBox', `${vb[0]} ${vb[1]} ${vb[2]} ${vb[3]}`)
+  }
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v))
+
+  const openSvgInNewTab = ({ source, initViewBox }) => {
+    const getClonedSvg = () => {
+      if (typeof source === 'string') {
+        const template = document.createElement('template')
+        template.innerHTML = source.trim()
+        const svg = template.content.querySelector('svg')
+        return svg ? svg.cloneNode(true) : null
+      }
+      if (source && typeof source.cloneNode === 'function') {
+        return source.cloneNode(true)
+      }
+      return null
+    }
+
+    const clone = getClonedSvg()
+    if (!clone) return
+    if (initViewBox && initViewBox.length === 4) {
+      clone.setAttribute('viewBox', initViewBox.join(' '))
+    }
+    if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+    if (!clone.getAttribute('xmlns:xlink') && clone.outerHTML.includes('xlink:')) {
+      clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+    }
+    // inject background to match current theme
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    const bg = getComputedStyle(document.body).backgroundColor || (isDark ? '#1e1e1e' : '#ffffff')
+    if (!clone.style.background) clone.style.background = bg
+
+    const serializer = new XMLSerializer()
+    const svgSource = serializer.serializeToString(clone)
+    const htmlSource = `<!doctype html><html><head><meta charset="utf-8" />
+      <style>
+        html, body { width: 100%; height: 100%; margin: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; }
+        svg { max-width: 100%; max-height: 100%; height: auto; width: auto; }
+      </style>
+      </head><body>${svgSource}</body></html>`
+    const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank', 'noopener')
+    setTimeout(() => URL.revokeObjectURL(url), 30000)
+  }
+
+  const attachMermaidViewerButton = wrap => {
+    let btn = wrap.querySelector('.mermaid-open-btn')
+    if (!btn) {
+      btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'mermaid-open-btn'
+      wrap.appendChild(btn)
+    }
+
+    btn.innerHTML = '<i class="fa fa-search fa-fw" aria-hidden="true"></i>'
+
+    if (!btn.__mermaidViewerBound) {
+      btn.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        const svg = wrap.__mermaidOriginalSvg || wrap.querySelector('svg')
+        if (!svg) return
+        const initViewBox = wrap.__mermaidInitViewBox
+        if (typeof svg === 'string') {
+          openSvgInNewTab({ source: svg, initViewBox })
+          return
+        }
+        openSvgInNewTab({ source: svg, initViewBox })
+      })
+      btn.__mermaidViewerBound = true
+    }
+  }
+
+  // Zoom around a point (px, py) in the SVG viewport (in viewBox coordinates)
+  const zoomAtPoint = (vb, factor, px, py) => {
+    const w = vb[2] * factor
+    const h = vb[3] * factor
+    const nx = px - (px - vb[0]) * factor
+    const ny = py - (py - vb[1]) * factor
+    return [nx, ny, w, h]
+  }
+
+  const initMermaidGestures = wrap => {
+    const svg = wrap.querySelector('svg')
+    if (!svg) return
+
+    // Ensure viewBox exists so gestures always work
+    const initVb = getSvgViewBox(svg)
+    wrap.__mermaidInitViewBox = initVb
+    wrap.__mermaidCurViewBox = initVb.slice()
+    setSvgViewBox(svg, initVb)
+
+    // Avoid binding multiple times on themeChange/pjax
+    if (wrap.__mermaidGestureBound) return
+    wrap.__mermaidGestureBound = true
+
+    // Helper: map client (viewport) coordinate -> viewBox coordinate
+    const clientToViewBox = (clientX, clientY) => {
+      const rect = svg.getBoundingClientRect()
+      const vb = wrap.__mermaidCurViewBox || getSvgViewBox(svg)
+      const x = vb[0] + (clientX - rect.left) * (vb[2] / rect.width)
+      const y = vb[1] + (clientY - rect.top) * (vb[3] / rect.height)
+      return { x, y, rect, vb }
+    }
+
+    const state = {
+      pointers: new Map(),
+      startVb: null,
+      startDist: 0,
+      startCenter: null
+    }
+
+    const clampVb = vb => {
+      const init = wrap.__mermaidInitViewBox || vb
+      const minW = init[2] * 0.1
+      const maxW = init[2] * 10
+      const minH = init[3] * 0.1
+      const maxH = init[3] * 10
+      vb[2] = clamp(vb[2], minW, maxW)
+      vb[3] = clamp(vb[3], minH, maxH)
+      return vb
+    }
+
+    const setCurVb = vb => {
+      vb = clampVb(vb)
+      wrap.__mermaidCurViewBox = vb
+      setSvgViewBox(svg, vb)
+    }
+
+    const onPointerDown = e => {
+      // Allow only primary button for mouse
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      svg.setPointerCapture(e.pointerId)
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      if (state.pointers.size === 1) {
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      } else if (state.pointers.size === 2) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        state.startDist = Math.hypot(dx, dy)
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        state.startCenter = { x: (pts[0].x + pts[1].x) / 2, y: (pts[0].y + pts[1].y) / 2 }
+      }
+    }
+
+    const onPointerMove = e => {
+      if (!state.pointers.has(e.pointerId)) return
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      // Pan with 1 pointer
+      if (state.pointers.size === 1 && state.startVb) {
+        const p = [...state.pointers.values()][0]
+        const prev = { x: e.clientX - e.movementX, y: e.clientY - e.movementY }
+        // movementX/Y unreliable on touch, compute from stored last position
+        const last = wrap.__mermaidLastSinglePointer || p
+        const dxClient = p.x - last.x
+        const dyClient = p.y - last.y
+        wrap.__mermaidLastSinglePointer = p
+
+        const { rect } = clientToViewBox(p.x, p.y)
+        const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        const dx = dxClient * (vb[2] / rect.width)
+        const dy = dyClient * (vb[3] / rect.height)
+        setCurVb([vb[0] - dx, vb[1] - dy, vb[2], vb[3]])
+        return
+      }
+
+      // Pinch zoom with 2 pointers
+      if (state.pointers.size === 2 && state.startVb && state.startDist > 0) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        const dist = Math.hypot(dx, dy)
+        if (!dist) return
+        const factor = state.startDist / dist // dist bigger => zoom in (viewBox smaller)
+
+        const cx = (pts[0].x + pts[1].x) / 2
+        const cy = (pts[0].y + pts[1].y) / 2
+        const centerClient = { x: cx, y: cy }
+
+        const pxy = clientToViewBox(centerClient.x, centerClient.y)
+        const cpx = pxy.x
+        const cpy = pxy.y
+
+        const vb = zoomAtPoint(state.startVb, factor, cpx, cpy)
+        setCurVb(vb)
+      }
+    }
+
+    const onPointerUpOrCancel = e => {
+      state.pointers.delete(e.pointerId)
+      if (state.pointers.size === 0) {
+        state.startVb = null
+        state.startDist = 0
+        state.startCenter = null
+        wrap.__mermaidLastSinglePointer = null
+      } else if (state.pointers.size === 1) {
+        // reset single pointer baseline to avoid jump
+        wrap.__mermaidLastSinglePointer = [...state.pointers.values()][0]
+      }
+    }
+
+    // Wheel zoom (mouse/trackpad)
+    const onWheel = e => {
+      // ctrlKey on mac trackpad pinch; we treat both as zoom
+      e.preventDefault()
+      const delta = e.deltaY
+      const zoomFactor = delta > 0 ? 1.1 : 0.9
+      const { x, y } = clientToViewBox(e.clientX, e.clientY)
+      const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      setCurVb(zoomAtPoint(vb, zoomFactor, x, y))
+    }
+
+    const onDblClick = () => {
+      const init = wrap.__mermaidInitViewBox
+      if (!init) return
+      wrap.__mermaidCurViewBox = init.slice()
+      setSvgViewBox(svg, init)
+    }
+
+    svg.addEventListener('pointerdown', onPointerDown)
+    svg.addEventListener('pointermove', onPointerMove)
+    svg.addEventListener('pointerup', onPointerUpOrCancel)
+    svg.addEventListener('pointercancel', onPointerUpOrCancel)
+    svg.addEventListener('wheel', onWheel, { passive: false })
+    svg.addEventListener('dblclick', onDblClick)
+  }
+
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+
+      // Clear old render (themeChange/pjax will rerun)
+      const oldSvg = item.querySelector('svg')
+      if (oldSvg) oldSvg.remove()
+      item.__mermaidGestureBound = false
+
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+        if (true) initMermaidGestures(item)
+        item.__mermaidOriginalSvg = svg
+        if (true) attachMermaidViewerButton(item)
+      }
+
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('/libs/mermaid/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.5"></script></div></div></body></html>

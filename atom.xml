@@ -1,602 +1,393 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>靖</title>
-  <icon>https://www.sujx.net/icon.png</icon>
-  
-  <link href="https://www.sujx.net/atom.xml" rel="self"/>
-  
-  <link href="https://www.sujx.net/"/>
-  <updated>2023-05-21T16:23:09.604Z</updated>
-  <id>https://www.sujx.net/</id>
-  
   <author>
     <name>靖轩</name>
-    
   </author>
-  
   <generator uri="https://hexo.io/">Hexo</generator>
-  
+  <icon>https://www.sujx.net/icon.png</icon>
+  <id>https://www.sujx.net/</id>
+  <link href="https://www.sujx.net/" rel="alternate"/>
+  <link href="https://www.sujx.net/atom.xml" rel="self"/>
+  <rights>All rights reserved 2026, 靖轩</rights>
+  <subtitle>逝者如斯夫,不舍昼夜</subtitle>
+  <title>靖轩</title>
+  <updated>2026-09-26T02:24:50.426Z</updated>
   <entry>
-    <title>Linux系统基础知识·3</title>
-    <link href="https://www.sujx.net/2023/05/21/magedu-week-3/"/>
-    <id>https://www.sujx.net/2023/05/21/magedu-week-3/</id>
-    <published>2023-05-21T14:48:47.000Z</published>
-    <updated>2023-05-21T16:23:09.604Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;blockquote&gt;
-&lt;p&gt;本文基于马哥教育就业班第三周课程总结&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&quot;软件管理&quot;&gt;&lt;a href=&quot;#软件管理&quot; class=&quot;headerlink&quot;</summary>
-        
-      
-    
-    
-    
-    <category term="Education" scheme="https://www.sujx.net/categories/Education/"/>
-    
-    
+    <author>
+      <name>靖轩</name>
+    </author>
+    <category term="读书笔记" scheme="https://www.sujx.net/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
+    <category term="创作" scheme="https://www.sujx.net/tags/%E5%88%9B%E4%BD%9C/"/>
+    <category term="AI视频" scheme="https://www.sujx.net/tags/AI%E8%A7%86%E9%A2%91/"/>
+    <category term="AIGC" scheme="https://www.sujx.net/tags/AIGC/"/>
+    <id>https://www.sujx.net/2026/07/03/AIGC_FoxHole/</id>
+    <link href="https://www.sujx.net/2026/07/03/AIGC_FoxHole/"/>
+    <published>2026-07-03T01:04:07.000Z</published>
+    <summary>
+      <![CDATA[<blockquote>
+<p>自己拿oiioii生成的AI短剧，也是自己的第一部AI动画。将之前的<a href="https://www.sujx.net/2026/01/23/Foxhole/">剧本</a>形象化了。</p>
+</blockquote>
+<p><img]]>
+    </summary>
+    <title>海鹰</title>
+    <updated>2026-09-26T02:24:50.426Z</updated>
+  </entry>
+  <entry>
+    <author>
+      <name>靖轩</name>
+    </author>
+    <category term="开发基础" scheme="https://www.sujx.net/categories/%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/"/>
+    <category term="Python" scheme="https://www.sujx.net/tags/Python/"/>
+    <category term="Flask" scheme="https://www.sujx.net/tags/Flask/"/>
+    <category term="鹊随金印" scheme="https://www.sujx.net/tags/%E9%B9%8A%E9%9A%8F%E9%87%91%E5%8D%B0/"/>
+    <category term="Viber Coding" scheme="https://www.sujx.net/tags/Viber-Coding/"/>
+    <id>https://www.sujx.net/2026/06/11/fristVibeCoding/</id>
+    <link href="https://www.sujx.net/2026/06/11/fristVibeCoding/"/>
+    <published>2026-06-11T01:04:07.000Z</published>
+    <summary>
+      <![CDATA[<blockquote>
+<p>在用Qoder开发几个web tools之后，发现一堆东西扔的到处都是，无法集中展现、修改也是一团乱麻。所以，我就将做好的工具集合到一块，然后使用统一的接口引入，这样也方便修改。</p>
+</blockquote>
+<p><img]]>
+    </summary>
+    <title>鹊随金印：我的第一个完整的AI编程项目</title>
+    <updated>2026-09-26T02:24:50.430Z</updated>
+  </entry>
+  <entry>
+    <author>
+      <name>靖轩</name>
+    </author>
+    <category term="开发基础" scheme="https://www.sujx.net/categories/%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/"/>
     <category term="Linux" scheme="https://www.sujx.net/tags/Linux/"/>
-    
-    <category term="面试题" scheme="https://www.sujx.net/tags/%E9%9D%A2%E8%AF%95%E9%A2%98/"/>
-    
-    <category term="基础知识" scheme="https://www.sujx.net/tags/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/"/>
-    
+    <category term="vi" scheme="https://www.sujx.net/tags/vi/"/>
+    <category term="Editor" scheme="https://www.sujx.net/tags/Editor/"/>
+    <id>https://www.sujx.net/2026/06/03/VI_Howto/</id>
+    <link href="https://www.sujx.net/2026/06/03/VI_Howto/"/>
+    <published>2026-06-03T01:04:07.000Z</published>
+    <summary>
+      <![CDATA[<blockquote>
+<p>学习使用 vi 文本编辑器对于任何在 Linux 环境下工作的人来说都是必不可少的。虽然适应其工作方式需要一些时间，但掌握 vi 命令能让你在无需离开终端或使用鼠标的情况下，极其快速地编辑文件。</p>
+</blockquote>
+<p><img]]>
+    </summary>
+    <title>VI编辑器简介</title>
+    <updated>2026-09-26T02:24:50.428Z</updated>
   </entry>
-  
   <entry>
-    <title>Linux系统基础知识·2</title>
-    <link href="https://www.sujx.net/2023/05/14/magedu-week-2/"/>
-    <id>https://www.sujx.net/2023/05/14/magedu-week-2/</id>
-    <published>2023-05-14T14:48:47.000Z</published>
-    <updated>2023-05-21T16:23:09.604Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;blockquote&gt;
-&lt;p&gt;本文基于马哥教育就业班第二周课程总结&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&quot;系统设计&quot;&gt;&lt;a href=&quot;#系统设计&quot; class=&quot;headerlink&quot;</summary>
-        
-      
-    
-    
-    
-    <category term="Education" scheme="https://www.sujx.net/categories/Education/"/>
-    
-    
+    <author>
+      <name>靖轩</name>
+    </author>
+    <category term="工作留痕" scheme="https://www.sujx.net/categories/%E5%B7%A5%E4%BD%9C%E7%95%99%E7%97%95/"/>
+    <category term="湖南中信" scheme="https://www.sujx.net/tags/%E6%B9%96%E5%8D%97%E4%B8%AD%E4%BF%A1/"/>
+    <category term="新闻稿件" scheme="https://www.sujx.net/tags/%E6%96%B0%E9%97%BB%E7%A8%BF%E4%BB%B6/"/>
+    <category term="文书" scheme="https://www.sujx.net/tags/%E6%96%87%E4%B9%A6/"/>
+    <id>https://www.sujx.net/2026/05/28/HNCitic_2605/</id>
+    <link href="https://www.sujx.net/2026/05/28/HNCitic_2605/"/>
+    <published>2026-05-28T01:04:07.000Z</published>
+    <summary>
+      <![CDATA[<blockquote>
+<p>本人稿件，供稿湖南中信，</p>
+</blockquote>
+<p><img src="https://cdn.sujx.net/2026/05/28/hardworker.png"></p>
+<h2 id="集团头条"><a]]>
+    </summary>
+    <title>我要上头条</title>
+    <updated>2026-09-26T02:25:04.134Z</updated>
+  </entry>
+  <entry>
+    <author>
+      <name>靖轩</name>
+    </author>
+    <category term="运维技巧" scheme="https://www.sujx.net/categories/%E8%BF%90%E7%BB%B4%E6%8A%80%E5%B7%A7/"/>
+    <category term="Domain" scheme="https://www.sujx.net/tags/Domain/"/>
+    <category term="sync" scheme="https://www.sujx.net/tags/sync/"/>
+    <category term="w32tm" scheme="https://www.sujx.net/tags/w32tm/"/>
+    <category term="域控" scheme="https://www.sujx.net/tags/%E5%9F%9F%E6%8E%A7/"/>
+    <id>https://www.sujx.net/2026/05/12/TS-Domain-Controller-Sync-Failure/</id>
+    <link href="https://www.sujx.net/2026/05/12/TS-Domain-Controller-Sync-Failure/"/>
+    <published>2026-05-12T03:04:07.000Z</published>
+    <summary>
+      <![CDATA[<p><img src="https://cdn.sujx.net/covers/cover152.jpg"></p>
+<blockquote>
+<ol start="2026">
+<li>05]]>
+    </summary>
+    <title>记一次Windows AD域控制器同步故障排错</title>
+    <updated>2026-09-26T02:32:15.014Z</updated>
+  </entry>
+  <entry>
+    <author>
+      <name>靖轩</name>
+    </author>
+    <category term="读书笔记" scheme="https://www.sujx.net/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
+    <category term="读书笔记" scheme="https://www.sujx.net/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
+    <category term="城市发展" scheme="https://www.sujx.net/tags/%E5%9F%8E%E5%B8%82%E5%8F%91%E5%B1%95/"/>
+    <category term="政治经济学" scheme="https://www.sujx.net/tags/%E6%94%BF%E6%B2%BB%E7%BB%8F%E6%B5%8E%E5%AD%A6/"/>
+    <category term="GDP" scheme="https://www.sujx.net/tags/GDP/"/>
+    <category term="TFP" scheme="https://www.sujx.net/tags/TFP/"/>
+    <id>https://www.sujx.net/2026/05/11/GDP2TFP/</id>
+    <link href="https://www.sujx.net/2026/05/11/GDP2TFP/"/>
+    <published>2026-05-11T01:04:07.000Z</published>
+    <summary>
+      <![CDATA[<blockquote>
+<p>“从GDP到TFP”的强制性转轨。用官方话语讲，这叫“高质量发展”；用马克思主义政治经济学的术语讲，这叫地方政府从“封建领主+银行家”的复合体，被迫转型为“产业资本家+基金经理”——而转型的成本，正系统性地转嫁到你我这样的小资产阶级和小公务员身上。]]>
+    </summary>
+    <title>「从GDP到TFP：政治经济学观察」</title>
+    <updated>2026-09-26T02:25:04.125Z</updated>
+  </entry>
+  <entry>
+    <author>
+      <name>靖轩</name>
+    </author>
+    <category term="读书笔记" scheme="https://www.sujx.net/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
+    <category term="读书笔记" scheme="https://www.sujx.net/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
+    <category term="分析能力" scheme="https://www.sujx.net/tags/%E5%88%86%E6%9E%90%E8%83%BD%E5%8A%9B/"/>
+    <category term="学习" scheme="https://www.sujx.net/tags/%E5%AD%A6%E4%B9%A0/"/>
+    <id>https://www.sujx.net/2026/05/07/How-to-develop-analytical-skills/</id>
+    <link href="https://www.sujx.net/2026/05/07/How-to-develop-analytical-skills/"/>
+    <published>2026-05-07T01:04:07.000Z</published>
+    <summary>
+      <![CDATA[<blockquote>
+<p>本文来自于一本近五十年前的老书《如何培训分析能力》，其中就已经有了现代项目管理的思维。其文本内容是由<a]]>
+    </summary>
+    <title>分析能力的培养</title>
+    <updated>2026-09-26T02:32:14.958Z</updated>
+  </entry>
+  <entry>
+    <author>
+      <name>靖轩</name>
+    </author>
+    <category term="读书笔记" scheme="https://www.sujx.net/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
+    <category term="Redis" scheme="https://www.sujx.net/tags/Redis/"/>
+    <category term="web-servver" scheme="https://www.sujx.net/tags/web-servver/"/>
+    <category term="fullstack" scheme="https://www.sujx.net/tags/fullstack/"/>
+    <id>https://www.sujx.net/2026/04/23/Redis-Howto/</id>
+    <link href="https://www.sujx.net/2026/04/23/Redis-Howto/"/>
+    <published>2026-04-23T07:04:07.000Z</published>
+    <summary>
+      <![CDATA[<p><img src="https://cdn.sujx.net/covers/cover137.jpg"></p>
+<h2 id="Redis-简介"><a href="#Redis-简介" class="headerlink" title="Redis]]>
+    </summary>
+    <title>Redis 完全指南：命令、常见问题解答、配置和故障排除</title>
+    <updated>2026-09-26T02:25:04.197Z</updated>
+  </entry>
+  <entry>
+    <author>
+      <name>靖轩</name>
+    </author>
+    <category term="海外杂谈" scheme="https://www.sujx.net/categories/%E6%B5%B7%E5%A4%96%E6%9D%82%E8%B0%88/"/>
+    <category term="ATI" scheme="https://www.sujx.net/tags/ATI/"/>
+    <category term="数据资产" scheme="https://www.sujx.net/tags/%E6%95%B0%E6%8D%AE%E8%B5%84%E4%BA%A7/"/>
+    <category term="翻译" scheme="https://www.sujx.net/tags/%E7%BF%BB%E8%AF%91/"/>
+    <category term="计算机历史" scheme="https://www.sujx.net/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%8E%86%E5%8F%B2/"/>
+    <id>https://www.sujx.net/2026/04/19/Story-ATI-Founder/</id>
+    <link href="https://www.sujx.net/2026/04/19/Story-ATI-Founder/"/>
+    <published>2026-04-19T01:04:07.000Z</published>
+    <summary>
+      <![CDATA[<p>本文翻译自计算机历史博物馆的人物采访，原始链接已经附在正文开始。最早的原有是在知乎上和人打笔头官司，我忽然发现ATI这个浓眉大眼的其实也是华人创建的，而且历史极其悠久。于是顺藤摸瓜，找到了他们创始人的一些资料。很是感慨，当年香港还是有一条走高科技发展的道路的。<br>另外，]]>
+    </summary>
+    <title>「ATI创始人的故事:本尼·刘（Benny Lau）和李·刘（Lee Lau）的口述历史」</title>
+    <updated>2026-09-26T02:25:04.207Z</updated>
+  </entry>
+  <entry>
+    <author>
+      <name>靖轩</name>
+    </author>
+    <category term="开发基础" scheme="https://www.sujx.net/categories/%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/"/>
+    <category term="Markdown" scheme="https://www.sujx.net/tags/Markdown/"/>
+    <category term="公文格式" scheme="https://www.sujx.net/tags/%E5%85%AC%E6%96%87%E6%A0%BC%E5%BC%8F/"/>
+    <category term="Pandoc" scheme="https://www.sujx.net/tags/Pandoc/"/>
+    <id>https://www.sujx.net/2026/04/14/Project_MD2DOC/</id>
+    <link href="https://www.sujx.net/2026/04/14/Project_MD2DOC/"/>
+    <published>2026-04-14T03:00:00.000Z</published>
+    <summary>
+      <![CDATA[<blockquote>
+<p>经常需要撰写公文的同仁们一定深有体会：按照《党政机关公文格式》（GB&#x2F;T 9704-2012）在 Word 中调整格式，不仅步骤繁琐，还容易出错。那么，能否用 Markdown]]>
+    </summary>
+    <title>用 Python 将 Markdown 一键转换为公文格式</title>
+    <updated>2026-09-26T02:25:04.189Z</updated>
+  </entry>
+  <entry>
+    <author>
+      <name>靖轩</name>
+    </author>
+    <category term="操作笔记" scheme="https://www.sujx.net/categories/%E6%93%8D%E4%BD%9C%E7%AC%94%E8%AE%B0/"/>
+    <category term="hunan" scheme="https://www.sujx.net/tags/hunan/"/>
+    <category term="citic" scheme="https://www.sujx.net/tags/citic/"/>
+    <category term="news" scheme="https://www.sujx.net/tags/news/"/>
+    <id>https://www.sujx.net/2026/03/24/Hunan-news-2603/</id>
+    <link href="https://www.sujx.net/2026/03/24/Hunan-news-2603/"/>
+    <published>2026-03-24T13:04:07.000Z</published>
+    <summary>
+      <![CDATA[<p>2026年3月19日，湖南中信通信有限公司（以下简称“湖南中信”）与中电信数智科技有限公司（以下简称“电信数智”）在湖南长沙北辰中信银行大厦举行战略合作协议签约仪式。湖南中信董事长常镝、总经理吕志诚与电信数智金融企业客户部副总经理蔡云朋、金融企业二部经理刘佳、客户经理赵琦等]]>
+    </summary>
+    <title>湖南中信与中电信数智签署战略合作协议</title>
+    <updated>2026-09-26T02:25:04.145Z</updated>
+  </entry>
+  <entry>
+    <author>
+      <name>靖轩</name>
+    </author>
+    <category term="海外杂谈" scheme="https://www.sujx.net/categories/%E6%B5%B7%E5%A4%96%E6%9D%82%E8%B0%88/"/>
     <category term="Linux" scheme="https://www.sujx.net/tags/Linux/"/>
-    
-    <category term="面试题" scheme="https://www.sujx.net/tags/%E9%9D%A2%E8%AF%95%E9%A2%98/"/>
-    
-    <category term="基础知识" scheme="https://www.sujx.net/tags/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/"/>
-    
+    <category term="top" scheme="https://www.sujx.net/tags/top/"/>
+    <category term="CPU" scheme="https://www.sujx.net/tags/CPU/"/>
+    <id>https://www.sujx.net/2026/03/17/CPU-spiked/</id>
+    <link href="https://www.sujx.net/2026/03/17/CPU-spiked/"/>
+    <published>2026-03-17T07:04:07.000Z</published>
+    <summary>
+      <![CDATA[<blockquote>
+<p>CPU 峰值并不意味着你的机器在死亡，它只是意味着有变化发生了。</p>
+<p>区分初级管理员和专家的，不是他们知道多少命令，而是他们如何解释系统告诉他们的信息。</p>
+</blockquote>
+<p><img]]>
+    </summary>
+    <title>如何诊断Linux系统的高CPU占用原因</title>
+    <updated>2026-09-26T02:25:04.107Z</updated>
   </entry>
-  
   <entry>
-    <title>Linux系统基础知识·1</title>
-    <link href="https://www.sujx.net/2023/04/10/magedu-week-1/"/>
-    <id>https://www.sujx.net/2023/04/10/magedu-week-1/</id>
-    <published>2023-04-10T08:35:34.000Z</published>
-    <updated>2023-05-21T16:23:09.436Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;一个完整计算系统的简要介绍&lt;/p&gt;
-&lt;pre class=&quot;line-numbers language-bash&quot; data-language=&quot;bash&quot;&gt;&lt;code</summary>
-        
-      
-    
-    
-    
-    <category term="Education" scheme="https://www.sujx.net/categories/Education/"/>
-    
-    
+    <author>
+      <name>靖轩</name>
+    </author>
+    <category term="应用程序" scheme="https://www.sujx.net/categories/%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F/"/>
+    <category term="E-mail" scheme="https://www.sujx.net/tags/E-mail/"/>
+    <category term="iRedmail" scheme="https://www.sujx.net/tags/iRedmail/"/>
+    <category term="postfix" scheme="https://www.sujx.net/tags/postfix/"/>
+    <category term="Dovecot" scheme="https://www.sujx.net/tags/Dovecot/"/>
+    <id>https://www.sujx.net/2026/03/11/mailserver-build/</id>
+    <link href="https://www.sujx.net/2026/03/11/mailserver-build/"/>
+    <published>2026-03-11T00:04:07.000Z</published>
+    <summary>
+      <![CDATA[<blockquote>
+<p>电子邮件是个传递好消息的通道，但如果你传递能够使人发狂的坏消息，邮件不是一个好的渠道，因为你不知道他的反应如何。</p>
+<p>​]]>
+    </summary>
+    <title>邮件服务器的搭建</title>
+    <updated>2026-09-26T02:25:04.256Z</updated>
+  </entry>
+  <entry>
+    <author>
+      <name>靖轩</name>
+    </author>
+    <category term="开发基础" scheme="https://www.sujx.net/categories/%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/"/>
+    <category term="Python" scheme="https://www.sujx.net/tags/Python/"/>
+    <category term="Fullstack" scheme="https://www.sujx.net/tags/Fullstack/"/>
+    <category term="Technology" scheme="https://www.sujx.net/tags/Technology/"/>
+    <id>https://www.sujx.net/2026/03/02/Python-Basic/</id>
+    <link href="https://www.sujx.net/2026/03/02/Python-Basic/"/>
+    <published>2026-03-02T07:04:07.000Z</published>
+    <summary>
+      <![CDATA[<p><img src="https://cdn.sujx.net/covers/cover137.jpg"></p>
+<h1 id="模块1：Python基础"><a href="#模块1：Python基础" class="headerlink"]]>
+    </summary>
+    <title>Python基础知识</title>
+    <updated>2026-09-26T02:32:14.992Z</updated>
+  </entry>
+  <entry>
+    <author>
+      <name>靖轩</name>
+    </author>
+    <category term="操作笔记" scheme="https://www.sujx.net/categories/%E6%93%8D%E4%BD%9C%E7%AC%94%E8%AE%B0/"/>
+    <category term="旅行" scheme="https://www.sujx.net/tags/%E6%97%85%E8%A1%8C/"/>
+    <category term="山东" scheme="https://www.sujx.net/tags/%E5%B1%B1%E4%B8%9C/"/>
+    <category term="游记" scheme="https://www.sujx.net/tags/%E6%B8%B8%E8%AE%B0/"/>
+    <id>https://www.sujx.net/2026/02/23/Travel-shandong/</id>
+    <link href="https://www.sujx.net/2026/02/23/Travel-shandong/"/>
+    <published>2026-02-23T01:04:07.000Z</published>
+    <summary>
+      <![CDATA[<blockquote>
+<p>很多事情就像是旅行一样，当你决定要出发的时候候，最困难的那部分其实就已经完成了。</p>
+</blockquote>
+<p><img src="https://cdn.sujx.net/covers/cover139.jpg"></p>
+<h2]]>
+    </summary>
+    <title>过年去山东的流水账</title>
+    <updated>2026-09-26T02:25:04.223Z</updated>
+  </entry>
+  <entry>
+    <author>
+      <name>靖轩</name>
+    </author>
+    <category term="海外杂谈" scheme="https://www.sujx.net/categories/%E6%B5%B7%E5%A4%96%E6%9D%82%E8%B0%88/"/>
     <category term="Linux" scheme="https://www.sujx.net/tags/Linux/"/>
-    
-    <category term="面试题" scheme="https://www.sujx.net/tags/%E9%9D%A2%E8%AF%95%E9%A2%98/"/>
-    
-    <category term="基础知识" scheme="https://www.sujx.net/tags/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>内核虚拟化KVM的使用</title>
-    <link href="https://www.sujx.net/2022/11/03/How2UseKVM/"/>
-    <id>https://www.sujx.net/2022/11/03/How2UseKVM/</id>
-    <published>2022-11-03T14:22:22.000Z</published>
-    <updated>2023-05-30T08:30:00.011Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;h2 id=&quot;概念&quot;&gt;&lt;a href=&quot;#概念&quot; class=&quot;headerlink&quot; title=&quot;概念&quot;&gt;&lt;/a&gt;概念&lt;/h2&gt;&lt;p&gt;&lt;a href=&quot;https://www.linux-kvm.org/&quot;&gt;KVM&lt;/a&gt;全称为Kernel Virtual</summary>
-        
-      
-    
-    
-    
-    <category term="Technology" scheme="https://www.sujx.net/categories/Technology/"/>
-    
-    
-    <category term="Virtual" scheme="https://www.sujx.net/tags/Virtual/"/>
-    
-    <category term="KVM" scheme="https://www.sujx.net/tags/KVM/"/>
-    
-    <category term="Linux" scheme="https://www.sujx.net/tags/Linux/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>CentOS主机清理旧内核</title>
-    <link href="https://www.sujx.net/2022/10/19/clean-old-kernel/"/>
-    <id>https://www.sujx.net/2022/10/19/clean-old-kernel/</id>
-    <published>2022-10-19T06:48:47.000Z</published>
-    <updated>2023-06-02T14:52:32.511Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;h3 id=&quot;CentOS7上删除旧内核&quot;&gt;&lt;a href=&quot;#CentOS7上删除旧内核&quot; class=&quot;headerlink&quot; title=&quot;CentOS7上删除旧内核&quot;&gt;&lt;/a&gt;CentOS7上删除旧内核&lt;/h3&gt;&lt;p&gt;centos7</summary>
-        
-      
-    
-    
-    
-    <category term="Technology" scheme="https://www.sujx.net/categories/Technology/"/>
-    
-    
-    <category term="CentOS7" scheme="https://www.sujx.net/tags/CentOS7/"/>
-    
-    <category term="CentOS8" scheme="https://www.sujx.net/tags/CentOS8/"/>
-    
-    <category term="Kernel" scheme="https://www.sujx.net/tags/Kernel/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>CCSK思维导图</title>
-    <link href="https://www.sujx.net/2022/10/01/CCSK-MindMap/"/>
-    <id>https://www.sujx.net/2022/10/01/CCSK-MindMap/</id>
-    <published>2022-10-01T14:48:47.000Z</published>
-    <updated>2023-05-23T04:30:52.686Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;p&gt;&lt;a href=&quot;https://www.c-csa.cn/u_file/photo/20200827/825c545c82.pdf&quot;&gt;CCSK前导知识&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://cdn.sujx.net/CCSK-Mindmap.png&quot;</summary>
-        
-      
-    
-    
-    
-    <category term="Security" scheme="https://www.sujx.net/categories/Security/"/>
-    
-    
-    <category term="CCSK" scheme="https://www.sujx.net/tags/CCSK/"/>
-    
-    <category term="MindMap" scheme="https://www.sujx.net/tags/MindMap/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Kubernetes的部署</title>
-    <link href="https://www.sujx.net/2022/09/19/Kubernetes-Deploy/"/>
-    <id>https://www.sujx.net/2022/09/19/Kubernetes-Deploy/</id>
-    <published>2022-09-19T06:48:47.000Z</published>
-    <updated>2023-05-30T08:06:16.014Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;h2 id=&quot;概要&quot;&gt;&lt;a href=&quot;#概要&quot; class=&quot;headerlink&quot; title=&quot;概要&quot;&gt;&lt;/a&gt;概要&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;Kubernetes&lt;/strong&gt; 这个名字源于希腊语，意为“舵手”或“飞行员”。k8s 这个缩写是因为 k 和 s</summary>
-        
-      
-    
-    
-    
-    <category term="Technology" scheme="https://www.sujx.net/categories/Technology/"/>
-    
-    
-    <category term="Docker" scheme="https://www.sujx.net/tags/Docker/"/>
-    
-    <category term="Kubernetes" scheme="https://www.sujx.net/tags/Kubernetes/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Docker的基本使用</title>
-    <link href="https://www.sujx.net/2022/08/15/Docker-Pratice/"/>
-    <id>https://www.sujx.net/2022/08/15/Docker-Pratice/</id>
-    <published>2022-08-15T01:35:34.000Z</published>
-    <updated>2023-05-20T14:25:42.367Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;h2 id=&quot;简介&quot;&gt;&lt;a href=&quot;#简介&quot; class=&quot;headerlink&quot; title=&quot;简介&quot;&gt;&lt;/a&gt;简介&lt;/h2&gt;&lt;h3 id=&quot;Docker是什么&quot;&gt;&lt;a href=&quot;#Docker是什么&quot; class=&quot;headerlink&quot;</summary>
-        
-      
-    
-    
-    
-    
-    <category term="Docker" scheme="https://www.sujx.net/tags/Docker/"/>
-    
-    <category term="Basic" scheme="https://www.sujx.net/tags/Basic/"/>
-    
-    <category term="Tech" scheme="https://www.sujx.net/tags/Tech/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>大型网站技术架构核心原理与案例分析</title>
-    <link href="https://www.sujx.net/2022/08/01/Large-Scale_Website_Architecture/"/>
-    <id>https://www.sujx.net/2022/08/01/Large-Scale_Website_Architecture/</id>
-    <published>2022-07-31T23:35:34.000Z</published>
-    <updated>2023-05-20T14:25:42.479Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;blockquote&gt;
-&lt;p&gt;此为《大型网站技术架构核心原理与案例分析》的记录&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&quot;概述&quot;&gt;&lt;a href=&quot;#概述&quot; class=&quot;headerlink&quot; title=&quot;概述&quot;&gt;&lt;/a&gt;概述&lt;/h2&gt;&lt;h3</summary>
-        
-      
-    
-    
-    
-    
-    <category term="Architecture" scheme="https://www.sujx.net/tags/Architecture/"/>
-    
-    <category term="Website" scheme="https://www.sujx.net/tags/Website/"/>
-    
-    <category term="Books" scheme="https://www.sujx.net/tags/Books/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>定时删除Wazuh日志索引</title>
-    <link href="https://www.sujx.net/2022/07/20/wauzh-clean-log/"/>
-    <id>https://www.sujx.net/2022/07/20/wauzh-clean-log/</id>
-    <published>2022-07-20T02:35:34.000Z</published>
-    <updated>2023-05-06T10:58:04.779Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;h2 id=&quot;前情&quot;&gt;&lt;a href=&quot;#前情&quot; class=&quot;headerlink&quot;</summary>
-        
-      
-    
-    
-    
-    <category term="Security" scheme="https://www.sujx.net/categories/Security/"/>
-    
-    
-    <category term="Wazuh" scheme="https://www.sujx.net/tags/Wazuh/"/>
-    
-    <category term="ElasticSearch" scheme="https://www.sujx.net/tags/ElasticSearch/"/>
-    
-    <category term="crontab - Shell" scheme="https://www.sujx.net/tags/crontab-Shell/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>使用PowerShell脚本管理Hyper-V宿主机上的虚机网卡访问ACL规则</title>
-    <link href="https://www.sujx.net/2022/07/01/powershell-vm-netacl/"/>
-    <id>https://www.sujx.net/2022/07/01/powershell-vm-netacl/</id>
-    <published>2022-07-01T02:35:34.000Z</published>
-    <updated>2023-05-06T10:58:03.739Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;h1 id=&quot;使用PowerShell脚本管理Hyper-V宿主机上的虚机网卡访问ACL规则&quot;&gt;&lt;a href=&quot;#使用PowerShell脚本管理Hyper-V宿主机上的虚机网卡访问ACL规则&quot; class=&quot;headerlink&quot;</summary>
-        
-      
-    
-    
-    
-    <category term="Tips" scheme="https://www.sujx.net/categories/Tips/"/>
-    
-    
-    <category term="Windows" scheme="https://www.sujx.net/tags/Windows/"/>
-    
-    <category term="powershell" scheme="https://www.sujx.net/tags/powershell/"/>
-    
+    <category term="CPU" scheme="https://www.sujx.net/tags/CPU/"/>
     <category term="troubleshooting" scheme="https://www.sujx.net/tags/troubleshooting/"/>
-    
+    <id>https://www.sujx.net/2026/02/13/CPU-Usage/</id>
+    <link href="https://www.sujx.net/2026/02/13/CPU-Usage/"/>
+    <published>2026-02-13T07:04:07.000Z</published>
+    <summary>
+      <![CDATA[<p>作为一名 Linux 系统工程师，我确信你们都使用过 <code>top</code> 命令。它一直是几十年来首选的工具——简单、可靠，并且在你需要时总是存在。但你有没有注意到一件事？偶尔，你可能会发现一个进程的 CPU 使用率飙升到 150%、200%甚至]]>
+    </summary>
+    <title>CPU高占用的排查</title>
+    <updated>2026-09-26T02:32:14.925Z</updated>
   </entry>
-  
   <entry>
-    <title>自己动手构建简易广播系统</title>
-    <link href="https://www.sujx.net/2022/06/29/how-to-build-liveserver/"/>
-    <id>https://www.sujx.net/2022/06/29/how-to-build-liveserver/</id>
-    <published>2022-06-29T08:00:28.000Z</published>
-    <updated>2023-05-06T10:58:02.707Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;h2 id=&quot;综合概述&quot;&gt;&lt;a href=&quot;#综合概述&quot; class=&quot;headerlink&quot;</summary>
-        
-      
-    
-    
-    
-    <category term="System" scheme="https://www.sujx.net/categories/System/"/>
-    
-    
-    <category term="SRS" scheme="https://www.sujx.net/tags/SRS/"/>
-    
+    <author>
+      <name>靖轩</name>
+    </author>
+    <category term="海外杂谈" scheme="https://www.sujx.net/categories/%E6%B5%B7%E5%A4%96%E6%9D%82%E8%B0%88/"/>
+    <category term="Ansible" scheme="https://www.sujx.net/tags/Ansible/"/>
+    <category term="Tools" scheme="https://www.sujx.net/tags/Tools/"/>
+    <category term="playbook" scheme="https://www.sujx.net/tags/playbook/"/>
+    <id>https://www.sujx.net/2026/02/03/Ansible-Accelerate/</id>
+    <link href="https://www.sujx.net/2026/02/03/Ansible-Accelerate/"/>
+    <published>2026-02-03T07:04:07.000Z</published>
+    <summary>
+      <![CDATA[<p> Ansible 已成为现代基础设施自动化的基石，提供了一种直接而强大的方法来管理 IT 运营，从基本的软件包安装到协调复杂的跨节点部署，Ansible 都能胜任。然而，随着自动化规模的扩大，playbook]]>
+    </summary>
+    <title>为你的Ansible插上翅膀</title>
+    <updated>2026-09-26T02:25:04.098Z</updated>
   </entry>
-  
   <entry>
-    <title>远程搜集主机网卡信息</title>
-    <link href="https://www.sujx.net/2022/06/01/powershell-remote-netadapter/"/>
-    <id>https://www.sujx.net/2022/06/01/powershell-remote-netadapter/</id>
-    <published>2022-06-01T02:35:34.000Z</published>
-    <updated>2023-05-06T10:58:03.615Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;h1 id=&quot;远程搜集主机网卡信息&quot;&gt;&lt;a href=&quot;#远程搜集主机网卡信息&quot; class=&quot;headerlink&quot; title=&quot;远程搜集主机网卡信息&quot;&gt;&lt;/a&gt;远程搜集主机网卡信息&lt;/h1&gt;&lt;h2 id=&quot;开启功能&quot;&gt;&lt;a href=&quot;#开启功能&quot;</summary>
-        
-      
-    
-    
-    
-    <category term="Tips" scheme="https://www.sujx.net/categories/Tips/"/>
-    
-    
-    <category term="Windows" scheme="https://www.sujx.net/tags/Windows/"/>
-    
-    <category term="powershell" scheme="https://www.sujx.net/tags/powershell/"/>
-    
-    <category term="troubleshooting" scheme="https://www.sujx.net/tags/troubleshooting/"/>
-    
+    <author>
+      <name>靖轩</name>
+    </author>
+    <category term="读书笔记" scheme="https://www.sujx.net/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
+    <category term="AI" scheme="https://www.sujx.net/tags/AI/"/>
+    <category term="小说" scheme="https://www.sujx.net/tags/%E5%B0%8F%E8%AF%B4/"/>
+    <category term="prompt" scheme="https://www.sujx.net/tags/prompt/"/>
+    <id>https://www.sujx.net/2026/01/23/Foxhole/</id>
+    <link href="https://www.sujx.net/2026/01/23/Foxhole/"/>
+    <published>2026-01-23T01:04:07.000Z</published>
+    <summary>
+      <![CDATA[<blockquote>
+<p>你是一个科幻文学作者，你现在要以苏联战壕文学的笔触和写法写一篇千字左右的科幻小说。小说的主角是一名苏联宇航员，他经历了独自的宇宙行走以完成宇宙飞船的维修工作，并使用手边的工具避免了一颗高速漂浮过来的美国卫星残骸撞击太空舱。这个卫星残骸是地面遥测中心]]>
+    </summary>
+    <title>单人战壕</title>
+    <updated>2026-09-26T02:25:04.125Z</updated>
   </entry>
-  
   <entry>
-    <title>文件存在但IIS报404故障的解决</title>
-    <link href="https://www.sujx.net/2022/05/05/iis-mime/"/>
-    <id>https://www.sujx.net/2022/05/05/iis-mime/</id>
-    <published>2022-05-05T02:35:34.000Z</published>
-    <updated>2023-05-06T10:58:02.911Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;h1 id=&quot;文件存在但IIS报404故障的解决&quot;&gt;&lt;a href=&quot;#文件存在但IIS报404故障的解决&quot; class=&quot;headerlink&quot; title=&quot;文件存在但IIS报404故障的解决&quot;&gt;&lt;/a&gt;文件存在但IIS报404故障的解决&lt;/h1&gt;&lt;h2</summary>
-        
-      
-    
-    
-    
-    <category term="Tips" scheme="https://www.sujx.net/categories/Tips/"/>
-    
-    
-    <category term="Windows" scheme="https://www.sujx.net/tags/Windows/"/>
-    
-    <category term="IIS" scheme="https://www.sujx.net/tags/IIS/"/>
-    
-    <category term="troubleshooting" scheme="https://www.sujx.net/tags/troubleshooting/"/>
-    
+    <author>
+      <name>靖轩</name>
+    </author>
+    <category term="海外杂谈" scheme="https://www.sujx.net/categories/%E6%B5%B7%E5%A4%96%E6%9D%82%E8%B0%88/"/>
+    <category term="Server" scheme="https://www.sujx.net/tags/Server/"/>
+    <category term="WEB" scheme="https://www.sujx.net/tags/WEB/"/>
+    <category term="OWASP" scheme="https://www.sujx.net/tags/OWASP/"/>
+    <id>https://www.sujx.net/2026/01/20/OWASP-top/</id>
+    <link href="https://www.sujx.net/2026/01/20/OWASP-top/"/>
+    <published>2026-01-20T07:04:07.000Z</published>
+    <summary>
+      <![CDATA[<p>在当今的数字世界中，Web 应用程序对企业和个人都至关重要。然而，随着在线平台的增长，Web 安全问题已成为一个主要关注点。黑客经常利用漏洞进行未经授权的访问、中断服务或窃取敏感信息。为了应对这一问题，开放 Web 应用程序安全项目（OWASP）创建了一份顶级 Web]]>
+    </summary>
+    <title>如何理解 Web 应用程序安全</title>
+    <updated>2026-09-26T02:25:04.178Z</updated>
   </entry>
-  
   <entry>
-    <title>macOS的部署、重命名与加域</title>
-    <link href="https://www.sujx.net/2022/04/11/macOS-join-ad/"/>
-    <id>https://www.sujx.net/2022/04/11/macOS-join-ad/</id>
-    <published>2022-04-11T02:35:34.000Z</published>
-    <updated>2023-05-06T10:58:03.259Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;h2 id=&quot;缘起&quot;&gt;&lt;a href=&quot;#缘起&quot; class=&quot;headerlink&quot; title=&quot;缘起&quot;&gt;&lt;/a&gt;缘起&lt;/h2&gt;&lt;p&gt;公司现有一堆14年末的Mac</summary>
-        
-      
-    
-    
-    
-    <category term="System" scheme="https://www.sujx.net/categories/System/"/>
-    
-    
-    <category term="macOS" scheme="https://www.sujx.net/tags/macOS/"/>
-    
-    <category term="ActiveDirectory" scheme="https://www.sujx.net/tags/ActiveDirectory/"/>
-    
-    <category term="MacMini" scheme="https://www.sujx.net/tags/MacMini/"/>
-    
+    <author>
+      <name>靖轩</name>
+    </author>
+    <category term="海外杂谈" scheme="https://www.sujx.net/categories/%E6%B5%B7%E5%A4%96%E6%9D%82%E8%B0%88/"/>
+    <category term="Linux" scheme="https://www.sujx.net/tags/Linux/"/>
+    <category term="Performance" scheme="https://www.sujx.net/tags/Performance/"/>
+    <category term="Cache" scheme="https://www.sujx.net/tags/Cache/"/>
+    <id>https://www.sujx.net/2026/01/11/Linux_Cache/</id>
+    <link href="https://www.sujx.net/2026/01/11/Linux_Cache/"/>
+    <published>2026-01-11T07:04:07.000Z</published>
+    <summary>
+      <![CDATA[<p>在系统管理和 DevOps 领域，性能至关重要。每一毫秒都至关重要，而 Linux 系统速度的一个最基本但最容易被误解的组件之一就是其缓存机制。许多管理员看到高内存使用率归因于“缓存”而本能地担忧，但这通常是系统健康且性能良好的迹象。理解 Linux]]>
+    </summary>
+    <title>精通 Linux 缓存：提升性能与速度</title>
+    <updated>2026-09-26T02:25:04.170Z</updated>
   </entry>
-  
-  <entry>
-    <title>MacMini 主机更换SSD</title>
-    <link href="https://www.sujx.net/2022/04/01/macmini-hd2ssd/"/>
-    <id>https://www.sujx.net/2022/04/01/macmini-hd2ssd/</id>
-    <published>2022-04-01T02:35:34.000Z</published>
-    <updated>2023-05-06T10:58:03.207Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;p&gt;部门库存里面有几台硬盘为1TB机械盘的2014年版本Mac Mini。为了资源利用，现将这些主机的硬盘更换为拆机的256GB SSD磁盘。&lt;/p&gt;
-&lt;p&gt;主要操作流程如下：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;拆除主机外壳( 要注意wifi的连接线)&lt;br&gt;&lt;img</summary>
-        
-      
-    
-    
-    
-    <category term="Tips" scheme="https://www.sujx.net/categories/Tips/"/>
-    
-    
-    <category term="mac" scheme="https://www.sujx.net/tags/mac/"/>
-    
-    <category term="hardware" scheme="https://www.sujx.net/tags/hardware/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>《VMware vSphere 性能设计》笔记</title>
-    <link href="https://www.sujx.net/2022/03/21/vsphere-performance/"/>
-    <id>https://www.sujx.net/2022/03/21/vsphere-performance/</id>
-    <published>2022-03-21T02:35:34.000Z</published>
-    <updated>2023-05-06T10:58:04.739Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;blockquote&gt;
-&lt;p&gt;本书从概念和操作两方面介绍了虚拟化基础设施的性能。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&quot;CPU&quot;&gt;&lt;a href=&quot;#CPU&quot; class=&quot;headerlink&quot; title=&quot;CPU&quot;&gt;&lt;/a&gt;CPU&lt;/h2&gt;&lt;h3</summary>
-        
-      
-    
-    
-    
-    <category term="Books" scheme="https://www.sujx.net/categories/Books/"/>
-    
-    
-    <category term="vSphere" scheme="https://www.sujx.net/tags/vSphere/"/>
-    
-    <category term="performance" scheme="https://www.sujx.net/tags/performance/"/>
-    
-    <category term="VMware" scheme="https://www.sujx.net/tags/VMware/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>CentOS 8转换为CentOS Stream 8</title>
-    <link href="https://www.sujx.net/2022/03/11/centos8-covert-2-stream/"/>
-    <id>https://www.sujx.net/2022/03/11/centos8-covert-2-stream/</id>
-    <published>2022-03-11T04:35:34.000Z</published>
-    <updated>2023-05-06T10:58:01.687Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;p&gt;由于CentOS 8的源已经不可用，所以需要将原有 CentOS 8 升级为CentOS Steam 8：&lt;/p&gt;
-&lt;pre class=&quot;line-numbers language-bash&quot; data-language=&quot;bash&quot;&gt;&lt;code</summary>
-        
-      
-    
-    
-    
-    <category term="Tips" scheme="https://www.sujx.net/categories/Tips/"/>
-    
-    
-    <category term="CentOS" scheme="https://www.sujx.net/tags/CentOS/"/>
-    
-    <category term="system" scheme="https://www.sujx.net/tags/system/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>SSSD服务主机脱域的处理</title>
-    <link href="https://www.sujx.net/2022/03/01/sssd-realm/"/>
-    <id>https://www.sujx.net/2022/03/01/sssd-realm/</id>
-    <published>2022-03-01T02:35:34.000Z</published>
-    <updated>2023-05-06T10:58:04.187Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;h2 id=&quot;缘起&quot;&gt;&lt;a href=&quot;#缘起&quot; class=&quot;headerlink&quot; title=&quot;缘起&quot;&gt;&lt;/a&gt;缘起&lt;/h2&gt;&lt;p&gt;近期，DBA报错多台CentOS7的主机无法使用域账号登陆，出现“Permission</summary>
-        
-      
-    
-    
-    
-    <category term="Tips" scheme="https://www.sujx.net/categories/Tips/"/>
-    
-    
-    <category term="ActiveDirectory" scheme="https://www.sujx.net/tags/ActiveDirectory/"/>
-    
-    <category term="sssd" scheme="https://www.sujx.net/tags/sssd/"/>
-    
-    <category term="realm" scheme="https://www.sujx.net/tags/realm/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Windows Server上开启SSH服务</title>
-    <link href="https://www.sujx.net/2022/02/28/windows-ssh-server/"/>
-    <id>https://www.sujx.net/2022/02/28/windows-ssh-server/</id>
-    <published>2022-02-28T02:35:34.000Z</published>
-    <updated>2023-05-06T10:58:05.419Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;h2 id=&quot;背景&quot;&gt;&lt;a href=&quot;#背景&quot; class=&quot;headerlink&quot; title=&quot;背景&quot;&gt;&lt;/a&gt;背景&lt;/h2&gt;&lt;p&gt;由于微信小工具的SDK是部署到Windows</summary>
-        
-      
-    
-    
-    
-    <category term="System" scheme="https://www.sujx.net/categories/System/"/>
-    
-    
-    <category term="ssh" scheme="https://www.sujx.net/tags/ssh/"/>
-    
-    <category term="windows" scheme="https://www.sujx.net/tags/windows/"/>
-    
-    <category term="Service" scheme="https://www.sujx.net/tags/Service/"/>
-    
-  </entry>
-  
 </feed>

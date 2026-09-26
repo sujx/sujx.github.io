@@ -1,0 +1,631 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>单人战壕 | 靖轩</title><meta name="author" content="靖轩"><meta name="copyright" content="靖轩"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="你是一个科幻文学作者，你现在要以苏联战壕文学的笔触和写法写一篇千字左右的科幻小说。小说的主角是一名苏联宇航员，他经历了独自的宇宙行走以完成宇宙飞船的维修工作，并使用手边的工具避免了一颗高速漂浮过来的美国卫星残骸撞击太空舱。这个卫星残骸是地面遥测中心发现的，并呼叫宇航员进仓躲避，但宇航员决定自己解决它，最后宇航员返回太空船失败，最终飘向了太阳。  通过这个简单的提示词，成功输出了一篇短篇小说。这个">
+<meta property="og:type" content="article">
+<meta property="og:title" content="单人战壕">
+<meta property="og:url" content="https://www.sujx.net/2026/01/23/Foxhole/index.html">
+<meta property="og:site_name" content="靖轩">
+<meta property="og:description" content="你是一个科幻文学作者，你现在要以苏联战壕文学的笔触和写法写一篇千字左右的科幻小说。小说的主角是一名苏联宇航员，他经历了独自的宇宙行走以完成宇宙飞船的维修工作，并使用手边的工具避免了一颗高速漂浮过来的美国卫星残骸撞击太空舱。这个卫星残骸是地面遥测中心发现的，并呼叫宇航员进仓躲避，但宇航员决定自己解决它，最后宇航员返回太空船失败，最终飘向了太阳。  通过这个简单的提示词，成功输出了一篇短篇小说。这个">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.sujx.net/covers/cover144.jpg">
+<meta property="article:published_time" content="2026-01-23T01:04:07.000Z">
+<meta property="article:modified_time" content="2026-09-26T02:25:04.125Z">
+<meta property="article:author" content="靖轩">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="prompt">
+<meta property="article:tag" content="小说">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.sujx.net/covers/cover144.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "单人战壕",
+  "url": "https://www.sujx.net/2026/01/23/Foxhole/",
+  "image": "https://cdn.sujx.net/covers/cover144.jpg",
+  "datePublished": "2026-01-23T01:04:07.000Z",
+  "dateModified": "2026-09-26T02:25:04.125Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "靖轩",
+      "url": "https://www.sujx.net"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://cdn.sujx.net/about/favicon.png"><link rel="canonical" href="https://www.sujx.net/2026/01/23/Foxhole/index.html"><link rel="preconnect" href="//cdnjs.cloudflare.com"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css?v=5.5.5"><link rel="stylesheet" href="/fonts/css/all.min.css"><link rel="stylesheet" href="/libs/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?417b20ac1984432f821159fac27d3bb5";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><link rel="stylesheet" href="/fonts/titillium-web.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: '/libs/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: true,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '单人战壕',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="alternate" href="/atom.xml" title="靖轩" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">靖轩</span></a><a class="nav-page-title" href="/"><span class="site-name">单人战壕</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">单人战壕</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-01-23T01:04:07.000Z" title="发表于 2026-01-23 09:04:07">2026-01-23</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-09-26T02:25:04.125Z" title="更新于 2026-09-26 10:25:04">2026-09-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">6k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>17分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><blockquote>
+<p>你是一个科幻文学作者，你现在要以苏联战壕文学的笔触和写法写一篇千字左右的科幻小说。小说的主角是一名苏联宇航员，他经历了独自的宇宙行走以完成宇宙飞船的维修工作，并使用手边的工具避免了一颗高速漂浮过来的美国卫星残骸撞击太空舱。这个卫星残骸是地面遥测中心发现的，并呼叫宇航员进仓躲避，但宇航员决定自己解决它，最后宇航员返回太空船失败，最终飘向了太阳。</p>
+</blockquote>
+<p>通过这个简单的提示词，成功输出了一篇短篇小说。这个小说写的其实挺好的，不是么？</p>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover144.jpg"></p>
+<h2 id="开放空间"><a href="#开放空间" class="headerlink" title="开放空间"></a>开放空间</h2><p>维克托·彼得罗维奇·索洛维约夫不喜欢“开放空间”这个词。</p>
+<p>这个词太干净了，像是宣传画上的东西，涂着亮红色的油漆，旁边站着微笑的共青团员。而他此刻所在的这个地方——距离地球表面三百七十公里的轨道上，贴着“礼炮”号模块舱的外壁——没有任何宣传画能够描绘它的真实面貌。这里没有空气，没有温度，没有善意，也没有恶意。它只是存在着，像一张无限大的灰色毡布，把一切都裹进去。</p>
+<p>他攥紧了扳手。</p>
+<p>手套里的手指已经麻木了。外层手套的第三层隔热膜在三个小时前被微陨石划了一道口子，那道口子已经穿透了内层——他能感觉到指尖的皮肤在真空的接触下开始发麻。热量正在以每五分钟一度（摄氏）的速度从暴露的指尖流失。他还能活动手指，这就够了。不需要更多。</p>
+<p>“礼炮，我是海鹰。通讯检查。”</p>
+<p>耳机里先是一阵嘶嘶的白噪音，然后是地面指挥中心的值班员声音——那是科罗廖夫城里某个年轻中尉的声音，维克托甚至能想象出他面前的荧光屏和搪瓷杯子里凉掉的茶。</p>
+<p>“海鹰，礼炮收到。信号五格。你那边怎么样？”</p>
+<p>“正在更换散热板第三固定栓。旧螺栓已经取出，新件安装中。”</p>
+<p>“收到。注意二号手扶轨道的锁定状态，它的阻尼器在昨天——”</p>
+<p>“我知道。它在飘。我会用手腕扣住主扶手。”</p>
+<p>维克托没有等对方说完。不是不礼貌，是因为时间。舱外服的生命支持系统还剩下十一个小时，而他面前的工作清单上还有七个项目。每个项目都意味着要从一个工位转移到另一个工位，每一步都是在深渊上方的一小步。他的手扶轨道确实在飘——二号轨道的根部阻尼器失效了，整根一米二长的钛合金扶手像一根被拔断的琴弦，只有末端还连着舱壁。碰一下，它就会缓慢地荡开，像钟摆，像某种垂死的东西在呼吸。</p>
+<p>维克托用左手腕的安全钩扣住了主轨道，右手的扳手咬住了新螺栓的六角头。拧紧。力矩不能超过四十一牛米——这是他在拜科努尔基地的模拟舱里拧过四百三十七次之后刻进肌肉记忆里的数字。四十一。多一分，散热板的陶瓷复合材料会裂；少一分，热循环会把它在未来二十次轨道日出日落中慢慢震松。</p>
+<p>他拧到了四十。</p>
+<p>“海鹰，第一项完成。开始第二项：更换光谱分析仪的外部校准靶标。”</p>
+<p>“礼炮收到。维克托·彼得罗维奇，你的心率一百二十三，注意呼吸节奏。”</p>
+<p>他几乎要笑。心率一百二十三。在地面上，这不过是慢跑的水平。在这里，在这个距离地表三百七十公里的地方，每一次心跳都把血液压向四肢，而四肢正在被真空包裹着，像被塞进了一具为自己量身定做的棺材里。</p>
+<p>他没有放慢呼吸。</p>
+<h2 id="地球的边缘"><a href="#地球的边缘" class="headerlink" title="地球的边缘"></a>地球的边缘</h2><p>第三项完成的时候候，维克托看见了地球的边缘。</p>
+<p>不是地平线——地平线是给站在地面上的人用的。在轨道上，你看见的是弧度，是这条弧线背后那层薄得让人想骂脏话的大气层，淡蓝色，像一层被谁不小心涂上去的水彩。水彩下面是他出生的地方。第聂伯罗彼得罗夫斯克。他母亲至今还住在赫鲁晓夫时期建的那栋五层楼里，阳台上的西红柿到了八月会垂下来，垂到楼下丽季娅老太太的晾衣绳上方。</p>
+<p>他忽然想抽烟。</p>
+<p>他已经戒了十一年。但在这一刻，在这件造价相当于一千四百人全年工资的舱外服里，他想抽烟，想得手指尖都在扳手手柄上微微发颤。</p>
+<p>“海鹰，这里是礼炮。地面遥测中心刚发来紧急信息。”耳机里的声音变了，不再是那个年轻中尉的平稳语调，而是任务指挥长本人——伊戈尔·尼古拉耶维奇，一个从不提高嗓门的人。他一旦提高嗓门，就意味着事情已经出了地面站能控制的范畴。</p>
+<p>“请讲。”</p>
+<p>“编号KH-11-4032目标，美国KH-11系列侦察卫星残骸，尺寸约四十厘米乘七十厘米，质量估算六十到八十公斤。轨道参数正在精确计算，但初步数据显示它的轨道面与我们当前轨道面存在交叉。最近点距离——正在更新——”</p>
+<p>维克托停下了手里的动作。他把扳手插回腰间的工具架上，用右手手背按下了头盔侧面的通讯模式切换键，切换到应急频道。</p>
+<p>“说数字。”</p>
+<p>“最近点距离，初始计算为十四米。时间窗口在二十三分钟后。”</p>
+<p>二十三分钟。十四米。一个八十公斤的物体，在轨道上以相对速度——他心算了一下——如果它是在倾角相近但相位不同的轨道上，相对速度大约在每秒两公里左右。十四米的距离，在这个速度下，不是距离。是零。</p>
+<p>“维克托·彼得罗维奇，”指挥长的声音变得更低了，低到像是一只手按在他的肩膀上说出的俄语，“地面命令你立即停止舱外作业，按紧急程序返回气闸舱。我们将在十一分钟内完成泄压和舱口关闭。你有足够的时候间。”</p>
+<p>维克托没有动。</p>
+<p>他低头看了看自己的双手。右手套上那道被微陨石划开的口子，在头盔灯的光线下泛着一层暗淡的金属光泽——透过裂口能看到内层已经被穿透，指尖的皮肤暴露在真空中，开始变得苍白。左手套的手掌部位，磨损得能看到第二层编织层。这双手已经拧过一千三百个螺栓，换过九块散热板，剪断过十七根失效的电缆扎带。</p>
+<p>他又抬头看了看四周。</p>
+<p>三百七十公里的高度上，“四周”是一个很难定义的概念。上下左右在这里没有任何意义。但他还是在看——他在找。</p>
+<p>“海鹰呼叫礼炮。给我它的精确轨道参数。倾角，升交点赤经，近地点幅角，真近点角。全部。”</p>
+<p>“维克托·彼得罗维奇——”</p>
+<p>“伊戈尔·尼古拉耶维奇，给我参数。我在外面，我在看。如果我看见它来了，我可以——”</p>
+<p>可以什么？他没有说完这句话。</p>
+<p>指挥长沉默了三秒。在航天通讯中，三秒的沉默等于一个世纪。</p>
+<p>“发送中。注意查收。”</p>
+<p>维克托左手腕上的数据终端震动了一下，屏幕上滚过一串数字。他看完之后闭上了眼睛。</p>
+<p>两公里每秒。</p>
+<p>那块美国卫星残骸——不管它是什么时候碎裂的，被什么碎裂的——正以两公里每秒的相对速度朝“礼炮”号模块舱飞来。十四米的最近点距离，在这个速度下，实际上就是擦着舱壁过去。而那块东西的质量是六十到八十公斤。一块八十公斤的钛合金和多层复合材料碎片，以两公里每秒的速度击中任何东西，结果都不是“损坏”。结果是“穿透”。结果是“爆炸减压”。结果是“三名宇航员在一秒内死亡”——如果气闸舱的舱壁被击穿的话。</p>
+<p>而气闸舱就在他身后三米的地方。</p>
+<p>他睁开眼睛。</p>
+<h2 id="每秒两公里"><a href="#每秒两公里" class="headerlink" title="每秒两公里"></a>每秒两公里</h2><p>“礼炮，我需要三分钟。”</p>
+<p>“你要做什么？”</p>
+<p>维克托没有回答。他用安全钩把自己转移到主轨道的最后一个节点上，然后解开了安全钩。</p>
+<p>他飘浮了。</p>
+<p>在“礼炮”号模块舱的外壁上，在距离地球三百七十公里的真空中，他解开了唯一把自己与生命连接在一起的安全钩。</p>
+<p>这不是冲动。这是计算。</p>
+<p>他的舱外服背包上有一个应急推进单元——六个压缩氮气喷口，每个能提供零点五牛顿的推力，总共够用一百二十秒。这玩意的设计用途是在宇航员意外脱离空间站时提供回到舱壁的机会。从来没有人用它做过别的事。</p>
+<p>维克托用它做了一件别的事。</p>
+<p>他按下了手动控制手柄，向左偏航五度，俯仰负三度，然后全推力向前。</p>
+<p>他的身体开始移动。缓慢地，以一种与宇宙的尺度相比几乎可笑的加速度，他沿着“礼炮”号舱壁的外表面滑行，绕过科学仪器舱的散热板阵列，掠过对接节点的锥形结构，到达了舱段的背阴面。</p>
+<p>在这里，他看见了它。</p>
+<p>KH-11-4032。一块大约七十厘米长的碎片，形状不规则，像是被暴力撕开的金属躯体。它的边缘在头盔灯的反光中闪烁——那种不属于任何自然物体的、人为制造的金属光泽。它正在旋转，缓慢的，每分钟大约两周，像一个被处决后仍在抽搐的身体。</p>
+<p>它在他的左侧，大约二十五米远，正沿着一条与空间站中轴线呈十七度夹角的轨迹运动。按照地面给的参数，再过十八分钟，它会从气闸舱外壁十四米处经过。</p>
+<p>十四米。他想了想。</p>
+<p>他的舱外服背包上有一个备用的应急氧气瓶——小型钛合金罐，约两公斤重，设计用于主氧系统故障时提供额外三十分钟的呼吸支持。他手里有一把钢丝钳——不是专门设计的太空工具，是他从工具包里带出来的、用来剪断电缆扎带的普通钢丝钳。他还有一个磁力底座，原本是用来临时固定小型设备用的。</p>
+<p>他把这三样东西组合在了一起。</p>
+<p>一根备用的凯夫拉绳索从工具腰带上解下来，五米长，设计承重四百公斤。绳索的一端系在应急氧气瓶的阀体上，另一端缠在钢丝钳的手柄上，打了三个死结。他把磁力底座贴在胸口的钢板加强区上——那里是舱外服结构最强的部位，能承受两百公斤的拉力。氧气瓶则用绳索的中间段拴在自己的腰带上，作为临时的锚点。</p>
+<p>然后他等。</p>
+<p>等那块碎片转过它的周期，等它把最宽的那一面转向他。</p>
+<p>在它转过的那一瞬间——在那一瞬间，维克托看见了它表面还残留着的一块标识牌，白色底漆，红色字母，USA——他按下了应急推进单元的最后一个脉冲。</p>
+<p>他朝它飞去。</p>
+<p>相对速度很难精确控制。他只能靠感觉——靠十一年前在加加林空军学院学到的、早已生锈的弹道学直觉，靠这双手拧过一千三百个螺栓之后形成的对力度的本能判断。他飞向那块碎片，像一名士兵在战壕里跃出战位冲向敌阵——不因为勇敢，因为战壕即将被炮弹击中，而他和他的战友们无处可退。</p>
+<p>他撞上它的时候候，胸口传来一阵沉闷的震动。</p>
+<p>磁力底座咬住了碎片的表面。钢丝钳的手柄卡在碎片的两块结构板之间，像一把楔子打进劈柴的裂缝里。氧气瓶还拴在他腰间，绳索在他和碎片之间绷成了一条直线。</p>
+<p>维克托感觉到自己的身体被碎片的自旋带动，开始绕着一个不在自己体内的轴心旋转。眩晕感立刻涌上来——前庭系统在失重环境下对这种复合旋转运动毫无办法。他咬住了自己的下嘴唇，咬到尝到了血腥味。</p>
+<p>然后他按下了应急推进单元的最后一个氮气喷口——负Z方向，零点五牛顿，持续三秒。</p>
+<p>这个推力微乎其微。但它足以改变一个只有八十公斤的物体的轨道参数——只要方向正确。</p>
+<p>维克托不知道方向是否正确。他只知道他必须让这块碎片的速度矢量增加一个垂直于它原轨道的分量，让它从“擦过”变成“错过”。至于它会飘向哪里——飘向地球，飘向深空，飘向太阳——他不在乎。</p>
+<p>他只知道，它不能飘向气闸舱。</p>
+<p>绳索在他的腰间拉扯着，钢制的锁扣在压力下发出一种他听不见但能感觉到的振动——那种振动通过舱外服的材料传递到他的腰腹上，像一只冰冷的手在摇晃他。</p>
+<p>他等了五秒。十秒。十五秒。</p>
+<p>碎片的自旋在改变——它的角动量正在被绳索的张力逐渐消耗。它开始摆动，像一个被拽住的钟摆，幅度越来越小。</p>
+<p>然后它松开了。</p>
+<p>不是绳索断了——绳索的张力把磁力底座从他胸口拽脱了。那块碎片表面的多层隔热毡已经被撕裂，但磁力底座原本吸在他胸口的钢板加强区上——那个加强区是钛合金，磁力底座吸得很紧。但绳索绷紧的力量太大了，磁力底座的电磁吸盘在极限载荷下失效了，它从维克托胸口弹开，连同那根五米长的绳索和拴在绳索上的应急氧气瓶一起，被碎片带着飘走了。他唯一的一把钢丝钳——他用来剪断电缆扎带的、从工具包里带出来的那把普通的钢丝钳——也一起消失了。</p>
+<p>维克托看着它们远去。</p>
+<p>那块KH-11的残骸和那把钢丝钳，和那个应急氧气瓶，在头盔灯的余光照亮它们的最后一段距离里，缓缓地旋转着，像是三个在舞池里缓慢旋转的人。它们的速度矢量已经改变了——他成功了。它不会再经过气闸舱十四米处。它会从更远的地方过去，远到地面站的雷达都不会再追踪它。</p>
+<p>它朝着太阳的方向飘去。</p>
+<h2 id="朝着太阳飘去"><a href="#朝着太阳飘去" class="headerlink" title="朝着太阳飘去"></a>朝着太阳飘去</h2><p>维克托低头看了看自己的胸口。磁力底座已经不见了，只剩下胸前钢板加强区上那个浅浅的压痕——电磁吸盘留下的痕迹。绳索也没有了。应急氧气瓶也没有了。他被拽脱了几乎每一件能用来返回的东西。</p>
+<p>然后他看了看自己的位置。</p>
+<p>他现在距离“礼炮”号模块舱大约四十米。应急推进单元的氮气已经耗尽。他的安全钩在刚才解开之后就没有再扣回去。他飘浮着。</p>
+<p>“海鹰呼叫礼炮。”</p>
+<p>没有回答。</p>
+<p>他检查了一下通讯开关。它在他撞上碎片的时候候被撞到了备用频道。他拨回来。</p>
+<p>“海鹰呼叫礼炮。请回答。”</p>
+<p>“……海鹰，这里是礼炮。你——维克托·彼得罗维奇，你在哪里？”</p>
+<p>“我在外面。距离你们大约四十米。应急推进没气了。没有任何东西能用来推进了。”</p>
+<p>通讯里传来一阵嘈杂的声音。地面站肯定已经介入了。他能听到好几个声音同时在说话，其中有指挥长的，有飞控工程师的，还有一个——那是谁？——那是某个女人的声音，急促的，像是在报一组数字。</p>
+<p>“维克托·彼得罗维奇，”指挥长的声音重新出现，这次是纯粹的、赤裸的、没有经过任何过滤的人类声音，“我们会想办法。你的舱外服还有——”</p>
+<p>“伊戈尔·尼古拉耶维奇，”维克托说，“我的氧气还有三小时五十八分钟。主氧系统还在工作。但手套上的那道口子已经穿透了内层，我的手指暴露在真空里。体温在下降。我飘离的速度是每秒零点三米。四十米的距离，我飘到你们够不到的地方，还需要多长时间？”</p>
+<p>通讯里沉默了。</p>
+<p>“大约两分钟，”维克托自己回答了。“如果我什么都不做，两分钟后我就超出了任何应急拖索的极限距离。而我没有办法做任何事了。我的推进剂耗尽了，我的绳索没了，我的备用氧气瓶也没了。”</p>
+<p>“那你就——”指挥长的声音突然裂开了，不是愤怒，是那种在战壕里看着自己的士兵冲出掩体时喉咙里涌上来的东西，“你还有什么？你身上还有什么？”</p>
+<p>维克托低头看了看自己的工具腰带。钢丝钳没了。扳手还在——他低头看了看别在腰带右侧的扳手，三百毫米长的开口扳手，钛合金的，大约零点八公斤。还有一个卷尺，一把备用的小号一字螺丝刀，几根塑料扎带，一把折叠式的六角扳手套装。</p>
+<p>他的目光落在扳手上。</p>
+<p>他把它从腰带上取下来，握在右手里。零点八公斤。如果他把它朝空间站的方向扔出去，反冲力能让他获得大约——他心算了一下——每秒零点零三米的速度增量。相对于他每秒零点三米的飘离速度，这点增量毫无意义。</p>
+<p>他又看了看气闸舱的方向。他看到了舷窗里的灯光——有人在用手电筒给他打信号，三短三长三短，SOS。他们在看着他。他们什么都做不了，但他们在看着他。</p>
+<p>维克托做了一个决定。</p>
+<p>他没有用无线电说。他只是慢慢地、仔细地、用右手把那把扳手从自己身上解下来——他犹豫了一下——然后把它朝着空间站的方向扔了出去。</p>
+<p>不是指望它能带来反冲。零点八公斤对一百二十公斤的系统，扔出去的反冲速度只有每秒零点零二米，连测量仪器都测不出来。他扔它，是因为它是一把好扳手。钛合金的，三百毫米开口，在拜科努尔基地的模拟舱里，他用它拧过三千多个螺栓。它不应该和他一起消失。</p>
+<p>扳手在头盔灯的光线中翻滚着，缓缓地飞向气闸舱的方向——飞偏了，大约偏了三米。它会永远地错过空间站，成为另一块碎片，在轨道上飘荡几年，然后在大气层里烧成一颗没人注意到的流星。</p>
+<p>维克托不再看了。</p>
+<p>他转过身，面向太阳。</p>
+<p>他的氧气还剩下三小时五十一分钟。他的舱外服加热系统还在工作，但手套上那道口子正在让热量流失，暴露在真空中的指尖已经失去了所有感觉。他试着活动了一下指尖，它们像是别人的手指，像是某种被连接在他手腕上的、与他无关的机械装置。</p>
+<p>他不再加速了。他只是飘着。</p>
+<p>“海鹰呼叫礼炮。”</p>
+<p>这一次，他的声音很平静。平静得像是在读一份气象报告，像是在说“第聂伯罗彼得罗夫斯克，今日有雨，东南风三级”。</p>
+<p>“伊戈尔·尼古拉耶维奇，请转告我的母亲。花园里的西红柿，八月要记得收。丽季娅老太太会帮忙的。”</p>
+<p>“维克托·彼得罗维奇——你——你回来——你给我回来——”</p>
+<p>“我已经计算过了。我的速度矢量与空间站的差值现在是每秒零点三一米。以联盟号的对接能力，你们不可能在燃料限额内完成搜救。不要试。不要让人为了我——”</p>
+<p>他没有说完这句话。</p>
+<p>因为在那一刻，太阳完全出现在了他的视野里。没有面罩的滤镜——他已经把它翻了上去。太阳的光压直接打在他的脸上，打在他的眼眶上，打进他的瞳孔里。</p>
+<p>那是他见过的、最亮的、最白的光。</p>
+<p>他想起了第聂伯罗彼得罗夫斯克的夏天。想起了母亲在阳台上浇花时，水珠在阳光中折射出的那种光。想起了加加林空军学院操场上的阳光，他在那里跑了五千次晨跑，每一次太阳升起的位置都精确到角秒。想起了拜科努尔的黎明，火箭在发射台上被照亮的那一刻，整片草原都在燃烧。</p>
+<p>他朝着太阳飘去。</p>
+<p>他知道自己不会到达太阳。他知道自己会在氧气耗尽后安静地睡去，会在几个月后——或者几年后——被轨道衰减拉进大气层，会在某个无人知晓的夜晚变成一颗流星。</p>
+<p>但此刻，他只是飘着。</p>
+<p>像一块碎片。</p>
+<p>像一把扳手。</p>
+<p>像一个在战壕里待了太久的人，终于站起来，走出了战壕，走进了那片无边无际的、没有枪声的、白色的旷野。</p>
+<p>通讯里传来地面站的最后一条信息。不是指挥长的声音。是一个女人的声音——也许是那个一直在报数字的女工程师。她的声音很轻，很稳，像是从很远的地方传来的一首他小时候听过的歌。</p>
+<p>她说的是：</p>
+<p>“维克托·彼得罗维奇，这里是地面。你的任务已经完成。空间站安全。全体人员安全。你——你做得很好。你做得很好。海鹰，你做得很好。”</p>
+<p>维克托·彼得罗维奇·索洛维约夫没有再回答。</p>
+<p>他的面罩朝着太阳。他的手臂安静地垂在身体两侧。他的右手套上那道被微陨石划开的口子，在阳光中反射着暗淡的金属光泽。</p>
+<p>他飘着。</p>
+<p>朝着太阳飘去。</p>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/AI/">AI</a><a class="post-meta__tags" href="/tags/%E5%B0%8F%E8%AF%B4/">小说</a><a class="post-meta__tags" href="/tags/prompt/">prompt</a></div><div class="post-share"><div class="social-share" data-image="https://cdn.sujx.net/covers/cover144.jpg" data-sites="facebook,twitter,weibo,qq"></div><link rel="stylesheet" href="/libs/sharejs/css/share.min.css" media="print" onload="this.media='all'"><script src="/libs/sharejs/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>能否请我喝一杯咖啡？</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.jpg" target="_blank"><img class="post-qr-code-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/wechat.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2026/02/03/Ansible-Accelerate/" title="为你的Ansible插上翅膀"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover134.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">为你的Ansible插上翅膀</div></div><div class="info-2"><div class="info-item-1"> Ansible 已成为现代基础设施自动化的基石，提供了一种直接而强大的方法来管理 IT 运营，从基本的软件包安装到协调复杂的跨节点部署，Ansible 都能胜任。然而，随着自动化规模的扩大，playbook 的执行时间可能会成为瓶颈。实施正确的优化策略对于保持高效的工作流程至关重要。本指南探讨了八种有效的方法，可以显著减少您的 Ansible playbook 执行时间。  使用回调插件诊断性能瓶颈在优化之前，您需要识别出实际导致速度变慢的原因。Ansible 的回调插件为每个任务提供详细的计时信息，帮助您定位性能问题。 在您的配置中启用 timer 、 profile_tasks 和 profile_roles 插件： [defaults]inventory = ./hostscallbacks_enabled = timer, profile_tasks, profile_roles  运行您的 playbook 时，您将看到全面的计时数据： ==================================================================...</div></div></div></a><a class="pagination-related" href="/2026/01/20/OWASP-top/" title="如何理解 Web 应用程序安全"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover145.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">如何理解 Web 应用程序安全</div></div><div class="info-2"><div class="info-item-1">在当今的数字世界中，Web 应用程序对企业和个人都至关重要。然而，随着在线平台的增长，Web 安全问题已成为一个主要关注点。黑客经常利用漏洞进行未经授权的访问、中断服务或窃取敏感信息。为了应对这一问题，开放 Web 应用程序安全项目（OWASP）创建了一份顶级 Web 应用程序安全风险列表。该列表被称为 OWASP Top 10，已成为开发人员和安全专业人员识别和缓解关键漏洞的全球标准。 在本文中，我们将深入探讨每个 OWASP Top 10 漏洞，提供从基础到高级的示例、预防技术和最佳实践。让我们探索如何理解和解决这些风险，以保护您的 Web 应用程序。  什么是 OWASP Top 10？OWASP Top 10 是一个定期更新的、针对 Web 应用最关键的安全风险列表。它旨在指导开发者和安全专家了解常见的漏洞，使他们能够创建更安全的应用程序。让我们逐一分析每个风险，并提供实用的缓解建议。 1. 注入什么是注入？注入漏洞发生在不可信数据被作为命令或查询的一部分发送给解释器时，允许攻击者在未经授权的情况下执行恶意命令或访问数据。SQL 注入是最常见的例子。 注入示例考虑一个 S...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/02/01/AI-PM-Handbook/" title="简明AI基础知识"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover75.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-02-01</div><div class="info-item-2">简明AI基础知识</div></div><div class="info-2"><div class="info-item-1">每当科技发生飞跃式进步时，我们总会陷入一个重大争议。在了解了其中哦的风险后，我们是否敢于采用强大的技术？我们别无选择，争议只是自欺欺人。AI已经到来，悲观担忧并不能保护我们免受潜在的危害。潘多拉的盒子已经打开，当我们审视其中的内容时，会发现希望永不止息。    01 北京朝阳区·东三环   AI的基础基础设施和工具AI产品的性能和成功的关键在于管理AI流程所需要的基础设施， 需要充分理解， 才能将其输出集成到产品中． 机器学习与深度学习机器学习机器学习（ ML ）由两个关键部分组成：所使用的模型和用于学习的训练数据。理论上， 每次重新训练模型时， 模型的性能都会有所提升。如何选择、构建、调整和维护这些模型以实现最佳性能，是数据科学家和机器学习工程师的工作任务。每次使用模型时，都可以通过它与正确答案的差异来评估模型的准确性，并反复迭代，直到获得足够好的模型。每次迭代都基于具有某些模式或特征的数据构建和训练模型。 所有机器学习模型都可以分为以下四种学习类型：  监督学习 数据由人工标注，机器也试图正确的标注当前或者未来的数据点 应用： 分类模型：例如垃圾邮件过滤器 回归模型：寻求变量...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">靖轩</div><div class="author-info-description">逝者如斯夫,不舍昼夜</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/grepsu"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://gitee.com/grepsu" target="_blank" title="Gitee"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:sujx@live.cn" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS链接"><i class="fa  fa-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%80%E6%94%BE%E7%A9%BA%E9%97%B4"><span class="toc-number">1.</span> <span class="toc-text">开放空间</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%B0%E7%90%83%E7%9A%84%E8%BE%B9%E7%BC%98"><span class="toc-number">2.</span> <span class="toc-text">地球的边缘</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AF%8F%E7%A7%92%E4%B8%A4%E5%85%AC%E9%87%8C"><span class="toc-number">3.</span> <span class="toc-text">每秒两公里</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%9D%E7%9D%80%E5%A4%AA%E9%98%B3%E9%A3%98%E5%8E%BB"><span class="toc-number">4.</span> <span class="toc-text">朝着太阳飘去</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/07/03/AIGC_FoxHole/" title="海鹰">海鹰</a><time datetime="2026-07-03T01:04:07.000Z" title="发表于 2026-07-03 09:04:07">2026-07-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/11/fristVibeCoding/" title="鹊随金印：我的第一个完整的AI编程项目">鹊随金印：我的第一个完整的AI编程项目</a><time datetime="2026-06-11T01:04:07.000Z" title="发表于 2026-06-11 09:04:07">2026-06-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/03/VI_Howto/" title="VI编辑器简介">VI编辑器简介</a><time datetime="2026-06-03T01:04:07.000Z" title="发表于 2026-06-03 09:04:07">2026-06-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/28/HNCitic_2605/" title="我要上头条">我要上头条</a><time datetime="2026-05-28T01:04:07.000Z" title="发表于 2026-05-28 09:04:07">2026-05-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/12/TS-Domain-Controller-Sync-Failure/" title="记一次Windows AD域控制器同步故障排错">记一次Windows AD域控制器同步故障排错</a><time datetime="2026-05-12T03:04:07.000Z" title="发表于 2026-05-12 11:04:07">2026-05-12</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2008 - 2026 By 靖轩</span></div><div class="footer_custom_text">京ICP备17034757号</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.5"></script><script src="/js/main.js?v=5.5.5"></script><script src="/libs/fancybox/fancybox.umd.js"></script><script src="/js/instantpage.js" type="module"></script><script src="/libs/lazyload/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const parseViewBox = viewBox => {
+    if (!viewBox) return null
+    const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
+    if (parts.length !== 4 || parts.some(n => Number.isNaN(n))) return null
+    return parts
+  }
+
+  const getSvgViewBox = svg => {
+    const attr = parseViewBox(svg.getAttribute('viewBox'))
+    if (attr) return attr
+
+    // Fallback: use bbox to build a viewBox
+    try {
+      const bbox = svg.getBBox()
+      if (bbox && bbox.width && bbox.height) return [bbox.x, bbox.y, bbox.width, bbox.height]
+    } catch (e) {
+      // getBBox may fail on some edge cases; ignore
+    }
+
+    const w = Number(svg.getAttribute('width')) || 0
+    const h = Number(svg.getAttribute('height')) || 0
+    if (w > 0 && h > 0) return [0, 0, w, h]
+    return [0, 0, 100, 100]
+  }
+
+  const setSvgViewBox = (svg, vb) => {
+    svg.setAttribute('viewBox', `${vb[0]} ${vb[1]} ${vb[2]} ${vb[3]}`)
+  }
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v))
+
+  const openSvgInNewTab = ({ source, initViewBox }) => {
+    const getClonedSvg = () => {
+      if (typeof source === 'string') {
+        const template = document.createElement('template')
+        template.innerHTML = source.trim()
+        const svg = template.content.querySelector('svg')
+        return svg ? svg.cloneNode(true) : null
+      }
+      if (source && typeof source.cloneNode === 'function') {
+        return source.cloneNode(true)
+      }
+      return null
+    }
+
+    const clone = getClonedSvg()
+    if (!clone) return
+    if (initViewBox && initViewBox.length === 4) {
+      clone.setAttribute('viewBox', initViewBox.join(' '))
+    }
+    if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+    if (!clone.getAttribute('xmlns:xlink') && clone.outerHTML.includes('xlink:')) {
+      clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+    }
+    // inject background to match current theme
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    const bg = getComputedStyle(document.body).backgroundColor || (isDark ? '#1e1e1e' : '#ffffff')
+    if (!clone.style.background) clone.style.background = bg
+
+    const serializer = new XMLSerializer()
+    const svgSource = serializer.serializeToString(clone)
+    const htmlSource = `<!doctype html><html><head><meta charset="utf-8" />
+      <style>
+        html, body { width: 100%; height: 100%; margin: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; }
+        svg { max-width: 100%; max-height: 100%; height: auto; width: auto; }
+      </style>
+      </head><body>${svgSource}</body></html>`
+    const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank', 'noopener')
+    setTimeout(() => URL.revokeObjectURL(url), 30000)
+  }
+
+  const attachMermaidViewerButton = wrap => {
+    let btn = wrap.querySelector('.mermaid-open-btn')
+    if (!btn) {
+      btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'mermaid-open-btn'
+      wrap.appendChild(btn)
+    }
+
+    btn.innerHTML = '<i class="fa fa-search fa-fw" aria-hidden="true"></i>'
+
+    if (!btn.__mermaidViewerBound) {
+      btn.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        const svg = wrap.__mermaidOriginalSvg || wrap.querySelector('svg')
+        if (!svg) return
+        const initViewBox = wrap.__mermaidInitViewBox
+        if (typeof svg === 'string') {
+          openSvgInNewTab({ source: svg, initViewBox })
+          return
+        }
+        openSvgInNewTab({ source: svg, initViewBox })
+      })
+      btn.__mermaidViewerBound = true
+    }
+  }
+
+  // Zoom around a point (px, py) in the SVG viewport (in viewBox coordinates)
+  const zoomAtPoint = (vb, factor, px, py) => {
+    const w = vb[2] * factor
+    const h = vb[3] * factor
+    const nx = px - (px - vb[0]) * factor
+    const ny = py - (py - vb[1]) * factor
+    return [nx, ny, w, h]
+  }
+
+  const initMermaidGestures = wrap => {
+    const svg = wrap.querySelector('svg')
+    if (!svg) return
+
+    // Ensure viewBox exists so gestures always work
+    const initVb = getSvgViewBox(svg)
+    wrap.__mermaidInitViewBox = initVb
+    wrap.__mermaidCurViewBox = initVb.slice()
+    setSvgViewBox(svg, initVb)
+
+    // Avoid binding multiple times on themeChange/pjax
+    if (wrap.__mermaidGestureBound) return
+    wrap.__mermaidGestureBound = true
+
+    // Helper: map client (viewport) coordinate -> viewBox coordinate
+    const clientToViewBox = (clientX, clientY) => {
+      const rect = svg.getBoundingClientRect()
+      const vb = wrap.__mermaidCurViewBox || getSvgViewBox(svg)
+      const x = vb[0] + (clientX - rect.left) * (vb[2] / rect.width)
+      const y = vb[1] + (clientY - rect.top) * (vb[3] / rect.height)
+      return { x, y, rect, vb }
+    }
+
+    const state = {
+      pointers: new Map(),
+      startVb: null,
+      startDist: 0,
+      startCenter: null
+    }
+
+    const clampVb = vb => {
+      const init = wrap.__mermaidInitViewBox || vb
+      const minW = init[2] * 0.1
+      const maxW = init[2] * 10
+      const minH = init[3] * 0.1
+      const maxH = init[3] * 10
+      vb[2] = clamp(vb[2], minW, maxW)
+      vb[3] = clamp(vb[3], minH, maxH)
+      return vb
+    }
+
+    const setCurVb = vb => {
+      vb = clampVb(vb)
+      wrap.__mermaidCurViewBox = vb
+      setSvgViewBox(svg, vb)
+    }
+
+    const onPointerDown = e => {
+      // Allow only primary button for mouse
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      svg.setPointerCapture(e.pointerId)
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      if (state.pointers.size === 1) {
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      } else if (state.pointers.size === 2) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        state.startDist = Math.hypot(dx, dy)
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        state.startCenter = { x: (pts[0].x + pts[1].x) / 2, y: (pts[0].y + pts[1].y) / 2 }
+      }
+    }
+
+    const onPointerMove = e => {
+      if (!state.pointers.has(e.pointerId)) return
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      // Pan with 1 pointer
+      if (state.pointers.size === 1 && state.startVb) {
+        const p = [...state.pointers.values()][0]
+        const prev = { x: e.clientX - e.movementX, y: e.clientY - e.movementY }
+        // movementX/Y unreliable on touch, compute from stored last position
+        const last = wrap.__mermaidLastSinglePointer || p
+        const dxClient = p.x - last.x
+        const dyClient = p.y - last.y
+        wrap.__mermaidLastSinglePointer = p
+
+        const { rect } = clientToViewBox(p.x, p.y)
+        const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        const dx = dxClient * (vb[2] / rect.width)
+        const dy = dyClient * (vb[3] / rect.height)
+        setCurVb([vb[0] - dx, vb[1] - dy, vb[2], vb[3]])
+        return
+      }
+
+      // Pinch zoom with 2 pointers
+      if (state.pointers.size === 2 && state.startVb && state.startDist > 0) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        const dist = Math.hypot(dx, dy)
+        if (!dist) return
+        const factor = state.startDist / dist // dist bigger => zoom in (viewBox smaller)
+
+        const cx = (pts[0].x + pts[1].x) / 2
+        const cy = (pts[0].y + pts[1].y) / 2
+        const centerClient = { x: cx, y: cy }
+
+        const pxy = clientToViewBox(centerClient.x, centerClient.y)
+        const cpx = pxy.x
+        const cpy = pxy.y
+
+        const vb = zoomAtPoint(state.startVb, factor, cpx, cpy)
+        setCurVb(vb)
+      }
+    }
+
+    const onPointerUpOrCancel = e => {
+      state.pointers.delete(e.pointerId)
+      if (state.pointers.size === 0) {
+        state.startVb = null
+        state.startDist = 0
+        state.startCenter = null
+        wrap.__mermaidLastSinglePointer = null
+      } else if (state.pointers.size === 1) {
+        // reset single pointer baseline to avoid jump
+        wrap.__mermaidLastSinglePointer = [...state.pointers.values()][0]
+      }
+    }
+
+    // Wheel zoom (mouse/trackpad)
+    const onWheel = e => {
+      // ctrlKey on mac trackpad pinch; we treat both as zoom
+      e.preventDefault()
+      const delta = e.deltaY
+      const zoomFactor = delta > 0 ? 1.1 : 0.9
+      const { x, y } = clientToViewBox(e.clientX, e.clientY)
+      const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      setCurVb(zoomAtPoint(vb, zoomFactor, x, y))
+    }
+
+    const onDblClick = () => {
+      const init = wrap.__mermaidInitViewBox
+      if (!init) return
+      wrap.__mermaidCurViewBox = init.slice()
+      setSvgViewBox(svg, init)
+    }
+
+    svg.addEventListener('pointerdown', onPointerDown)
+    svg.addEventListener('pointermove', onPointerMove)
+    svg.addEventListener('pointerup', onPointerUpOrCancel)
+    svg.addEventListener('pointercancel', onPointerUpOrCancel)
+    svg.addEventListener('wheel', onWheel, { passive: false })
+    svg.addEventListener('dblclick', onDblClick)
+  }
+
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+
+      // Clear old render (themeChange/pjax will rerun)
+      const oldSvg = item.querySelector('svg')
+      if (oldSvg) oldSvg.remove()
+      item.__mermaidGestureBound = false
+
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+        if (true) initMermaidGestures(item)
+        item.__mermaidOriginalSvg = svg
+        if (true) attachMermaidViewerButton(item)
+      }
+
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('/libs/mermaid/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.5"></script></div></div></body></html>

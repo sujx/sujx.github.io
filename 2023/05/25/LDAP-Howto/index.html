@@ -1,0 +1,559 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>理解LDAP服务 | 靖轩</title><meta name="author" content="靖轩"><meta name="copyright" content="靖轩"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="OpenLDAP是一个轻量级目录访问协议（ Lightweight Directory Access Protocal， LDAP ），是开源集中账号管理架构的实现。 概念OpenLDAP默认以Brekeley DB作为后端数据库，主要以散列的数据类型进行数据存储，例如以键值对的方式进行存储。BerkeleyDB数据库是面向查询和读取进行优化的数据库，它不支持事务型数据库所支持的高并发的吞吐量以及">
+<meta property="og:type" content="article">
+<meta property="og:title" content="理解LDAP服务">
+<meta property="og:url" content="https://www.sujx.net/2023/05/25/LDAP-Howto/index.html">
+<meta property="og:site_name" content="靖轩">
+<meta property="og:description" content="OpenLDAP是一个轻量级目录访问协议（ Lightweight Directory Access Protocal， LDAP ），是开源集中账号管理架构的实现。 概念OpenLDAP默认以Brekeley DB作为后端数据库，主要以散列的数据类型进行数据存储，例如以键值对的方式进行存储。BerkeleyDB数据库是面向查询和读取进行优化的数据库，它不支持事务型数据库所支持的高并发的吞吐量以及">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.sujx.net/covers/cover31.jpg">
+<meta property="article:published_time" content="2023-05-25T07:04:07.000Z">
+<meta property="article:modified_time" content="2026-09-26T02:25:04.167Z">
+<meta property="article:author" content="靖轩">
+<meta property="article:tag" content="FreeIPA">
+<meta property="article:tag" content="LDAP">
+<meta property="article:tag" content="OpenLadp">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.sujx.net/covers/cover31.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "理解LDAP服务",
+  "url": "https://www.sujx.net/2023/05/25/LDAP-Howto/",
+  "image": "https://cdn.sujx.net/covers/cover31.jpg",
+  "datePublished": "2023-05-25T07:04:07.000Z",
+  "dateModified": "2026-09-26T02:25:04.167Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "靖轩",
+      "url": "https://www.sujx.net"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://cdn.sujx.net/about/favicon.png"><link rel="canonical" href="https://www.sujx.net/2023/05/25/LDAP-Howto/index.html"><link rel="preconnect" href="//cdnjs.cloudflare.com"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css?v=5.5.5"><link rel="stylesheet" href="/fonts/css/all.min.css"><link rel="stylesheet" href="/libs/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?417b20ac1984432f821159fac27d3bb5";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><link rel="stylesheet" href="/fonts/titillium-web.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: '/libs/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: true,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '理解LDAP服务',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="alternate" href="/atom.xml" title="靖轩" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">靖轩</span></a><a class="nav-page-title" href="/"><span class="site-name">理解LDAP服务</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">理解LDAP服务</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-05-25T07:04:07.000Z" title="发表于 2023-05-25 15:04:07">2023-05-25</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-09-26T02:25:04.167Z" title="更新于 2026-09-26 10:25:04">2026-09-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F/">应用程序</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">2.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>9分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><p>OpenLDAP是一个轻量级目录访问协议（ Lightweight Directory Access Protocal， LDAP ），是开源集中账号管理架构的实现。</p>
+<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>OpenLDAP默认以Brekeley DB作为后端数据库，主要以散列的数据类型进行数据存储，例如以键值对的方式进行存储。BerkeleyDB数据库是面向查询和读取进行优化的数据库，它不支持事务型数据库所支持的高并发的吞吐量以及复杂的事务操作。</p>
+<p>OpenLDAP目录中的信息是按照树形结构进行组织，具体信息存储在条目（ entry ）中，条目可以看成关系数据库中的表记录，条目是具有区别名（ Distinguished Name， DN ）的属性（ attribute ）， DN是用来引用条目，DN相当于关系数据库中的主键，是唯一的，属性由类型（ type ）和一个或者多值（ value ）组成。</p>
+<h3 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h3><ol>
+<li>查询操作</li>
+<li>更新操作</li>
+<li>同步操作</li>
+<li>认证和管理操作</li>
+</ol>
+<h3 id="目录树"><a href="#目录树" class="headerlink" title="目录树"></a>目录树</h3><ul>
+<li><p><code>目录树</code></p>
+<p>在一个目录服务系统中，整个目录信息集可以表示为一个目录信息树，树中的每个节点是一个条目（ Entry ）。</p>
+</li>
+<li><p><code>条目（Entry）</code></p>
+<p>条目，也叫记录项，是 LDAP 中最基本的颗粒，就像字典中的词条，或者是数据库中的记录。通常对 LDAP 的添加、删除、更改、检索都是以条目为基本对象的。</p>
+<blockquote>
+<p>LDAP 目录的条目（entry）由属性（attribute）的一个聚集组成，并由一个唯一性的名字引用，即<strong>专有名称</strong>（<strong>distinguished name</strong>，DN）。例如，DN 能取这样的值：”<code>cn=group， dc=eryajf， dc=net</code>“。</p>
+</blockquote>
+</li>
+<li><p><code>对象类（ObjectClass）</code></p>
+<p>对象类是属性的集合，LDAP 预想了很多人员组织机构中常见的对象，并将其封装成对象类。比如人员（<code>person</code>）含有姓（<code>sn</code>）、名（<code>cn</code>）、电话（ <code>telephoneNumber</code> ）、密码（ <code>userPassword</code> ）等属性，单位职工（ <code>organizationalPerson</code> ）是人员（ <code>person</code> ）的继承类，除了上述属性之外还含有职务（<code>title</code>）、邮政编码（<code>postalCode</code>）、通信地址（ <code>postalAddress</code> ）等属性。</p>
+</li>
+<li><p><code>属性 （ Attribute ）</code></p>
+<p>每个条目都可以有很多属性（Attribute），比如常见的人都有姓名、地址、电话等属性。每个属性都有名称及对应的值，属性值可以有单个、多个。</p>
+</li>
+</ul>
+<h3 id="字段"><a href="#字段" class="headerlink" title="字段"></a>字段</h3><ul>
+<li><p><code>dc ( Domain Component )</code></p>
+<p>域名的部分，其格式是将完整的域名分成几部分，如域名为<code>eryajf.net</code>变成<code>dc=eryajf， dc=net</code>。</p>
+</li>
+<li><p><code>ou（Organization Unit）</code></p>
+<p>组织单位，组织单位可以包含其他各种对象（ 包括其他组织单元 ）。</p>
+</li>
+<li><p><code>cn （Common Name）</code></p>
+<p>常用名称，可用作分组的名字，或者用户的全名。<a target="_blank" rel="noopener" href="https://datatracker.ietf.org/doc/html/rfc4519#section-2.3">参考（ opens new window ）</a></p>
+</li>
+<li><p><code>dn （Distinguished Name）</code></p>
+<p>每一个条目都有一个唯一的标识名，dn 在 ldap 中全局唯一，相当于该条目的唯一 ID，如上边示例中的：<code>cn=group， dc=eryajf， dc=net</code>就是该条目的 dn。</p>
+</li>
+<li><p><code>rdn （Relative dn）</code></p>
+<p>一般指 dn 逗号最左边的部分，如<code>cn=group， dc=eryajf， dc=net</code>的 rdn 就是 <code>cn=group</code>。</p>
+</li>
+<li><p><code>Base DN</code></p>
+<p>LDAP 目录树的最顶部就是根，比如上边示例中的 base dn 为 <code>dc=eryajf， dc=net</code>。</p>
+</li>
+<li><p><code>description</code></p>
+<p>在不同类别中，对应不同类别的说明信息，比如用户的说明信息，分组的说明信息。</p>
+</li>
+</ul>
+<h2 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h2><h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装软件包</span></span><br><span class="line">dnf install -y openldap openldap-clients openldap-servers</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">拉起服务</span></span><br><span class="line">systemctl enable --now slapd</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">验证端口</span></span><br><span class="line">netstat -antup | grep -i 389</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">开通防火墙</span></span><br><span class="line">firewall-cmd --add-service=&#123;ldap, ldaps&#125;</span><br><span class="line">firewall-cmd --runtime-to-permanent</span><br></pre></td></tr></table></figure>
+
+<h3 id="目录结构"><a href="#目录结构" class="headerlink" title="目录结构"></a>目录结构</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@ldap ~]# tree /etc/openldap/</span><br><span class="line">/etc/openldap/</span><br><span class="line">├── certs</span><br><span class="line">├── check_password.conf</span><br><span class="line">├── ldap.conf</span><br><span class="line">├── schema</span><br><span class="line">│   ├── collective.ldif</span><br><span class="line">│   ├── collective.schema</span><br><span class="line">│   ├── corba.ldif</span><br><span class="line">│   ├── corba.schema</span><br><span class="line">│   ├── core.ldif</span><br><span class="line">│   ├── core.schema</span><br><span class="line">│   ├── cosine.ldif</span><br><span class="line">│   ├── cosine.schema</span><br><span class="line">│   ├── dsee.ldif</span><br><span class="line">│   ├── dsee.schema</span><br><span class="line">│   ├── duaconf.ldif</span><br><span class="line">│   ├── duaconf.schema</span><br><span class="line">│   ├── dyngroup.ldif</span><br><span class="line">│   ├── dyngroup.schema</span><br><span class="line">│   ├── inetorgperson.ldif</span><br><span class="line">│   ├── inetorgperson.schema</span><br><span class="line">│   ├── java.ldif</span><br><span class="line">│   ├── java.schema</span><br><span class="line">│   ├── misc.ldif</span><br><span class="line">│   ├── misc.schema</span><br><span class="line">│   ├── msuser.ldif</span><br><span class="line">│   ├── msuser.schema</span><br><span class="line">│   ├── namedobject.ldif</span><br><span class="line">│   ├── namedobject.schema</span><br><span class="line">│   ├── nis.ldif</span><br><span class="line">│   ├── nis.schema</span><br><span class="line">│   ├── openldap.ldif</span><br><span class="line">│   ├── openldap.schema</span><br><span class="line">│   ├── pmi.ldif</span><br><span class="line">│   └── pmi.schema</span><br><span class="line">└── slapd.d</span><br><span class="line">    ├── cn=config</span><br><span class="line">    │   ├── cn=schema</span><br><span class="line">    │   │   └── cn=&#123;0&#125;core.ldif</span><br><span class="line">    │   ├── cn=schema.ldif</span><br><span class="line">    │   ├── olcDatabase=&#123;0&#125;config.ldif</span><br><span class="line">    │   ├── olcDatabase=&#123;-1&#125;frontend.ldif</span><br><span class="line">    │   ├── olcDatabase=&#123;1&#125;monitor.ldif</span><br><span class="line">    │   └── olcDatabase=&#123;2&#125;mdb.ldif</span><br><span class="line">    └── cn=config.ldif</span><br><span class="line"></span><br><span class="line">5 directories, 39 files</span><br></pre></td></tr></table></figure>
+
+<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><p>从openldap2。 4。 23版本开始，所有配置都保存在&#x2F;etc&#x2F;openldap&#x2F;slapd。 d目录下的cn&#x3D;config文件夹内，不再使用slapd。 conf作为配置文件。配置文件的后缀为 ldif，且每个配置文件都是通过命令自动生成的，</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">复制一个默认配置到指定目录下， 并授权，这一步一定要做，然后再启动服务，不然生产密码时会报错</span></span><br><span class="line">cp /usr/share/openldap-servers/DB_CONFIG. example /var/lib/ldap/DB_CONFIG</span><br><span class="line">chown -R ldap /var/lib/ldap/DB_CONFIG</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">记录生成的加密密码qwe123</span></span><br><span class="line">[root@ldap ~]# slappasswd -s qwe123</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">将上述密码作为管理密码导入</span></span><br><span class="line">[root@ldap ~]# cat &gt; ~/chrootpw.ldif &lt;&lt;EOF</span><br><span class="line">dn: olcDatabase=&#123;0&#125;config, cn=config</span><br><span class="line">changetype: modify</span><br><span class="line">add: olcRootPW</span><br><span class="line">olcRootPW: &#123;SSHA&#125;SJr5jXEbK0VQi56OwFXSDJdizYqPULIs</span><br><span class="line">EOF</span><br><span class="line">[root@ldap ~]# ldapadd -Y EXTERNAL -H ldapi:/// -f chrootpw.ldif </span><br><span class="line">SASL/EXTERNAL authentication started</span><br><span class="line">SASL username: gidNumber=0+uidNumber=0, cn=peercred, cn=external, cn=auth</span><br><span class="line">SASL SSF: 0</span><br><span class="line">modifying entry &quot;olcDatabase=&#123;0&#125;config, cn=config&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">导入基本架构</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">依次执行下面的命令，导入基础的一些配置， 我这里将所有的都导入一下</span></span><br><span class="line">ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/cosine.ldif</span><br><span class="line">ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/nis.ldif</span><br><span class="line">ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/inetorgperson.ldif</span><br><span class="line">ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/collective.ldif</span><br><span class="line">ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/corba.ldif</span><br><span class="line">ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/duaconf.ldif</span><br><span class="line">ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/dyngroup.ldif</span><br><span class="line">ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/java.ldif</span><br><span class="line">ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/misc.ldif</span><br><span class="line">ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/openldap.ldif</span><br><span class="line">ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/pmi.ldif</span><br><span class="line">ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/ppolicy.ldif</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">设置LDAP的Manager密码qq2211</span></span><br><span class="line">[root@ldap ~]# slappasswd -s qq2211</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">创建自定义contoso.com的组织架构</span></span><br><span class="line">[root@ldap ~]# cat &gt; ~/chdomain.ldif &lt;&lt;EOF</span><br><span class="line">dn: olcDatabase=&#123;1&#125;monitor, cn=config</span><br><span class="line">changetype: modify</span><br><span class="line">replace: olcAccess</span><br><span class="line">olcAccess: &#123;0&#125;to * by dn.base=&quot;gidNumber=0+uidNumber=0, cn=peercred, cn=external, cn=auth&quot;</span><br><span class="line">  read by dn.base=&quot;cn=Manager, dc=contoso, dc=com&quot; read by * none</span><br><span class="line"></span><br><span class="line">dn: olcDatabase=&#123;2&#125;mdb, cn=config</span><br><span class="line">changetype: modify</span><br><span class="line">replace: olcSuffix</span><br><span class="line">olcSuffix: dc=contoso, dc=com</span><br><span class="line"></span><br><span class="line">dn: olcDatabase=&#123;2&#125;mdb, cn=config</span><br><span class="line">changetype: modify</span><br><span class="line">replace: olcRootDN</span><br><span class="line">olcRootDN: cn=Manager, dc=contoso, dc=com</span><br><span class="line"></span><br><span class="line">dn: olcDatabase=&#123;2&#125;mdb, cn=config</span><br><span class="line">changetype: modify</span><br><span class="line">add: olcRootPW</span><br><span class="line">olcRootPW: &#123;SSHA&#125;GHsRW7TOj5T0ffYyCkdE9mRKzyPUG9sP</span><br><span class="line"></span><br><span class="line">dn: olcDatabase=&#123;2&#125;mdb, cn=config</span><br><span class="line">changetype: modify</span><br><span class="line">add: olcAccess</span><br><span class="line">olcAccess: &#123;0&#125;to attrs=userPassword, shadowLastChange by</span><br><span class="line">  dn=&quot;cn=Manager, dc=srv, dc=world&quot; write by anonymous auth by self write by * none</span><br><span class="line">olcAccess: &#123;1&#125;to dn.base=&quot;&quot; by * read</span><br><span class="line">olcAccess: &#123;2&#125;to * by dn=&quot;cn=Manager, dc=srv, dc=world&quot; write by * read</span><br><span class="line">EOF</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">导入架构</span></span><br><span class="line">[root@ldap ~]# ldapmodify -Y EXTERNAL -H ldapi:/// -f chdomain.ldif</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">启用memberof功能, 开启memberof支持并新增用户支持memberof配置</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">新增add-memberof.ldif, <span class="comment">#开启memberof支持并新增用户支持memberof配置</span></span></span><br><span class="line">[root@ldap ~]# cat &gt; ./add-memberof.ldif &lt;&lt; EOF</span><br><span class="line">dn: cn=module&#123;0&#125;, cn=config</span><br><span class="line">cn: modulle&#123;0&#125;</span><br><span class="line">objectClass: olcModuleList</span><br><span class="line">objectclass: top</span><br><span class="line">olcModuleload: memberof.la</span><br><span class="line">olcModulePath: /usr/lib64/openldap</span><br><span class="line"></span><br><span class="line">dn: olcOverlay=&#123;0&#125;memberof, olcDatabase=&#123;2&#125;hdb, cn=config</span><br><span class="line">objectClass: olcConfig</span><br><span class="line">objectClass: olcMemberOf</span><br><span class="line">objectClass: olcOverlayConfig</span><br><span class="line">objectClass: top</span><br><span class="line">olcOverlay: memberof</span><br><span class="line">olcMemberOfDangling: ignore</span><br><span class="line">olcMemberOfRefInt: TRUE</span><br><span class="line">olcMemberOfGroupOC: groupOfUniqueNames</span><br><span class="line">olcMemberOfMemberAD: uniqueMember</span><br><span class="line">olcMemberOfMemberOfAD: memberOf</span><br><span class="line">EOF</span><br><span class="line">[root@ldap ~]# cat &gt; ./refint1. ldif &lt;&lt;EOF</span><br><span class="line">dn: cn=module&#123;0&#125;, cn=config</span><br><span class="line">add: olcmoduleload</span><br><span class="line">olcmoduleload: refint</span><br><span class="line">EOF</span><br><span class="line">[root@ldap ~]# cat &gt; ./refint2. ldif &lt;&lt;EOF</span><br><span class="line">dn: olcOverlay=refint, olcDatabase=&#123;2&#125;hdb, cn=config</span><br><span class="line">objectClass: olcConfig</span><br><span class="line">objectClass: olcOverlayConfig</span><br><span class="line">objectClass: olcRefintConfig</span><br><span class="line">objectClass: top</span><br><span class="line">olcOverlay: refint</span><br><span class="line">olcRefintAttribute: memberof uniqueMember  manager owner</span><br><span class="line">EOF</span><br><span class="line">ldapadd -Q -Y EXTERNAL -H ldapi:/// -f add-memberof.ldif</span><br><span class="line">ldapmodify -Q -Y EXTERNAL -H ldapi:/// -f refint1. ldif</span><br><span class="line">ldapadd -Q -Y EXTERNAL -H ldapi:/// -f refint2. ldif</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">创建组织结构, 建立DC和三个OU</span></span><br><span class="line">[root@ldap ~]# cat &gt; ~/basedomain.ldif &lt;&lt;EOF</span><br><span class="line">dn: dc=contoso, dc=com</span><br><span class="line">objectClass: top</span><br><span class="line">objectClass: dcObject</span><br><span class="line">objectclass: organization</span><br><span class="line">o: CONTOSO Company</span><br><span class="line">dc: contoso</span><br><span class="line"></span><br><span class="line">dn: cn=Manager, dc=contoso, dc=com</span><br><span class="line">objectClass: organizationalRole</span><br><span class="line">cn: Manager</span><br><span class="line">description: Directory Manager</span><br><span class="line"></span><br><span class="line">dn: ou=People, dc=contoso, dc=com</span><br><span class="line">objectClass: organizationalUnit</span><br><span class="line">ou: People</span><br><span class="line"></span><br><span class="line">dn: ou=Group, dc=contoso, dc=com</span><br><span class="line">objectClass: organizationalUnit</span><br><span class="line">ou: Group</span><br><span class="line">EOF</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">创建相应组织和OU，需要输入密码</span></span><br><span class="line">[root@ldap ~]# ldapadd -x -D cn=Manager, dc=contoso, dc=com -W -f basedomain.ldif</span><br><span class="line">Enter LDAP Password: </span><br><span class="line">adding new entry &quot;dc=contoso, dc=com&quot;</span><br><span class="line"></span><br><span class="line">adding new entry &quot;cn=Manager, dc=contoso, dc=com&quot;</span><br><span class="line"></span><br><span class="line">adding new entry &quot;ou=People, dc=contoso, dc=com&quot;</span><br><span class="line"></span><br><span class="line">adding new entry &quot;ou=Group, dc=contoso, dc=com&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">配置SSL</span></span><br><span class="line">wget http://pub.contoso.com/ssl/contoso.com.crt</span><br><span class="line">wget http://pub.contoso.com/ssl/contoso.com.key</span><br><span class="line">mkdir -p /etc/ssl/contoso.com</span><br><span class="line">cp ~/contoso.com.* /etc/ssl/contoso.com</span><br><span class="line">cp /etc/ssl/contoso.com/contoso.com.crt /etc/pki/ca-trust/source/anchors/</span><br><span class="line">update-ca-trust </span><br><span class="line"></span><br><span class="line">[root@ldap ~]# cat &gt; ~/mod_ssl.ldif &lt;&lt;EOF</span><br><span class="line">dn: cn=config</span><br><span class="line">changetype: modify</span><br><span class="line">replace: olcTLSCertificateFile</span><br><span class="line">olcTLSCertificateFile: /etc/ssl/contoso.com/contoso.com.crt</span><br><span class="line">-</span><br><span class="line">replace: olcTLSCertificateKeyFile</span><br><span class="line">olcTLSCertificateKeyFile: /etc/ssl/contoso.com/contoso.com.key</span><br><span class="line">EOF</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">重启服务</span></span><br><span class="line">[root@ldap ~]# systemctl restart slapd</span><br></pre></td></tr></table></figure>
+
+<h3 id="创建用户"><a href="#创建用户" class="headerlink" title="创建用户"></a>创建用户</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">增加管理员用户ldapadm, 密码为rty456</span></span><br><span class="line">[root@ldap ~]# slappasswd -h &#123;SSHA&#125; -s rty456</span><br><span class="line">[root@ldap ~]# cat &gt; ./ldapadm.ldif &lt;&lt;EOF</span><br><span class="line">dn: dc=contoso, dc=com</span><br><span class="line">dc: CONTOSO</span><br><span class="line">objectClass: top</span><br><span class="line">objectClass: domaincd</span><br><span class="line">userPassword: &#123;SSHA&#125;NQz/ZsS0WDt+9rFGZ/PspbCAblPKVmJ0</span><br><span class="line">uidNumber: 2000</span><br><span class="line">gidNumber: 2000</span><br><span class="line"></span><br><span class="line">dn: cn=ldapadm , dc=contoso, dc=com</span><br><span class="line">objectClass: organizationalRole</span><br><span class="line">cn: ldapadm</span><br><span class="line">description: LDAP Manager</span><br><span class="line">EOF</span><br><span class="line">[root@ldap ~]# ldapadd -x -W -D &quot;cn=ldapadm, dc=contoso, dc=com&quot; -f ldapadm.ldif</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">增加用户sujx, 密码为1234qwer!!</span></span><br><span class="line">[root@ldap ~]# slappasswd -h &#123;SSHA&#125; -s 123qwe!!</span><br><span class="line">[root@ldap ~]# cat &gt; ./sujx.ldif &lt;&lt;EOF</span><br><span class="line">dn: uid=sujx, ou=People, dc=contoso, dc=com</span><br><span class="line">objectClass: inetOrgPerson</span><br><span class="line">objectClass: posixAccount</span><br><span class="line">objectClass: shadowAccount</span><br><span class="line">cn: sujx</span><br><span class="line">userPassword: &#123;SSHA&#125;DxyuX0Q223A9cyjlDn6bj6cFxfhecq7u</span><br><span class="line">description: Test User</span><br><span class="line">EOF</span><br><span class="line">[root@ldap ~]# ldapadd -x -W -D &quot;cn=sujx, dc=contoso, dc=com&quot; -f sujx.ldif</span><br></pre></td></tr></table></figure>
+
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
+<li><a target="_blank" rel="noopener" href="http://ldapdoc.eryajf.net/pages/17ba17/#%E5%89%8D%E8%A8%80">openLDAP的基础概念</a></li>
+<li><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000014683418">我花了一个五一终于搞懂了OpenLDAP</a></li>
+<li><a target="_blank" rel="noopener" href="http://ldapdoc.eryajf.net/pages/101948/#%E8%BF%99%E4%B8%AA%E9%A1%B9%E7%9B%AE%E7%9A%84%E5%B0%86%E6%9D%A5">一个现代化的LDAP管理工具</a></li>
+</ol>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/LDAP/">LDAP</a><a class="post-meta__tags" href="/tags/OpenLadp/">OpenLadp</a><a class="post-meta__tags" href="/tags/FreeIPA/">FreeIPA</a></div><div class="post-share"><div class="social-share" data-image="https://cdn.sujx.net/covers/cover31.jpg" data-sites="facebook,twitter,weibo,qq"></div><link rel="stylesheet" href="/libs/sharejs/css/share.min.css" media="print" onload="this.media='all'"><script src="/libs/sharejs/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>能否请我喝一杯咖啡？</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.jpg" target="_blank"><img class="post-qr-code-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/wechat.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2023/05/29/magedu-arc-1/" title="Linux动手实践·1"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/wallhaven-4lekzl.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Linux动手实践·1</div></div><div class="info-2"><div class="info-item-1"> 根据马哥教育架构班课程第一周作业而来  题目要求 在两台服务器上安装kvm虚拟化，把其中一台的虚拟机迁移到另一台；  2。 手动制作一个容器镜像创建成容器并正常运行。 操作实践 KVM虚拟化  # 新建三个虚机，分别承担KVM两个节点和一个NFS主机的角色# Node1: 192. 168. 10. 101 KVM主机# Node2: 192. 168. 10. 102 KVM主机# Stor1: 192. 168. 10. 11 NFS主机，提供iso和kvm两个共享挂载点# 在三台主机的/etc/hosts配置解析记录192. 168. 10. 101 node1192. 168. 10. 102 node2192. 168. 10. 11  stor1# KVM主机的部署，Node1和Node2同步操作# 最小虚拟化宿主环境, 仅包括libvirt和qemu-kvmyum group install -y virtualization-hypervisor # 用于访问和控制虚拟机以及容器的接口，包括libvirt客户端yum group install -y virtu...</div></div></div></a><a class="pagination-related" href="/2023/05/21/magedu-week-3/" title="Linux系统基础知识·3"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/04/wallhaven-mdj888.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Linux系统基础知识·3</div></div><div class="info-2"><div class="info-item-1"> 本文基于马哥教育就业班第三周课程总结  软件管理 尝试基于gcc命令说明 c语言编译过程。  C语言编译过程主要包括预处理、编译、汇编和链接四个阶段。gcc命令是一个常用的C语言编译器，可以完成这四个阶段的工作。下面是gcc命令的使用示例和各个阶段的说明：1。 预处理阶段主要是对源代码进行宏替换、头文件包含等操作，生成预处理后的代码。gcc命令中使用参数“-E”来进行预处理，示例命令如下：$ gcc -E main.c -o main.i2。 编译阶段主要是将预处理后的代码转换成汇编代码。gcc命令中使用参数“-S”来进行编译，示例命令如下：$ gcc -S main.i -o main.s3。 汇编阶段主要是将汇编代码转换成机器码。gcc命令中使用参数“-c”来进行汇编，示例命令如下：$ gcc -c main.s -o main.o4。 链接阶段主要是将多个目标文件链接成一个可执行文件。gcc命令中使用参数“-o”来指定输出文件名，示例命令如下：$ gcc main.o -o main以上是gcc命令的使用示例和C语言编译过程的各个阶段说明。在实际编译过程中，可以使用gcc...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">靖轩</div><div class="author-info-description">逝者如斯夫,不舍昼夜</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/grepsu"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://gitee.com/grepsu" target="_blank" title="Gitee"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:sujx@live.cn" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS链接"><i class="fa  fa-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A6%82%E5%BF%B5"><span class="toc-number">1.</span> <span class="toc-text">概念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%9F%E8%83%BD"><span class="toc-number">1.1.</span> <span class="toc-text">功能</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%AE%E5%BD%95%E6%A0%91"><span class="toc-number">1.2.</span> <span class="toc-text">目录树</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E6%AE%B5"><span class="toc-number">1.3.</span> <span class="toc-text">字段</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%83%A8%E7%BD%B2"><span class="toc-number">2.</span> <span class="toc-text">部署</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85"><span class="toc-number">2.1.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84"><span class="toc-number">2.2.</span> <span class="toc-text">目录结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE"><span class="toc-number">2.3.</span> <span class="toc-text">配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E7%94%A8%E6%88%B7"><span class="toc-number">2.4.</span> <span class="toc-text">创建用户</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">3.</span> <span class="toc-text">参考</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/07/03/AIGC_FoxHole/" title="海鹰">海鹰</a><time datetime="2026-07-03T01:04:07.000Z" title="发表于 2026-07-03 09:04:07">2026-07-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/11/fristVibeCoding/" title="鹊随金印：我的第一个完整的AI编程项目">鹊随金印：我的第一个完整的AI编程项目</a><time datetime="2026-06-11T01:04:07.000Z" title="发表于 2026-06-11 09:04:07">2026-06-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/03/VI_Howto/" title="VI编辑器简介">VI编辑器简介</a><time datetime="2026-06-03T01:04:07.000Z" title="发表于 2026-06-03 09:04:07">2026-06-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/28/HNCitic_2605/" title="我要上头条">我要上头条</a><time datetime="2026-05-28T01:04:07.000Z" title="发表于 2026-05-28 09:04:07">2026-05-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/12/TS-Domain-Controller-Sync-Failure/" title="记一次Windows AD域控制器同步故障排错">记一次Windows AD域控制器同步故障排错</a><time datetime="2026-05-12T03:04:07.000Z" title="发表于 2026-05-12 11:04:07">2026-05-12</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2008 - 2026 By 靖轩</span></div><div class="footer_custom_text">京ICP备17034757号</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.5"></script><script src="/js/main.js?v=5.5.5"></script><script src="/libs/fancybox/fancybox.umd.js"></script><script src="/js/instantpage.js" type="module"></script><script src="/libs/lazyload/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const parseViewBox = viewBox => {
+    if (!viewBox) return null
+    const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
+    if (parts.length !== 4 || parts.some(n => Number.isNaN(n))) return null
+    return parts
+  }
+
+  const getSvgViewBox = svg => {
+    const attr = parseViewBox(svg.getAttribute('viewBox'))
+    if (attr) return attr
+
+    // Fallback: use bbox to build a viewBox
+    try {
+      const bbox = svg.getBBox()
+      if (bbox && bbox.width && bbox.height) return [bbox.x, bbox.y, bbox.width, bbox.height]
+    } catch (e) {
+      // getBBox may fail on some edge cases; ignore
+    }
+
+    const w = Number(svg.getAttribute('width')) || 0
+    const h = Number(svg.getAttribute('height')) || 0
+    if (w > 0 && h > 0) return [0, 0, w, h]
+    return [0, 0, 100, 100]
+  }
+
+  const setSvgViewBox = (svg, vb) => {
+    svg.setAttribute('viewBox', `${vb[0]} ${vb[1]} ${vb[2]} ${vb[3]}`)
+  }
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v))
+
+  const openSvgInNewTab = ({ source, initViewBox }) => {
+    const getClonedSvg = () => {
+      if (typeof source === 'string') {
+        const template = document.createElement('template')
+        template.innerHTML = source.trim()
+        const svg = template.content.querySelector('svg')
+        return svg ? svg.cloneNode(true) : null
+      }
+      if (source && typeof source.cloneNode === 'function') {
+        return source.cloneNode(true)
+      }
+      return null
+    }
+
+    const clone = getClonedSvg()
+    if (!clone) return
+    if (initViewBox && initViewBox.length === 4) {
+      clone.setAttribute('viewBox', initViewBox.join(' '))
+    }
+    if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+    if (!clone.getAttribute('xmlns:xlink') && clone.outerHTML.includes('xlink:')) {
+      clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+    }
+    // inject background to match current theme
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    const bg = getComputedStyle(document.body).backgroundColor || (isDark ? '#1e1e1e' : '#ffffff')
+    if (!clone.style.background) clone.style.background = bg
+
+    const serializer = new XMLSerializer()
+    const svgSource = serializer.serializeToString(clone)
+    const htmlSource = `<!doctype html><html><head><meta charset="utf-8" />
+      <style>
+        html, body { width: 100%; height: 100%; margin: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; }
+        svg { max-width: 100%; max-height: 100%; height: auto; width: auto; }
+      </style>
+      </head><body>${svgSource}</body></html>`
+    const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank', 'noopener')
+    setTimeout(() => URL.revokeObjectURL(url), 30000)
+  }
+
+  const attachMermaidViewerButton = wrap => {
+    let btn = wrap.querySelector('.mermaid-open-btn')
+    if (!btn) {
+      btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'mermaid-open-btn'
+      wrap.appendChild(btn)
+    }
+
+    btn.innerHTML = '<i class="fa fa-search fa-fw" aria-hidden="true"></i>'
+
+    if (!btn.__mermaidViewerBound) {
+      btn.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        const svg = wrap.__mermaidOriginalSvg || wrap.querySelector('svg')
+        if (!svg) return
+        const initViewBox = wrap.__mermaidInitViewBox
+        if (typeof svg === 'string') {
+          openSvgInNewTab({ source: svg, initViewBox })
+          return
+        }
+        openSvgInNewTab({ source: svg, initViewBox })
+      })
+      btn.__mermaidViewerBound = true
+    }
+  }
+
+  // Zoom around a point (px, py) in the SVG viewport (in viewBox coordinates)
+  const zoomAtPoint = (vb, factor, px, py) => {
+    const w = vb[2] * factor
+    const h = vb[3] * factor
+    const nx = px - (px - vb[0]) * factor
+    const ny = py - (py - vb[1]) * factor
+    return [nx, ny, w, h]
+  }
+
+  const initMermaidGestures = wrap => {
+    const svg = wrap.querySelector('svg')
+    if (!svg) return
+
+    // Ensure viewBox exists so gestures always work
+    const initVb = getSvgViewBox(svg)
+    wrap.__mermaidInitViewBox = initVb
+    wrap.__mermaidCurViewBox = initVb.slice()
+    setSvgViewBox(svg, initVb)
+
+    // Avoid binding multiple times on themeChange/pjax
+    if (wrap.__mermaidGestureBound) return
+    wrap.__mermaidGestureBound = true
+
+    // Helper: map client (viewport) coordinate -> viewBox coordinate
+    const clientToViewBox = (clientX, clientY) => {
+      const rect = svg.getBoundingClientRect()
+      const vb = wrap.__mermaidCurViewBox || getSvgViewBox(svg)
+      const x = vb[0] + (clientX - rect.left) * (vb[2] / rect.width)
+      const y = vb[1] + (clientY - rect.top) * (vb[3] / rect.height)
+      return { x, y, rect, vb }
+    }
+
+    const state = {
+      pointers: new Map(),
+      startVb: null,
+      startDist: 0,
+      startCenter: null
+    }
+
+    const clampVb = vb => {
+      const init = wrap.__mermaidInitViewBox || vb
+      const minW = init[2] * 0.1
+      const maxW = init[2] * 10
+      const minH = init[3] * 0.1
+      const maxH = init[3] * 10
+      vb[2] = clamp(vb[2], minW, maxW)
+      vb[3] = clamp(vb[3], minH, maxH)
+      return vb
+    }
+
+    const setCurVb = vb => {
+      vb = clampVb(vb)
+      wrap.__mermaidCurViewBox = vb
+      setSvgViewBox(svg, vb)
+    }
+
+    const onPointerDown = e => {
+      // Allow only primary button for mouse
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      svg.setPointerCapture(e.pointerId)
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      if (state.pointers.size === 1) {
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      } else if (state.pointers.size === 2) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        state.startDist = Math.hypot(dx, dy)
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        state.startCenter = { x: (pts[0].x + pts[1].x) / 2, y: (pts[0].y + pts[1].y) / 2 }
+      }
+    }
+
+    const onPointerMove = e => {
+      if (!state.pointers.has(e.pointerId)) return
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      // Pan with 1 pointer
+      if (state.pointers.size === 1 && state.startVb) {
+        const p = [...state.pointers.values()][0]
+        const prev = { x: e.clientX - e.movementX, y: e.clientY - e.movementY }
+        // movementX/Y unreliable on touch, compute from stored last position
+        const last = wrap.__mermaidLastSinglePointer || p
+        const dxClient = p.x - last.x
+        const dyClient = p.y - last.y
+        wrap.__mermaidLastSinglePointer = p
+
+        const { rect } = clientToViewBox(p.x, p.y)
+        const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        const dx = dxClient * (vb[2] / rect.width)
+        const dy = dyClient * (vb[3] / rect.height)
+        setCurVb([vb[0] - dx, vb[1] - dy, vb[2], vb[3]])
+        return
+      }
+
+      // Pinch zoom with 2 pointers
+      if (state.pointers.size === 2 && state.startVb && state.startDist > 0) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        const dist = Math.hypot(dx, dy)
+        if (!dist) return
+        const factor = state.startDist / dist // dist bigger => zoom in (viewBox smaller)
+
+        const cx = (pts[0].x + pts[1].x) / 2
+        const cy = (pts[0].y + pts[1].y) / 2
+        const centerClient = { x: cx, y: cy }
+
+        const pxy = clientToViewBox(centerClient.x, centerClient.y)
+        const cpx = pxy.x
+        const cpy = pxy.y
+
+        const vb = zoomAtPoint(state.startVb, factor, cpx, cpy)
+        setCurVb(vb)
+      }
+    }
+
+    const onPointerUpOrCancel = e => {
+      state.pointers.delete(e.pointerId)
+      if (state.pointers.size === 0) {
+        state.startVb = null
+        state.startDist = 0
+        state.startCenter = null
+        wrap.__mermaidLastSinglePointer = null
+      } else if (state.pointers.size === 1) {
+        // reset single pointer baseline to avoid jump
+        wrap.__mermaidLastSinglePointer = [...state.pointers.values()][0]
+      }
+    }
+
+    // Wheel zoom (mouse/trackpad)
+    const onWheel = e => {
+      // ctrlKey on mac trackpad pinch; we treat both as zoom
+      e.preventDefault()
+      const delta = e.deltaY
+      const zoomFactor = delta > 0 ? 1.1 : 0.9
+      const { x, y } = clientToViewBox(e.clientX, e.clientY)
+      const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      setCurVb(zoomAtPoint(vb, zoomFactor, x, y))
+    }
+
+    const onDblClick = () => {
+      const init = wrap.__mermaidInitViewBox
+      if (!init) return
+      wrap.__mermaidCurViewBox = init.slice()
+      setSvgViewBox(svg, init)
+    }
+
+    svg.addEventListener('pointerdown', onPointerDown)
+    svg.addEventListener('pointermove', onPointerMove)
+    svg.addEventListener('pointerup', onPointerUpOrCancel)
+    svg.addEventListener('pointercancel', onPointerUpOrCancel)
+    svg.addEventListener('wheel', onWheel, { passive: false })
+    svg.addEventListener('dblclick', onDblClick)
+  }
+
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+
+      // Clear old render (themeChange/pjax will rerun)
+      const oldSvg = item.querySelector('svg')
+      if (oldSvg) oldSvg.remove()
+      item.__mermaidGestureBound = false
+
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+        if (true) initMermaidGestures(item)
+        item.__mermaidOriginalSvg = svg
+        if (true) attachMermaidViewerButton(item)
+      }
+
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('/libs/mermaid/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.5"></script></div></div></body></html>

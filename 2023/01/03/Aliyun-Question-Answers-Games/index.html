@@ -1,0 +1,592 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>阿里云游戏服务端架构设计问答 | 靖轩</title><meta name="author" content="靖轩"><meta name="copyright" content="靖轩"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="1。比如说在一个游戏行业里面，或者说一个典型的游戏架构，在云资源层面，就是云的架构层面。应该注意哪些点，或者怎么样才能设计一个符合这个游戏需求的一个架构。比如说它可能是有一个小的游戏，或者说是一个很大的像原神这样的，或者它可能是一个很小的页游或者端游或者什么样。那么在不同场景下，它的架构会有什么区别？然后这块的考虑因素是什么？  答：在设计一个满足游戏需求的架构时，需要考虑以下几个方面： 1。 游">
+<meta property="og:type" content="article">
+<meta property="og:title" content="阿里云游戏服务端架构设计问答">
+<meta property="og:url" content="https://www.sujx.net/2023/01/03/Aliyun-Question-Answers-Games/index.html">
+<meta property="og:site_name" content="靖轩">
+<meta property="og:description" content="1。比如说在一个游戏行业里面，或者说一个典型的游戏架构，在云资源层面，就是云的架构层面。应该注意哪些点，或者怎么样才能设计一个符合这个游戏需求的一个架构。比如说它可能是有一个小的游戏，或者说是一个很大的像原神这样的，或者它可能是一个很小的页游或者端游或者什么样。那么在不同场景下，它的架构会有什么区别？然后这块的考虑因素是什么？  答：在设计一个满足游戏需求的架构时，需要考虑以下几个方面： 1。 游">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.sujx.net/covers/cover29.jpg">
+<meta property="article:published_time" content="2023-01-03T07:04:07.000Z">
+<meta property="article:modified_time" content="2026-09-26T02:32:14.917Z">
+<meta property="article:author" content="靖轩">
+<meta property="article:tag" content="aliyun">
+<meta property="article:tag" content="interview">
+<meta property="article:tag" content="解决方案架构设计师">
+<meta property="article:tag" content="阿里云">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.sujx.net/covers/cover29.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "阿里云游戏服务端架构设计问答",
+  "url": "https://www.sujx.net/2023/01/03/Aliyun-Question-Answers-Games/",
+  "image": "https://cdn.sujx.net/covers/cover29.jpg",
+  "datePublished": "2023-01-03T07:04:07.000Z",
+  "dateModified": "2026-09-26T02:32:14.917Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "靖轩",
+      "url": "https://www.sujx.net"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://cdn.sujx.net/about/favicon.png"><link rel="canonical" href="https://www.sujx.net/2023/01/03/Aliyun-Question-Answers-Games/index.html"><link rel="preconnect" href="//cdnjs.cloudflare.com"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css?v=5.5.5"><link rel="stylesheet" href="/fonts/css/all.min.css"><link rel="stylesheet" href="/libs/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?417b20ac1984432f821159fac27d3bb5";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><link rel="stylesheet" href="/fonts/titillium-web.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: '/libs/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: true,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '阿里云游戏服务端架构设计问答',
+  isHighlightShrink: false,
+  isToc: false,
+  pageType: 'post'
+}</script><link rel="alternate" href="/atom.xml" title="靖轩" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">靖轩</span></a><a class="nav-page-title" href="/"><span class="site-name">阿里云游戏服务端架构设计问答</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">阿里云游戏服务端架构设计问答</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-01-03T07:04:07.000Z" title="发表于 2023-01-03 15:04:07">2023-01-03</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-09-26T02:32:14.917Z" title="更新于 2026-09-26 10:32:14">2026-09-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/">开发基础</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">4.8k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>14分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><p>1。比如说在一个游戏行业里面，或者说一个典型的游戏架构，在云资源层面，就是云的架构层面。应该注意哪些点，或者怎么样才能设计一个符合这个游戏需求的一个架构。比如说它可能是有一个小的游戏，或者说是一个很大的像原神这样的，或者它可能是一个很小的页游或者端游或者什么样。那么在不同场景下，它的架构会有什么区别？然后这块的考虑因素是什么？</p>
+<p> 答：在设计一个满足游戏需求的架构时，需要考虑以下几个方面：</p>
+<p>1。 游戏类型和规模：小型网页游戏或手机网络游戏，一般不需要太复杂的架构，可以直接使用云服务器ECS，数据库RDS等基本服务来搭建。而对于大型网游如原神，则需要更为复杂的分布式架构，包括多台服务器协同工作，可能需要使用到弹性伸缩、负载均衡等高级功能。<br>2。 用户访问量：如果预计有大量的用户同时在线，那么需要考虑使用负载均衡SLB来进行流量分发，以避免单一服务器过载。同时，还需要考虑到高并发情况下的数据一致性问题。<br>3。 数据处理能力：对于大数据量的游戏，例如拥有大量用户数据和行为数据的MMORPG，需要使用高效的分布式数据库和存储服务，如DRDS和OSS。<br>4。 网络安全：任何在线服务都需要考虑网络安全问题，特别是游戏这样的高价值目标，更是黑客的重点攻击对象。因此，需要使用WAF等防火墙设备，以及DDoS防护等手段来保护服务器安全。</p>
+<p>总的来说，对于不同的游戏场景，其架构设计的关键点也会有所不同，但是都要围绕着如何更好地服务于玩家这一核心目标进行。 </p>
+<hr>
+<p>2。比如说对假如说我们现在这款游戏刚上线，它可能这个在线用户数或者说并发数。可能刚上线他会没那么多，它可能初始是一个1000QPS的，那可能随着我的运营做的比较好，这个游戏也做的比较好，它可能会变成1万甚至更多的QPS对于一个这个架构的演进。或者说从一个1000QPS的系统到了一个1万QPS的系统，它应该是怎样的一个过程，或者说怎么设计，什么样的架构，是更符合这种场景的，是一套架构应对这两种场景吗？还是不同的场景下面要调用不同的架构？ </p>
+<p>答：对于一款游戏来说，从1000QPS增长到10000QPS是一个比较大的挑战，因为这不仅涉及到硬件资源的扩展，还包括软件架构的设计和优化。</p>
+<p>1。 初始阶段：当游戏刚开始上线，预计用户量不会太大，可以选择使用相对简单的架构，例如使用一台或几台云服务器ECS，搭配MySQL数据库，以满足初期的需求。<br>2。 中期阶段：随着用户量的增长，可能需要升级硬件资源，例如增加云服务器的数量，并使用负载均衡SLB进行流量分发。此外，也可以开始考虑进行一些软件架构的优化，例如使用缓存服务Redis来缓解数据库的压力。<br>3。 后期阶段：当用户量进一步增长，可能需要采用更为复杂的技术方案，例如分布式数据库和存储等技术，以保证系统的稳定性和可扩展性。</p>
+<p>在这个过程中，可以使用一些工具和方法来监控系统的运行状况，以便及时发现并解决问题。例如，可以通过监控系统的CPU、内存、磁盘I&#x2F;O等指标，来判断是否需要进行硬件升级；可以通过分析系统的访问日志，来了解用户的使用习惯和热点问题，以便于进行相应的优化。总体来说，一个好的游戏架构应该能够在应对不同规模的用户量的同时，保持良好的稳定性、可扩展性和可用性。同时，也需要根据业务的发展变化，不断地进行调整和优化。</p>
+<hr>
+<p>3。我们用云的环境弹性伸缩来解决一些风险流量的一些问题。但是用弹性探索也需要一些采用分布式的系统，需要稳定性的问题。那我想问一下，比如说在使用负载均衡这种场景下，在高可用这个逻辑上面，我们要怎么做才算是一个比较好的情况？</p>
+<p>答：</p>
+<p>1。 负载均衡策略：合理的负载均衡策略也是提高系统可用性的重要手段之一。例如，我们可以根据服务器的实际性能和负载情况动态调整分配给它们的任务数量，避免某一部分服务器过载而导致整体服务质量下降。<br>2。 系统日志监控 : 检测系统的错误日志并快速响应。<br>3。 容灾和备份设计：通过容灾和备份设计来增强系统的可靠性。例如，可以设置多个数据中心，当其中一个中心出现问题时，可以快速切换到另一个中心继续提供服务。</p>
+<hr>
+<p>4。你知道我们的这个负载均衡，它是一个地域级别的产品，它做不到跨地域。那你是怎么做到负载均衡的入口，同时在不同的定位都可用。比如说北京在杭州，在上海都有，你的负责，都有你的这个机器，你是怎么办？到这个流量的均衡，然后同时大家又都在一个全局的游戏中。</p>
+<p>答：使用SDN（Software Defined Networking）或者Overlay网络技术，将分布在不同地域的服务器组成一个虚拟的网络。在这种情况下，你可以使用传统的负载均衡器来进行流量分发，而无需担心地域之间的通信问题。这种方法的优点是可以提供更好的性能和灵活性，但实现起来比较复杂，需要专业的网络知识和技术支持。</p>
+<hr>
+<p>5。那也就是说你不同定义里面的机器是不互通的，就是只能跟着一个组的。那假如我今天我注册的时候候，我是在上海注册的。然后我这个用户出差跑到了北京。这个时候他如果想登录这个游戏，他应该去哪？他只能去上海吗？</p>
+<p>答：还是应该在上海，我们设置的是若玩家连续30天都在上海登录，才会改变他的服务区，这样保持一定阈值时间，避免增加系统操作压力。 </p>
+<hr>
+<p>6。这个其实是我刚才问了这一系列问题，想要想想就是想表示的一件事情，就是你的稳定性，和你的性能，还有你的成本，这之间是需要去综合考虑的。这个是我们要在做架构设计的时候候去考虑的。你们的游戏部署在阿里云的哪些region上？好，你们在部署杭州北京两个region上，假设现在有一个情况，我在西藏，假设我在西藏，我也想玩这个游戏。然后我发现这个网络总是不太行，就动不动就垮，然后一抖我就下线或者掉线什么的就不太好。那这种场景下怎么优化一下呢？</p>
+<p>答：可以使用以下方法：</p>
+<p>1。 使用CDN( Content Delivery Network )服务：CDN可以在靠近用户的位置提供内容分发服务，减少数据传输的距离和时间，进而提升访问速度。例如，阿里云的CDN节点遍布全国各地，包括西藏地区，可以帮助您改善用户体验。<br>2。 使用边缘计算：您可以考虑使用边缘计算连接西藏与您服务器所在的地区，减少网络传输距离，降低网络延迟。<br>3。 异步更新和数据压缩：对于游戏客户端而言，可以采用异步更新、数据压缩等技术，减少客户端与服务器之间的数据传输量，减小网络负担，提高响应速度。</p>
+<hr>
+<p>7。假设说现在这个西藏的时候间节点覆盖不太好，因为你知道西藏的这个基础设施不太行的运营商也不太行。但但是又有那么一些，你可以假设它不是一个C端用户，或者说可能是你的一个VIP用户，或者他的一个氪金的玩家。Anyway他就很重要，这个时候你要应该怎么去做。</p>
+<p>答：若这名玩家价值很高，可以使用以下方法来提升他的游戏网络体验：</p>
+<ol>
+<li>分布式部署，直接在阿里云在西藏的适当节点为此玩家设置专门的VPC</li>
+<li>VPN专线连接，确保网络的稳定性</li>
+</ol>
+<hr>
+<p>8。假设现在韩国的玩家必须要接入。你现在在您现在在国内的北京或者上海的系统来做。在这种情况下，怎么保证韩国玩家的访问速度？这个时候怎样处理好跨境的问题？</p>
+<p>答：使用全球加速， 阿里云提供了全球化访问的产品， 如Global Accelerator ( GA )， GA在全球范围内提供了高速稳定的网络链接， 可以为您的用户提供低延迟的游戏体验</p>
+<hr>
+<ol start="9">
+<li>CEN和全球加速有什么区别？</li>
+</ol>
+<p>答：GA全球加速不需要在客户那一侧部署什么云资源的，就是只需要给人家一个上车点，他就直接可以访问了。但是CEN是连接了2个VPC PC的，连接2个VPC的，你一定要在韩国有个VPC， 就是你要在韩国，在阿里云region上面部署一些资源，你才需要去用云企业网去打通韩国和北京。那就变成说今天你如果用云企业法的方案的话，就是你不再只是北京和杭州两个region，你要在韩国也要有一个region部署ECS部署数据库，所以CEN要相对GA全球加速更加稳定些。</p>
+<hr>
+<p>10.多服游戏架构和单服游戏架构有哪些因素需要注意和关注的，来提升整体的成为更好的游戏系统？</p>
+<p>答：在设计多服游戏架构时，需要关注的因素有：</p>
+<p>1。 数据同步： 在多服架构中，游戏世界和数据同步是非常重要的，因为不同的服务器可能有不同的游戏进度。游戏世界同步机制可以保持， 所有的服务器上的世界状态一致，让用户能够自由的在各个服务器间切换。<br>2。 扩展性： 多服架构比单服更容易扩展和调整容量，因为它可以把压力分散到多个服务器上，而不是全部集中在一个服务器。<br>3。 管理复杂度： 多服增加了管理复杂度，需要维护更多的服务器，保持所有服务器的一致性和协调各个服务器之间的操作。</p>
+<p>对于单服游戏架构，关注的因素包括:</p>
+<p>1。 性能和稳定性：需要确保单个服务器能够承受大量的用户同时在线，同时也要确保服务器的稳定性和安全性。<br>2。 扩展性： 单服架构相比多服来说很难快速扩大容量，当用户人数过多时可能会导致服务器崩溃。因此，在设计之初就要考虑到扩展性，如使用可扩展的数据库和存储系统。                       </p>
+<p>总的来说，无论是多服还是单服的游戏架构，关键是要满足用户的需求，提供稳定、快速、无缝的游戏体验，同时也需要适应游戏的</p>
+<p>发展和变化，做出适当的优化和改进。</p>
+<hr>
+<p>11。假如说现在你是北京、上海和韩国首尔三个region， 那么你可以是一个服务区，有三个region；你也可以是两个服务区。比如北京、上海是一个服务区，然后韩国是一个服务区。这两种情况下有什么区别？对你架构设计有什么影响？</p>
+<p>答：北京、上海和韩国首尔三个region属于一个服务区，对游戏数据库压力比较大，增加了运营和维护，增加管理难度。相比之下，</p>
+<p>第二种方案减少了运营和维护的工作量，分开的服务区可以让你更灵活地进行扩展。</p>
+<hr>
+<p>12.不同服的情况下，平台级的更新怎样做更好？效率会更高呢？</p>
+<p>答：可以使用阿里云运维编排服务（Operation Orchestration Service，简称OOS）通过创建模板-创建执行-执行结果这一套流程，跨地域进行事件驱动的批量操作、定时运维任务来实现平台级的更新 </p>
+<hr>
+<p>13。 比如说已经确定好整个游戏架构，我们设计出来了，然后甚至都已经在一些POC的阶段，在这个做测试了。我们怎么做一些性能测试或者一些这种performance的一些evaluation。来看一下，我要不要做一些调整，这个测试应该怎么做。</p>
+<p>答：在游戏上线之前，通常需要执行一系列的性能测试以评估架构的有效性和可行性。以下是一种可能的测试流程：</p>
+<p>1。 设定测试目标： 首先明确测试的目标是什么，例如游戏是否能在峰值时段满足预期的 QPS ( 每秒查询次数 )，是否能满足预计的并发用户数量等等。<br>2。 设计测试案例： 根据设定的目标设计测试案例，包括但不限于压力测试、功能测试、安全性测试等。<br>3。 进行测试： 在模拟环境下进行测试，并收集相关的指标数据。<br>4。 结果分析： 分析测试结果，看是否达到预期的目标，并找出可能导致问题的地方。<br>5。 调整与优化： 根据测试结果对游戏系统进行调整和优化。</p>
+<hr>
+<p>14。 PTS是一个挺好用的工具，然后利用PTS的话应该怎么做才能比较好好的看出，或者说评估一下这个现在是我们觉得是ok的还是怎么样。</p>
+<p>答：对于利用PTS做性能评估，可以有一下一些注意事项</p>
+<ol>
+<li>首先明确测试目标： 明确你要做什么类型的性能测试 （ 例如压力测试、并发测试 ） 和期望的结果（ 例如多少并发量 ）</li>
+</ol>
+<p>2。 观察结果： 执行PTS任务后，观看系统的反应并获取相关性能指标。</p>
+<p>3。 结果分析： 根据PTS的结果进行分析，并确定是否有潜在的问题。</p>
+<hr>
+<p>15。如果说我们现在发现在这个过程中，我的这个transaction就是数据库的transaction有点慢。老卡，对对对，我现在这个半天应该是很多操作是原子性的事物，然后就可能卡住了。如果这种情况下，我们要怎么优化一下，或者说从哪些方向上去考虑？ </p>
+<p>答：当发现数据库事物慢的时候候，可以从以下几个方面入手进行优化：</p>
+<ol>
+<li>读写分离：读取密集型的应用程序可以使用主从复制和缓存，将读取操作放到从库或缓存上，减轻主库的压力</li>
+<li>SQL查询优化：查看慢查询日志，找出导致性能瓶颈的问题查询语句，并针对性地对其进行优化</li>
+<li>表结构优化： 调整字段的数据类型，增加索引等</li>
+<li>MySQL参数调优： 调整MySQL的相关参数，例如 innodb_buffer_pool_size等</li>
+<li>数据库分区 : 把大表按照某种规则分割成若干个小表，可以改善读写速度</li>
+<li>数据库扩展：垂直扩展或水平扩展数据库集群</li>
+<li>使用数据库中间件 : 放在主从复制的基础上，可以把主库变成读写分离模式， 或者实现Sharding</li>
+<li>磁盘优化： 检查磁盘IO，查看是否符合需求</li>
+</ol>
+<hr>
+<p>16.怎样判断是网络带宽问题？</p>
+<p>以下方法可以判断是否是网络带宽的问题：</p>
+<p>1。 ping测试： 如果在高峰期访问网站时，ping值较高，可能是网络带宽问题。使用ping工具，发送数据包到目标主机，观察网络延迟和丢包情况。<br>2。 带宽测试： 用专门的网络带宽测试工具进行网络带宽测试，查看实际带宽利用率。<br>3。 网络监视工具： 使用网络监视工具检查带宽使用情况。</p>
+<hr>
+<p>17.在监控方面，怎样做一个比较完整的可视化？</p>
+<p>主要有一下数据需要直接可视化监控:</p>
+<ol>
+<li>系统资源 : CPU、内存、硬盘空间、网络流量等硬件资源使用情况</li>
+<li>游戏进程状态 : 进程运行状态、是否有挂起或阻塞等异常情况</li>
+<li>数据库性能 : SQL执行性能、事务性能等</li>
+<li>系统事件 : 用户登录成功率、注册成功率等重要系统事件</li>
+</ol>
+<hr>
+<p>18.确定所要可视化显示的监控指标的逻辑是什么？</p>
+<p>要看核心的业务链路，那这个场景它可能进来的时候候走的是CDN，然后走了负载均衡，然后走到ECS， 然后后面可能接了某个mysql或者是某个其实是应该按业务链路的形式来做可视化的设计。就这样一条最重要的链路里面，在这个链路里，各个环节的资源现在是一个什么情况？</p>
+<p>因为里面我看到其中有一台ECS CPU， 比较有可能会马上就去看一下我的分发业务有没有受到影响。比较有可能会马上就去看一下我的分发业务有没有受到影响。其实可视化的核心可视化的核心不是给人看的，可视化的核心在我看来是要尽量降低问题发生的概率，以及问题发生之后能够缩短这个问题恢复的时候长。</p>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E9%98%BF%E9%87%8C%E4%BA%91/">阿里云</a><a class="post-meta__tags" href="/tags/aliyun/">aliyun</a><a class="post-meta__tags" href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1%E5%B8%88/">解决方案架构设计师</a><a class="post-meta__tags" href="/tags/interview/">interview</a></div><div class="post-share"><div class="social-share" data-image="https://cdn.sujx.net/covers/cover29.jpg" data-sites="facebook,twitter,weibo,qq"></div><link rel="stylesheet" href="/libs/sharejs/css/share.min.css" media="print" onload="this.media='all'"><script src="/libs/sharejs/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>能否请我喝一杯咖啡？</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.jpg" target="_blank"><img class="post-qr-code-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/wechat.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2023/01/11/Ansible-Howto/" title="Ansible的使用入门"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover27.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Ansible的使用入门</div></div><div class="info-2"><div class="info-item-1">简介Ansible的名字来源于小说《安德的游戏》中超时空的即时通信工具，可以使用它远程实时控制前线舰队的战斗。2012年3月发布0. 0. 1版，2015年为Redhat收购。 宗旨 Keep Things Simple Stay Organized Test Often  优点 具有数千个功能丰富的模块 使用和部署简单 安全 幂等性 支持使用YAML格式进行playbook的任务编排 具有较强大的多层解决方案  缺点 不支持一般性事务回滚 对于大量主机执行效率差，如不saltstack效率高  组成 Inventory：主机清单文件，提供主机信息和主机分组信息 Modules：执行命令的功能模块 Plugins：功能模块的补充 API：供第三方程序调用的编程接口  安装部署# Rocklinux 需要BaseOS、APPstream、EPEL三个软件源的支持[sujx@master ~]$ yum info ansibleName         : ansibleVersion      : 7. 2. 0Release      : 1. el8Architecture :...</div></div></div></a><a class="pagination-related" href="/2022/12/23/Tomacat-howto/" title="Tomcat使用入门"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/07/20240803100728.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Tomcat使用入门</div></div><div class="info-2"><div class="info-item-1">Tomcat是一个免费的开放源代码的Web应用服务器，具有处理HTML静态资源页面的功能，同时它还是一个Servlet和JSP的容器。Tomcat于1999年发布，初始版本为3。 0，实现了Servlet2。 2和JSP1。 1的规范。 Tomcat的核心分为3个部分：  Web容器：负责处理静态页面； JSP容器：把JSP页面翻译为一般的Servlet Catalina：是一个servlet容器，用于处理servlet  部署服务# 安装JDK[root@tomcat]dnf install -y java-17-openjdk java-17-openjdk-devel[root@tomcat]alternatives --config javaThere is 1 program that provides &#x27;java&#x27;.  Selection    Command-----------------------------------------------*+ 1           java-17-openjdk.x86_64 ( /usr/lib/...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2024/12/31/Aliyun-ECS-GUI/" title="阿里云ECS实现图形界面"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover70.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-31</div><div class="info-item-2">阿里云ECS实现图形界面</div></div><div class="info-2"><div class="info-item-1">因为公司需要在阿里云上部署一套致远互联的OA平台，该OA需要在图形界面下进行安装部署。为此，我将构建基础平台的过程纪录一下。    12 天津·西青·中北镇·水西公园   商务准备配置确认 与厂家确认所需服务器配置和地域要求 切合当前已有阿里云上环境，拉取配置表及所需费用，并申请相关优惠卷  合规处理 完成内部预算申请，在阿里云后台下载购买合同并交付需求提交方 购买完成之后，将本次购买发票提交需求方  主机准备基础配置# 系统使用RockyLinux9. 5# 系统更新dnf update -y# 安装常用软件dnf install -y wget curl zip unzip vim mailx mlocate telnet bash-completion tmuxdnf install -y chrony rsync git screen tree open-vm-tools yum-utils lrzszdnf install -y device-mapper-persistent-data lvm2 psmisc net-toolsdnf install -y bind-...</div></div></div></a><a class="pagination-related" href="/2023/02/23/Aliyun-Question-Answers-Common/" title="阿里云架构设计知识问答"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover24.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-02-23</div><div class="info-item-2">阿里云架构设计知识问答</div></div><div class="info-2"><div class="info-item-1">规划设计类介绍一下容灾图景灾备，是企业中一项重要的技术应用，对于企业数据安全起到了很大的作用。 一般来说，灾备的级别可以分为数据级、应用级和业务级三个级别。  数据级灾备：主要关注的就是数据，就是在灾难发生之后，可以确保数据不受到损坏。比如早期的通过备份到磁带转移到异地或者基于网络实现灾备中心与生产中心的异步\同步的数据传输。 应用级灾备：建立在数据级灾备的基础上，对应用系统进行复制，也就是在异地灾备中心再构建一套应用支撑系统，可提供应用接管能力。支撑系统包括数据备份系统、备用应用系统、以及备用网络等。 业务级灾备：也是最高级别的灾备系统，包括超过IT系统的部分，比如业务用户的办公场所以及业务工作人员备份等。  我们这里主要讲述IT系统的灾备。常见的灾备架构有以下几种： 集群部署通过将应用和数据集群化部署在同一数据中心的多台服务器上，使用多线网络接入、多路电力供应、应用的负载均衡、多主机集群、数据库集群、日志同步等技术来满足对可用性和可靠性的要求。 同城双活同城双活是在相距20公里以上的同城或者相邻区域镜像部署两个独立的集群，数据单点写到主机房，然后实时同步到从机房，从而避免单个...</div></div></div></a><a class="pagination-related" href="/2024/04/10/Interview-Some-Tips/" title="面试中的非技术问题"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover15.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-04-10</div><div class="info-item-2">面试中的非技术问题</div></div><div class="info-2"><div class="info-item-1"> 面试是一个人与人的沟通，是信息的交流和互换  自我介绍开场白上午好，我叫靖轩。 我今天很高兴能有这个机会来参加本次面试。有机会加入贵公司担任系统运维工程师一职，我感到非常激动。 我在IT基础设施和系统运维方面拥有超过十年的工作经验，我培养和训练了一系列强大的技能组合，与此职位完美契合。 个人经历我毕业于北京航空航天大学行政管理专业。在北航天华集团作为通讯编辑，参与了北京2008奥运会、共青团中央、中央电视台、北京电视台、解放军空军政治部等单位的重大活动。在北京农科院信息化所作为行政助理，参与了北京市河道整治、东营市智慧农业等多个重要项目的招投标。 随后我在新京报开始了我的IT系统运维的职业生涯。由于我的奉献精神以及结果驱动的方法，独立完成了基于Hyper-V和SCVMM的私有云的实施、法新社、新华社图片库与内部图片库的系统搭建和运维、内部OA和IM系统的实施，并多次处理重大故障。期间，我作为IT系统工程师的身份参与了北京奥运会、汶川地震、北京七二一暴雨、北京市政务内网改造等重大报道活动的IT支持活动，获得了2010年度优秀员工的称号，并成为了所在党支部委员。在这一时期，我考取了...</div></div></div></a><a class="pagination-related" href="/2023/03/13/Note-Others-202303/" title="杂记"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover28.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-13</div><div class="info-item-2">杂记</div></div><div class="info-2"><div class="info-item-1">记录一些不成文的杂项    07 摄于 北京通州台湖镇·台湖公园   阿里云免费版企业邮箱现在从阿里云已经找不到免费的企业邮箱申请入口了，但实际上它仍然是可以找到的：[申请链接](https://common-buy.aliyun.com/?userCode=r3yteowb?spm=a2c6h.12873639.article-detail.8.85464bf18SykTr&amp;commodityCode=alimail&amp;specCode=lx_18482&amp;request=%7B%22ord_time%22:%223:Year%22， %22account_num%22:%225%22%7D#&#x2F;buy) Axure10激活方式 序列号 被授权人：downxia授权秘钥：UdMLVdonmFlplbTMoBppfrUXZMhEQ6Mf2shBAkTCJBk5ycQJs2NALgvLsHhyfoYR被授权人：downxia授权秘钥：Bv6P2wrR10Sq5UCpPSB0+LMjkWU2i1XgQNFaWV84qWvx+1HHVnK01ilcxOOEG...</div></div></div></a><a class="pagination-related" href="/2023/11/29/Aliyun-ACE-Exam/" title="谈谈阿里云的ACE面试"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023/11/aliyun_ACE_cert.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-11-29</div><div class="info-item-2">谈谈阿里云的ACE面试</div></div><div class="info-2"><div class="info-item-1">全宇宙第77个阿里云ACE新鲜出炉。 很奇怪阿里云的认证ID和ACE ID是什么关系，是以后ACE ID不变，证书编号自增么？ 面试是阿里云ACE认证的最后一关，也是最难的的一关。这里就结合我的经历给大家提供一个思路，希望能够给大家提供一个微薄的助力。   简介 学习最需要的，不是悲壮的毅力，而是对无限未知的渴求  我也算是一个IT老兵了。2004年从大学毕业以后，在北京多个院校和企业从事IT运维工作，先后经历了行政管理、桌面运维、系统建设、私有云实施、IDC机房维护、公有云资产管理等多个工种和多个方向的业务，持有MCSE、HCIE、RHCA、PMP、CISP、ITIL等多个证书。当然，现在也有一个阿里云的ACE证书。 基于提高公有云知识水平的目的，我最早参加阿里云的考试是在2021年，先后完成了阿里云的ACA、ACP（云和安全两个方向）以及老版本的ACE。随着阿里云ACE认证体系的进化和个人对解决方案架构的兴趣增加，我决定对ACE证书进行再认证，又参加了新版的ACE认证考试。 ACE考试分为三个阶段：理论、实验和面试。由于我是老版证书有效期内，所以免了理论部分的考试。实验部分主...</div></div></div></a><a class="pagination-related" href="/2023/11/01/Aliyun-Manage-Skills/" title="「阿里云运维架构实践秘籍」"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023/11/aliyun-manager-skills.PNG" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-11-01</div><div class="info-item-2">「阿里云运维架构实践秘籍」</div></div><div class="info-2"><div class="info-item-1">云计算只是一个概念，阿里云则是云计算的落地实现。云计算是面向广大用户的，对应的是一个分布式云管控平台，具有稳定性、可弹性扩展、安全性、低成本、易用性等有点。从技术角度看，云平台是虚拟化、分布式、自动化的综合类平台。  云端选型云产品云计算带来的运维变革 人工阶段：人工完成运维 脚本及工具阶段：对于重复的事情通过脚本和工具完成 平台化阶段：用平台界面智能化操作完成日常操作 智能化阶段：自动扩容、故障自愈、AIOps  云计算带来的技术架构变革 单机架构阶段：IOE架构 集群架构阶段：采用虚拟的VIP技术 分布式架构阶段 微服务架构阶段  软件技术选型 硬件相关，嵌入式相关，C&#x2F;C++ Java&#x2F;C# 胶水语言：Python 快速构建语言：PHP 高并发语言：go 前后端语言：Javascript&#x2F;Node.js  系统技术选型云端网络的选型策略 网段 网卡 网络隔离 网络功能 网络实践  入网请求选型的方法 SLB网络 公网IP 弹性EIP DNAT  出网请求选型的方法 公网IP 弹性EIP SNAT  WEB服务器选型考虑 稳定性 性能 对负载均衡...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">靖轩</div><div class="author-info-description">逝者如斯夫,不舍昼夜</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/grepsu"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://gitee.com/grepsu" target="_blank" title="Gitee"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:sujx@live.cn" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS链接"><i class="fa  fa-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/07/03/AIGC_FoxHole/" title="海鹰">海鹰</a><time datetime="2026-07-03T01:04:07.000Z" title="发表于 2026-07-03 09:04:07">2026-07-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/11/fristVibeCoding/" title="鹊随金印：我的第一个完整的AI编程项目">鹊随金印：我的第一个完整的AI编程项目</a><time datetime="2026-06-11T01:04:07.000Z" title="发表于 2026-06-11 09:04:07">2026-06-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/03/VI_Howto/" title="VI编辑器简介">VI编辑器简介</a><time datetime="2026-06-03T01:04:07.000Z" title="发表于 2026-06-03 09:04:07">2026-06-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/28/HNCitic_2605/" title="我要上头条">我要上头条</a><time datetime="2026-05-28T01:04:07.000Z" title="发表于 2026-05-28 09:04:07">2026-05-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/12/TS-Domain-Controller-Sync-Failure/" title="记一次Windows AD域控制器同步故障排错">记一次Windows AD域控制器同步故障排错</a><time datetime="2026-05-12T03:04:07.000Z" title="发表于 2026-05-12 11:04:07">2026-05-12</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2008 - 2026 By 靖轩</span></div><div class="footer_custom_text">京ICP备17034757号</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.5"></script><script src="/js/main.js?v=5.5.5"></script><script src="/libs/fancybox/fancybox.umd.js"></script><script src="/js/instantpage.js" type="module"></script><script src="/libs/lazyload/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const parseViewBox = viewBox => {
+    if (!viewBox) return null
+    const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
+    if (parts.length !== 4 || parts.some(n => Number.isNaN(n))) return null
+    return parts
+  }
+
+  const getSvgViewBox = svg => {
+    const attr = parseViewBox(svg.getAttribute('viewBox'))
+    if (attr) return attr
+
+    // Fallback: use bbox to build a viewBox
+    try {
+      const bbox = svg.getBBox()
+      if (bbox && bbox.width && bbox.height) return [bbox.x, bbox.y, bbox.width, bbox.height]
+    } catch (e) {
+      // getBBox may fail on some edge cases; ignore
+    }
+
+    const w = Number(svg.getAttribute('width')) || 0
+    const h = Number(svg.getAttribute('height')) || 0
+    if (w > 0 && h > 0) return [0, 0, w, h]
+    return [0, 0, 100, 100]
+  }
+
+  const setSvgViewBox = (svg, vb) => {
+    svg.setAttribute('viewBox', `${vb[0]} ${vb[1]} ${vb[2]} ${vb[3]}`)
+  }
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v))
+
+  const openSvgInNewTab = ({ source, initViewBox }) => {
+    const getClonedSvg = () => {
+      if (typeof source === 'string') {
+        const template = document.createElement('template')
+        template.innerHTML = source.trim()
+        const svg = template.content.querySelector('svg')
+        return svg ? svg.cloneNode(true) : null
+      }
+      if (source && typeof source.cloneNode === 'function') {
+        return source.cloneNode(true)
+      }
+      return null
+    }
+
+    const clone = getClonedSvg()
+    if (!clone) return
+    if (initViewBox && initViewBox.length === 4) {
+      clone.setAttribute('viewBox', initViewBox.join(' '))
+    }
+    if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+    if (!clone.getAttribute('xmlns:xlink') && clone.outerHTML.includes('xlink:')) {
+      clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+    }
+    // inject background to match current theme
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    const bg = getComputedStyle(document.body).backgroundColor || (isDark ? '#1e1e1e' : '#ffffff')
+    if (!clone.style.background) clone.style.background = bg
+
+    const serializer = new XMLSerializer()
+    const svgSource = serializer.serializeToString(clone)
+    const htmlSource = `<!doctype html><html><head><meta charset="utf-8" />
+      <style>
+        html, body { width: 100%; height: 100%; margin: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; }
+        svg { max-width: 100%; max-height: 100%; height: auto; width: auto; }
+      </style>
+      </head><body>${svgSource}</body></html>`
+    const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank', 'noopener')
+    setTimeout(() => URL.revokeObjectURL(url), 30000)
+  }
+
+  const attachMermaidViewerButton = wrap => {
+    let btn = wrap.querySelector('.mermaid-open-btn')
+    if (!btn) {
+      btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'mermaid-open-btn'
+      wrap.appendChild(btn)
+    }
+
+    btn.innerHTML = '<i class="fa fa-search fa-fw" aria-hidden="true"></i>'
+
+    if (!btn.__mermaidViewerBound) {
+      btn.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        const svg = wrap.__mermaidOriginalSvg || wrap.querySelector('svg')
+        if (!svg) return
+        const initViewBox = wrap.__mermaidInitViewBox
+        if (typeof svg === 'string') {
+          openSvgInNewTab({ source: svg, initViewBox })
+          return
+        }
+        openSvgInNewTab({ source: svg, initViewBox })
+      })
+      btn.__mermaidViewerBound = true
+    }
+  }
+
+  // Zoom around a point (px, py) in the SVG viewport (in viewBox coordinates)
+  const zoomAtPoint = (vb, factor, px, py) => {
+    const w = vb[2] * factor
+    const h = vb[3] * factor
+    const nx = px - (px - vb[0]) * factor
+    const ny = py - (py - vb[1]) * factor
+    return [nx, ny, w, h]
+  }
+
+  const initMermaidGestures = wrap => {
+    const svg = wrap.querySelector('svg')
+    if (!svg) return
+
+    // Ensure viewBox exists so gestures always work
+    const initVb = getSvgViewBox(svg)
+    wrap.__mermaidInitViewBox = initVb
+    wrap.__mermaidCurViewBox = initVb.slice()
+    setSvgViewBox(svg, initVb)
+
+    // Avoid binding multiple times on themeChange/pjax
+    if (wrap.__mermaidGestureBound) return
+    wrap.__mermaidGestureBound = true
+
+    // Helper: map client (viewport) coordinate -> viewBox coordinate
+    const clientToViewBox = (clientX, clientY) => {
+      const rect = svg.getBoundingClientRect()
+      const vb = wrap.__mermaidCurViewBox || getSvgViewBox(svg)
+      const x = vb[0] + (clientX - rect.left) * (vb[2] / rect.width)
+      const y = vb[1] + (clientY - rect.top) * (vb[3] / rect.height)
+      return { x, y, rect, vb }
+    }
+
+    const state = {
+      pointers: new Map(),
+      startVb: null,
+      startDist: 0,
+      startCenter: null
+    }
+
+    const clampVb = vb => {
+      const init = wrap.__mermaidInitViewBox || vb
+      const minW = init[2] * 0.1
+      const maxW = init[2] * 10
+      const minH = init[3] * 0.1
+      const maxH = init[3] * 10
+      vb[2] = clamp(vb[2], minW, maxW)
+      vb[3] = clamp(vb[3], minH, maxH)
+      return vb
+    }
+
+    const setCurVb = vb => {
+      vb = clampVb(vb)
+      wrap.__mermaidCurViewBox = vb
+      setSvgViewBox(svg, vb)
+    }
+
+    const onPointerDown = e => {
+      // Allow only primary button for mouse
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      svg.setPointerCapture(e.pointerId)
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      if (state.pointers.size === 1) {
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      } else if (state.pointers.size === 2) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        state.startDist = Math.hypot(dx, dy)
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        state.startCenter = { x: (pts[0].x + pts[1].x) / 2, y: (pts[0].y + pts[1].y) / 2 }
+      }
+    }
+
+    const onPointerMove = e => {
+      if (!state.pointers.has(e.pointerId)) return
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      // Pan with 1 pointer
+      if (state.pointers.size === 1 && state.startVb) {
+        const p = [...state.pointers.values()][0]
+        const prev = { x: e.clientX - e.movementX, y: e.clientY - e.movementY }
+        // movementX/Y unreliable on touch, compute from stored last position
+        const last = wrap.__mermaidLastSinglePointer || p
+        const dxClient = p.x - last.x
+        const dyClient = p.y - last.y
+        wrap.__mermaidLastSinglePointer = p
+
+        const { rect } = clientToViewBox(p.x, p.y)
+        const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        const dx = dxClient * (vb[2] / rect.width)
+        const dy = dyClient * (vb[3] / rect.height)
+        setCurVb([vb[0] - dx, vb[1] - dy, vb[2], vb[3]])
+        return
+      }
+
+      // Pinch zoom with 2 pointers
+      if (state.pointers.size === 2 && state.startVb && state.startDist > 0) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        const dist = Math.hypot(dx, dy)
+        if (!dist) return
+        const factor = state.startDist / dist // dist bigger => zoom in (viewBox smaller)
+
+        const cx = (pts[0].x + pts[1].x) / 2
+        const cy = (pts[0].y + pts[1].y) / 2
+        const centerClient = { x: cx, y: cy }
+
+        const pxy = clientToViewBox(centerClient.x, centerClient.y)
+        const cpx = pxy.x
+        const cpy = pxy.y
+
+        const vb = zoomAtPoint(state.startVb, factor, cpx, cpy)
+        setCurVb(vb)
+      }
+    }
+
+    const onPointerUpOrCancel = e => {
+      state.pointers.delete(e.pointerId)
+      if (state.pointers.size === 0) {
+        state.startVb = null
+        state.startDist = 0
+        state.startCenter = null
+        wrap.__mermaidLastSinglePointer = null
+      } else if (state.pointers.size === 1) {
+        // reset single pointer baseline to avoid jump
+        wrap.__mermaidLastSinglePointer = [...state.pointers.values()][0]
+      }
+    }
+
+    // Wheel zoom (mouse/trackpad)
+    const onWheel = e => {
+      // ctrlKey on mac trackpad pinch; we treat both as zoom
+      e.preventDefault()
+      const delta = e.deltaY
+      const zoomFactor = delta > 0 ? 1.1 : 0.9
+      const { x, y } = clientToViewBox(e.clientX, e.clientY)
+      const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      setCurVb(zoomAtPoint(vb, zoomFactor, x, y))
+    }
+
+    const onDblClick = () => {
+      const init = wrap.__mermaidInitViewBox
+      if (!init) return
+      wrap.__mermaidCurViewBox = init.slice()
+      setSvgViewBox(svg, init)
+    }
+
+    svg.addEventListener('pointerdown', onPointerDown)
+    svg.addEventListener('pointermove', onPointerMove)
+    svg.addEventListener('pointerup', onPointerUpOrCancel)
+    svg.addEventListener('pointercancel', onPointerUpOrCancel)
+    svg.addEventListener('wheel', onWheel, { passive: false })
+    svg.addEventListener('dblclick', onDblClick)
+  }
+
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+
+      // Clear old render (themeChange/pjax will rerun)
+      const oldSvg = item.querySelector('svg')
+      if (oldSvg) oldSvg.remove()
+      item.__mermaidGestureBound = false
+
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+        if (true) initMermaidGestures(item)
+        item.__mermaidOriginalSvg = svg
+        if (true) attachMermaidViewerButton(item)
+      }
+
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('/libs/mermaid/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.5"></script></div></div></body></html>

@@ -1,0 +1,579 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>精通 Linux 缓存：提升性能与速度 | 靖轩</title><meta name="author" content="靖轩"><meta name="copyright" content="靖轩"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="在系统管理和 DevOps 领域，性能至关重要。每一毫秒都至关重要，而 Linux 系统速度的一个最基本但最容易被误解的组件之一就是其缓存机制。许多管理员看到高内存使用率归因于“缓存”而本能地担忧，但这通常是系统健康且性能良好的迹象。理解 Linux 缓存不仅仅是一个学术练习；它是一项实用技能，使您能够准确诊断性能问题并优化您的基础设施。本全面指南将揭开 Linux 缓存系统的神秘面纱，从其核心组">
+<meta property="og:type" content="article">
+<meta property="og:title" content="精通 Linux 缓存：提升性能与速度">
+<meta property="og:url" content="https://www.sujx.net/2026/01/11/Linux_Cache/index.html">
+<meta property="og:site_name" content="靖轩">
+<meta property="og:description" content="在系统管理和 DevOps 领域，性能至关重要。每一毫秒都至关重要，而 Linux 系统速度的一个最基本但最容易被误解的组件之一就是其缓存机制。许多管理员看到高内存使用率归因于“缓存”而本能地担忧，但这通常是系统健康且性能良好的迹象。理解 Linux 缓存不仅仅是一个学术练习；它是一项实用技能，使您能够准确诊断性能问题并优化您的基础设施。本全面指南将揭开 Linux 缓存系统的神秘面纱，从其核心组">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.sujx.net/covers/cover138.jpg">
+<meta property="article:published_time" content="2026-01-11T07:04:07.000Z">
+<meta property="article:modified_time" content="2026-09-26T02:25:04.170Z">
+<meta property="article:author" content="靖轩">
+<meta property="article:tag" content="Cache">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="Performance">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.sujx.net/covers/cover138.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "精通 Linux 缓存：提升性能与速度",
+  "url": "https://www.sujx.net/2026/01/11/Linux_Cache/",
+  "image": "https://cdn.sujx.net/covers/cover138.jpg",
+  "datePublished": "2026-01-11T07:04:07.000Z",
+  "dateModified": "2026-09-26T02:25:04.170Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "靖轩",
+      "url": "https://www.sujx.net"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://cdn.sujx.net/about/favicon.png"><link rel="canonical" href="https://www.sujx.net/2026/01/11/Linux_Cache/index.html"><link rel="preconnect" href="//cdnjs.cloudflare.com"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css?v=5.5.5"><link rel="stylesheet" href="/fonts/css/all.min.css"><link rel="stylesheet" href="/libs/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?417b20ac1984432f821159fac27d3bb5";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><link rel="stylesheet" href="/fonts/titillium-web.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: '/libs/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: true,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '精通 Linux 缓存：提升性能与速度',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="alternate" href="/atom.xml" title="靖轩" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">靖轩</span></a><a class="nav-page-title" href="/"><span class="site-name">精通 Linux 缓存：提升性能与速度</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">精通 Linux 缓存：提升性能与速度</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-01-11T07:04:07.000Z" title="发表于 2026-01-11 15:04:07">2026-01-11</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-09-26T02:25:04.170Z" title="更新于 2026-09-26 10:25:04">2026-09-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B5%B7%E5%A4%96%E6%9D%82%E8%B0%88/">海外杂谈</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">3.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>9分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><p>在系统管理和 DevOps 领域，性能至关重要。每一毫秒都至关重要，而 Linux 系统速度的一个最基本但最容易被误解的组件之一就是其缓存机制。许多管理员看到高内存使用率归因于“缓存”而本能地担忧，但这通常是系统健康且性能良好的迹象。理解 Linux 缓存不仅仅是一个学术练习；它是一项实用技能，使您能够准确诊断性能问题并优化您的基础设施。本全面指南将揭开 Linux 缓存系统的神秘面纱，从其核心组件到实用的监控和管理技术。<br><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover138.jpg"></p>
+<h2 id="Linux-缓存是什么"><a href="#Linux-缓存是什么" class="headerlink" title="Linux 缓存是什么"></a>Linux 缓存是什么</h2><p>从根本上说，Linux 缓存是一个机制，它使用系统未使用的部分随机存取存储器（RAM）来存储最近从磁盘（如 SSD 或 HDD）读取或写入的数据。由于从 RAM 访问数据比从磁盘读取快几个数量级，因此这种缓存可以显著加快系统操作。你可以把它想象成一个图书管理员，他把最常被借阅的书籍放在附近的推车里，而不是每次使用后都放回庞大的书架上。下次有人询问这些热门书籍时，管理员可以立即递给他。在这个类比中，RAM 是推车，磁盘是主图书馆，而 Linux 内核是聪明的管理员。这个过程最小化了磁盘 I&#x2F;O（输入&#x2F;输出），这个计算机系统中最慢的操作之一。</p>
+<p>主要优势包括：</p>
+<ul>
+<li>加快应用程序加载时间：应用程序及其所需数据可以从缓存中提供，而不是从磁盘，从而更快启动。</li>
+<li>提升系统响应速度：频繁操作，如列出目录中的文件，几乎可以瞬间完成，因为所需元数据保存在内存中。</li>
+<li>减少磁盘磨损：通过最小化不必要的读写操作，缓存可以延长物理存储设备的寿命，尤其是 SSD。</li>
+</ul>
+<p>缓存使用内存并非“浪费”。内存很重要，内核是智能的，如果应用程序需要更多内存，内核将无缝且自动地缩小缓存以释放 RAM 给应用程序。这种动态管理确保缓存提升性能，同时不会使关键进程缺乏所需的内存。</p>
+<h2 id="深入探究Linux-缓存"><a href="#深入探究Linux-缓存" class="headerlink" title="深入探究Linux 缓存"></a>深入探究Linux 缓存</h2><p>“Linux 缓存”一词是指几个相关但不同的机制共同工作的总称。最重要的组成部分是页面缓存、Dentry 缓存和 Inode 缓存。</p>
+<h3 id="页面缓存：文件缓存的核心"><a href="#页面缓存：文件缓存的核心" class="headerlink" title="页面缓存：文件缓存的核心"></a>页面缓存：文件缓存的核心</h3><p>页面缓存是 Linux 内核使用的主要磁盘缓存。当你从磁盘读取文件时，内核将其读取为称为“页面”的块（通常大小为 4KB）并存储这些页面在未使用的 RAM 区域。下次任何进程请求该文件的部分内容时，内核可以直接从速度更快的页面缓存中提供，避免了缓慢的磁盘读取操作。这也适用于写操作。当你向文件写入数据时，数据可以首先写入 Page Cache（这个过程称为写回缓存）。然后系统可以通知应用程序写入完成，使应用程序感觉快速响应。内核随后在最佳时间将这些“脏”页面在后台刷新到磁盘。可以使用 <code>sync</code> 命令手动强制所有脏页面写入磁盘。</p>
+<h3 id="缓冲区缓存：缓冲块设备-I-O"><a href="#缓冲区缓存：缓冲块设备-I-O" class="headerlink" title="缓冲区缓存：缓冲块设备 I&#x2F;O"></a>缓冲区缓存：缓冲块设备 I&#x2F;O</h3><p>历史上，缓冲区缓存（或<code>Buffers</code>）是一个独立的实体，它存储与块设备相关的元数据，例如文件系统日志或分区表。在现代 Linux 内核（2. 4 之后）中，缓冲区缓存不是一个独立的内存池。它的功能已与页面缓存统一。今天，当你在 <code>free</code> 或 <code>top</code> 等工具中看“Buffers”时，它通常指的是页面缓存中专门存储块设备元数据的页面。这是一个临时存储原始磁盘块的存储区，与以文件为中心的页面缓存相比，它是一个较小的组件。</p>
+<h3 id="Slab-分配器：Dentry-和-Inode-缓存"><a href="#Slab-分配器：Dentry-和-Inode-缓存" class="headerlink" title="Slab 分配器：Dentry 和 Inode 缓存"></a>Slab 分配器：Dentry 和 Inode 缓存</h3><p>超越缓存文件内容，内核还需要缓存文件系统元数据以避免重复磁盘查找文件结构信息。这由 Slab 分配器处理，Slab 分配器是内核中用于频繁使用的数据结构的特殊内存管理机制。</p>
+<h4 id="dentry-缓存（dcache）"><a href="#dentry-缓存（dcache）" class="headerlink" title="dentry 缓存（dcache）"></a>dentry 缓存（dcache）</h4><p>一个“dentry”（目录项）是一种数据结构，用于将文件路径（例如 <code>/home/user/document.txt</code> ）转换为 inode。每次访问文件时，内核都必须遍历这个路径。dentry 缓存将这些转换保存在 RAM 中。这极大地加快了诸如 <code>ls -l</code> 或任何文件访问的操作，因为内核无需反复从磁盘读取目录信息。您可以从官方 Linux 内核文档中了解更多关于内核内存分配的信息。</p>
+<h4 id="inode-缓存（icache）"><a href="#inode-缓存（icache）" class="headerlink" title="inode 缓存（icache）"></a>inode 缓存（icache）</h4><p>一个“inode”存储了文件的所有元数据——除了文件名和实际数据内容。这包括权限、所有权、文件大小、时间戳以及指向磁盘块的指针，这些磁盘块存储了文件的数据。inode 缓存将这些信息保存在内存中，用于最近访问的文件，再次避免了因检索元数据而导致的慢速磁盘 I&#x2F;O。</p>
+<h2 id="监控和分析-Linux-缓存"><a href="#监控和分析-Linux-缓存" class="headerlink" title="监控和分析 Linux 缓存"></a>监控和分析 Linux 缓存</h2><p>使用标准 Linux 命令行工具可以轻松监控系统的缓存。理解其输出是了解内存情况的关键。</p>
+<h3 id="使用-free-命令"><a href="#使用-free-命令" class="headerlink" title="使用 free 命令"></a>使用 free 命令</h3><p><code>free</code> 命令是检查内存使用情况的最快方法。使用 <code>-h</code> （人类可读）标志使输出易于理解。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">free -h</span></span><br><span class="line">               total        used        free      shared  buff/cache   available</span><br><span class="line">Mem:            15Gi       4. 5Gi       338Mi       1. 1Gi        10Gi        9. 2Gi</span><br><span class="line">Swap:          2. 0Gi       1. 2Gi       821Mi</span><br></pre></td></tr></table></figure>
+
+<p>以下是解读关键列的方法：</p>
+<ul>
+<li>总计：已安装的总 RAM。</li>
+<li>已使用：应用程序实际使用的内存（总计 - 可用 - 缓存）。</li>
+<li>可用：真正未被使用的内存。在繁忙的系统上，这个数值通常较小，这是正常的。</li>
+<li>buff&#x2F;cache：这是由页面缓存、缓冲区缓存和 Slab 分配器（dentries 和 inode）使用的内存总和。这是内核在需要时可以回收的内存。</li>
+<li>可用：这是最重要的指标。它是估计有多少内存可用于启动新应用程序而不进行交换的估计值。它包括“空闲”内存以及可以轻松回收的“buff&#x2F;cache”部分。</li>
+</ul>
+<h3 id="理解-proc-meminfo"><a href="#理解-proc-meminfo" class="headerlink" title="理解 /proc/meminfo"></a>理解 <code>/proc/meminfo</code></h3><p>为了更详细的分解，您可以检查虚拟文件 <code>/proc/meminfo</code> 。该文件提供了大量信息，工具如 <code>free</code> 使用这些信息。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">cat</span> /proc/meminfo | grep -E <span class="string">&#x27;^( MemAvailable|Buffers|Cached|SReclaimable )&#x27;</span></span></span><br><span class="line">MemAvailable:    9614444 kB</span><br><span class="line">Buffers:          345520 kB</span><br><span class="line">Cached:          9985224 kB</span><br><span class="line">SReclaimable:     678220 kB</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>可用内存：与 <code>free</code> 中的“可用”列相同。</li>
+<li>缓冲区：缓冲区缓存使用的内存。</li>
+<li>缓存：页面缓存使用的内存，不包括交换缓存。</li>
+<li>可回收：Slab 内存（如 dentry 和 inode 缓存）中可回收的部分。</li>
+</ul>
+<h3 id="高级工具：-vmstat-和-slabtop"><a href="#高级工具：-vmstat-和-slabtop" class="headerlink" title="高级工具： vmstat 和 slabtop"></a>高级工具： <code>vmstat</code> 和 <code>slabtop</code></h3><p>对于动态监控， <code>vmstat</code> （虚拟内存统计）非常出色。运行 <code>vmstat 2</code> 将每 2 秒提供一次更新。软件工具</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ vmstat 2</span><br><span class="line">procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----</span><br><span class="line"> r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st</span><br><span class="line"> 1  0 1252348 347492 345632 10580980    2    5   119   212  136  163  9  2 88  1  0</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>注意 <code>bi</code> （块入）和 <code>bo</code> （块出）列。这里的数值高且持续，表明磁盘 I&#x2F;O 繁忙。如果这些值在系统繁忙时较低，则表明缓存正在有效地服务请求。</p>
+<p>要直接检查 Slab 分配器，你可以使用 <code>slabtop</code> 。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># requires root privileges</span><br><span class="line">sudo slabtop</span><br></pre></td></tr></table></figure>
+
+<p>这个命令提供实时查看顶级内核缓存的视图，让你看到像 <code>dentry</code> 这样的对象以及各种 inode 缓存使用了多少内存。</p>
+<h2 id="管理-Linux-缓存：何时以及如何清除它"><a href="#管理-Linux-缓存：何时以及如何清除它" class="headerlink" title="管理 Linux 缓存：何时以及如何清除它"></a>管理 Linux 缓存：何时以及如何清除它</h2><p>警告：手动清除 Linux 缓存是一项需要极其谨慎执行的操作，在生产系统上很少有必要。内核的内存管理算法高度优化。强制清除缓存可能会导致性能暂时下降，因为系统需要从速度较慢的磁盘重新读取所需数据。</p>
+<h3 id="为什么你可能认为需要清除缓存"><a href="#为什么你可能认为需要清除缓存" class="headerlink" title="为什么你可能认为需要清除缓存"></a>为什么你可能<em>认为</em>需要清除缓存</h3><p>管理员想要清除缓存最常见的原因是对 <code>free -h</code> 的输出存在误解。他们看到“free”内存值较低而“buff&#x2F;cache”值较高，便认为系统内存不足。正如我们所讨论的，这是健康系统的预期行为。清除缓存的唯一合法理由通常是用于基准测试——例如，在不考虑缓存效应的情况下测量应用程序磁盘 I&#x2F;O 的“冷启动”性能。</p>
+<h3 id="drop-caches-机制：清除缓存的正确方法"><a href="#drop-caches-机制：清除缓存的正确方法" class="headerlink" title="drop_caches 机制：清除缓存的正确方法"></a>drop_caches 机制：清除缓存的正确方法</h3><p>如果你有正当理由清除缓存，Linux 提供了一种通过 <code>/proc/sys/vm/drop_caches</code> 接口进行非破坏性操作的方式。关于详细解释，像 Red Hat 关于内存管理的文章等资源非常有价值。</p>
+<p>首先，使用 <code>sync</code> 命令将所有缓存数据写入磁盘是一个好习惯，以防止任何数据丢失。这会将内存中的任何“脏”页面刷新到存储设备。硬盘</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">First, ensure all pending writes are completed</span></span><br><span class="line">sync</span><br></pre></td></tr></table></figure>
+
+<p>接下来，您可以向 <code>drop_caches</code> 写入一个值来指定要清除的内容。执行此操作需要 root 权限。</p>
+<ul>
+<li><p><strong>仅释放页缓存：</strong></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">echo 1 | sudo tee /proc/sys/vm/drop_caches</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>释放可回收的 slab 对象（dentries 和 inodes）：</strong></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">echo 2 | sudo tee /proc/sys/vm/drop_caches</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>释放页缓存、目录项和 inode（最常见的情况）：</strong></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">echo 3 | sudo tee /proc/sys/vm/drop_caches</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="示例：前后对比"><a href="#示例：前后对比" class="headerlink" title="示例：前后对比"></a>示例：前后对比</h4><p>让我们看看效果。<strong>之前：</strong></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">操作之前</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">free -h</span></span><br><span class="line">               total        used        free      shared  buff/cache   available</span><br><span class="line">Mem:            15Gi       4. 5Gi       338Mi       1. 1Gi        10Gi        9. 2Gi</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">执行操作</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">sync</span>; <span class="built_in">echo</span> 3 | <span class="built_in">sudo</span> <span class="built_in">tee</span> /proc/sys/vm/drop_caches</span></span><br><span class="line">3</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">操作完成</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">free -h</span></span><br><span class="line">               total        used        free      shared  buff/cache   available</span><br><span class="line">Mem:            15Gi       4. 4Gi        10Gi       1. 1Gi       612Mi        9. 6Gi</span><br></pre></td></tr></table></figure>
+
+<p>如您所见， <code>buff/cache</code> 值从 10Gi 骤降至 612Mi，而 <code>free</code> 内存相应增加。然而，对于需要刚刚从缓存中清除的数据的任何操作，系统的性能现在会更慢。</p>
+<h2 id="常见问题解答"><a href="#常见问题解答" class="headerlink" title="常见问题解答"></a>常见问题解答</h2><ul>
+<li><p><strong>Linux 中缓冲区和缓存有什么区别？</strong></p>
+<p>从历史上看，缓冲区用于原始块设备 I&#x2F;O，而缓存用于文件内容。在现代内核中，它们是统一的。“缓存”（页面缓存）存储文件数据，“缓冲区”表示块 I&#x2F;O 的元数据，但它们都驻留在同一个内存池中。</p>
+</li>
+<li><p><strong>Linux 中高缓存使用率是坏事吗？</strong></p>
+<p>不，恰恰相反。高缓存使用率表明您的系统正在有效地使用可用 RAM 来加速磁盘操作。这不是“浪费”的内存，当应用程序需要时将自动释放。</p>
+</li>
+<li><p><strong>如何查看哪些文件在页面缓存中？</strong></p>
+<p>目前没有简单的标准命令可以实现这一点，但像 <code>vmtouch</code> 或 <code>pcstat</code> 这样的第三方工具可以分析文件或目录，并报告它们当前有多少内容驻留在页面缓存中。</p>
+</li>
+<li><p><strong>清除缓存会删除我的数据吗？</strong></p>
+<p>不会。使用 <code>drop_caches</code> 方法不会导致数据丢失。缓存仅存储永久存储在磁盘上的数据的副本。在清除缓存之前，先运行 <code>sync</code> 可以确保所有待处理的写入操作都安全地提交到磁盘。</p>
+</li>
+</ul>
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>Linux 缓存是一项强大且智能的性能提升功能。通过利用未使用的 RAM，内核显著减少了磁盘 I&#x2F;O，使整个系统运行更快、响应更及时。虽然存在手动清除缓存的能力，但其使用场景几乎仅限于特定的基准测试场景。对于系统管理员和 DevOps 工程师来说，关键在于学会如何使用 <code>free</code> 、 <code>vmstat</code> 和 <code>/proc/meminfo</code> 等工具正确监控和解读缓存使用情况。</p>
+<p>拥抱并理解 Linux 缓存的行为是掌握 Linux 性能调优和构建健壮、高效系统的基本步骤。</p>
+<hr>
+<p>原文链接： <a target="_blank" rel="noopener" href="https://www.devopsroles.com/wp-content/uploads/2025/10/Mastering-Linux-Cache.jpg">Mastering Linux Cache: Boost Performance &amp; Speed</a></p>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Linux/">Linux</a><a class="post-meta__tags" href="/tags/Performance/">Performance</a><a class="post-meta__tags" href="/tags/Cache/">Cache</a></div><div class="post-share"><div class="social-share" data-image="https://cdn.sujx.net/covers/cover138.jpg" data-sites="facebook,twitter,weibo,qq"></div><link rel="stylesheet" href="/libs/sharejs/css/share.min.css" media="print" onload="this.media='all'"><script src="/libs/sharejs/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>能否请我喝一杯咖啡？</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.jpg" target="_blank"><img class="post-qr-code-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/wechat.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2026/01/20/OWASP-top/" title="如何理解 Web 应用程序安全"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover145.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">如何理解 Web 应用程序安全</div></div><div class="info-2"><div class="info-item-1">在当今的数字世界中，Web 应用程序对企业和个人都至关重要。然而，随着在线平台的增长，Web 安全问题已成为一个主要关注点。黑客经常利用漏洞进行未经授权的访问、中断服务或窃取敏感信息。为了应对这一问题，开放 Web 应用程序安全项目（OWASP）创建了一份顶级 Web 应用程序安全风险列表。该列表被称为 OWASP Top 10，已成为开发人员和安全专业人员识别和缓解关键漏洞的全球标准。 在本文中，我们将深入探讨每个 OWASP Top 10 漏洞，提供从基础到高级的示例、预防技术和最佳实践。让我们探索如何理解和解决这些风险，以保护您的 Web 应用程序。  什么是 OWASP Top 10？OWASP Top 10 是一个定期更新的、针对 Web 应用最关键的安全风险列表。它旨在指导开发者和安全专家了解常见的漏洞，使他们能够创建更安全的应用程序。让我们逐一分析每个风险，并提供实用的缓解建议。 1. 注入什么是注入？注入漏洞发生在不可信数据被作为命令或查询的一部分发送给解释器时，允许攻击者在未经授权的情况下执行恶意命令或访问数据。SQL 注入是最常见的例子。 注入示例考虑一个 S...</div></div></div></a><a class="pagination-related" href="/2026/01/03/Ubuntu_CA/" title="找出Ubuntu内置那些CA证书"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover123.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">找出Ubuntu内置那些CA证书</div></div><div class="info-2"><div class="info-item-1">在 Linux 安全领域，证书机构（CAs）作为可信的第三方，负责验证网站、服务器和客户端的身份。Ubuntu 预装了一组可信的根证书，但了解如何检查、验证和检查这些证书是系统管理员和开发人员的一项关键技能。本指南涵盖了 CA 证书的存储位置、如何列出它们以及如何使用标准命令行工具验证其有效性。    10 山西·阳泉·娘子关镇   CA 证书存储在哪里？在 Ubuntu（以及大多数基于 Debian 的系统）中，受信任的 CA 证书存储在几个特定的位置：  /etc/ssl/certs/：这是 OpenSSL 和其他应用程序查找受信任证书的主要目录。它包含单个证书文件和指向实际证书的符号链接（通常以哈希值命名）。 /etc/ssl/certs/ca-certificates.crt：这是一个单个连接文件 ，包含系统上所有受信任的 CA 证书。许多应用程序（如 Python requests 或 curl）使用此特定文件，而不是扫描整个目录。 /usr/share/ca-certificates/：此目录存放由 ca-certificates 软件包提供的原始证书文件。  列出所...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2024/06/17/Aliyun-ECS-Perf/" title="简单测试阿里云Linux主机性能"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover19.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-06-17</div><div class="info-item-2">简单测试阿里云Linux主机性能</div></div><div class="info-2"><div class="info-item-1">在实际的虚拟化平台建设项目中，交付物的测试用例都一直是个需要注意的重要事件。期间，设计原始规划是否合理、资源配置是否正确，以及和甲方以及其他参与者的扯皮……现在，我尝试分别使用阿里云的99元（ 张家口区域，规格为ecs。 e-c1m1。 large ）和199元ECS( 北京区域，规格为ecs。 e-c1m2。 large )来进行一个简单的性能测试。   05 摄于北京通州，一个不请自来的松鼠   CPU测试# 查看CPU信息[root@beijing ~]# cat /proc/cpuinfo processor	: 0vendor_id	: GenuineIntelcpu family	: 6model		: 85model name	: Intel( R ) Xeon( R ) Platinumstepping	: 4microcode	: 0x1cpu MHz		: 2500. 002cache size	: 33792 KBphysical id	: 0siblings	: 2core id		: 0cpu cores	: 1apicid		: 0initial ap...</div></div></div></a><a class="pagination-related" href="/2022/11/03/KVM-Howto/" title="内核虚拟化KVM的使用"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/wallhaven-4dqdw3.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2022-11-03</div><div class="info-item-2">内核虚拟化KVM的使用</div></div><div class="info-2"><div class="info-item-1">概念KVM全称为Kernel Virtual Machine内核虚拟机，它是硬件辅助的全虚拟化解决方案，支持x86架构，并已移植到ARM、MIPS、PowerPC等架构。KVM作为可加载的内核模块包含在Linux内核之中，除了通用模块kvm.ko外，针对不同的CPU还有不同的模块，例如针对Intel的CPU的kvm-intel.ko，针对AMD的kvm-amd.ko. KVM的体系结构的核心是一组实现虚拟化功能的Linux内核模块，包括提供虚拟化能力的kvm。 ko，还包括特定CPU的模块和管理中断、时钟等设备管理模块。而其他设备例如网卡、显卡、存储控制器和磁盘则由QEMU( Quick Emulator )来负责。它通过&#x2F;dev&#x2F;kvm接口设置一个Guest操作系统的地址空间，从而提供模拟的I&#x2F;O设备。Libvirt是管理虚拟机和其他虚拟化功能的软件集合，包括API库、守护进程（ libvirtd ）和其他工具，它在KVM解决方案中扮演管理工具的角色。 入门创建虚机准备安装以Rocky Linux 8为例，需要准备一台对应虚机，并开启相关嵌套虚拟化...</div></div></div></a><a class="pagination-related" href="/2023/05/14/magedu-week-2/" title="Linux系统基础知识·2"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/wallhaven-43wj9y.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-05-14</div><div class="info-item-2">Linux系统基础知识·2</div></div><div class="info-2"><div class="info-item-1"> 本文基于马哥教育就业班第二周课程总结  系统设计 请总结Linux的安全模型  Linux的安全模型基于许多不同的安全措施，包括访问控制、加密、审计和漏洞修补以下是Linux安全模型的主要要点：1. 访问控制：Linux使用许多不同的访问控制机制来保护系统和数据其中最常见的是基于用户和组的访问控制，它允许管理员为每个用户和组分配不同的权限此外，Linux还支持访问控制列表（ACL）和强制访问控制（MAC）等高级访问控制机制；2. 加密：Linux支持许多不同的加密技术，包括SSL / TLS、SSH、IPSec和GPG等这些技术可以用于保护数据传输和存储，以及验证用户身份；3. 审计：Linux支持系统级别的审计，可以记录用户活动、系统事件和安全事件等这些日志可以用于监控系统安全性，并帮助管理员识别潜在的安全问题；4. 漏洞修补：Linux社区积极修补系统中发现的漏洞，并发布安全更新管理员应该定期更新系统以确保最新的安全补丁已安装；总之，Linux的安全模型是一个多层次的、综合的安全框架，它提供了许多不同的安全措施来保护系统和数据管理员应该了解这些措施，并采取适当的措施来保护他...</div></div></div></a><a class="pagination-related" href="/2024/08/03/About-IT-SEC/" title="IT运维安全策略"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover36.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-08-03</div><div class="info-item-2">IT运维安全策略</div></div><div class="info-2"><div class="info-item-1">概述IT运维安全主要包括网络层面、系统层面、软件层面、硬件层面。 硬件层面IDC机房、服务器硬件、IT设备等定期巡检，保证其正常、稳定运行，以防止损失、被盗、高温、静电、电源等 软件层面Nginx、Java、PHP、MySQL、Web站点、业务系统等软件程序漏洞及BUG，对外访问权限、监听的端口、版本隐藏、软件权限控制、用户名和密码控制 系统层面操作系统自身版本、BUG漏洞、暴露的端口、服务、系统权限、root用户、禁止ping、指令特权控制 网络层面大流量冲击、DDoS、ARP攻击、通信中断等，网络层面安全重点关注网络流量、网络连通性。    05 摄于河北邯郸·太极宗师杨露禅   攻击方式DDoS攻击DDoS( Distributed Denial of Service， 分布式拒绝服务 )攻击的主要目的是让指定目标无法提供正常服务，是目前最强大、最难防御的攻击之一。 原理借助于客户端&#x2F;服务器技术，将多个计算机联合起来作为攻击平台，对一个或多个目标发动DDoS攻击，从而成倍提高拒绝服务攻击的威力。  分布式拒绝服务攻击采取的攻击手段就是分布式的，使攻击方式出现了没有...</div></div></div></a><a class="pagination-related" href="/2025/06/13/Guide2PCP/" title="释放系统性能：Fedora和RHEL上PCP调优实用指南"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover112.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-06-13</div><div class="info-item-2">释放系统性能：Fedora和RHEL上PCP调优实用指南</div></div><div class="info-2"><div class="info-item-1">Performance Co-Pilot ( PCP )是一个用于收集、监控和分析系统性能指标的强大框架。它包含在 Fedora 和 RHEL 的仓库中，允许管理员以最低配置收集各种数据。本指南将指导您如何调整PCP 的 pmlogger服务，以更好地满足您的需求——无论您是在调试性能问题，还是在受限的硬件上运行。  PCP的默认设置是否适合您的P用例？通常并非如此。虽然 PCP 的默认设置能够在数据粒度和开销之间取得平衡，但生产工作负载的差异很大。本文稍后将使用两个场景来演示一些有用的配置。 启动并运行 PCP首先，安装 PCP 包： $ sudo dnf install -y pcp pcp-system-tools  然后启用并启动核心服务： $ sudo systemctl enable --now pmcd.service$ sudo systemctl enable --now pmlogger.service  验证两个服务是否正在运行： $ systemctl status pmcd pmlogger  了解 pmlogger 及其配置PCP由两个主要成分组成： ...</div></div></div></a><a class="pagination-related" href="/2025/02/21/Hardlink-Softlink/" title="Linux中的文件、硬链接和软连接"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover82.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-02-21</div><div class="info-item-2">Linux中的文件、硬链接和软连接</div></div><div class="info-2"><div class="info-item-1">我一直对自己对 Linux 中的 inode、硬链接和软链接的肤浅理解感到困扰。在这里，我尝试将我的学习结构化为一个简化的思维模型。欢迎指正。   下文是对A mental model for Linux file, hard and soft links的翻译  Linux中的文件、硬链接和软连接Linux中文件是什么？在存储层面，文件是数据块。在文件系统级别，此数据块表示为称为inode的抽象。将 inode 视为存储有关底层数据块的元数据的数据结构。路径名 使得这一对（inode，数据块）可供人类访问和使用。 以这种方式思考整体 - 文件的数据块位于比路径名（位于文件系统级别）更低的抽象级别。inode 充当桥梁 - 文件系统级别的数据块的代表。  文件的组成部分。从下往上依次为数据块、inode 和路径名 大致来说，文件 &#x3D; 路径名 + inode + 数据块。 因此，当您谈论文件时，您可能指的是其中部分或全部组件。 硬链接现在，如果我们将路径名视为贴在（inode，数据块）对上的标签，那么我们可以用不同的标签引用同一个 inode。  两个路径名/tmp/fi...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">靖轩</div><div class="author-info-description">逝者如斯夫,不舍昼夜</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/grepsu"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://gitee.com/grepsu" target="_blank" title="Gitee"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:sujx@live.cn" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS链接"><i class="fa  fa-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Linux-%E7%BC%93%E5%AD%98%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-number">1.</span> <span class="toc-text">Linux 缓存是什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B7%B1%E5%85%A5%E6%8E%A2%E7%A9%B6Linux-%E7%BC%93%E5%AD%98"><span class="toc-number">2.</span> <span class="toc-text">深入探究Linux 缓存</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A1%B5%E9%9D%A2%E7%BC%93%E5%AD%98%EF%BC%9A%E6%96%87%E4%BB%B6%E7%BC%93%E5%AD%98%E7%9A%84%E6%A0%B8%E5%BF%83"><span class="toc-number">2.1.</span> <span class="toc-text">页面缓存：文件缓存的核心</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%93%E5%86%B2%E5%8C%BA%E7%BC%93%E5%AD%98%EF%BC%9A%E7%BC%93%E5%86%B2%E5%9D%97%E8%AE%BE%E5%A4%87-I-O"><span class="toc-number">2.2.</span> <span class="toc-text">缓冲区缓存：缓冲块设备 I&#x2F;O</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Slab-%E5%88%86%E9%85%8D%E5%99%A8%EF%BC%9ADentry-%E5%92%8C-Inode-%E7%BC%93%E5%AD%98"><span class="toc-number">2.3.</span> <span class="toc-text">Slab 分配器：Dentry 和 Inode 缓存</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#dentry-%E7%BC%93%E5%AD%98%EF%BC%88dcache%EF%BC%89"><span class="toc-number">2.3.1.</span> <span class="toc-text">dentry 缓存（dcache）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#inode-%E7%BC%93%E5%AD%98%EF%BC%88icache%EF%BC%89"><span class="toc-number">2.3.2.</span> <span class="toc-text">inode 缓存（icache）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%91%E6%8E%A7%E5%92%8C%E5%88%86%E6%9E%90-Linux-%E7%BC%93%E5%AD%98"><span class="toc-number">3.</span> <span class="toc-text">监控和分析 Linux 缓存</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-free-%E5%91%BD%E4%BB%A4"><span class="toc-number">3.1.</span> <span class="toc-text">使用 free 命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%90%86%E8%A7%A3-proc-meminfo"><span class="toc-number">3.2.</span> <span class="toc-text">理解 &#x2F;proc&#x2F;meminfo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%AB%98%E7%BA%A7%E5%B7%A5%E5%85%B7%EF%BC%9A-vmstat-%E5%92%8C-slabtop"><span class="toc-number">3.3.</span> <span class="toc-text">高级工具： vmstat 和 slabtop</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%A1%E7%90%86-Linux-%E7%BC%93%E5%AD%98%EF%BC%9A%E4%BD%95%E6%97%B6%E4%BB%A5%E5%8F%8A%E5%A6%82%E4%BD%95%E6%B8%85%E9%99%A4%E5%AE%83"><span class="toc-number">4.</span> <span class="toc-text">管理 Linux 缓存：何时以及如何清除它</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%A0%E5%8F%AF%E8%83%BD%E8%AE%A4%E4%B8%BA%E9%9C%80%E8%A6%81%E6%B8%85%E9%99%A4%E7%BC%93%E5%AD%98"><span class="toc-number">4.1.</span> <span class="toc-text">为什么你可能认为需要清除缓存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#drop-caches-%E6%9C%BA%E5%88%B6%EF%BC%9A%E6%B8%85%E9%99%A4%E7%BC%93%E5%AD%98%E7%9A%84%E6%AD%A3%E7%A1%AE%E6%96%B9%E6%B3%95"><span class="toc-number">4.2.</span> <span class="toc-text">drop_caches 机制：清除缓存的正确方法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%EF%BC%9A%E5%89%8D%E5%90%8E%E5%AF%B9%E6%AF%94"><span class="toc-number">4.2.1.</span> <span class="toc-text">示例：前后对比</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E8%A7%A3%E7%AD%94"><span class="toc-number">5.</span> <span class="toc-text">常见问题解答</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%93%E8%AE%BA"><span class="toc-number">6.</span> <span class="toc-text">结论</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/07/03/AIGC_FoxHole/" title="海鹰">海鹰</a><time datetime="2026-07-03T01:04:07.000Z" title="发表于 2026-07-03 09:04:07">2026-07-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/11/fristVibeCoding/" title="鹊随金印：我的第一个完整的AI编程项目">鹊随金印：我的第一个完整的AI编程项目</a><time datetime="2026-06-11T01:04:07.000Z" title="发表于 2026-06-11 09:04:07">2026-06-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/03/VI_Howto/" title="VI编辑器简介">VI编辑器简介</a><time datetime="2026-06-03T01:04:07.000Z" title="发表于 2026-06-03 09:04:07">2026-06-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/28/HNCitic_2605/" title="我要上头条">我要上头条</a><time datetime="2026-05-28T01:04:07.000Z" title="发表于 2026-05-28 09:04:07">2026-05-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/12/TS-Domain-Controller-Sync-Failure/" title="记一次Windows AD域控制器同步故障排错">记一次Windows AD域控制器同步故障排错</a><time datetime="2026-05-12T03:04:07.000Z" title="发表于 2026-05-12 11:04:07">2026-05-12</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2008 - 2026 By 靖轩</span></div><div class="footer_custom_text">京ICP备17034757号</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.5"></script><script src="/js/main.js?v=5.5.5"></script><script src="/libs/fancybox/fancybox.umd.js"></script><script src="/js/instantpage.js" type="module"></script><script src="/libs/lazyload/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const parseViewBox = viewBox => {
+    if (!viewBox) return null
+    const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
+    if (parts.length !== 4 || parts.some(n => Number.isNaN(n))) return null
+    return parts
+  }
+
+  const getSvgViewBox = svg => {
+    const attr = parseViewBox(svg.getAttribute('viewBox'))
+    if (attr) return attr
+
+    // Fallback: use bbox to build a viewBox
+    try {
+      const bbox = svg.getBBox()
+      if (bbox && bbox.width && bbox.height) return [bbox.x, bbox.y, bbox.width, bbox.height]
+    } catch (e) {
+      // getBBox may fail on some edge cases; ignore
+    }
+
+    const w = Number(svg.getAttribute('width')) || 0
+    const h = Number(svg.getAttribute('height')) || 0
+    if (w > 0 && h > 0) return [0, 0, w, h]
+    return [0, 0, 100, 100]
+  }
+
+  const setSvgViewBox = (svg, vb) => {
+    svg.setAttribute('viewBox', `${vb[0]} ${vb[1]} ${vb[2]} ${vb[3]}`)
+  }
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v))
+
+  const openSvgInNewTab = ({ source, initViewBox }) => {
+    const getClonedSvg = () => {
+      if (typeof source === 'string') {
+        const template = document.createElement('template')
+        template.innerHTML = source.trim()
+        const svg = template.content.querySelector('svg')
+        return svg ? svg.cloneNode(true) : null
+      }
+      if (source && typeof source.cloneNode === 'function') {
+        return source.cloneNode(true)
+      }
+      return null
+    }
+
+    const clone = getClonedSvg()
+    if (!clone) return
+    if (initViewBox && initViewBox.length === 4) {
+      clone.setAttribute('viewBox', initViewBox.join(' '))
+    }
+    if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+    if (!clone.getAttribute('xmlns:xlink') && clone.outerHTML.includes('xlink:')) {
+      clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+    }
+    // inject background to match current theme
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    const bg = getComputedStyle(document.body).backgroundColor || (isDark ? '#1e1e1e' : '#ffffff')
+    if (!clone.style.background) clone.style.background = bg
+
+    const serializer = new XMLSerializer()
+    const svgSource = serializer.serializeToString(clone)
+    const htmlSource = `<!doctype html><html><head><meta charset="utf-8" />
+      <style>
+        html, body { width: 100%; height: 100%; margin: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; }
+        svg { max-width: 100%; max-height: 100%; height: auto; width: auto; }
+      </style>
+      </head><body>${svgSource}</body></html>`
+    const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank', 'noopener')
+    setTimeout(() => URL.revokeObjectURL(url), 30000)
+  }
+
+  const attachMermaidViewerButton = wrap => {
+    let btn = wrap.querySelector('.mermaid-open-btn')
+    if (!btn) {
+      btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'mermaid-open-btn'
+      wrap.appendChild(btn)
+    }
+
+    btn.innerHTML = '<i class="fa fa-search fa-fw" aria-hidden="true"></i>'
+
+    if (!btn.__mermaidViewerBound) {
+      btn.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        const svg = wrap.__mermaidOriginalSvg || wrap.querySelector('svg')
+        if (!svg) return
+        const initViewBox = wrap.__mermaidInitViewBox
+        if (typeof svg === 'string') {
+          openSvgInNewTab({ source: svg, initViewBox })
+          return
+        }
+        openSvgInNewTab({ source: svg, initViewBox })
+      })
+      btn.__mermaidViewerBound = true
+    }
+  }
+
+  // Zoom around a point (px, py) in the SVG viewport (in viewBox coordinates)
+  const zoomAtPoint = (vb, factor, px, py) => {
+    const w = vb[2] * factor
+    const h = vb[3] * factor
+    const nx = px - (px - vb[0]) * factor
+    const ny = py - (py - vb[1]) * factor
+    return [nx, ny, w, h]
+  }
+
+  const initMermaidGestures = wrap => {
+    const svg = wrap.querySelector('svg')
+    if (!svg) return
+
+    // Ensure viewBox exists so gestures always work
+    const initVb = getSvgViewBox(svg)
+    wrap.__mermaidInitViewBox = initVb
+    wrap.__mermaidCurViewBox = initVb.slice()
+    setSvgViewBox(svg, initVb)
+
+    // Avoid binding multiple times on themeChange/pjax
+    if (wrap.__mermaidGestureBound) return
+    wrap.__mermaidGestureBound = true
+
+    // Helper: map client (viewport) coordinate -> viewBox coordinate
+    const clientToViewBox = (clientX, clientY) => {
+      const rect = svg.getBoundingClientRect()
+      const vb = wrap.__mermaidCurViewBox || getSvgViewBox(svg)
+      const x = vb[0] + (clientX - rect.left) * (vb[2] / rect.width)
+      const y = vb[1] + (clientY - rect.top) * (vb[3] / rect.height)
+      return { x, y, rect, vb }
+    }
+
+    const state = {
+      pointers: new Map(),
+      startVb: null,
+      startDist: 0,
+      startCenter: null
+    }
+
+    const clampVb = vb => {
+      const init = wrap.__mermaidInitViewBox || vb
+      const minW = init[2] * 0.1
+      const maxW = init[2] * 10
+      const minH = init[3] * 0.1
+      const maxH = init[3] * 10
+      vb[2] = clamp(vb[2], minW, maxW)
+      vb[3] = clamp(vb[3], minH, maxH)
+      return vb
+    }
+
+    const setCurVb = vb => {
+      vb = clampVb(vb)
+      wrap.__mermaidCurViewBox = vb
+      setSvgViewBox(svg, vb)
+    }
+
+    const onPointerDown = e => {
+      // Allow only primary button for mouse
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      svg.setPointerCapture(e.pointerId)
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      if (state.pointers.size === 1) {
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      } else if (state.pointers.size === 2) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        state.startDist = Math.hypot(dx, dy)
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        state.startCenter = { x: (pts[0].x + pts[1].x) / 2, y: (pts[0].y + pts[1].y) / 2 }
+      }
+    }
+
+    const onPointerMove = e => {
+      if (!state.pointers.has(e.pointerId)) return
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      // Pan with 1 pointer
+      if (state.pointers.size === 1 && state.startVb) {
+        const p = [...state.pointers.values()][0]
+        const prev = { x: e.clientX - e.movementX, y: e.clientY - e.movementY }
+        // movementX/Y unreliable on touch, compute from stored last position
+        const last = wrap.__mermaidLastSinglePointer || p
+        const dxClient = p.x - last.x
+        const dyClient = p.y - last.y
+        wrap.__mermaidLastSinglePointer = p
+
+        const { rect } = clientToViewBox(p.x, p.y)
+        const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        const dx = dxClient * (vb[2] / rect.width)
+        const dy = dyClient * (vb[3] / rect.height)
+        setCurVb([vb[0] - dx, vb[1] - dy, vb[2], vb[3]])
+        return
+      }
+
+      // Pinch zoom with 2 pointers
+      if (state.pointers.size === 2 && state.startVb && state.startDist > 0) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        const dist = Math.hypot(dx, dy)
+        if (!dist) return
+        const factor = state.startDist / dist // dist bigger => zoom in (viewBox smaller)
+
+        const cx = (pts[0].x + pts[1].x) / 2
+        const cy = (pts[0].y + pts[1].y) / 2
+        const centerClient = { x: cx, y: cy }
+
+        const pxy = clientToViewBox(centerClient.x, centerClient.y)
+        const cpx = pxy.x
+        const cpy = pxy.y
+
+        const vb = zoomAtPoint(state.startVb, factor, cpx, cpy)
+        setCurVb(vb)
+      }
+    }
+
+    const onPointerUpOrCancel = e => {
+      state.pointers.delete(e.pointerId)
+      if (state.pointers.size === 0) {
+        state.startVb = null
+        state.startDist = 0
+        state.startCenter = null
+        wrap.__mermaidLastSinglePointer = null
+      } else if (state.pointers.size === 1) {
+        // reset single pointer baseline to avoid jump
+        wrap.__mermaidLastSinglePointer = [...state.pointers.values()][0]
+      }
+    }
+
+    // Wheel zoom (mouse/trackpad)
+    const onWheel = e => {
+      // ctrlKey on mac trackpad pinch; we treat both as zoom
+      e.preventDefault()
+      const delta = e.deltaY
+      const zoomFactor = delta > 0 ? 1.1 : 0.9
+      const { x, y } = clientToViewBox(e.clientX, e.clientY)
+      const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      setCurVb(zoomAtPoint(vb, zoomFactor, x, y))
+    }
+
+    const onDblClick = () => {
+      const init = wrap.__mermaidInitViewBox
+      if (!init) return
+      wrap.__mermaidCurViewBox = init.slice()
+      setSvgViewBox(svg, init)
+    }
+
+    svg.addEventListener('pointerdown', onPointerDown)
+    svg.addEventListener('pointermove', onPointerMove)
+    svg.addEventListener('pointerup', onPointerUpOrCancel)
+    svg.addEventListener('pointercancel', onPointerUpOrCancel)
+    svg.addEventListener('wheel', onWheel, { passive: false })
+    svg.addEventListener('dblclick', onDblClick)
+  }
+
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+
+      // Clear old render (themeChange/pjax will rerun)
+      const oldSvg = item.querySelector('svg')
+      if (oldSvg) oldSvg.remove()
+      item.__mermaidGestureBound = false
+
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+        if (true) initMermaidGestures(item)
+        item.__mermaidOriginalSvg = svg
+        if (true) attachMermaidViewerButton(item)
+      }
+
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('/libs/mermaid/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.5"></script></div></div></body></html>

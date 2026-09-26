@@ -1,21 +1,126 @@
-<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>靖 | 靖</title><meta name="author" content="靖轩"><meta name="copyright" content="靖轩"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="逝者如斯夫,不舍昼夜"><link rel="shortcut icon" href="https://cdn.sujx.net/about/favicon.png"><link rel="canonical" href="https://www.sujx.net/tags/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin=""/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>var _hmt = _hmt || [];
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>靖轩 | 靖轩</title><meta name="author" content="靖轩"><meta name="copyright" content="靖轩"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="逝者如斯夫,不舍昼夜">
+<meta property="og:type" content="website">
+<meta property="og:title" content="靖轩">
+<meta property="og:url" content="https://www.sujx.net/tags/index.html">
+<meta property="og:site_name" content="靖轩">
+<meta property="og:description" content="逝者如斯夫,不舍昼夜">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.sujx.net/about/avatar.jpg">
+<meta property="article:published_time" content="2026-09-26T01:40:30.804Z">
+<meta property="article:modified_time" content="2026-05-06T08:28:58.000Z">
+<meta property="article:author" content="靖轩">
+<meta property="article:tag" content="靖轩,sujx">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.sujx.net/about/avatar.jpg"><script type="application/ld+json"></script><link rel="shortcut icon" href="https://cdn.sujx.net/about/favicon.png"><link rel="canonical" href="https://www.sujx.net/tags/index.html"><link rel="preconnect" href="//cdnjs.cloudflare.com"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css?v=5.5.5"><link rel="stylesheet" href="/fonts/css/all.min.css"><link rel="stylesheet" href="/libs/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
 (function() {
   var hm = document.createElement("script");
   hm.src = "https://hm.baidu.com/hm.js?417b20ac1984432f821159fac27d3bb5";
-  var s = document.getElementsByTagName("script")[0]; 
+  var s = document.getElementsByTagName("script")[0];
   s.parentNode.insertBefore(hm, s);
 })();
-</script><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web&amp;display=swap" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><link rel="stylesheet" href="/fonts/titillium-web.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
   root: '/',
   algolia: undefined,
-  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":5,"unescape":false,"languages":{"hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found"}},
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
   translate: undefined,
-  noticeOutdate: undefined,
-  highlight: {"plugin":"prismjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
   copy: {
-    success: 'Copy successfully',
-    error: 'Copy error',
-    noSupport: 'The browser does not support'
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
   },
   relativeDate: {
     homepage: false,
@@ -23,138 +128,445 @@
   },
   runtime: '',
   dateSuffix: {
-    just: 'Just',
-    min: 'minutes ago',
-    hour: 'hours ago',
-    day: 'days ago',
-    month: 'months ago'
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
   },
   copyright: undefined,
   lightbox: 'fancybox',
   Snackbar: undefined,
-  source: {
-    justifiedGallery: {
-      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
-      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
-    }
+  infinitegrid: {
+    js: '/libs/infinitegrid.min.js',
+    buttonText: '加载更多'
   },
   isPhotoFigcaption: false,
-  islazyload: false,
-  isAnchor: false,
+  islazyloadPlugin: true,
+  isAnchor: true,
   percent: {
     toc: true,
     rightside: false,
-  }
+  },
+  autoDarkmode: false
 }</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
-  title: '靖',
-  isPost: false,
-  isHome: false,
+  title: '靖轩',
   isHighlightShrink: false,
   isToc: false,
-  postUpdate: '2023-05-06 18:58:01'
-}</script><noscript><style type="text/css">
-  #nav {
-    opacity: 1
+  pageType: 'page'
+}</script><link rel="alternate" href="/atom.xml" title="靖轩" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="page type-tags" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">靖轩</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><h1 class="title-seo">靖轩</h1></header><main class="layout" id="content-inner"><div id="page"><div class="tag-cloud-list text-center"><a href="/tags/7zip/" style="font-size: 1.22em; background-color: rgb(131, 50, 96);">7zip</a><a href="/tags/application/" style="font-size: 1.2em; background-color: rgb(50, 190, 178);">application</a><a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" style="font-size: 1.5em; background-color: rgb(157, 50, 50);">读书笔记</a><a href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/" style="font-size: 1.35em; background-color: rgb(89, 105, 198);">软件工程</a><a href="/tags/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/" style="font-size: 1.3em; background-color: rgb(65, 132, 98);">项目管理</a><a href="/tags/%E6%8A%80%E6%9C%AF%E4%B8%BA%E5%BE%84/" style="font-size: 1.2em; background-color: rgb(109, 50, 182);">技术为径</a><a href="/tags/job-description/" style="font-size: 1.2em; background-color: rgb(50, 132, 72);">job description</a><a href="/tags/Large-Model/" style="font-size: 1.2em; background-color: rgb(128, 51, 57);">Large Model</a><a href="/tags/Operations-Engineer/" style="font-size: 1.2em; background-color: rgb(50, 177, 156);">Operations Engineer</a><a href="/tags/%E8%81%8C%E4%B8%9A%E8%A7%84%E5%88%92/" style="font-size: 1.2em; background-color: rgb(196, 184, 50);">职业规划</a><a href="/tags/%E5%88%9B%E4%BD%9C/" style="font-size: 1.2em; background-color: rgb(69, 79, 50);">创作</a><a href="/tags/AI%E8%A7%86%E9%A2%91/" style="font-size: 1.2em; background-color: rgb(121, 50, 164);">AI视频</a><a href="/tags/AIGC/" style="font-size: 1.22em; background-color: rgb(50, 115, 66);">AIGC</a><a href="/tags/%E7%BD%91%E5%8D%A1/" style="font-size: 1.22em; background-color: rgb(123, 50, 60);">网卡</a><a href="/tags/100Gbps/" style="font-size: 1.2em; background-color: rgb(50, 50, 119);">100Gbps</a><a href="/tags/25Gbps/" style="font-size: 1.2em; background-color: rgb(167, 50, 135);">25Gbps</a><a href="/tags/Datacenter/" style="font-size: 1.22em; background-color: rgb(50, 50, 50);">Datacenter</a><a href="/tags/%E9%98%BF%E9%87%8C%E4%BA%91/" style="font-size: 1.43em; background-color: rgb(189, 164, 159);">阿里云</a><a href="/tags/ACE-%E6%9D%AD%E5%B7%9E-Exam/" style="font-size: 1.2em; background-color: rgb(185, 187, 50);">ACE - 杭州 - Exam</a><a href="/tags/%E8%81%8C%E4%B8%9A%E8%AE%A4%E8%AF%81/" style="font-size: 1.2em; background-color: rgb(100, 50, 50);">职业认证</a><a href="/tags/ACE/" style="font-size: 1.2em; background-color: rgb(165, 50, 178);">ACE</a><a href="/tags/aliyun/" style="font-size: 1.27em; background-color: rgb(177, 50, 69);">aliyun</a><a href="/tags/ecs/" style="font-size: 1.2em; background-color: rgb(110, 126, 87);">ecs</a><a href="/tags/%E5%9B%BE%E5%BD%A2%E5%8C%96/" style="font-size: 1.2em; background-color: rgb(50, 181, 50);">图形化</a><a href="/tags/seeyon/" style="font-size: 1.2em; background-color: rgb(189, 124, 144);">seeyon</a><a href="/tags/%E8%87%B4%E8%BF%9C%E4%BA%92%E8%81%94/" style="font-size: 1.2em; background-color: rgb(50, 124, 161);">致远互联</a><a href="/tags/Aliyun/" style="font-size: 1.27em; background-color: rgb(56, 138, 147);">Aliyun</a><a href="/tags/Exam/" style="font-size: 1.25em; background-color: rgb(139, 50, 50);">Exam</a><a href="/tags/AI/" style="font-size: 1.22em; background-color: rgb(81, 186, 56);">AI</a><a href="/tags/Note/" style="font-size: 1.2em; background-color: rgb(114, 50, 50);">Note</a><a href="/tags/Handbook/" style="font-size: 1.2em; background-color: rgb(107, 115, 69);">Handbook</a><a href="/tags/PM/" style="font-size: 1.2em; background-color: rgb(50, 71, 144);">PM</a><a href="/tags/ECS/" style="font-size: 1.25em; background-color: rgb(154, 196, 96);">ECS</a><a href="/tags/Kdump/" style="font-size: 1.2em; background-color: rgb(158, 50, 50);">Kdump</a><a href="/tags/Linux/" style="font-size: 1.48em; background-color: rgb(50, 110, 144);">Linux</a><a href="/tags/Test/" style="font-size: 1.2em; background-color: rgb(167, 123, 101);">Test</a><a href="/tags/Performance/" style="font-size: 1.25em; background-color: rgb(50, 50, 169);">Performance</a><a href="/tags/Migrate/" style="font-size: 1.2em; background-color: rgb(73, 150, 50);">Migrate</a><a href="/tags/Transfer/" style="font-size: 1.2em; background-color: rgb(50, 64, 50);">Transfer</a><a href="/tags/%E6%9D%AD%E5%B7%9E/" style="font-size: 1.2em; background-color: rgb(100, 123, 90);">杭州</a><a href="/tags/%E6%97%85%E6%B8%B8/" style="font-size: 1.22em; background-color: rgb(183, 92, 173);">旅游</a><a href="/tags/security/" style="font-size: 1.27em; background-color: rgb(100, 153, 166);">security</a><a href="/tags/hping3/" style="font-size: 1.2em; background-color: rgb(139, 50, 50);">hping3</a><a href="/tags/ab/" style="font-size: 1.2em; background-color: rgb(173, 105, 95);">ab</a><a href="/tags/syn/" style="font-size: 1.2em; background-color: rgb(131, 190, 114);">syn</a><a href="/tags/flood/" style="font-size: 1.2em; background-color: rgb(50, 92, 88);">flood</a><a href="/tags/firewalld/" style="font-size: 1.2em; background-color: rgb(96, 50, 59);">firewalld</a><a href="/tags/iptables/" style="font-size: 1.2em; background-color: rgb(50, 108, 148);">iptables</a><a href="/tags/DDoS/" style="font-size: 1.2em; background-color: rgb(104, 154, 103);">DDoS</a><a href="/tags/Kubernetes/" style="font-size: 1.4em; background-color: rgb(50, 50, 50);">Kubernetes</a><a href="/tags/K3s/" style="font-size: 1.2em; background-color: rgb(50, 50, 155);">K3s</a><a href="/tags/Ansible/" style="font-size: 1.3em; background-color: rgb(50, 186, 50);">Ansible</a><a href="/tags/AWX/" style="font-size: 1.22em; background-color: rgb(50, 54, 89);">AWX</a><a href="/tags/Tools/" style="font-size: 1.32em; background-color: rgb(189, 100, 50);">Tools</a><a href="/tags/playbook/" style="font-size: 1.2em; background-color: rgb(54, 50, 50);">playbook</a><a href="/tags/Cloud/" style="font-size: 1.2em; background-color: rgb(50, 176, 52);">Cloud</a><a href="/tags/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/" style="font-size: 1.22em; background-color: rgb(50, 50, 142);">架构设计</a><a href="/tags/QA/" style="font-size: 1.2em; background-color: rgb(98, 186, 53);">QA</a><a href="/tags/InterView/" style="font-size: 1.2em; background-color: rgb(74, 50, 50);">InterView</a><a href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%E6%9E%B6%E6%9E%84%E5%B8%88/" style="font-size: 1.22em; background-color: rgb(151, 185, 121);">解决方案架构师</a><a href="/tags/Devops-rhce/" style="font-size: 1.2em; background-color: rgb(143, 50, 179);">Devops - rhce</a><a href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1%E5%B8%88/" style="font-size: 1.2em; background-color: rgb(194, 166, 99);">解决方案架构设计师</a><a href="/tags/interview/" style="font-size: 1.25em; background-color: rgb(101, 78, 54);">interview</a><a href="/tags/bacula/" style="font-size: 1.22em; background-color: rgb(111, 50, 96);">bacula</a><a href="/tags/bareos/" style="font-size: 1.2em; background-color: rgb(60, 189, 121);">bareos</a><a href="/tags/backup/" style="font-size: 1.22em; background-color: rgb(199, 50, 69);">backup</a><a href="/tags/%E8%80%B3%E6%9C%BA/" style="font-size: 1.2em; background-color: rgb(197, 70, 179);">耳机</a><a href="/tags/Bluetooth-Windows/" style="font-size: 1.2em; background-color: rgb(181, 50, 181);">Bluetooth - Windows</a><a href="/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/" style="font-size: 1.2em; background-color: rgb(126, 163, 196);">区块链</a><a href="/tags/BlockChain/" style="font-size: 1.2em; background-color: rgb(50, 150, 103);">BlockChain</a><a href="/tags/%E6%AF%94%E7%89%B9%E5%B8%81/" style="font-size: 1.2em; background-color: rgb(169, 193, 162);">比特币</a><a href="/tags/Web3/" style="font-size: 1.2em; background-color: rgb(50, 52, 189);">Web3</a><a href="/tags/Backup/" style="font-size: 1.22em; background-color: rgb(140, 94, 59);">Backup</a><a href="/tags/%E7%A7%81%E6%9C%89%E4%BA%91/" style="font-size: 1.25em; background-color: rgb(50, 74, 129);">私有云</a><a href="/tags/%E8%99%9A%E6%8B%9F%E5%8C%96/" style="font-size: 1.27em; background-color: rgb(52, 89, 81);">虚拟化</a><a href="/tags/VMware/" style="font-size: 1.27em; background-color: rgb(79, 50, 84);">VMware</a><a href="/tags/%E8%BF%90%E7%BB%B4/" style="font-size: 1.22em; background-color: rgb(161, 50, 120);">运维</a><a href="/tags/bigdata/" style="font-size: 1.27em; background-color: rgb(85, 89, 81);">bigdata</a><a href="/tags/cdh/" style="font-size: 1.22em; background-color: rgb(172, 50, 88);">cdh</a><a href="/tags/cdh5/" style="font-size: 1.2em; background-color: rgb(105, 149, 90);">cdh5</a><a href="/tags/offline/" style="font-size: 1.22em; background-color: rgb(50, 62, 120);">offline</a><a href="/tags/hdfs/" style="font-size: 1.22em; background-color: rgb(50, 50, 50);">hdfs</a><a href="/tags/linux/" style="font-size: 1.4em; background-color: rgb(50, 129, 175);">linux</a><a href="/tags/nic/" style="font-size: 1.2em; background-color: rgb(143, 93, 196);">nic</a><a href="/tags/bond/" style="font-size: 1.2em; background-color: rgb(75, 82, 116);">bond</a><a href="/tags/teaming/" style="font-size: 1.2em; background-color: rgb(196, 50, 106);">teaming</a><a href="/tags/%E8%BD%AE%E8%AF%A2/" style="font-size: 1.2em; background-color: rgb(128, 50, 126);">轮询</a><a href="/tags/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" style="font-size: 1.22em; background-color: rgb(94, 50, 144);">负载均衡</a><a href="/tags/%E4%BC%81%E4%B8%9A%E7%BB%8F%E8%90%A5/" style="font-size: 1.2em; background-color: rgb(134, 50, 168);">企业经营</a><a href="/tags/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" style="font-size: 1.2em; background-color: rgb(73, 52, 165);">数据分析</a><a href="/tags/DataAnalysis/" style="font-size: 1.2em; background-color: rgb(95, 196, 59);">DataAnalysis</a><a href="/tags/%E7%BB%8F%E8%90%A5%E5%88%86%E6%9E%90/" style="font-size: 1.2em; background-color: rgb(167, 60, 193);">经营分析</a><a href="/tags/CZTP/" style="font-size: 1.2em; background-color: rgb(151, 73, 50);">CZTP</a><a href="/tags/%E9%9B%B6%E4%BF%A1%E4%BB%BB/" style="font-size: 1.2em; background-color: rgb(163, 50, 197);">零信任</a><a href="/tags/ZeroTrust/" style="font-size: 1.2em; background-color: rgb(152, 87, 137);">ZeroTrust</a><a href="/tags/mapreduce/" style="font-size: 1.2em; background-color: rgb(50, 50, 166);">mapreduce</a><a href="/tags/wordcount/" style="font-size: 1.2em; background-color: rgb(50, 169, 72);">wordcount</a><a href="/tags/yarn/" style="font-size: 1.2em; background-color: rgb(50, 165, 50);">yarn</a><a href="/tags/top/" style="font-size: 1.2em; background-color: rgb(50, 119, 178);">top</a><a href="/tags/CPU/" style="font-size: 1.22em; background-color: rgb(90, 136, 50);">CPU</a><a href="/tags/ZTA/" style="font-size: 1.2em; background-color: rgb(116, 50, 80);">ZTA</a><a href="/tags/zero-trust/" style="font-size: 1.2em; background-color: rgb(187, 121, 50);">zero trust</a><a href="/tags/CentOS7/" style="font-size: 1.2em; background-color: rgb(78, 146, 98);">CentOS7</a><a href="/tags/CentOS8/" style="font-size: 1.22em; background-color: rgb(165, 50, 136);">CentOS8</a><a href="/tags/Kernel/" style="font-size: 1.2em; background-color: rgb(149, 50, 50);">Kernel</a><a href="/tags/%E5%A4%A7%E5%90%8C/" style="font-size: 1.2em; background-color: rgb(106, 123, 93);">大同</a><a href="/tags/%E5%B1%B1%E8%A5%BF/" style="font-size: 1.22em; background-color: rgb(50, 50, 81);">山西</a><a href="/tags/%E7%85%A4%E7%9F%BF/" style="font-size: 1.2em; background-color: rgb(173, 155, 82);">煤矿</a><a href="/tags/%E6%97%85%E8%A1%8C/" style="font-size: 1.22em; background-color: rgb(92, 50, 50);">旅行</a><a href="/tags/troubleshooting/" style="font-size: 1.27em; background-color: rgb(70, 50, 187);">troubleshooting</a><a href="/tags/centos/" style="font-size: 1.35em; background-color: rgb(50, 175, 65);">centos</a><a href="/tags/dnf/" style="font-size: 1.2em; background-color: rgb(53, 189, 90);">dnf</a><a href="/tags/repo/" style="font-size: 1.22em; background-color: rgb(131, 50, 122);">repo</a><a href="/tags/RPM/" style="font-size: 1.2em; background-color: rgb(82, 126, 51);">RPM</a><a href="/tags/yum/" style="font-size: 1.2em; background-color: rgb(78, 185, 161);">yum</a><a href="/tags/%E6%B5%B7%E5%A4%96%E5%8D%8E%E4%BA%BA/" style="font-size: 1.2em; background-color: rgb(187, 169, 50);">海外华人</a><a href="/tags/%E5%8E%86%E5%8F%B2/" style="font-size: 1.22em; background-color: rgb(68, 113, 163);">历史</a><a href="/tags/%E4%B8%9C%E5%8D%97%E4%BA%9A/" style="font-size: 1.2em; background-color: rgb(161, 103, 70);">东南亚</a><a href="/tags/%E5%8D%8E%E4%BE%A8/" style="font-size: 1.2em; background-color: rgb(165, 173, 104);">华侨</a><a href="/tags/%E6%8E%A7%E5%88%B6%E8%AE%BA/" style="font-size: 1.2em; background-color: rgb(84, 50, 189);">控制论</a><a href="/tags/%E7%A7%91%E5%AD%A6%E6%96%B9%E6%B3%95/" style="font-size: 1.2em; background-color: rgb(194, 134, 131);">科学方法</a><a href="/tags/CRM/" style="font-size: 1.2em; background-color: rgb(162, 190, 95);">CRM</a><a href="/tags/Book/" style="font-size: 1.2em; background-color: rgb(150, 170, 119);">Book</a><a href="/tags/Elasticsearch/" style="font-size: 1.27em; background-color: rgb(134, 71, 147);">Elasticsearch</a><a href="/tags/Notes/" style="font-size: 1.2em; background-color: rgb(149, 61, 180);">Notes</a><a href="/tags/dell/" style="font-size: 1.22em; background-color: rgb(110, 89, 50);">dell</a><a href="/tags/idrac/" style="font-size: 1.22em; background-color: rgb(102, 115, 98);">idrac</a><a href="/tags/Server/" style="font-size: 1.3em; background-color: rgb(142, 69, 147);">Server</a><a href="/tags/Computer/" style="font-size: 1.2em; background-color: rgb(61, 50, 120);">Computer</a><a href="/tags/%E5%90%88%E5%90%8C/" style="font-size: 1.2em; background-color: rgb(50, 170, 153);">合同</a><a href="/tags/%E6%96%87%E6%9C%AC%E6%A0%BC%E5%BC%8F/" style="font-size: 1.2em; background-color: rgb(86, 196, 95);">文本格式</a><a href="/tags/Contract/" style="font-size: 1.2em; background-color: rgb(136, 50, 174);">Contract</a><a href="/tags/PXE/" style="font-size: 1.2em; background-color: rgb(50, 146, 195);">PXE</a><a href="/tags/tftp/" style="font-size: 1.2em; background-color: rgb(110, 50, 77);">tftp</a><a href="/tags/Deployment/" style="font-size: 1.2em; background-color: rgb(50, 91, 123);">Deployment</a><a href="/tags/System/" style="font-size: 1.32em; background-color: rgb(71, 96, 83);">System</a><a href="/tags/%E5%B7%A5%E7%A8%8B%E5%B8%88/" style="font-size: 1.2em; background-color: rgb(184, 186, 50);">工程师</a><a href="/tags/%E5%B7%A5%E7%A8%8B%E5%AF%BC%E8%AE%BA/" style="font-size: 1.2em; background-color: rgb(66, 50, 135);">工程导论</a><a href="/tags/Devops/" style="font-size: 1.22em; background-color: rgb(197, 169, 50);">Devops</a><a href="/tags/ITIL/" style="font-size: 1.22em; background-color: rgb(169, 111, 183);">ITIL</a><a href="/tags/SRE/" style="font-size: 1.27em; background-color: rgb(87, 50, 114);">SRE</a><a href="/tags/DevOps/" style="font-size: 1.2em; background-color: rgb(73, 64, 53);">DevOps</a><a href="/tags/Culture/" style="font-size: 1.2em; background-color: rgb(50, 176, 54);">Culture</a><a href="/tags/Organizational-Behavior/" style="font-size: 1.2em; background-color: rgb(122, 118, 50);">Organizational Behavior</a><a href="/tags/DNS/" style="font-size: 1.22em; background-color: rgb(144, 128, 120);">DNS</a><a href="/tags/dnsmasq/" style="font-size: 1.2em; background-color: rgb(68, 99, 70);">dnsmasq</a><a href="/tags/CentOS/" style="font-size: 1.38em; background-color: rgb(175, 114, 188);">CentOS</a><a href="/tags/discuz/" style="font-size: 1.2em; background-color: rgb(128, 159, 60);">discuz</a><a href="/tags/forum/" style="font-size: 1.2em; background-color: rgb(198, 106, 183);">forum</a><a href="/tags/dos/" style="font-size: 1.2em; background-color: rgb(80, 50, 74);">dos</a><a href="/tags/ELK/" style="font-size: 1.2em; background-color: rgb(188, 93, 50);">ELK</a><a href="/tags/eNSP/" style="font-size: 1.2em; background-color: rgb(50, 171, 138);">eNSP</a><a href="/tags/Network/" style="font-size: 1.22em; background-color: rgb(160, 137, 118);">Network</a><a href="/tags/Switch/" style="font-size: 1.2em; background-color: rgb(131, 77, 51);">Switch</a><a href="/tags/Router/" style="font-size: 1.22em; background-color: rgb(60, 90, 141);">Router</a><a href="/tags/Huawei/" style="font-size: 1.22em; background-color: rgb(80, 98, 145);">Huawei</a><a href="/tags/Cyber-Securtiy/" style="font-size: 1.2em; background-color: rgb(112, 81, 112);">Cyber Securtiy</a><a href="/tags/%E7%AD%89%E7%BA%A7%E4%BF%9D%E6%8A%A4/" style="font-size: 1.2em; background-color: rgb(139, 172, 184);">等级保护</a><a href="/tags/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/" style="font-size: 1.2em; background-color: rgb(99, 184, 50);">网络安全</a><a href="/tags/Fail2Ban/" style="font-size: 1.2em; background-color: rgb(50, 50, 196);">Fail2Ban</a><a href="/tags/Firewall/" style="font-size: 1.2em; background-color: rgb(70, 141, 50);">Firewall</a><a href="/tags/%E5%B0%8F%E8%AF%B4/" style="font-size: 1.2em; background-color: rgb(50, 50, 125);">小说</a><a href="/tags/prompt/" style="font-size: 1.2em; background-color: rgb(50, 113, 50);">prompt</a><a href="/tags/%E5%9F%8E%E5%B8%82%E5%8F%91%E5%B1%95/" style="font-size: 1.2em; background-color: rgb(152, 50, 71);">城市发展</a><a href="/tags/%E6%94%BF%E6%B2%BB%E7%BB%8F%E6%B5%8E%E5%AD%A6/" style="font-size: 1.2em; background-color: rgb(83, 92, 169);">政治经济学</a><a href="/tags/GDP/" style="font-size: 1.2em; background-color: rgb(66, 155, 68);">GDP</a><a href="/tags/TFP/" style="font-size: 1.2em; background-color: rgb(56, 195, 126);">TFP</a><a href="/tags/ebook/" style="font-size: 1.2em; background-color: rgb(50, 50, 50);">ebook</a><a href="/tags/pdf/" style="font-size: 1.2em; background-color: rgb(67, 50, 50);">pdf</a><a href="/tags/Docker/" style="font-size: 1.27em; background-color: rgb(185, 60, 127);">Docker</a><a href="/tags/Tech/" style="font-size: 1.2em; background-color: rgb(50, 54, 162);">Tech</a><a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 1.22em; background-color: rgb(50, 50, 159);">总结</a><a href="/tags/Life/" style="font-size: 1.22em; background-color: rgb(131, 78, 50);">Life</a><a href="/tags/%E6%96%B0%E4%BA%AC%E6%8A%A5/" style="font-size: 1.2em; background-color: rgb(88, 54, 102);">新京报</a><a href="/tags/nginx/" style="font-size: 1.3em; background-color: rgb(50, 194, 178);">nginx</a><a href="/tags/web-server/" style="font-size: 1.27em; background-color: rgb(161, 62, 61);">web-server</a><a href="/tags/goaccess/" style="font-size: 1.2em; background-color: rgb(183, 106, 120);">goaccess</a><a href="/tags/log/" style="font-size: 1.2em; background-color: rgb(107, 71, 50);">log</a><a href="/tags/%E7%BB%8F%E6%B5%8E%E5%AD%A6/" style="font-size: 1.2em; background-color: rgb(76, 50, 50);">经济学</a><a href="/tags/%E7%A4%BE%E4%BC%9A%E6%B2%BB%E7%90%86/" style="font-size: 1.2em; background-color: rgb(92, 70, 133);">社会治理</a><a href="/tags/%E8%A1%8C%E6%94%BF%E7%AE%A1%E7%90%86/" style="font-size: 1.2em; background-color: rgb(168, 132, 183);">行政管理</a><a href="/tags/IT/" style="font-size: 1.2em; background-color: rgb(108, 87, 96);">IT</a><a href="/tags/Google/" style="font-size: 1.22em; background-color: rgb(96, 137, 97);">Google</a><a href="/tags/SystemAdmin/" style="font-size: 1.2em; background-color: rgb(52, 200, 169);">SystemAdmin</a><a href="/tags/Operator/" style="font-size: 1.2em; background-color: rgb(50, 58, 71);">Operator</a><a href="/tags/Fusioncompute/" style="font-size: 1.2em; background-color: rgb(50, 140, 50);">Fusioncompute</a><a href="/tags/password/" style="font-size: 1.2em; background-color: rgb(180, 50, 196);">password</a><a href="/tags/%E6%96%B0%E9%97%BB%E7%A8%BF/" style="font-size: 1.22em; background-color: rgb(64, 113, 119);">新闻稿</a><a href="/tags/%E6%B9%96%E5%8D%97%E4%B8%AD%E4%BF%A1/" style="font-size: 1.25em; background-color: rgb(147, 156, 122);">湖南中信</a><a href="/tags/%E5%86%99%E4%BD%9C/" style="font-size: 1.2em; background-color: rgb(50, 134, 170);">写作</a><a href="/tags/Fedora/" style="font-size: 1.27em; background-color: rgb(141, 50, 134);">Fedora</a><a href="/tags/RHEL/" style="font-size: 1.2em; background-color: rgb(135, 50, 50);">RHEL</a><a href="/tags/PCP/" style="font-size: 1.2em; background-color: rgb(105, 198, 189);">PCP</a><a href="/tags/hdoop/" style="font-size: 1.2em; background-color: rgb(176, 161, 93);">hdoop</a><a href="/tags/%E5%AF%BC%E6%B8%B8%E8%AF%8D/" style="font-size: 1.2em; background-color: rgb(156, 151, 71);">导游词</a><a href="/tags/%E8%A7%A3%E8%AF%B4%E8%AF%8D/" style="font-size: 1.2em; background-color: rgb(109, 104, 197);">解说词</a><a href="/tags/%E5%A4%A9%E5%AE%89%E9%97%A8/" style="font-size: 1.2em; background-color: rgb(50, 90, 107);">天安门</a><a href="/tags/%E6%95%85%E5%AE%AB/" style="font-size: 1.2em; background-color: rgb(50, 50, 167);">故宫</a><a href="/tags/%E9%A2%90%E5%92%8C%E5%9B%AD/" style="font-size: 1.2em; background-color: rgb(71, 67, 186);">颐和园</a><a href="/tags/%E9%95%BF%E5%9F%8E/" style="font-size: 1.2em; background-color: rgb(86, 50, 170);">长城</a><a href="/tags/%E5%8D%81%E4%B8%89%E9%99%B5/" style="font-size: 1.2em; background-color: rgb(118, 55, 50);">十三陵</a><a href="/tags/%E5%AF%BC%E6%B8%B8%E8%B5%84%E6%A0%BC%E8%80%83%E8%AF%95/" style="font-size: 1.2em; background-color: rgb(135, 50, 116);">导游资格考试</a><a href="/tags/%E5%AF%BC%E6%B8%B8%E9%9D%A2%E8%AF%95/" style="font-size: 1.2em; background-color: rgb(50, 53, 154);">导游面试</a><a href="/tags/%E5%85%AC%E6%96%87%E6%92%B0%E5%86%99/" style="font-size: 1.2em; background-color: rgb(64, 120, 106);">公文撰写</a><a href="/tags/%E4%B8%9C%E5%8D%8E%E8%BD%AF%E4%BB%B6/" style="font-size: 1.2em; background-color: rgb(107, 124, 198);">东华软件</a><a href="/tags/HPC/" style="font-size: 1.2em; background-color: rgb(50, 139, 75);">HPC</a><a href="/tags/Management/" style="font-size: 1.22em; background-color: rgb(130, 94, 86);">Management</a><a href="/tags/%E6%96%B0%E9%97%BB%E7%A8%BF%E4%BB%B6/" style="font-size: 1.2em; background-color: rgb(50, 62, 106);">新闻稿件</a><a href="/tags/%E6%96%87%E4%B9%A6/" style="font-size: 1.2em; background-color: rgb(110, 92, 126);">文书</a><a href="/tags/blog/" style="font-size: 1.25em; background-color: rgb(50, 147, 58);">blog</a><a href="/tags/hexo/" style="font-size: 1.22em; background-color: rgb(103, 50, 146);">hexo</a><a href="/tags/wordpress/" style="font-size: 1.2em; background-color: rgb(109, 75, 56);">wordpress</a><a href="/tags/%E8%BD%AF%E9%93%BE%E6%8E%A5/" style="font-size: 1.2em; background-color: rgb(50, 56, 115);">软链接</a><a href="/tags/%E7%A1%AC%E9%93%BE%E6%8E%A5/" style="font-size: 1.2em; background-color: rgb(147, 195, 163);">硬链接</a><a href="/tags/link/" style="font-size: 1.2em; background-color: rgb(50, 102, 50);">link</a><a href="/tags/butterfly/" style="font-size: 1.2em; background-color: rgb(51, 193, 67);">butterfly</a><a href="/tags/fedora/" style="font-size: 1.22em; background-color: rgb(50, 50, 91);">fedora</a><a href="/tags/Hexo/" style="font-size: 1.22em; background-color: rgb(122, 83, 162);">Hexo</a><a href="/tags/NodeJs/" style="font-size: 1.2em; background-color: rgb(50, 192, 121);">NodeJs</a><a href="/tags/Systemd/" style="font-size: 1.2em; background-color: rgb(66, 126, 185);">Systemd</a><a href="/tags/History/" style="font-size: 1.2em; background-color: rgb(165, 129, 194);">History</a><a href="/tags/Crawler/" style="font-size: 1.2em; background-color: rgb(50, 109, 150);">Crawler</a><a href="/tags/Nginx/" style="font-size: 1.27em; background-color: rgb(50, 57, 79);">Nginx</a><a href="/tags/robots-txt/" style="font-size: 1.2em; background-color: rgb(55, 50, 166);">robots.txt</a><a href="/tags/Minecraft/" style="font-size: 1.22em; background-color: rgb(168, 175, 165);">Minecraft</a><a href="/tags/Service/" style="font-size: 1.22em; background-color: rgb(140, 73, 74);">Service</a><a href="/tags/Engineer/" style="font-size: 1.2em; background-color: rgb(153, 50, 111);">Engineer</a><a href="/tags/CISP/" style="font-size: 1.2em; background-color: rgb(50, 71, 175);">CISP</a><a href="/tags/github/" style="font-size: 1.2em; background-color: rgb(130, 126, 50);">github</a><a href="/tags/hosts/" style="font-size: 1.2em; background-color: rgb(50, 65, 184);">hosts</a><a href="/tags/%E8%BF%90%E7%BB%B4%E4%BA%A4%E4%BB%98/" style="font-size: 1.2em; background-color: rgb(83, 99, 88);">运维交付</a><a href="/tags/%E8%B5%84%E4%BA%A7%E7%AE%A1%E7%90%86/" style="font-size: 1.2em; background-color: rgb(96, 114, 50);">资产管理</a><a href="/tags/%E6%95%B0%E6%8D%AE%E4%B8%AD%E5%BF%83/" style="font-size: 1.2em; background-color: rgb(83, 83, 105);">数据中心</a><a href="/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8/" style="font-size: 1.27em; background-color: rgb(152, 135, 53);">服务器</a><a href="/tags/IDC/" style="font-size: 1.22em; background-color: rgb(50, 94, 50);">IDC</a><a href="/tags/Game/" style="font-size: 1.2em; background-color: rgb(119, 84, 143);">Game</a><a href="/tags/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8C/" style="font-size: 1.2em; background-color: rgb(199, 99, 56);">我的世界</a><a href="/tags/hunan/" style="font-size: 1.2em; background-color: rgb(169, 91, 83);">hunan</a><a href="/tags/citic/" style="font-size: 1.2em; background-color: rgb(182, 183, 128);">citic</a><a href="/tags/news/" style="font-size: 1.2em; background-color: rgb(130, 96, 146);">news</a><a href="/tags/Hyper-V/" style="font-size: 1.27em; background-color: rgb(150, 163, 55);">Hyper-V</a><a href="/tags/Microsoft/" style="font-size: 1.2em; background-color: rgb(50, 50, 141);">Microsoft</a><a href="/tags/Windows/" style="font-size: 1.45em; background-color: rgb(50, 86, 53);">Windows</a><a href="/tags/ISO27001/" style="font-size: 1.2em; background-color: rgb(101, 50, 60);">ISO27001</a><a href="/tags/Virtual-Machines/" style="font-size: 1.2em; background-color: rgb(147, 50, 50);">Virtual Machines</a><a href="/tags/Powershell/" style="font-size: 1.2em; background-color: rgb(51, 129, 196);">Powershell</a><a href="/tags/IT%E5%94%AE%E5%89%8D/" style="font-size: 1.22em; background-color: rgb(52, 56, 50);">IT售前</a><a href="/tags/cURL/" style="font-size: 1.2em; background-color: rgb(105, 144, 119);">cURL</a><a href="/tags/Tool/" style="font-size: 1.2em; background-color: rgb(84, 78, 73);">Tool</a><a href="/tags/Web/" style="font-size: 1.2em; background-color: rgb(130, 50, 50);">Web</a><a href="/tags/bash/" style="font-size: 1.25em; background-color: rgb(63, 142, 114);">bash</a><a href="/tags/cert/" style="font-size: 1.27em; background-color: rgb(50, 54, 147);">cert</a><a href="/tags/SSL/" style="font-size: 1.25em; background-color: rgb(167, 87, 50);">SSL</a><a href="/tags/%E5%8F%91%E7%A5%A8%E9%AA%8C%E7%9C%9F/" style="font-size: 1.2em; background-color: rgb(50, 62, 50);">发票验真</a><a href="/tags/Storage/" style="font-size: 1.25em; background-color: rgb(62, 50, 195);">Storage</a><a href="/tags/VirtualMachine/" style="font-size: 1.22em; background-color: rgb(133, 53, 73);">VirtualMachine</a><a href="/tags/Interview/" style="font-size: 1.2em; background-color: rgb(116, 99, 66);">Interview</a><a href="/tags/vSphere/" style="font-size: 1.25em; background-color: rgb(92, 84, 78);">vSphere</a><a href="/tags/KVM/" style="font-size: 1.22em; background-color: rgb(183, 77, 132);">KVM</a><a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 1.22em; background-color: rgb(170, 128, 80);">面试</a><a href="/tags/%E8%87%AA%E6%88%91%E6%8E%A5%E5%8F%97/" style="font-size: 1.2em; background-color: rgb(50, 50, 194);">自我接受</a><a href="/tags/jumpserver/" style="font-size: 1.25em; background-color: rgb(50, 72, 69);">jumpserver</a><a href="/tags/k3s/" style="font-size: 1.2em; background-color: rgb(50, 103, 168);">k3s</a><a href="/tags/cluster/" style="font-size: 1.2em; background-color: rgb(50, 112, 50);">cluster</a><a href="/tags/Kali/" style="font-size: 1.2em; background-color: rgb(61, 57, 138);">Kali</a><a href="/tags/Security/" style="font-size: 1.35em; background-color: rgb(101, 143, 74);">Security</a><a href="/tags/%E5%88%86%E6%9E%90%E8%83%BD%E5%8A%9B/" style="font-size: 1.2em; background-color: rgb(62, 50, 174);">分析能力</a><a href="/tags/%E5%AD%A6%E4%B9%A0/" style="font-size: 1.22em; background-color: rgb(72, 59, 176);">学习</a><a href="/tags/Bind/" style="font-size: 1.2em; background-color: rgb(50, 193, 124);">Bind</a><a href="/tags/DNSmasq/" style="font-size: 1.2em; background-color: rgb(50, 84, 50);">DNSmasq</a><a href="/tags/Cache/" style="font-size: 1.22em; background-color: rgb(59, 57, 59);">Cache</a><a href="/tags/Gitea/" style="font-size: 1.2em; background-color: rgb(54, 193, 50);">Gitea</a><a href="/tags/Jupyter/" style="font-size: 1.2em; background-color: rgb(53, 50, 50);">Jupyter</a><a href="/tags/Python/" style="font-size: 1.3em; background-color: rgb(101, 50, 78);">Python</a><a href="/tags/Kanban/" style="font-size: 1.2em; background-color: rgb(50, 50, 57);">Kanban</a><a href="/tags/%E5%B7%A5%E4%BD%9C%E6%96%B9%E6%B3%95/" style="font-size: 1.2em; background-color: rgb(50, 50, 198);">工作方法</a><a href="/tags/Books/" style="font-size: 1.27em; background-color: rgb(175, 50, 50);">Books</a><a href="/tags/CI-CD/" style="font-size: 1.2em; background-color: rgb(125, 50, 50);">CI/CD</a><a href="/tags/CKA/" style="font-size: 1.2em; background-color: rgb(50, 50, 50);">CKA</a><a href="/tags/Virtual/" style="font-size: 1.2em; background-color: rgb(147, 90, 50);">Virtual</a><a href="/tags/LDAP/" style="font-size: 1.2em; background-color: rgb(79, 127, 191);">LDAP</a><a href="/tags/OpenLadp/" style="font-size: 1.2em; background-color: rgb(108, 50, 199);">OpenLadp</a><a href="/tags/FreeIPA/" style="font-size: 1.2em; background-color: rgb(50, 132, 157);">FreeIPA</a><a href="/tags/Kind/" style="font-size: 1.2em; background-color: rgb(104, 182, 108);">Kind</a><a href="/tags/%E9%9D%A2%E8%AF%95%E9%A2%98/" style="font-size: 1.38em; background-color: rgb(50, 196, 50);">面试题</a><a href="/tags/Sysadmin/" style="font-size: 1.25em; background-color: rgb(144, 50, 184);">Sysadmin</a><a href="/tags/Kuntai/" style="font-size: 1.2em; background-color: rgb(174, 50, 50);">Kuntai</a><a href="/tags/ARM/" style="font-size: 1.2em; background-color: rgb(124, 158, 50);">ARM</a><a href="/tags/Google-authenticator/" style="font-size: 1.2em; background-color: rgb(78, 50, 199);">Google-authenticator</a><a href="/tags/OTP/" style="font-size: 1.2em; background-color: rgb(174, 76, 50);">OTP</a><a href="/tags/disk/" style="font-size: 1.2em; background-color: rgb(186, 78, 156);">disk</a><a href="/tags/lvm/" style="font-size: 1.2em; background-color: rgb(144, 165, 50);">lvm</a><a href="/tags/computer/" style="font-size: 1.2em; background-color: rgb(119, 50, 200);">computer</a><a href="/tags/Redhat/" style="font-size: 1.2em; background-color: rgb(195, 50, 163);">Redhat</a><a href="/tags/DevOPS/" style="font-size: 1.2em; background-color: rgb(65, 95, 180);">DevOPS</a><a href="/tags/Networking/" style="font-size: 1.2em; background-color: rgb(50, 50, 50);">Networking</a><a href="/tags/Ubuntu/" style="font-size: 1.27em; background-color: rgb(103, 50, 193);">Ubuntu</a><a href="/tags/EVE-NG/" style="font-size: 1.2em; background-color: rgb(99, 72, 50);">EVE-NG</a><a href="/tags/LVS/" style="font-size: 1.2em; background-color: rgb(50, 187, 179);">LVS</a><a href="/tags/Haproxy/" style="font-size: 1.2em; background-color: rgb(163, 140, 86);">Haproxy</a><a href="/tags/Keepalived/" style="font-size: 1.2em; background-color: rgb(60, 123, 135);">Keepalived</a><a href="/tags/Cluster/" style="font-size: 1.2em; background-color: rgb(50, 50, 50);">Cluster</a><a href="/tags/Architecture/" style="font-size: 1.2em; background-color: rgb(87, 170, 109);">Architecture</a><a href="/tags/Website/" style="font-size: 1.2em; background-color: rgb(69, 58, 119);">Website</a><a href="/tags/llama2/" style="font-size: 1.2em; background-color: rgb(145, 179, 52);">llama2</a><a href="/tags/local-first/" style="font-size: 1.2em; background-color: rgb(60, 193, 50);">local-first</a><a href="/tags/%E7%BB%B4%E4%BF%9D%E5%B7%A5%E7%A8%8B%E5%B8%88/" style="font-size: 1.2em; background-color: rgb(120, 50, 102);">维保工程师</a><a href="/tags/%E8%BF%90%E7%BB%B4%E7%AE%A1%E7%90%86/" style="font-size: 1.2em; background-color: rgb(50, 130, 118);">运维管理</a><a href="/tags/performance/" style="font-size: 1.25em; background-color: rgb(177, 50, 132);">performance</a><a href="/tags/SaaS/" style="font-size: 1.2em; background-color: rgb(172, 96, 122);">SaaS</a><a href="/tags/Market/" style="font-size: 1.2em; background-color: rgb(84, 50, 55);">Market</a><a href="/tags/Read/" style="font-size: 1.2em; background-color: rgb(108, 94, 76);">Read</a><a href="/tags/MobSF/" style="font-size: 1.2em; background-color: rgb(50, 54, 100);">MobSF</a><a href="/tags/Security-Docker/" style="font-size: 1.2em; background-color: rgb(99, 183, 83);">Security - Docker</a><a href="/tags/storage/" style="font-size: 1.2em; background-color: rgb(50, 50, 149);">storage</a><a href="/tags/nfs/" style="font-size: 1.2em; background-color: rgb(140, 175, 50);">nfs</a><a href="/tags/iscsi/" style="font-size: 1.2em; background-color: rgb(114, 169, 185);">iscsi</a><a href="/tags/Nodejs/" style="font-size: 1.2em; background-color: rgb(160, 85, 136);">Nodejs</a><a href="/tags/Database/" style="font-size: 1.2em; background-color: rgb(50, 53, 50);">Database</a><a href="/tags/MySQL/" style="font-size: 1.27em; background-color: rgb(171, 192, 111);">MySQL</a><a href="/tags/NVME/" style="font-size: 1.2em; background-color: rgb(150, 50, 171);">NVME</a><a href="/tags/SSD/" style="font-size: 1.2em; background-color: rgb(183, 50, 53);">SSD</a><a href="/tags/HDD/" style="font-size: 1.2em; background-color: rgb(50, 71, 117);">HDD</a><a href="/tags/cloud/" style="font-size: 1.2em; background-color: rgb(102, 193, 184);">cloud</a><a href="/tags/qiniu/" style="font-size: 1.2em; background-color: rgb(50, 146, 61);">qiniu</a><a href="/tags/ohttps/" style="font-size: 1.22em; background-color: rgb(50, 155, 50);">ohttps</a><a href="/tags/%E4%BC%81%E4%B8%9A%E9%82%AE%E7%AE%B1/" style="font-size: 1.2em; background-color: rgb(50, 152, 91);">企业邮箱</a><a href="/tags/Axure/" style="font-size: 1.2em; background-color: rgb(50, 172, 50);">Axure</a><a href="/tags/vscode/" style="font-size: 1.2em; background-color: rgb(50, 114, 160);">vscode</a><a href="/tags/OCSinventory/" style="font-size: 1.2em; background-color: rgb(50, 50, 184);">OCSinventory</a><a href="/tags/sysadmin/" style="font-size: 1.2em; background-color: rgb(84, 51, 117);">sysadmin</a><a href="/tags/centos8/" style="font-size: 1.22em; background-color: rgb(117, 183, 161);">centos8</a><a href="/tags/ssh/" style="font-size: 1.27em; background-color: rgb(136, 162, 152);">ssh</a><a href="/tags/system/" style="font-size: 1.27em; background-color: rgb(155, 121, 56);">system</a><a href="/tags/WEB/" style="font-size: 1.2em; background-color: rgb(50, 112, 197);">WEB</a><a href="/tags/OWASP/" style="font-size: 1.2em; background-color: rgb(138, 50, 50);">OWASP</a><a href="/tags/Virtualization/" style="font-size: 1.22em; background-color: rgb(50, 57, 120);">Virtualization</a><a href="/tags/Podman/" style="font-size: 1.3em; background-color: rgb(81, 126, 72);">Podman</a><a href="/tags/YAML/" style="font-size: 1.2em; background-color: rgb(111, 87, 71);">YAML</a><a href="/tags/podman-compose/" style="font-size: 1.2em; background-color: rgb(161, 121, 113);">podman-compose</a><a href="/tags/%E4%BC%98%E5%8C%96%E5%B7%A5%E5%85%B7/" style="font-size: 1.2em; background-color: rgb(50, 109, 186);">优化工具</a><a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="font-size: 1.2em; background-color: rgb(135, 50, 50);">操作系统</a><a href="/tags/%E6%96%B0%E5%AA%92%E4%BD%93/" style="font-size: 1.2em; background-color: rgb(75, 50, 83);">新媒体</a><a href="/tags/%E6%96%B0%E5%AA%92%E4%BD%93%E7%AE%A1%E7%90%86/" style="font-size: 1.2em; background-color: rgb(50, 141, 50);">新媒体管理</a><a href="/tags/%E8%88%86%E6%83%85%E7%9B%91%E6%B5%8B/" style="font-size: 1.2em; background-color: rgb(82, 64, 50);">舆情监测</a><a href="/tags/ssl/" style="font-size: 1.2em; background-color: rgb(130, 175, 136);">ssl</a><a href="/tags/Container/" style="font-size: 1.2em; background-color: rgb(137, 58, 86);">Container</a><a href="/tags/V%C2%B7P%C2%B7N/" style="font-size: 1.2em; background-color: rgb(128, 75, 50);">V·P·N</a><a href="/tags/pritunl/" style="font-size: 1.2em; background-color: rgb(67, 50, 140);">pritunl</a><a href="/tags/Systemr/" style="font-size: 1.2em; background-color: rgb(106, 63, 91);">Systemr</a><a href="/tags/Markdown/" style="font-size: 1.2em; background-color: rgb(97, 50, 88);">Markdown</a><a href="/tags/%E5%85%AC%E6%96%87%E6%A0%BC%E5%BC%8F/" style="font-size: 1.2em; background-color: rgb(90, 50, 58);">公文格式</a><a href="/tags/Pandoc/" style="font-size: 1.2em; background-color: rgb(100, 50, 50);">Pandoc</a><a href="/tags/Prometheus/" style="font-size: 1.2em; background-color: rgb(132, 88, 50);">Prometheus</a><a href="/tags/Monitor/" style="font-size: 1.25em; background-color: rgb(164, 143, 69);">Monitor</a><a href="/tags/CPPM/" style="font-size: 1.2em; background-color: rgb(80, 50, 110);">CPPM</a><a href="/tags/%E6%B3%A8%E5%86%8C%E8%81%8C%E4%B8%9A%E9%87%87%E8%B4%AD%E7%BB%8F%E7%90%86/" style="font-size: 1.2em; background-color: rgb(182, 50, 106);">注册职业采购经理</a><a href="/tags/CDN/" style="font-size: 1.2em; background-color: rgb(107, 74, 109);">CDN</a><a href="/tags/Principle/" style="font-size: 1.2em; background-color: rgb(102, 50, 167);">Principle</a><a href="/tags/Programming/" style="font-size: 1.2em; background-color: rgb(192, 82, 170);">Programming</a><a href="/tags/Deepseek/" style="font-size: 1.2em; background-color: rgb(144, 108, 183);">Deepseek</a><a href="/tags/VScode/" style="font-size: 1.2em; background-color: rgb(170, 50, 50);">VScode</a><a href="/tags/Ollama/" style="font-size: 1.2em; background-color: rgb(50, 64, 50);">Ollama</a><a href="/tags/winget/" style="font-size: 1.22em; background-color: rgb(119, 65, 51);">winget</a><a href="/tags/rack-server/" style="font-size: 1.2em; background-color: rgb(110, 50, 184);">rack-server</a><a href="/tags/RabbitMQ/" style="font-size: 1.2em; background-color: rgb(163, 131, 123);">RabbitMQ</a><a href="/tags/MessageQueue/" style="font-size: 1.2em; background-color: rgb(172, 50, 50);">MessageQueue</a><a href="/tags/Redis/" style="font-size: 1.2em; background-color: rgb(183, 50, 127);">Redis</a><a href="/tags/web-servver/" style="font-size: 1.2em; background-color: rgb(67, 50, 168);">web-servver</a><a href="/tags/fullstack/" style="font-size: 1.2em; background-color: rgb(50, 107, 125);">fullstack</a><a href="/tags/Fullstack/" style="font-size: 1.2em; background-color: rgb(196, 176, 113);">Fullstack</a><a href="/tags/Technology/" style="font-size: 1.2em; background-color: rgb(147, 50, 163);">Technology</a><a href="/tags/%E4%B8%9A%E5%8A%A1%E6%B1%87%E6%8A%A5/" style="font-size: 1.2em; background-color: rgb(124, 131, 86);">业务汇报</a><a href="/tags/%E7%9F%A5%E8%AF%86%E5%A4%A7%E7%BA%B2/" style="font-size: 1.2em; background-color: rgb(67, 109, 174);">知识大纲</a><a href="/tags/PPT/" style="font-size: 1.2em; background-color: rgb(195, 146, 62);">PPT</a><a href="/tags/Report/" style="font-size: 1.2em; background-color: rgb(91, 189, 77);">Report</a><a href="/tags/VMwareWorkstation/" style="font-size: 1.2em; background-color: rgb(123, 101, 50);">VMwareWorkstation</a><a href="/tags/RockyLinux/" style="font-size: 1.25em; background-color: rgb(111, 112, 70);">RockyLinux</a><a href="/tags/GoldenTemplate/" style="font-size: 1.2em; background-color: rgb(169, 50, 78);">GoldenTemplate</a><a href="/tags/Template/" style="font-size: 1.22em; background-color: rgb(147, 52, 169);">Template</a><a href="/tags/%E5%AE%B9%E5%99%A8/" style="font-size: 1.2em; background-color: rgb(103, 163, 85);">容器</a><a href="/tags/Contained/" style="font-size: 1.2em; background-color: rgb(164, 124, 50);">Contained</a><a href="/tags/%E7%BD%91%E7%BB%9C%E5%AE%89%E8%A3%85/" style="font-size: 1.2em; background-color: rgb(136, 178, 51);">网络安装</a><a href="/tags/Cybersecurity/" style="font-size: 1.22em; background-color: rgb(63, 50, 142);">Cybersecurity</a><a href="/tags/rpm/" style="font-size: 1.2em; background-color: rgb(50, 163, 124);">rpm</a><a href="/tags/version-lock/" style="font-size: 1.2em; background-color: rgb(123, 157, 91);">version lock</a><a href="/tags/Rockylinux/" style="font-size: 1.2em; background-color: rgb(194, 54, 50);">Rockylinux</a><a href="/tags/shell/" style="font-size: 1.25em; background-color: rgb(200, 156, 57);">shell</a><a href="/tags/study/" style="font-size: 1.22em; background-color: rgb(53, 165, 178);">study</a><a href="/tags/%E6%96%87%E6%A1%A3%E6%A8%A1%E6%9D%BF/" style="font-size: 1.2em; background-color: rgb(116, 50, 189);">文档模板</a><a href="/tags/Document/" style="font-size: 1.2em; background-color: rgb(105, 140, 182);">Document</a><a href="/tags/%E6%88%98%E5%BD%B9%E5%AD%A6/" style="font-size: 1.2em; background-color: rgb(111, 59, 51);">战役学</a><a href="/tags/Science-of-Operations/" style="font-size: 1.2em; background-color: rgb(58, 111, 50);">Science of Operations</a><a href="/tags/%E5%94%AE%E5%89%8D%E5%B7%A5%E7%A8%8B%E5%B8%88/" style="font-size: 1.2em; background-color: rgb(50, 61, 50);">售前工程师</a><a href="/tags/ATI/" style="font-size: 1.2em; background-color: rgb(101, 80, 50);">ATI</a><a href="/tags/%E6%95%B0%E6%8D%AE%E8%B5%84%E4%BA%A7/" style="font-size: 1.2em; background-color: rgb(149, 182, 114);">数据资产</a><a href="/tags/%E7%BF%BB%E8%AF%91/" style="font-size: 1.2em; background-color: rgb(194, 134, 86);">翻译</a><a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%8E%86%E5%8F%B2/" style="font-size: 1.2em; background-color: rgb(117, 79, 93);">计算机历史</a><a href="/tags/strategy/" style="font-size: 1.2em; background-color: rgb(86, 73, 91);">strategy</a><a href="/tags/%E6%9B%BE%E7%91%9E%E9%BE%99/" style="font-size: 1.2em; background-color: rgb(179, 175, 50);">曾瑞龙</a><a href="/tags/%E5%8C%97%E5%AE%8B/" style="font-size: 1.2em; background-color: rgb(112, 153, 116);">北宋</a><a href="/tags/PMP/" style="font-size: 1.2em; background-color: rgb(50, 137, 82);">PMP</a><a href="/tags/%E7%A4%BE%E4%BC%9A%E5%B7%A5%E7%A8%8B/" style="font-size: 1.2em; background-color: rgb(50, 136, 194);">社会工程</a><a href="/tags/Social-Engineering/" style="font-size: 1.2em; background-color: rgb(56, 76, 50);">Social Engineering</a><a href="/tags/%E7%B3%BB%E7%BB%9F%E8%A7%84%E5%88%92/" style="font-size: 1.22em; background-color: rgb(110, 176, 169);">系统规划</a><a href="/tags/%E8%BD%AF%E8%80%83/" style="font-size: 1.22em; background-color: rgb(175, 61, 147);">软考</a><a href="/tags/%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86/" style="font-size: 1.22em; background-color: rgb(50, 110, 97);">系统管理</a><a href="/tags/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/" style="font-size: 1.2em; background-color: rgb(130, 50, 154);">数据存储</a><a href="/tags/DAS/" style="font-size: 1.2em; background-color: rgb(164, 165, 164);">DAS</a><a href="/tags/NAS/" style="font-size: 1.2em; background-color: rgb(186, 50, 151);">NAS</a><a href="/tags/SAN/" style="font-size: 1.2em; background-color: rgb(190, 84, 148);">SAN</a><a href="/tags/podman/" style="font-size: 1.2em; background-color: rgb(50, 50, 60);">podman</a><a href="/tags/sun-panel/" style="font-size: 1.2em; background-color: rgb(194, 160, 122);">sun-panel</a><a href="/tags/Navigation/" style="font-size: 1.2em; background-color: rgb(55, 75, 55);">Navigation</a><a href="/tags/Panel/" style="font-size: 1.2em; background-color: rgb(80, 87, 50);">Panel</a><a href="/tags/homepage/" style="font-size: 1.2em; background-color: rgb(72, 165, 190);">homepage</a><a href="/tags/Jumpserver/" style="font-size: 1.2em; background-color: rgb(50, 117, 69);">Jumpserver</a><a href="/tags/Troubleshooting/" style="font-size: 1.2em; background-color: rgb(50, 161, 50);">Troubleshooting</a><a href="/tags/upgrade/" style="font-size: 1.2em; background-color: rgb(50, 97, 50);">upgrade</a><a href="/tags/tax/" style="font-size: 1.2em; background-color: rgb(50, 69, 119);">tax</a><a href="/tags/Certification/" style="font-size: 1.2em; background-color: rgb(50, 89, 172);">Certification</a><a href="/tags/exam/" style="font-size: 1.2em; background-color: rgb(50, 174, 52);">exam</a><a href="/tags/%E5%A4%A7%E5%9E%8B%E7%BD%91%E7%AB%99/" style="font-size: 1.2em; background-color: rgb(119, 53, 104);">大型网站</a><a href="/tags/Domain/" style="font-size: 1.2em; background-color: rgb(150, 50, 50);">Domain</a><a href="/tags/sync/" style="font-size: 1.2em; background-color: rgb(75, 98, 125);">sync</a><a href="/tags/w32tm/" style="font-size: 1.2em; background-color: rgb(152, 50, 50);">w32tm</a><a href="/tags/%E5%9F%9F%E6%8E%A7/" style="font-size: 1.2em; background-color: rgb(164, 50, 50);">域控</a><a href="/tags/Library/" style="font-size: 1.2em; background-color: rgb(62, 120, 150);">Library</a><a href="/tags/book/" style="font-size: 1.22em; background-color: rgb(177, 50, 62);">book</a><a href="/tags/cablire-web/" style="font-size: 1.2em; background-color: rgb(50, 130, 86);">cablire-web</a><a href="/tags/Cablire/" style="font-size: 1.2em; background-color: rgb(56, 50, 184);">Cablire</a><a href="/tags/Talebook/" style="font-size: 1.2em; background-color: rgb(132, 127, 154);">Talebook</a><a href="/tags/System-Roadmap/" style="font-size: 1.2em; background-color: rgb(155, 50, 74);">System Roadmap</a><a href="/tags/RSS/" style="font-size: 1.2em; background-color: rgb(51, 50, 64);">RSS</a><a href="/tags/TinyRss/" style="font-size: 1.2em; background-color: rgb(50, 153, 70);">TinyRss</a><a href="/tags/VPS/" style="font-size: 1.2em; background-color: rgb(187, 127, 169);">VPS</a><a href="/tags/%E8%83%8E%E5%8E%8B%E7%9B%91%E6%B5%8B/" style="font-size: 1.2em; background-color: rgb(52, 138, 117);">胎压监测</a><a href="/tags/%E9%93%81%E5%B0%86%E5%86%9B/" style="font-size: 1.2em; background-color: rgb(168, 140, 145);">铁将军</a><a href="/tags/%E5%85%AC%E7%89%88%E8%83%8E%E5%8E%8B%E7%9B%91%E6%B5%8B/" style="font-size: 1.2em; background-color: rgb(188, 177, 152);">公版胎压监测</a><a href="/tags/Thinkpad/" style="font-size: 1.2em; background-color: rgb(94, 150, 122);">Thinkpad</a><a href="/tags/T14/" style="font-size: 1.2em; background-color: rgb(50, 110, 82);">T14</a><a href="/tags/%E6%8B%86%E6%9C%BA/" style="font-size: 1.2em; background-color: rgb(138, 184, 102);">拆机</a><a href="/tags/ChatGPT/" style="font-size: 1.2em; background-color: rgb(50, 93, 97);">ChatGPT</a><a href="/tags/%E8%BD%AC%E8%BD%BD/" style="font-size: 1.2em; background-color: rgb(189, 179, 101);">转载</a><a href="/tags/%E5%8C%97%E4%BA%AC/" style="font-size: 1.2em; background-color: rgb(50, 50, 72);">北京</a><a href="/tags/%E5%8F%B0%E6%B9%96/" style="font-size: 1.2em; background-color: rgb(172, 165, 50);">台湖</a><a href="/tags/Travel/" style="font-size: 1.38em; background-color: rgb(164, 174, 148);">Travel</a><a href="/tags/tomcat/" style="font-size: 1.2em; background-color: rgb(138, 121, 156);">tomcat</a><a href="/tags/java/" style="font-size: 1.22em; background-color: rgb(86, 107, 59);">java</a><a href="/tags/%E5%B9%BF%E5%B7%9E/" style="font-size: 1.2em; background-color: rgb(82, 144, 117);">广州</a><a href="/tags/%E5%BC%80%E5%B0%81/" style="font-size: 1.2em; background-color: rgb(100, 67, 119);">开封</a><a href="/tags/city/" style="font-size: 1.22em; background-color: rgb(84, 122, 54);">city</a><a href="/tags/%E6%B4%9B%E9%98%B3/" style="font-size: 1.2em; background-color: rgb(179, 171, 133);">洛阳</a><a href="/tags/%E5%B0%91%E6%9E%97%E5%AF%BA/" style="font-size: 1.2em; background-color: rgb(127, 157, 154);">少林寺</a><a href="/tags/%E6%B2%B3%E5%8D%97/" style="font-size: 1.2em; background-color: rgb(121, 166, 50);">河南</a><a href="/tags/%E5%84%BF%E7%AB%A5%E8%8A%82/" style="font-size: 1.2em; background-color: rgb(120, 91, 55);">儿童节</a><a href="/tags/%E5%85%AD%E4%B8%80/" style="font-size: 1.2em; background-color: rgb(182, 189, 64);">六一</a><a href="/tags/%E4%B8%80%E4%BB%BD%E5%AE%B6%E4%B9%A6/" style="font-size: 1.2em; background-color: rgb(197, 116, 50);">一份家书</a><a href="/tags/%E5%B1%B1%E4%B8%9C/" style="font-size: 1.2em; background-color: rgb(144, 50, 146);">山东</a><a href="/tags/%E6%B8%B8%E8%AE%B0/" style="font-size: 1.2em; background-color: rgb(107, 115, 102);">游记</a><a href="/tags/UPtime-Kuma/" style="font-size: 1.2em; background-color: rgb(132, 50, 186);">UPtime-Kuma</a><a href="/tags/%E5%A4%A9%E6%B4%A5/" style="font-size: 1.22em; background-color: rgb(199, 183, 87);">天津</a><a href="/tags/Carrier/" style="font-size: 1.2em; background-color: rgb(87, 123, 80);">Carrier</a><a href="/tags/%E6%B3%B0%E8%BE%BE/" style="font-size: 1.2em; background-color: rgb(80, 111, 112);">泰达</a><a href="/tags/%E8%88%AA%E6%AF%8D/" style="font-size: 1.2em; background-color: rgb(110, 58, 140);">航母</a><a href="/tags/%E4%B8%9C%E6%88%B4%E6%B2%B3/" style="font-size: 1.2em; background-color: rgb(55, 50, 50);">东戴河</a><a href="/tags/%E5%85%B4%E5%9F%8E/" style="font-size: 1.2em; background-color: rgb(79, 50, 157);">兴城</a><a href="/tags/%E5%B1%B1%E6%B5%B7%E5%85%B3/" style="font-size: 1.2em; background-color: rgb(50, 75, 50);">山海关</a><a href="/tags/CA/" style="font-size: 1.2em; background-color: rgb(124, 97, 189);">CA</a><a href="/tags/openssl/" style="font-size: 1.2em; background-color: rgb(156, 101, 50);">openssl</a><a href="/tags/VMDK/" style="font-size: 1.2em; background-color: rgb(73, 161, 102);">VMDK</a><a href="/tags/WSL2/" style="font-size: 1.2em; background-color: rgb(79, 166, 182);">WSL2</a><a href="/tags/RAG/" style="font-size: 1.2em; background-color: rgb(50, 50, 51);">RAG</a><a href="/tags/LLama3-1/" style="font-size: 1.2em; background-color: rgb(164, 180, 163);">LLama3. 1</a><a href="/tags/open-webui/" style="font-size: 1.2em; background-color: rgb(97, 50, 192);">open-webui</a><a href="/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B/" style="font-size: 1.2em; background-color: rgb(51, 167, 52);">大模型</a><a href="/tags/vi/" style="font-size: 1.2em; background-color: rgb(50, 166, 50);">vi</a><a href="/tags/Editor/" style="font-size: 1.2em; background-color: rgb(50, 85, 50);">Editor</a><a href="/tags/%E6%9C%BA%E6%88%BF/" style="font-size: 1.2em; background-color: rgb(79, 173, 81);">机房</a><a href="/tags/Vulnerability/" style="font-size: 1.22em; background-color: rgb(128, 73, 77);">Vulnerability</a><a href="/tags/%E6%BC%8F%E6%B4%9E/" style="font-size: 1.2em; background-color: rgb(100, 183, 178);">漏洞</a><a href="/tags/System-Admin/" style="font-size: 1.2em; background-color: rgb(133, 56, 100);">System Admin</a><a href="/tags/Wazuh/" style="font-size: 1.27em; background-color: rgb(51, 158, 50);">Wazuh</a><a href="/tags/ElasticSearch/" style="font-size: 1.2em; background-color: rgb(160, 50, 161);">ElasticSearch</a><a href="/tags/crontab-Shell/" style="font-size: 1.2em; background-color: rgb(156, 50, 154);">crontab - Shell</a><a href="/tags/%E4%BA%A7%E4%B8%9A%E5%A4%A7%E8%84%91/" style="font-size: 1.2em; background-color: rgb(50, 149, 84);">产业大脑</a><a href="/tags/%E7%89%A9%E8%81%94%E7%BD%91/" style="font-size: 1.2em; background-color: rgb(164, 164, 126);">物联网</a><a href="/tags/%E4%BA%A7%E4%B8%9A%E5%8D%8F%E5%90%8C/" style="font-size: 1.2em; background-color: rgb(109, 175, 50);">产业协同</a><a href="/tags/useraddd/" style="font-size: 1.2em; background-color: rgb(182, 103, 89);">useraddd</a><a href="/tags/passwd/" style="font-size: 1.2em; background-color: rgb(50, 90, 115);">passwd</a><a href="/tags/Infrastructure/" style="font-size: 1.2em; background-color: rgb(87, 146, 60);">Infrastructure</a><a href="/tags/ITSM/" style="font-size: 1.2em; background-color: rgb(50, 50, 50);">ITSM</a><a href="/tags/webmin/" style="font-size: 1.2em; background-color: rgb(199, 95, 50);">webmin</a><a href="/tags/bind9/" style="font-size: 1.2em; background-color: rgb(187, 122, 170);">bind9</a><a href="/tags/dns/" style="font-size: 1.2em; background-color: rgb(145, 73, 50);">dns</a><a href="/tags/WindowsPE/" style="font-size: 1.2em; background-color: rgb(68, 112, 182);">WindowsPE</a><a href="/tags/WSUS/" style="font-size: 1.2em; background-color: rgb(50, 190, 83);">WSUS</a><a href="/tags/cissp/" style="font-size: 1.2em; background-color: rgb(107, 120, 50);">cissp</a><a href="/tags/wazuh/" style="font-size: 1.3em; background-color: rgb(94, 119, 79);">wazuh</a><a href="/tags/Windows-Server/" style="font-size: 1.2em; background-color: rgb(200, 93, 76);">Windows Server</a><a href="/tags/AD-FS/" style="font-size: 1.2em; background-color: rgb(50, 123, 172);">AD-FS</a><a href="/tags/%E4%BA%94%E5%8F%B0%E5%B1%B1/" style="font-size: 1.2em; background-color: rgb(79, 50, 188);">五台山</a><a href="/tags/Samba/" style="font-size: 1.2em; background-color: rgb(74, 151, 122);">Samba</a><a href="/tags/Winbind/" style="font-size: 1.2em; background-color: rgb(50, 96, 50);">Winbind</a><a href="/tags/AD/" style="font-size: 1.2em; background-color: rgb(165, 73, 50);">AD</a><a href="/tags/Zabbix/" style="font-size: 1.27em; background-color: rgb(198, 190, 78);">Zabbix</a><a href="/tags/MFA/" style="font-size: 1.2em; background-color: rgb(189, 50, 124);">MFA</a><a href="/tags/TroubleShotting/" style="font-size: 1.2em; background-color: rgb(90, 50, 116);">TroubleShotting</a><a href="/tags/monitor/" style="font-size: 1.2em; background-color: rgb(118, 50, 195);">monitor</a><a href="/tags/windows/" style="font-size: 1.2em; background-color: rgb(50, 92, 132);">windows</a><a href="/tags/antivirus/" style="font-size: 1.2em; background-color: rgb(140, 97, 124);">antivirus</a><a href="/tags/deploy/" style="font-size: 1.2em; background-color: rgb(50, 187, 160);">deploy</a><a href="/tags/hadoop/" style="font-size: 1.2em; background-color: rgb(55, 50, 131);">hadoop</a><a href="/tags/itop/" style="font-size: 1.2em; background-color: rgb(59, 50, 133);">itop</a><a href="/tags/mirrors/" style="font-size: 1.2em; background-color: rgb(103, 139, 50);">mirrors</a><a href="/tags/tsinghua/" style="font-size: 1.2em; background-color: rgb(190, 149, 73);">tsinghua</a><a href="/tags/Sysstem/" style="font-size: 1.2em; background-color: rgb(135, 50, 101);">Sysstem</a><a href="/tags/Antivirus/" style="font-size: 1.2em; background-color: rgb(163, 130, 50);">Antivirus</a><a href="/tags/ClamAV/" style="font-size: 1.2em; background-color: rgb(50, 164, 50);">ClamAV</a><a href="/tags/CCSK/" style="font-size: 1.2em; background-color: rgb(96, 192, 137);">CCSK</a><a href="/tags/MindMap/" style="font-size: 1.2em; background-color: rgb(50, 81, 50);">MindMap</a><a href="/tags/powershell/" style="font-size: 1.3em; background-color: rgb(139, 198, 50);">powershell</a><a href="/tags/OCSInventroy/" style="font-size: 1.2em; background-color: rgb(166, 50, 50);">OCSInventroy</a><a href="/tags/GLPI/" style="font-size: 1.2em; background-color: rgb(50, 50, 97);">GLPI</a><a href="/tags/CMDB/" style="font-size: 1.2em; background-color: rgb(182, 176, 50);">CMDB</a><a href="/tags/%E7%94%9F%E6%B4%BB/" style="font-size: 1.2em; background-color: rgb(198, 159, 50);">生活</a><a href="/tags/wemeet/" style="font-size: 1.2em; background-color: rgb(50, 93, 116);">wemeet</a><a href="/tags/zoom/" style="font-size: 1.2em; background-color: rgb(118, 50, 140);">zoom</a><a href="/tags/SRS/" style="font-size: 1.22em; background-color: rgb(124, 50, 150);">SRS</a><a href="/tags/hyper-v/" style="font-size: 1.2em; background-color: rgb(137, 70, 187);">hyper-v</a><a href="/tags/Flask/" style="font-size: 1.2em; background-color: rgb(50, 52, 50);">Flask</a><a href="/tags/%E9%B9%8A%E9%9A%8F%E9%87%91%E5%8D%B0/" style="font-size: 1.2em; background-color: rgb(170, 72, 50);">鹊随金印</a><a href="/tags/Viber-Coding/" style="font-size: 1.2em; background-color: rgb(50, 112, 141);">Viber Coding</a><a href="/tags/http/" style="font-size: 1.2em; background-color: rgb(175, 144, 185);">http</a><a href="/tags/tool/" style="font-size: 1.2em; background-color: rgb(161, 50, 50);">tool</a><a href="/tags/share/" style="font-size: 1.2em; background-color: rgb(176, 115, 79);">share</a><a href="/tags/english/" style="font-size: 1.2em; background-color: rgb(50, 200, 165);">english</a><a href="/tags/read/" style="font-size: 1.2em; background-color: rgb(164, 117, 138);">read</a><a href="/tags/IIS/" style="font-size: 1.2em; background-color: rgb(80, 81, 156);">IIS</a><a href="/tags/iDrac/" style="font-size: 1.2em; background-color: rgb(50, 50, 178);">iDrac</a><a href="/tags/Dell/" style="font-size: 1.2em; background-color: rgb(140, 65, 66);">Dell</a><a href="/tags/kms/" style="font-size: 1.2em; background-color: rgb(50, 50, 149);">kms</a><a href="/tags/LVM/" style="font-size: 1.2em; background-color: rgb(50, 69, 136);">LVM</a><a href="/tags/%E6%B1%9F%E8%8B%8F/" style="font-size: 1.2em; background-color: rgb(113, 50, 50);">江苏</a><a href="/tags/%E6%97%A0%E9%94%A1/" style="font-size: 1.2em; background-color: rgb(177, 153, 67);">无锡</a><a href="/tags/%E6%B1%9F%E9%98%B4/" style="font-size: 1.2em; background-color: rgb(111, 131, 133);">江阴</a><a href="/tags/%E5%86%9B%E4%BA%8B/" style="font-size: 1.2em; background-color: rgb(151, 123, 162);">军事</a><a href="/tags/macOS/" style="font-size: 1.2em; background-color: rgb(50, 50, 117);">macOS</a><a href="/tags/ActiveDirectory/" style="font-size: 1.22em; background-color: rgb(94, 86, 50);">ActiveDirectory</a><a href="/tags/MacMini/" style="font-size: 1.2em; background-color: rgb(181, 160, 163);">MacMini</a><a href="/tags/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" style="font-size: 1.3em; background-color: rgb(50, 114, 102);">基础知识</a><a href="/tags/%E5%8A%A8%E6%89%8B%E5%AE%9E%E8%B7%B5/" style="font-size: 1.2em; background-color: rgb(157, 166, 50);">动手实践</a><a href="/tags/2021/" style="font-size: 1.2em; background-color: rgb(189, 88, 174);">2021</a><a href="/tags/2022/" style="font-size: 1.2em; background-color: rgb(50, 94, 50);">2022</a><a href="/tags/MyLife/" style="font-size: 1.2em; background-color: rgb(50, 50, 50);">MyLife</a><a href="/tags/mac/" style="font-size: 1.2em; background-color: rgb(61, 50, 139);">mac</a><a href="/tags/hardware/" style="font-size: 1.2em; background-color: rgb(107, 96, 175);">hardware</a><a href="/tags/E-mail/" style="font-size: 1.22em; background-color: rgb(130, 170, 129);">E-mail</a><a href="/tags/iRedmail/" style="font-size: 1.2em; background-color: rgb(163, 135, 184);">iRedmail</a><a href="/tags/postfix/" style="font-size: 1.2em; background-color: rgb(198, 124, 107);">postfix</a><a href="/tags/Dovecot/" style="font-size: 1.2em; background-color: rgb(50, 62, 77);">Dovecot</a><a href="/tags/rclone/" style="font-size: 1.2em; background-color: rgb(119, 96, 194);">rclone</a><a href="/tags/minio/" style="font-size: 1.2em; background-color: rgb(72, 81, 131);">minio</a><a href="/tags/s3/" style="font-size: 1.2em; background-color: rgb(199, 50, 111);">s3</a><a href="/tags/Notebook/" style="font-size: 1.2em; background-color: rgb(159, 90, 85);">Notebook</a><a href="/tags/Matebook/" style="font-size: 1.2em; background-color: rgb(91, 62, 104);">Matebook</a><a href="/tags/ActiveDirctory/" style="font-size: 1.2em; background-color: rgb(125, 50, 133);">ActiveDirctory</a><a href="/tags/djoin/" style="font-size: 1.2em; background-color: rgb(79, 83, 119);">djoin</a><a href="/tags/tips/" style="font-size: 1.22em; background-color: rgb(136, 50, 144);">tips</a><a href="/tags/owasp/" style="font-size: 1.2em; background-color: rgb(70, 52, 50);">owasp</a><a href="/tags/zap/" style="font-size: 1.2em; background-color: rgb(156, 95, 151);">zap</a><a href="/tags/web/" style="font-size: 1.2em; background-color: rgb(50, 197, 144);">web</a><a href="/tags/pptp/" style="font-size: 1.2em; background-color: rgb(59, 55, 146);">pptp</a><a href="/tags/rsyslog/" style="font-size: 1.2em; background-color: rgb(123, 179, 50);">rsyslog</a><a href="/tags/messages/" style="font-size: 1.2em; background-color: rgb(117, 158, 50);">messages</a><a href="/tags/%E7%BA%A2%E5%8D%81%E5%AD%97/" style="font-size: 1.2em; background-color: rgb(188, 172, 84);">红十字</a><a href="/tags/%E6%80%A5%E6%95%91%E5%91%98-%E5%9F%B9%E8%AE%AD/" style="font-size: 1.2em; background-color: rgb(135, 168, 193);">急救员 - 培训</a><a href="/tags/Android/" style="font-size: 1.2em; background-color: rgb(177, 143, 187);">Android</a><a href="/tags/SMS/" style="font-size: 1.2em; background-color: rgb(50, 152, 144);">SMS</a><a href="/tags/sssd/" style="font-size: 1.2em; background-color: rgb(179, 126, 51);">sssd</a><a href="/tags/realm/" style="font-size: 1.2em; background-color: rgb(187, 50, 50);">realm</a><a href="/tags/sshd/" style="font-size: 1.2em; background-color: rgb(120, 159, 100);">sshd</a><a href="/tags/sftp/" style="font-size: 1.2em; background-color: rgb(159, 81, 65);">sftp</a><a href="/tags/freefilesync/" style="font-size: 1.2em; background-color: rgb(200, 58, 171);">freefilesync</a><a href="/tags/receipt/" style="font-size: 1.2em; background-color: rgb(117, 125, 98);">receipt</a><a href="/tags/%E5%8F%91%E7%A5%A8/" style="font-size: 1.2em; background-color: rgb(152, 90, 113);">发票</a><a href="/tags/write/" style="font-size: 1.2em; background-color: rgb(88, 123, 174);">write</a><a href="/tags/logic/" style="font-size: 1.2em; background-color: rgb(164, 50, 50);">logic</a><a href="/tags/OBS/" style="font-size: 1.2em; background-color: rgb(161, 179, 103);">OBS</a><a href="/tags/livestream/" style="font-size: 1.2em; background-color: rgb(119, 133, 50);">livestream</a><a href="/tags/Ship/" style="font-size: 1.2em; background-color: rgb(90, 149, 70);">Ship</a><a href="/tags/netcard/" style="font-size: 1.2em; background-color: rgb(97, 116, 189);">netcard</a><a href="/tags/VLC/" style="font-size: 1.2em; background-color: rgb(116, 50, 180);">VLC</a><a href="/tags/steam/" style="font-size: 1.2em; background-color: rgb(119, 196, 151);">steam</a><a href="/tags/Tmux/" style="font-size: 1.2em; background-color: rgb(87, 137, 68);">Tmux</a><a href="/tags/CVE/" style="font-size: 1.2em; background-color: rgb(185, 191, 50);">CVE</a><a href="/tags/clash/" style="font-size: 1.2em; background-color: rgb(91, 153, 50);">clash</a><a href="/tags/virtual-machine/" style="font-size: 1.2em; background-color: rgb(137, 161, 54);">virtual machine</a><a href="/tags/proxy/" style="font-size: 1.2em; background-color: rgb(50, 50, 130);">proxy</a><a href="/tags/vmdk/" style="font-size: 1.2em; background-color: rgb(50, 50, 50);">vmdk</a><a href="/tags/vhdx/" style="font-size: 1.2em; background-color: rgb(50, 157, 91);">vhdx</a><a href="/tags/%E6%80%9D%E7%BB%B4%E6%96%B9%E5%BC%8F/" style="font-size: 1.2em; background-color: rgb(112, 50, 137);">思维方式</a><a href="/tags/elasticsearch/" style="font-size: 1.2em; background-color: rgb(79, 81, 138);">elasticsearch</a><a href="/tags/EDR/" style="font-size: 1.25em; background-color: rgb(50, 164, 50);">EDR</a><a href="/tags/HIDS/" style="font-size: 1.25em; background-color: rgb(142, 154, 112);">HIDS</a><a href="/tags/postgresql/" style="font-size: 1.2em; background-color: rgb(50, 177, 158);">postgresql</a><a href="/tags/vulnerability/" style="font-size: 1.2em; background-color: rgb(191, 99, 50);">vulnerability</a><a href="/tags/joke/" style="font-size: 1.2em; background-color: rgb(192, 50, 76);">joke</a><a href="/tags/picture/" style="font-size: 1.2em; background-color: rgb(194, 50, 152);">picture</a><a href="/tags/keeplived/" style="font-size: 1.2em; background-color: rgb(138, 80, 154);">keeplived</a><a href="/tags/lvs/" style="font-size: 1.2em; background-color: rgb(95, 50, 136);">lvs</a><a href="/tags/x11/" style="font-size: 1.2em; background-color: rgb(104, 96, 76);">x11</a><a href="/tags/xming/" style="font-size: 1.2em; background-color: rgb(200, 50, 50);">xming</a></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">靖轩</div><div class="author-info-description">逝者如斯夫,不舍昼夜</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/grepsu"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://gitee.com/grepsu" target="_blank" title="Gitee"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:sujx@live.cn" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS链接"><i class="fa  fa-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/07/03/AIGC_FoxHole/" title="海鹰">海鹰</a><time datetime="2026-07-03T01:04:07.000Z" title="发表于 2026-07-03 09:04:07">2026-07-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/11/fristVibeCoding/" title="鹊随金印：我的第一个完整的AI编程项目">鹊随金印：我的第一个完整的AI编程项目</a><time datetime="2026-06-11T01:04:07.000Z" title="发表于 2026-06-11 09:04:07">2026-06-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/03/VI_Howto/" title="VI编辑器简介">VI编辑器简介</a><time datetime="2026-06-03T01:04:07.000Z" title="发表于 2026-06-03 09:04:07">2026-06-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/28/HNCitic_2605/" title="我要上头条">我要上头条</a><time datetime="2026-05-28T01:04:07.000Z" title="发表于 2026-05-28 09:04:07">2026-05-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/12/TS-Domain-Controller-Sync-Failure/" title="记一次Windows AD域控制器同步故障排错">记一次Windows AD域控制器同步故障排错</a><time datetime="2026-05-12T03:04:07.000Z" title="发表于 2026-05-12 11:04:07">2026-05-12</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
+            <i class="fas fa-folder-open"></i>
+            <span>分类</span>
+            <a class="card-more-btn" href="/categories/" title="查看更多">
+      <i class="fas fa-angle-right"></i></a>
+          </div>
+          <ul class="card-category-list" id="aside-cat-list">
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8/"><span class="card-category-list-name">信息安全</span><span class="card-category-list-count">22</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E5%B7%A5%E4%BD%9C%E7%95%99%E7%97%95/"><span class="card-category-list-name">工作留痕</span><span class="card-category-list-count">3</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F/"><span class="card-category-list-name">应用程序</span><span class="card-category-list-count">65</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/"><span class="card-category-list-name">开发基础</span><span class="card-category-list-count">9</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%AC%94%E8%AE%B0/"><span class="card-category-list-name">操作笔记</span><span class="card-category-list-count">37</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%B5%B7%E5%A4%96%E6%9D%82%E8%B0%88/"><span class="card-category-list-name">海外杂谈</span><span class="card-category-list-count">14</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E7%A1%AC%E4%BB%B6%E6%9D%82%E8%B0%88/"><span class="card-category-list-name">硬件杂谈</span><span class="card-category-list-count">14</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"><span class="card-category-list-name">读书笔记</span><span class="card-category-list-count">49</span></a></li>
+          </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/7zip/" style="font-size: 1.19em; color: rgb(115, 177, 50);">7zip</a><a href="/tags/application/" style="font-size: 1.15em; color: rgb(147, 186, 50);">application</a><a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" style="font-size: 1.45em; color: rgb(50, 50, 173);">读书笔记</a><a href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/" style="font-size: 1.34em; color: rgb(185, 76, 50);">软件工程</a><a href="/tags/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/" style="font-size: 1.3em; color: rgb(50, 167, 167);">项目管理</a><a href="/tags/%E6%8A%80%E6%9C%AF%E4%B8%BA%E5%BE%84/" style="font-size: 1.15em; color: rgb(50, 94, 50);">技术为径</a><a href="/tags/job-description/" style="font-size: 1.15em; color: rgb(200, 106, 91);">job description</a><a href="/tags/Large-Model/" style="font-size: 1.15em; color: rgb(50, 126, 95);">Large Model</a><a href="/tags/Operations-Engineer/" style="font-size: 1.15em; color: rgb(107, 157, 88);">Operations Engineer</a><a href="/tags/%E8%81%8C%E4%B8%9A%E8%A7%84%E5%88%92/" style="font-size: 1.15em; color: rgb(170, 74, 159);">职业规划</a><a href="/tags/%E5%88%9B%E4%BD%9C/" style="font-size: 1.15em; color: rgb(50, 96, 113);">创作</a><a href="/tags/AI%E8%A7%86%E9%A2%91/" style="font-size: 1.15em; color: rgb(117, 155, 167);">AI视频</a><a href="/tags/AIGC/" style="font-size: 1.19em; color: rgb(50, 92, 197);">AIGC</a><a href="/tags/%E7%BD%91%E5%8D%A1/" style="font-size: 1.19em; color: rgb(183, 60, 50);">网卡</a><a href="/tags/100Gbps/" style="font-size: 1.15em; color: rgb(198, 93, 50);">100Gbps</a><a href="/tags/25Gbps/" style="font-size: 1.15em; color: rgb(192, 194, 60);">25Gbps</a><a href="/tags/Datacenter/" style="font-size: 1.19em; color: rgb(97, 50, 174);">Datacenter</a><a href="/tags/%E9%98%BF%E9%87%8C%E4%BA%91/" style="font-size: 1.38em; color: rgb(194, 148, 50);">阿里云</a><a href="/tags/ACE-%E6%9D%AD%E5%B7%9E-Exam/" style="font-size: 1.15em; color: rgb(105, 131, 50);">ACE - 杭州 - Exam</a><a href="/tags/%E8%81%8C%E4%B8%9A%E8%AE%A4%E8%AF%81/" style="font-size: 1.15em; color: rgb(50, 77, 133);">职业认证</a><a href="/tags/ACE/" style="font-size: 1.15em; color: rgb(51, 50, 189);">ACE</a><a href="/tags/aliyun/" style="font-size: 1.26em; color: rgb(65, 55, 50);">aliyun</a><a href="/tags/ecs/" style="font-size: 1.15em; color: rgb(171, 50, 151);">ecs</a><a href="/tags/%E5%9B%BE%E5%BD%A2%E5%8C%96/" style="font-size: 1.15em; color: rgb(98, 50, 165);">图形化</a><a href="/tags/seeyon/" style="font-size: 1.15em; color: rgb(167, 129, 179);">seeyon</a><a href="/tags/%E8%87%B4%E8%BF%9C%E4%BA%92%E8%81%94/" style="font-size: 1.15em; color: rgb(60, 107, 109);">致远互联</a><a href="/tags/Aliyun/" style="font-size: 1.26em; color: rgb(98, 119, 50);">Aliyun</a><a href="/tags/Exam/" style="font-size: 1.22em; color: rgb(50, 51, 108);">Exam</a><a href="/tags/AI/" style="font-size: 1.19em; color: rgb(50, 162, 122);">AI</a><a href="/tags/Note/" style="font-size: 1.15em; color: rgb(95, 162, 50);">Note</a><a href="/tags/Handbook/" style="font-size: 1.15em; color: rgb(50, 105, 124);">Handbook</a><a href="/tags/PM/" style="font-size: 1.15em; color: rgb(50, 50, 185);">PM</a><a href="/tags/ECS/" style="font-size: 1.22em; color: rgb(96, 50, 132);">ECS</a><a href="/tags/Kdump/" style="font-size: 1.15em; color: rgb(187, 83, 91);">Kdump</a><a href="/tags/Linux/" style="font-size: 1.41em; color: rgb(50, 89, 84);">Linux</a><a href="/tags/Test/" style="font-size: 1.15em; color: rgb(50, 163, 119);">Test</a><a href="/tags/Performance/" style="font-size: 1.22em; color: rgb(127, 50, 76);">Performance</a><a href="/tags/Migrate/" style="font-size: 1.15em; color: rgb(160, 187, 75);">Migrate</a><a href="/tags/Transfer/" style="font-size: 1.15em; color: rgb(195, 167, 50);">Transfer</a><a href="/tags/%E6%9D%AD%E5%B7%9E/" style="font-size: 1.15em; color: rgb(50, 65, 179);">杭州</a></div></div><div class="card-widget card-archives">
+    <div class="item-headline">
+      <i class="fas fa-archive"></i>
+      <span>归档</span>
+      <a class="card-more-btn" href="/archives/"
+            title="查看更多">
+            <i class="fas fa-angle-right"></i>
+          </a>
+    </div>
+  
+    <ul class="card-archive-list">
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2026/07/">
+            <span class="card-archive-list-date">
+              七月 2026
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2026/06/">
+            <span class="card-archive-list-date">
+              六月 2026
+            </span>
+            <span class="card-archive-list-count">2</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2026/05/">
+            <span class="card-archive-list-date">
+              五月 2026
+            </span>
+            <span class="card-archive-list-count">4</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2026/04/">
+            <span class="card-archive-list-date">
+              四月 2026
+            </span>
+            <span class="card-archive-list-count">3</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2026/03/">
+            <span class="card-archive-list-date">
+              三月 2026
+            </span>
+            <span class="card-archive-list-count">4</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2026/02/">
+            <span class="card-archive-list-date">
+              二月 2026
+            </span>
+            <span class="card-archive-list-count">3</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2026/01/">
+            <span class="card-archive-list-date">
+              一月 2026
+            </span>
+            <span class="card-archive-list-count">4</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/12/">
+            <span class="card-archive-list-date">
+              十二月 2025
+            </span>
+            <span class="card-archive-list-count">3</span>
+          </a>
+        </li>
+      
+    </ul>
+  </div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站信息</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">287</div></div><div class="webinfo-item"><div class="item-name">本站总字数 :</div><div class="item-count">762.9k</div></div><div class="webinfo-item"><div class="item-name">本站访客数 :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站总浏览量 :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2026-09-26T02:41:57.751Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2008 - 2026 By 靖轩</span></div><div class="footer_custom_text">京ICP备17034757号</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.5"></script><script src="/js/main.js?v=5.5.5"></script><script src="/libs/fancybox/fancybox.umd.js"></script><script src="/js/instantpage.js" type="module"></script><script src="/libs/lazyload/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const parseViewBox = viewBox => {
+    if (!viewBox) return null
+    const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
+    if (parts.length !== 4 || parts.some(n => Number.isNaN(n))) return null
+    return parts
   }
-  .justified-gallery img {
-    opacity: 1
+
+  const getSvgViewBox = svg => {
+    const attr = parseViewBox(svg.getAttribute('viewBox'))
+    if (attr) return attr
+
+    // Fallback: use bbox to build a viewBox
+    try {
+      const bbox = svg.getBBox()
+      if (bbox && bbox.width && bbox.height) return [bbox.x, bbox.y, bbox.width, bbox.height]
+    } catch (e) {
+      // getBBox may fail on some edge cases; ignore
+    }
+
+    const w = Number(svg.getAttribute('width')) || 0
+    const h = Number(svg.getAttribute('height')) || 0
+    if (w > 0 && h > 0) return [0, 0, w, h]
+    return [0, 0, 100, 100]
   }
 
-  #recent-posts time,
-  #post-meta time {
-    display: inline !important
+  const setSvgViewBox = (svg, vb) => {
+    svg.setAttribute('viewBox', `${vb[0]} ${vb[1]} ${vb[2]} ${vb[3]}`)
   }
-</style></noscript><script>(win=>{
-    win.saveToLocal = {
-      set: function setWithExpiry(key, value, ttl) {
-        if (ttl === 0) return
-        const now = new Date()
-        const expiryDay = ttl * 86400000
-        const item = {
-          value: value,
-          expiry: now.getTime() + expiryDay,
-        }
-        localStorage.setItem(key, JSON.stringify(item))
-      },
 
-      get: function getWithExpiry(key) {
-        const itemStr = localStorage.getItem(key)
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v))
 
-        if (!itemStr) {
-          return undefined
-        }
-        const item = JSON.parse(itemStr)
-        const now = new Date()
+  const openSvgInNewTab = ({ source, initViewBox }) => {
+    const getClonedSvg = () => {
+      if (typeof source === 'string') {
+        const template = document.createElement('template')
+        template.innerHTML = source.trim()
+        const svg = template.content.querySelector('svg')
+        return svg ? svg.cloneNode(true) : null
+      }
+      if (source && typeof source.cloneNode === 'function') {
+        return source.cloneNode(true)
+      }
+      return null
+    }
 
-        if (now.getTime() > item.expiry) {
-          localStorage.removeItem(key)
-          return undefined
+    const clone = getClonedSvg()
+    if (!clone) return
+    if (initViewBox && initViewBox.length === 4) {
+      clone.setAttribute('viewBox', initViewBox.join(' '))
+    }
+    if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+    if (!clone.getAttribute('xmlns:xlink') && clone.outerHTML.includes('xlink:')) {
+      clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+    }
+    // inject background to match current theme
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    const bg = getComputedStyle(document.body).backgroundColor || (isDark ? '#1e1e1e' : '#ffffff')
+    if (!clone.style.background) clone.style.background = bg
+
+    const serializer = new XMLSerializer()
+    const svgSource = serializer.serializeToString(clone)
+    const htmlSource = `<!doctype html><html><head><meta charset="utf-8" />
+      <style>
+        html, body { width: 100%; height: 100%; margin: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; }
+        svg { max-width: 100%; max-height: 100%; height: auto; width: auto; }
+      </style>
+      </head><body>${svgSource}</body></html>`
+    const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank', 'noopener')
+    setTimeout(() => URL.revokeObjectURL(url), 30000)
+  }
+
+  const attachMermaidViewerButton = wrap => {
+    let btn = wrap.querySelector('.mermaid-open-btn')
+    if (!btn) {
+      btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'mermaid-open-btn'
+      wrap.appendChild(btn)
+    }
+
+    btn.innerHTML = '<i class="fa fa-search fa-fw" aria-hidden="true"></i>'
+
+    if (!btn.__mermaidViewerBound) {
+      btn.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        const svg = wrap.__mermaidOriginalSvg || wrap.querySelector('svg')
+        if (!svg) return
+        const initViewBox = wrap.__mermaidInitViewBox
+        if (typeof svg === 'string') {
+          openSvgInNewTab({ source: svg, initViewBox })
+          return
         }
-        return item.value
+        openSvgInNewTab({ source: svg, initViewBox })
+      })
+      btn.__mermaidViewerBound = true
+    }
+  }
+
+  // Zoom around a point (px, py) in the SVG viewport (in viewBox coordinates)
+  const zoomAtPoint = (vb, factor, px, py) => {
+    const w = vb[2] * factor
+    const h = vb[3] * factor
+    const nx = px - (px - vb[0]) * factor
+    const ny = py - (py - vb[1]) * factor
+    return [nx, ny, w, h]
+  }
+
+  const initMermaidGestures = wrap => {
+    const svg = wrap.querySelector('svg')
+    if (!svg) return
+
+    // Ensure viewBox exists so gestures always work
+    const initVb = getSvgViewBox(svg)
+    wrap.__mermaidInitViewBox = initVb
+    wrap.__mermaidCurViewBox = initVb.slice()
+    setSvgViewBox(svg, initVb)
+
+    // Avoid binding multiple times on themeChange/pjax
+    if (wrap.__mermaidGestureBound) return
+    wrap.__mermaidGestureBound = true
+
+    // Helper: map client (viewport) coordinate -> viewBox coordinate
+    const clientToViewBox = (clientX, clientY) => {
+      const rect = svg.getBoundingClientRect()
+      const vb = wrap.__mermaidCurViewBox || getSvgViewBox(svg)
+      const x = vb[0] + (clientX - rect.left) * (vb[2] / rect.width)
+      const y = vb[1] + (clientY - rect.top) * (vb[3] / rect.height)
+      return { x, y, rect, vb }
+    }
+
+    const state = {
+      pointers: new Map(),
+      startVb: null,
+      startDist: 0,
+      startCenter: null
+    }
+
+    const clampVb = vb => {
+      const init = wrap.__mermaidInitViewBox || vb
+      const minW = init[2] * 0.1
+      const maxW = init[2] * 10
+      const minH = init[3] * 0.1
+      const maxH = init[3] * 10
+      vb[2] = clamp(vb[2], minW, maxW)
+      vb[3] = clamp(vb[3], minH, maxH)
+      return vb
+    }
+
+    const setCurVb = vb => {
+      vb = clampVb(vb)
+      wrap.__mermaidCurViewBox = vb
+      setSvgViewBox(svg, vb)
+    }
+
+    const onPointerDown = e => {
+      // Allow only primary button for mouse
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      svg.setPointerCapture(e.pointerId)
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      if (state.pointers.size === 1) {
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      } else if (state.pointers.size === 2) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        state.startDist = Math.hypot(dx, dy)
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        state.startCenter = { x: (pts[0].x + pts[1].x) / 2, y: (pts[0].y + pts[1].y) / 2 }
       }
     }
-  
-    win.getScript = url => new Promise((resolve, reject) => {
-      const script = document.createElement('script')
-      script.src = url
-      script.async = true
-      script.onerror = reject
-      script.onload = script.onreadystatechange = function() {
-        const loadState = this.readyState
-        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
-        script.onload = script.onreadystatechange = null
-        resolve()
+
+    const onPointerMove = e => {
+      if (!state.pointers.has(e.pointerId)) return
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      // Pan with 1 pointer
+      if (state.pointers.size === 1 && state.startVb) {
+        const p = [...state.pointers.values()][0]
+        const prev = { x: e.clientX - e.movementX, y: e.clientY - e.movementY }
+        // movementX/Y unreliable on touch, compute from stored last position
+        const last = wrap.__mermaidLastSinglePointer || p
+        const dxClient = p.x - last.x
+        const dyClient = p.y - last.y
+        wrap.__mermaidLastSinglePointer = p
+
+        const { rect } = clientToViewBox(p.x, p.y)
+        const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        const dx = dxClient * (vb[2] / rect.width)
+        const dy = dyClient * (vb[3] / rect.height)
+        setCurVb([vb[0] - dx, vb[1] - dy, vb[2], vb[3]])
+        return
       }
-      document.head.appendChild(script)
-    })
-  
-    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
-      const link = document.createElement('link')
-      link.rel = 'stylesheet'
-      link.href = url
-      if (id) link.id = id
-      link.onerror = reject
-      link.onload = link.onreadystatechange = function() {
-        const loadState = this.readyState
-        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
-        link.onload = link.onreadystatechange = null
-        resolve()
-      }
-      document.head.appendChild(link)
-    })
-  
-      win.activateDarkMode = function () {
-        document.documentElement.setAttribute('data-theme', 'dark')
-        if (document.querySelector('meta[name="theme-color"]') !== null) {
-          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
-        }
-      }
-      win.activateLightMode = function () {
-        document.documentElement.setAttribute('data-theme', 'light')
-        if (document.querySelector('meta[name="theme-color"]') !== null) {
-          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
-        }
-      }
-      const t = saveToLocal.get('theme')
-    
-          if (t === 'dark') activateDarkMode()
-          else if (t === 'light') activateLightMode()
-        
-      const asideStatus = saveToLocal.get('aside-status')
-      if (asideStatus !== undefined) {
-        if (asideStatus === 'hide') {
-          document.documentElement.classList.add('hide-aside')
-        } else {
-          document.documentElement.classList.remove('hide-aside')
-        }
-      }
-    
-    const detectApple = () => {
-      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
-        document.documentElement.classList.add('apple')
+
+      // Pinch zoom with 2 pointers
+      if (state.pointers.size === 2 && state.startVb && state.startDist > 0) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        const dist = Math.hypot(dx, dy)
+        if (!dist) return
+        const factor = state.startDist / dist // dist bigger => zoom in (viewBox smaller)
+
+        const cx = (pts[0].x + pts[1].x) / 2
+        const cy = (pts[0].y + pts[1].y) / 2
+        const centerClient = { x: cx, y: cy }
+
+        const pxy = clientToViewBox(centerClient.x, centerClient.y)
+        const cpx = pxy.x
+        const cpy = pxy.y
+
+        const vb = zoomAtPoint(state.startVb, factor, cpx, cpy)
+        setCurVb(vb)
       }
     }
-    detectApple()
-    })(window)</script><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="靖" type="application/atom+xml">
-</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://cdn.sujx.net/about/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">94</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">179</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">13</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Posts</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fas fa-book-open"></i><span> Books</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fas fa-tv"></i><span> Movies</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="靖"><span class="site-name">靖</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Posts</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fas fa-book-open"></i><span> Books</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fas fa-tv"></i><span> Movies</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="page"><h1 class="page-title"></h1><div class="tag-cloud-list is-center"><a href="/tags/7zip/" style="font-size: 1.33em; color: rgb(179, 74, 25)">7zip</a><a href="/tags/application/" style="font-size: 1.2em; color: rgb(124, 96, 45)">application</a><a href="/tags/CCSK/" style="font-size: 1.2em; color: rgb(90, 60, 76)">CCSK</a><a href="/tags/MindMap/" style="font-size: 1.2em; color: rgb(75, 183, 169)">MindMap</a><a href="/tags/Docker/" style="font-size: 1.33em; color: rgb(56, 191, 73)">Docker</a><a href="/tags/Basic/" style="font-size: 1.2em; color: rgb(178, 141, 31)">Basic</a><a href="/tags/Tech/" style="font-size: 1.2em; color: rgb(35, 56, 183)">Tech</a><a href="/tags/Virtual/" style="font-size: 1.2em; color: rgb(6, 128, 152)">Virtual</a><a href="/tags/KVM/" style="font-size: 1.2em; color: rgb(147, 138, 168)">KVM</a><a href="/tags/Linux/" style="font-size: 1.84em; color: rgb(109, 73, 138)">Linux</a><a href="/tags/Kubernetes/" style="font-size: 1.2em; color: rgb(2, 132, 23)">Kubernetes</a><a href="/tags/Architecture/" style="font-size: 1.2em; color: rgb(81, 55, 31)">Architecture</a><a href="/tags/Website/" style="font-size: 1.2em; color: rgb(117, 115, 114)">Website</a><a href="/tags/Books/" style="font-size: 1.2em; color: rgb(69, 118, 173)">Books</a><a href="/tags/Windows/" style="font-size: 2.1em; color: rgb(76, 68, 194)">Windows</a><a href="/tags/WindowsPE/" style="font-size: 1.33em; color: rgb(103, 70, 167)">WindowsPE</a><a href="/tags/cdh/" style="font-size: 1.33em; color: rgb(179, 151, 82)">cdh</a><a href="/tags/centos/" style="font-size: 1.84em; color: rgb(41, 30, 97)">centos</a><a href="/tags/deploy/" style="font-size: 1.2em; color: rgb(22, 47, 185)">deploy</a><a href="/tags/hadoop/" style="font-size: 1.2em; color: rgb(190, 25, 101)">hadoop</a><a href="/tags/CentOS/" style="font-size: 1.97em; color: rgb(48, 119, 99)">CentOS</a><a href="/tags/discuz/" style="font-size: 1.2em; color: rgb(156, 138, 153)">discuz</a><a href="/tags/forum/" style="font-size: 1.2em; color: rgb(81, 103, 34)">forum</a><a href="/tags/antivirus/" style="font-size: 1.2em; color: rgb(89, 100, 21)">antivirus</a><a href="/tags/security/" style="font-size: 1.33em; color: rgb(94, 125, 162)">security</a><a href="/tags/ssh/" style="font-size: 1.59em; color: rgb(18, 141, 80)">ssh</a><a href="/tags/system/" style="font-size: 1.59em; color: rgb(88, 29, 111)">system</a><a href="/tags/itop/" style="font-size: 1.2em; color: rgb(104, 175, 141)">itop</a><a href="/tags/VirtualMachine/" style="font-size: 1.2em; color: rgb(137, 141, 192)">VirtualMachine</a><a href="/tags/System/" style="font-size: 1.46em; color: rgb(78, 155, 194)">System</a><a href="/tags/mirrors/" style="font-size: 1.2em; color: rgb(192, 22, 153)">mirrors</a><a href="/tags/repo/" style="font-size: 1.33em; color: rgb(122, 163, 127)">repo</a><a href="/tags/tsinghua/" style="font-size: 1.2em; color: rgb(98, 101, 140)">tsinghua</a><a href="/tags/OCSInventroy/" style="font-size: 1.2em; color: rgb(33, 152, 33)">OCSInventroy</a><a href="/tags/GLPI/" style="font-size: 1.2em; color: rgb(25, 53, 104)">GLPI</a><a href="/tags/CMDB/" style="font-size: 1.2em; color: rgb(188, 109, 28)">CMDB</a><a href="/tags/powershell/" style="font-size: 1.59em; color: rgb(40, 98, 66)">powershell</a><a href="/tags/Sysstem/" style="font-size: 1.2em; color: rgb(102, 149, 56)">Sysstem</a><a href="/tags/Antivirus/" style="font-size: 1.2em; color: rgb(29, 116, 104)">Antivirus</a><a href="/tags/ClamAV/" style="font-size: 1.2em; color: rgb(59, 149, 173)">ClamAV</a><a href="/tags/CentOS7/" style="font-size: 1.2em; color: rgb(94, 159, 43)">CentOS7</a><a href="/tags/CentOS8/" style="font-size: 1.2em; color: rgb(106, 198, 107)">CentOS8</a><a href="/tags/Kernel/" style="font-size: 1.2em; color: rgb(160, 152, 173)">Kernel</a><a href="/tags/dnf/" style="font-size: 1.2em; color: rgb(141, 146, 74)">dnf</a><a href="/tags/RPM/" style="font-size: 1.2em; color: rgb(45, 38, 189)">RPM</a><a href="/tags/yum/" style="font-size: 1.2em; color: rgb(60, 5, 199)">yum</a><a href="/tags/linux/" style="font-size: 1.84em; color: rgb(39, 184, 184)">linux</a><a href="/tags/OCSinventory/" style="font-size: 1.2em; color: rgb(162, 48, 141)">OCSinventory</a><a href="/tags/sysadmin/" style="font-size: 1.2em; color: rgb(29, 155, 23)">sysadmin</a><a href="/tags/DNS/" style="font-size: 1.33em; color: rgb(12, 124, 163)">DNS</a><a href="/tags/dnsmasq/" style="font-size: 1.2em; color: rgb(75, 93, 121)">dnsmasq</a><a href="/tags/dos/" style="font-size: 1.2em; color: rgb(152, 14, 198)">dos</a><a href="/tags/backup/" style="font-size: 1.2em; color: rgb(177, 64, 163)">backup</a><a href="/tags/Elasticsearch/" style="font-size: 1.59em; color: rgb(101, 56, 2)">Elasticsearch</a><a href="/tags/ELK/" style="font-size: 1.2em; color: rgb(147, 148, 43)">ELK</a><a href="/tags/Fail2Ban/" style="font-size: 1.2em; color: rgb(127, 47, 173)">Fail2Ban</a><a href="/tags/Firewall/" style="font-size: 1.2em; color: rgb(160, 195, 178)">Firewall</a><a href="/tags/wemeet/" style="font-size: 1.2em; color: rgb(85, 194, 172)">wemeet</a><a href="/tags/zoom/" style="font-size: 1.2em; color: rgb(40, 34, 127)">zoom</a><a href="/tags/fedora/" style="font-size: 1.2em; color: rgb(154, 87, 72)">fedora</a><a href="/tags/jumpserver/" style="font-size: 1.46em; color: rgb(48, 187, 195)">jumpserver</a><a href="/tags/2021/" style="font-size: 1.2em; color: rgb(200, 38, 13)">2021</a><a href="/tags/2022/" style="font-size: 1.2em; color: rgb(46, 92, 18)">2022</a><a href="/tags/MyLife/" style="font-size: 1.2em; color: rgb(55, 131, 83)">MyLife</a><a href="/tags/blog/" style="font-size: 1.2em; color: rgb(3, 191, 98)">blog</a><a href="/tags/hexo/" style="font-size: 1.2em; color: rgb(122, 178, 93)">hexo</a><a href="/tags/wordpress/" style="font-size: 1.2em; color: rgb(123, 61, 3)">wordpress</a><a href="/tags/http/" style="font-size: 1.2em; color: rgb(164, 33, 42)">http</a><a href="/tags/tool/" style="font-size: 1.2em; color: rgb(15, 55, 50)">tool</a><a href="/tags/share/" style="font-size: 1.2em; color: rgb(162, 161, 84)">share</a><a href="/tags/english/" style="font-size: 1.2em; color: rgb(132, 14, 174)">english</a><a href="/tags/read/" style="font-size: 1.2em; color: rgb(30, 147, 65)">read</a><a href="/tags/SRS/" style="font-size: 1.33em; color: rgb(33, 22, 75)">SRS</a><a href="/tags/dell/" style="font-size: 1.46em; color: rgb(165, 82, 30)">dell</a><a href="/tags/idrac/" style="font-size: 1.46em; color: rgb(32, 136, 39)">idrac</a><a href="/tags/java/" style="font-size: 1.2em; color: rgb(154, 184, 107)">java</a><a href="/tags/hyper-v/" style="font-size: 1.2em; color: rgb(155, 60, 100)">hyper-v</a><a href="/tags/Virtualization/" style="font-size: 1.2em; color: rgb(56, 20, 183)">Virtualization</a><a href="/tags/IIS/" style="font-size: 1.2em; color: rgb(150, 129, 137)">IIS</a><a href="/tags/troubleshooting/" style="font-size: 1.46em; color: rgb(200, 147, 179)">troubleshooting</a><a href="/tags/interview/" style="font-size: 1.2em; color: rgb(0, 30, 40)">interview</a><a href="/tags/%E9%9D%A2%E8%AF%95%E9%A2%98/" style="font-size: 1.59em; color: rgb(66, 160, 173)">面试题</a><a href="/tags/Sysadmin/" style="font-size: 1.2em; color: rgb(42, 191, 191)">Sysadmin</a><a href="/tags/kms/" style="font-size: 1.2em; color: rgb(167, 19, 194)">kms</a><a href="/tags/github/" style="font-size: 1.2em; color: rgb(40, 50, 53)">github</a><a href="/tags/hosts/" style="font-size: 1.2em; color: rgb(138, 16, 27)">hosts</a><a href="/tags/LVM/" style="font-size: 1.2em; color: rgb(85, 63, 122)">LVM</a><a href="/tags/disk/" style="font-size: 1.2em; color: rgb(164, 52, 81)">disk</a><a href="/tags/lvm/" style="font-size: 1.2em; color: rgb(117, 186, 107)">lvm</a><a href="/tags/macOS/" style="font-size: 1.2em; color: rgb(199, 188, 98)">macOS</a><a href="/tags/ActiveDirectory/" style="font-size: 1.33em; color: rgb(175, 114, 55)">ActiveDirectory</a><a href="/tags/MacMini/" style="font-size: 1.2em; color: rgb(165, 192, 42)">MacMini</a><a href="/tags/mac/" style="font-size: 1.2em; color: rgb(127, 190, 139)">mac</a><a href="/tags/hardware/" style="font-size: 1.2em; color: rgb(7, 195, 164)">hardware</a><a href="/tags/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" style="font-size: 1.46em; color: rgb(91, 112, 154)">基础知识</a><a href="/tags/rclone/" style="font-size: 1.2em; color: rgb(6, 0, 12)">rclone</a><a href="/tags/minio/" style="font-size: 1.2em; color: rgb(153, 157, 121)">minio</a><a href="/tags/s3/" style="font-size: 1.2em; color: rgb(61, 13, 65)">s3</a><a href="/tags/MobSF/" style="font-size: 1.2em; color: rgb(158, 116, 112)">MobSF</a><a href="/tags/Security/" style="font-size: 1.71em; color: rgb(57, 84, 79)">Security</a><a href="/tags/bigdata/" style="font-size: 1.59em; color: rgb(103, 21, 50)">bigdata</a><a href="/tags/cdh5/" style="font-size: 1.2em; color: rgb(187, 37, 110)">cdh5</a><a href="/tags/offline/" style="font-size: 1.33em; color: rgb(152, 130, 59)">offline</a><a href="/tags/ActiveDirctory/" style="font-size: 1.2em; color: rgb(186, 189, 57)">ActiveDirctory</a><a href="/tags/djoin/" style="font-size: 1.2em; color: rgb(189, 11, 23)">djoin</a><a href="/tags/owasp/" style="font-size: 1.2em; color: rgb(12, 2, 162)">owasp</a><a href="/tags/zap/" style="font-size: 1.2em; color: rgb(5, 95, 22)">zap</a><a href="/tags/web/" style="font-size: 1.2em; color: rgb(122, 131, 36)">web</a><a href="/tags/tips/" style="font-size: 1.33em; color: rgb(11, 136, 116)">tips</a><a href="/tags/pptp/" style="font-size: 1.2em; color: rgb(142, 6, 121)">pptp</a><a href="/tags/receipt/" style="font-size: 1.2em; color: rgb(8, 4, 54)">receipt</a><a href="/tags/%E5%8F%91%E7%A5%A8/" style="font-size: 1.2em; color: rgb(80, 45, 191)">发票</a><a href="/tags/rsyslog/" style="font-size: 1.2em; color: rgb(175, 121, 182)">rsyslog</a><a href="/tags/messages/" style="font-size: 1.2em; color: rgb(5, 101, 65)">messages</a><a href="/tags/Ubuntu/" style="font-size: 1.33em; color: rgb(42, 131, 164)">Ubuntu</a><a href="/tags/netcard/" style="font-size: 1.2em; color: rgb(86, 128, 110)">netcard</a><a href="/tags/sshd/" style="font-size: 1.2em; color: rgb(145, 185, 97)">sshd</a><a href="/tags/sftp/" style="font-size: 1.2em; color: rgb(144, 189, 29)">sftp</a><a href="/tags/freefilesync/" style="font-size: 1.2em; color: rgb(21, 190, 120)">freefilesync</a><a href="/tags/Android/" style="font-size: 1.2em; color: rgb(74, 47, 176)">Android</a><a href="/tags/SMS/" style="font-size: 1.2em; color: rgb(109, 120, 176)">SMS</a><a href="/tags/E-mail/" style="font-size: 1.2em; color: rgb(65, 43, 14)">E-mail</a><a href="/tags/Tools/" style="font-size: 1.46em; color: rgb(156, 67, 153)">Tools</a><a href="/tags/OBS/" style="font-size: 1.2em; color: rgb(179, 4, 54)">OBS</a><a href="/tags/livestream/" style="font-size: 1.2em; color: rgb(160, 153, 151)">livestream</a><a href="/tags/sssd/" style="font-size: 1.2em; color: rgb(176, 11, 184)">sssd</a><a href="/tags/realm/" style="font-size: 1.2em; color: rgb(19, 193, 137)">realm</a><a href="/tags/Technology-Roadmap/" style="font-size: 1.2em; color: rgb(158, 96, 167)">Technology Roadmap</a><a href="/tags/book/" style="font-size: 1.2em; color: rgb(10, 90, 98)">book</a><a href="/tags/write/" style="font-size: 1.2em; color: rgb(183, 103, 151)">write</a><a href="/tags/logic/" style="font-size: 1.2em; color: rgb(1, 18, 93)">logic</a><a href="/tags/Tmux/" style="font-size: 1.2em; color: rgb(40, 60, 191)">Tmux</a><a href="/tags/Samba/" style="font-size: 1.2em; color: rgb(90, 61, 142)">Samba</a><a href="/tags/Winbind/" style="font-size: 1.2em; color: rgb(82, 55, 84)">Winbind</a><a href="/tags/AD/" style="font-size: 1.2em; color: rgb(134, 76, 180)">AD</a><a href="/tags/Hyper-V/" style="font-size: 1.2em; color: rgb(133, 113, 154)">Hyper-V</a><a href="/tags/Template/" style="font-size: 1.2em; color: rgb(111, 66, 91)">Template</a><a href="/tags/centos8/" style="font-size: 1.33em; color: rgb(106, 72, 107)">centos8</a><a href="/tags/hdfs/" style="font-size: 1.33em; color: rgb(104, 115, 133)">hdfs</a><a href="/tags/shell/" style="font-size: 1.2em; color: rgb(88, 31, 38)">shell</a><a href="/tags/VLC/" style="font-size: 1.2em; color: rgb(149, 108, 146)">VLC</a><a href="/tags/steam/" style="font-size: 1.2em; color: rgb(91, 177, 93)">steam</a><a href="/tags/vmdk/" style="font-size: 1.2em; color: rgb(47, 189, 28)">vmdk</a><a href="/tags/vhdx/" style="font-size: 1.2em; color: rgb(15, 169, 46)">vhdx</a><a href="/tags/vSphere/" style="font-size: 1.2em; color: rgb(1, 86, 16)">vSphere</a><a href="/tags/performance/" style="font-size: 1.2em; color: rgb(1, 83, 155)">performance</a><a href="/tags/VMware/" style="font-size: 1.2em; color: rgb(5, 188, 97)">VMware</a><a href="/tags/Wazuh/" style="font-size: 1.59em; color: rgb(94, 161, 144)">Wazuh</a><a href="/tags/ElasticSearch/" style="font-size: 1.2em; color: rgb(137, 82, 103)">ElasticSearch</a><a href="/tags/crontab-Shell/" style="font-size: 1.2em; color: rgb(63, 32, 139)">crontab - Shell</a><a href="/tags/Ansible/" style="font-size: 1.2em; color: rgb(87, 141, 58)">Ansible</a><a href="/tags/CVE/" style="font-size: 1.2em; color: rgb(73, 99, 176)">CVE</a><a href="/tags/cissp/" style="font-size: 1.2em; color: rgb(13, 99, 55)">cissp</a><a href="/tags/wazuh/" style="font-size: 1.71em; color: rgb(138, 157, 154)">wazuh</a><a href="/tags/elasticsearch/" style="font-size: 1.2em; color: rgb(45, 96, 35)">elasticsearch</a><a href="/tags/postgresql/" style="font-size: 1.2em; color: rgb(34, 29, 15)">postgresql</a><a href="/tags/vulnerability/" style="font-size: 1.2em; color: rgb(86, 144, 31)">vulnerability</a><a href="/tags/EDR/" style="font-size: 1.46em; color: rgb(43, 183, 58)">EDR</a><a href="/tags/Vulnerability/" style="font-size: 1.2em; color: rgb(17, 40, 184)">Vulnerability</a><a href="/tags/HIDS/" style="font-size: 1.46em; color: rgb(154, 44, 12)">HIDS</a><a href="/tags/keeplived/" style="font-size: 1.2em; color: rgb(179, 115, 12)">keeplived</a><a href="/tags/lvs/" style="font-size: 1.2em; color: rgb(12, 111, 97)">lvs</a><a href="/tags/CRM/" style="font-size: 1.2em; color: rgb(16, 40, 87)">CRM</a><a href="/tags/Book/" style="font-size: 1.2em; color: rgb(157, 180, 188)">Book</a><a href="/tags/Notes/" style="font-size: 1.2em; color: rgb(67, 95, 137)">Notes</a><a href="/tags/hdoop/" style="font-size: 1.2em; color: rgb(67, 43, 30)">hdoop</a><a href="/tags/Windows-Server/" style="font-size: 1.2em; color: rgb(45, 123, 55)">Windows Server</a><a href="/tags/AD-FS/" style="font-size: 1.2em; color: rgb(15, 39, 69)">AD-FS</a><a href="/tags/windows/" style="font-size: 1.2em; color: rgb(0, 184, 191)">windows</a><a href="/tags/Service/" style="font-size: 1.2em; color: rgb(78, 87, 140)">Service</a><a href="/tags/Router/" style="font-size: 1.2em; color: rgb(157, 132, 48)">Router</a><a href="/tags/WSUS/" style="font-size: 1.2em; color: rgb(121, 69, 166)">WSUS</a><a href="/tags/mapreduce/" style="font-size: 1.2em; color: rgb(141, 38, 109)">mapreduce</a><a href="/tags/wordcount/" style="font-size: 1.2em; color: rgb(63, 140, 141)">wordcount</a><a href="/tags/yarn/" style="font-size: 1.2em; color: rgb(141, 178, 114)">yarn</a><a href="/tags/x11/" style="font-size: 1.2em; color: rgb(1, 139, 133)">x11</a><a href="/tags/xming/" style="font-size: 1.2em; color: rgb(181, 171, 195)">xming</a><a href="/tags/monitor/" style="font-size: 1.2em; color: rgb(78, 174, 131)">monitor</a><a href="/tags/Zabbix/" style="font-size: 1.2em; color: rgb(147, 185, 32)">Zabbix</a></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">靖轩</div><div class="author-info__description">逝者如斯夫,不舍昼夜</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">94</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">179</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">13</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/sujx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://gitee.com/grepsu" target="_blank" title="Gitee"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:sujx@live.cn" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS链接"><i class="fa  fa-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/21/magedu-week-3/" title="Linux系统基础知识·3">Linux系统基础知识·3</a><time datetime="2023-05-21T14:48:47.000Z" title="Created 2023-05-21 22:48:47">2023-05-21</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/14/magedu-week-2/" title="Linux系统基础知识·2">Linux系统基础知识·2</a><time datetime="2023-05-14T14:48:47.000Z" title="Created 2023-05-14 22:48:47">2023-05-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/04/10/magedu-week-1/" title="Linux系统基础知识·1">Linux系统基础知识·1</a><time datetime="2023-04-10T08:35:34.000Z" title="Created 2023-04-10 16:35:34">2023-04-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2022/11/03/How2UseKVM/" title="内核虚拟化KVM的使用">内核虚拟化KVM的使用</a><time datetime="2022-11-03T14:22:22.000Z" title="Created 2022-11-03 22:22:22">2022-11-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2022/10/19/clean-old-kernel/" title="CentOS主机清理旧内核">CentOS主机清理旧内核</a><time datetime="2022-10-19T06:48:47.000Z" title="Created 2022-10-19 14:48:47">2022-10-19</time></div></div></div></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>Tags</span></div><div class="card-tag-cloud"><a href="/tags/github/" style="font-size: 1.1em; color: #999">github</a> <a href="/tags/logic/" style="font-size: 1.1em; color: #999">logic</a> <a href="/tags/disk/" style="font-size: 1.1em; color: #999">disk</a> <a href="/tags/kms/" style="font-size: 1.1em; color: #999">kms</a> <a href="/tags/receipt/" style="font-size: 1.1em; color: #999">receipt</a> <a href="/tags/s3/" style="font-size: 1.1em; color: #999">s3</a> <a href="/tags/VLC/" style="font-size: 1.1em; color: #999">VLC</a> <a href="/tags/wordpress/" style="font-size: 1.1em; color: #999">wordpress</a> <a href="/tags/hexo/" style="font-size: 1.1em; color: #999">hexo</a> <a href="/tags/LVM/" style="font-size: 1.1em; color: #999">LVM</a> <a href="/tags/tips/" style="font-size: 1.23em; color: #999ea6">tips</a> <a href="/tags/Kubernetes/" style="font-size: 1.1em; color: #999">Kubernetes</a> <a href="/tags/mapreduce/" style="font-size: 1.1em; color: #999">mapreduce</a> <a href="/tags/CMDB/" style="font-size: 1.1em; color: #999">CMDB</a> <a href="/tags/Virtual/" style="font-size: 1.1em; color: #999">Virtual</a> <a href="/tags/english/" style="font-size: 1.1em; color: #999">english</a> <a href="/tags/7zip/" style="font-size: 1.23em; color: #999ea6">7zip</a> <a href="/tags/CentOS/" style="font-size: 1.5em; color: #99a9bf">CentOS</a> <a href="/tags/share/" style="font-size: 1.1em; color: #999">share</a> <a href="/tags/zoom/" style="font-size: 1.1em; color: #999">zoom</a> <a href="/tags/offline/" style="font-size: 1.23em; color: #999ea6">offline</a> <a href="/tags/fedora/" style="font-size: 1.1em; color: #999">fedora</a> <a href="/tags/x11/" style="font-size: 1.1em; color: #999">x11</a> <a href="/tags/livestream/" style="font-size: 1.1em; color: #999">livestream</a> <a href="/tags/vSphere/" style="font-size: 1.1em; color: #999">vSphere</a> <a href="/tags/MyLife/" style="font-size: 1.1em; color: #999">MyLife</a> <a href="/tags/tsinghua/" style="font-size: 1.1em; color: #999">tsinghua</a> <a href="/tags/CRM/" style="font-size: 1.1em; color: #999">CRM</a> <a href="/tags/Firewall/" style="font-size: 1.1em; color: #999">Firewall</a> <a href="/tags/backup/" style="font-size: 1.1em; color: #999">backup</a> <a href="/tags/java/" style="font-size: 1.1em; color: #999">java</a> <a href="/tags/steam/" style="font-size: 1.1em; color: #999">steam</a> <a href="/tags/minio/" style="font-size: 1.1em; color: #999">minio</a> <a href="/tags/Virtualization/" style="font-size: 1.1em; color: #999">Virtualization</a> <a href="/tags/Vulnerability/" style="font-size: 1.1em; color: #999">Vulnerability</a> <a href="/tags/performance/" style="font-size: 1.1em; color: #999">performance</a> <a href="/tags/MacMini/" style="font-size: 1.1em; color: #999">MacMini</a> <a href="/tags/system/" style="font-size: 1.37em; color: #99a4b2">system</a> <a href="/tags/Antivirus/" style="font-size: 1.1em; color: #999">Antivirus</a> <a href="/tags/Fail2Ban/" style="font-size: 1.1em; color: #999">Fail2Ban</a></div></div><div class="card-widget card-archives"><div class="item-headline"><i class="fas fa-archive"></i><span>Archives</span><a class="card-more-btn" href="/archives/" title="More">
-    <i class="fas fa-angle-right"></i></a></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/05/"><span class="card-archive-list-date">May 2023</span><span class="card-archive-list-count">2</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/04/"><span class="card-archive-list-date">April 2023</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/11/"><span class="card-archive-list-date">November 2022</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/10/"><span class="card-archive-list-date">October 2022</span><span class="card-archive-list-count">2</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/09/"><span class="card-archive-list-date">September 2022</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/08/"><span class="card-archive-list-date">August 2022</span><span class="card-archive-list-count">2</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/07/"><span class="card-archive-list-date">July 2022</span><span class="card-archive-list-count">2</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/06/"><span class="card-archive-list-date">June 2022</span><span class="card-archive-list-count">2</span></a></li></ul></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>Info</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">Article :</div><div class="item-count">94</div></div><div class="webinfo-item"><div class="item-name">Total Count :</div><div class="item-count">127.8k</div></div><div class="webinfo-item"><div class="item-name">UV :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">PV :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">Last Push :</div><div class="item-count" id="last-push-date" data-lastPushDate="2023-06-02T14:52:52.702Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://cdn.sujx.net/about/footimg.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By 靖轩</div><div class="footer_custom_text">京ICP备17034757号-1</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading the Database</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
+
+    const onPointerUpOrCancel = e => {
+      state.pointers.delete(e.pointerId)
+      if (state.pointers.size === 0) {
+        state.startVb = null
+        state.startDist = 0
+        state.startCenter = null
+        wrap.__mermaidLastSinglePointer = null
+      } else if (state.pointers.size === 1) {
+        // reset single pointer baseline to avoid jump
+        wrap.__mermaidLastSinglePointer = [...state.pointers.values()][0]
+      }
+    }
+
+    // Wheel zoom (mouse/trackpad)
+    const onWheel = e => {
+      // ctrlKey on mac trackpad pinch; we treat both as zoom
+      e.preventDefault()
+      const delta = e.deltaY
+      const zoomFactor = delta > 0 ? 1.1 : 0.9
+      const { x, y } = clientToViewBox(e.clientX, e.clientY)
+      const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      setCurVb(zoomAtPoint(vb, zoomFactor, x, y))
+    }
+
+    const onDblClick = () => {
+      const init = wrap.__mermaidInitViewBox
+      if (!init) return
+      wrap.__mermaidCurViewBox = init.slice()
+      setSvgViewBox(svg, init)
+    }
+
+    svg.addEventListener('pointerdown', onPointerDown)
+    svg.addEventListener('pointermove', onPointerMove)
+    svg.addEventListener('pointerup', onPointerUpOrCancel)
+    svg.addEventListener('pointercancel', onPointerUpOrCancel)
+    svg.addEventListener('wheel', onWheel, { passive: false })
+    svg.addEventListener('dblclick', onDblClick)
+  }
+
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+
+      // Clear old render (themeChange/pjax will rerun)
+      const oldSvg = item.querySelector('svg')
+      if (oldSvg) oldSvg.remove()
+      item.__mermaidGestureBound = false
+
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+        if (true) initMermaidGestures(item)
+        item.__mermaidOriginalSvg = svg
+        if (true) attachMermaidViewerButton(item)
+      }
+
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('/libs/mermaid/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.5"></script></div></div></body></html>

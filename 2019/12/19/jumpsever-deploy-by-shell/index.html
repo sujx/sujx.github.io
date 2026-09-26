@@ -1,0 +1,502 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>使用脚本一键部署堡垒机 | 靖轩</title><meta name="author" content="靖轩"><meta name="copyright" content="靖轩"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="部门领导要求研究一下堡垒机的使用，所以花了两天时间研究了一下开源堡垒机的部署和使用。因为官方文档中有些已经有了部分错误，现在以官方的CentOS8版本的安装文档为蓝本把部署过程以脚本的形式备份一下。 其中，主要的变化是使用了官方源的nginx、修改了python安装的几个组件的版本、部署了堡垒机jms服务、koko服务和guacamole服务的systemd自启动脚本。 #!&#x2F;bin&#x2F;bash#">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用脚本一键部署堡垒机">
+<meta property="og:url" content="https://www.sujx.net/2019/12/19/jumpsever-deploy-by-shell/index.html">
+<meta property="og:site_name" content="靖轩">
+<meta property="og:description" content="部门领导要求研究一下堡垒机的使用，所以花了两天时间研究了一下开源堡垒机的部署和使用。因为官方文档中有些已经有了部分错误，现在以官方的CentOS8版本的安装文档为蓝本把部署过程以脚本的形式备份一下。 其中，主要的变化是使用了官方源的nginx、修改了python安装的几个组件的版本、部署了堡垒机jms服务、koko服务和guacamole服务的systemd自启动脚本。 #!&#x2F;bin&#x2F;bash#">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.sujx.net/2024/07/20240803100728.jpg">
+<meta property="article:published_time" content="2019-12-19T09:15:13.000Z">
+<meta property="article:modified_time" content="2026-09-26T02:32:15.031Z">
+<meta property="article:author" content="靖轩">
+<meta property="article:tag" content="centos">
+<meta property="article:tag" content="jumpserver">
+<meta property="article:tag" content="shell">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.sujx.net/2024/07/20240803100728.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "使用脚本一键部署堡垒机",
+  "url": "https://www.sujx.net/2019/12/19/jumpsever-deploy-by-shell/",
+  "image": "https://cdn.sujx.net/2024/07/20240803100728.jpg",
+  "datePublished": "2019-12-19T09:15:13.000Z",
+  "dateModified": "2026-09-26T02:32:15.031Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "靖轩",
+      "url": "https://www.sujx.net"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://cdn.sujx.net/about/favicon.png"><link rel="canonical" href="https://www.sujx.net/2019/12/19/jumpsever-deploy-by-shell/index.html"><link rel="preconnect" href="//cdnjs.cloudflare.com"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css?v=5.5.5"><link rel="stylesheet" href="/fonts/css/all.min.css"><link rel="stylesheet" href="/libs/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?417b20ac1984432f821159fac27d3bb5";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><link rel="stylesheet" href="/fonts/titillium-web.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: '/libs/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: true,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '使用脚本一键部署堡垒机',
+  isHighlightShrink: false,
+  isToc: false,
+  pageType: 'post'
+}</script><link rel="alternate" href="/atom.xml" title="靖轩" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">靖轩</span></a><a class="nav-page-title" href="/"><span class="site-name">使用脚本一键部署堡垒机</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">使用脚本一键部署堡垒机</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2019-12-19T09:15:13.000Z" title="发表于 2019-12-19 17:15:13">2019-12-19</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-09-26T02:32:15.031Z" title="更新于 2026-09-26 10:32:15">2026-09-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8/">信息安全</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">1.7k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>8分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><p>部门领导要求研究一下堡垒机的使用，所以花了两天时间研究了一下开源堡垒机的部署和使用。因为官方文档中有些已经有了部分错误，现在以官方的CentOS8版本的安装文档为蓝本把部署过程以脚本的形式备份一下。 其中，主要的变化是使用了官方源的nginx、修改了python安装的几个组件的版本、部署了堡垒机jms服务、koko服务和guacamole服务的systemd自启动脚本。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">2020. 01. 15</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">sujx@live.cn</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装依赖包</span></span><br><span class="line">yum update -y</span><br><span class="line">yum -y install wget gcc epel-release git telnet openssh-clients dnf-utils vim </span><br><span class="line">yum update -y</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">下载 Jumpserver</span></span><br><span class="line">cd /opt/</span><br><span class="line">git clone --depth=1 https://github.com/jumpserver/jumpserver.git</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">防火墙 与 selinux 设置说明, 如果已经关闭了 防火墙 和 Selinux 的用户请跳过设置</span></span><br><span class="line">systemctl start firewalld</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">nginx 端口</span></span><br><span class="line">firewall-cmd --zone=public --add-service=http --permanent  </span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">用户SSH登录端口 koko</span></span><br><span class="line">firewall-cmd --zone=public --add-port=2222/tcp --permanent  </span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">重新载入规则</span></span><br><span class="line">firewall-cmd --reload  </span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">SElinux配置</span></span><br><span class="line">setsebool -P httpd_can_network_connect 1</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装 Redis, Jumpserver 使用 Redis 做 cache 和 celery broke</span></span><br><span class="line">yum -y install redis</span><br><span class="line">systemctl enable redis --now</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装 MySQL, 如果不使用 Mysql 可以跳过相关 Mysql 安装和配置, 支持sqlite3, mysql, postgres等</span></span><br><span class="line">yum -y install mariadb mariadb-devel mariadb-server sshpass</span><br><span class="line">systemctl enable mariadb --now</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">创建数据库 Jumpserver 并授权</span></span><br><span class="line">DB_PASSWORD=`cat /dev/urandom  tr -dc A-Za-z0-9  head -c 24`  # 生成随机数据库密码</span><br><span class="line"></span><br><span class="line">cat &gt;~/passwd.txt&lt;&lt;EOF</span><br><span class="line">数据库密码是 $DB_PASSWORD</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line">mysql -uroot -e &quot;create database jumpserver default charset &#x27;utf8&#x27;; grant all on jumpserver.* to &#x27;jumpserver&#x27;@&#x27;127. 0. 0. 1&#x27; identified by &#x27;$DB_PASSWORD&#x27;; flush privileges;&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装 Nginx, 用作代理服务器整合 Jumpserver 与各个组件</span></span><br><span class="line"></span><br><span class="line">yum -y install nginx</span><br><span class="line">systemctl enable nginx --now</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装 Python3. 6</span></span><br><span class="line">yum -y install python36 python36-devel</span><br><span class="line">yum -y install krb5-devel libtiff-devel libjpeg-devel libzip-devel freetype-devel libwebp-devel tcl-devel tk-devel openldap-devel libffi-devel openldap-clients</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装 Python 库依赖</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">配置使用华为python源</span></span><br><span class="line">mkdir ~/. pip</span><br><span class="line">cat &gt;~/. pip/pip.conf&lt;&lt;EOF</span><br><span class="line">[global]</span><br><span class="line">index-url = https://mirrors.huaweicloud.com/repository/pypi/simple</span><br><span class="line">trusted-host = mirrors.huaweicloud.com</span><br><span class="line">timeout = 120 </span><br><span class="line">EOF</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">配置并载入 Python3 虚拟环境</span></span><br><span class="line">cd /opt</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">py3 为虚拟环境名称, 可自定义</span></span><br><span class="line">python3 -m venv py3  </span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">退出虚拟环境可以使用 deactivate 命令</span></span><br><span class="line">source /opt/py3/bin/activate  </span><br><span class="line"></span><br><span class="line">pip install wheel setuptools</span><br><span class="line">pip install pip --upgrade</span><br><span class="line">pip install python-gssapi</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">修改依赖包版本</span></span><br><span class="line">sed -i &quot;s/Django==2. 1. 11/Django==2. 2/g&quot; /opt/jumpserver/requirements/requirements.txt</span><br><span class="line">sed -i &quot;s/cryptography==2. 3. 1/cryptography==2. 7/g&quot; /opt/jumpserver/requirements/requirements.txt</span><br><span class="line">sed -i &quot;s/pyasn1==0. 4. 2/pyasn1==0. 4. 6/g&quot; /opt/jumpserver/requirements/requirements.txt</span><br><span class="line"></span><br><span class="line">pip install -r /opt/jumpserver/requirements/requirements.txt</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">修改 Jumpserver 配置文件</span></span><br><span class="line">cd /opt/jumpserver</span><br><span class="line">cp config_example.yml config.yml</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">生成随机SECRET_KEY</span></span><br><span class="line">SECRET_KEY=`cat /dev/urandom  tr -dc A-Za-z0-9  head -c 50`  </span><br><span class="line">echo &quot;SECRET_KEY=$SECRET_KEY&quot; &gt;&gt; ~/. bashrc</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">生成随机BOOTSTRAP_TOKEN</span></span><br><span class="line">BOOTSTRAP_TOKEN=`cat /dev/urandom  tr -dc A-Za-z0-9  head -c 16`  </span><br><span class="line">echo &quot;BOOTSTRAP_TOKEN=$BOOTSTRAP_TOKEN&quot; &gt;&gt; ~/. bashrc</span><br><span class="line"></span><br><span class="line">sed -i &quot;s/SECRET_KEY:/SECRET_KEY: $SECRET_KEY/g&quot; /opt/jumpserver/config.yml</span><br><span class="line">sed -i &quot;s/BOOTSTRAP_TOKEN:/BOOTSTRAP_TOKEN: $BOOTSTRAP_TOKEN/g&quot; /opt/jumpserver/config.yml</span><br><span class="line">sed -i &quot;s/# DEBUG: true/DEBUG: false/g&quot; /opt/jumpserver/config.yml</span><br><span class="line">sed -i &quot;s/# LOG_LEVEL: DEBUG/LOG_LEVEL: ERROR/g&quot; /opt/jumpserver/config.yml</span><br><span class="line">sed -i &quot;s/# SESSION_EXPIRE_AT_BROWSER_CLOSE: false/SESSION_EXPIRE_AT_BROWSER_CLOSE: true/g&quot; /opt/jumpserver/config.yml</span><br><span class="line">sed -i &quot;s/DB_PASSWORD: /DB_PASSWORD: $DB_PASSWORD/g&quot; /opt/jumpserver/config.yml</span><br><span class="line"></span><br><span class="line">echo -e &quot;SECRET_KEY是 $SECRET_KEY&quot; &gt;&gt; ~/passwd.txt</span><br><span class="line">echo -e &quot;BOOTSTRAP_TOKEN是 $BOOTSTRAP_TOKEN&quot; &gt;&gt; ~/passwd.txt</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">退出虚拟环境可以使用 deactivate 命令</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">运行 Jumpserver</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash"><span class="built_in">cd</span> /opt/jumpserver</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">./jms start -d  <span class="comment"># 后台运行使用 -d 参数./jms start -d</span></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">新版本更新了运行脚本, 使用方式./jms startstopstatus all  后台运行请添加 -d 参数</span></span><br><span class="line">cat &gt;/usr/lib/systemd/system/jms.service&lt;&lt;EOF</span><br><span class="line">[Unit]</span><br><span class="line">Description=jms</span><br><span class="line">After=network.target mariadb.service redis.service</span><br><span class="line">Wants=mariadb.service redis.service</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type=forking</span><br><span class="line">Environment=&quot;PATH=/opt/py3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin&quot;</span><br><span class="line">ExecStart=/opt/jumpserver/jms start -d</span><br><span class="line">ExecReload=</span><br><span class="line">ExecStop=/opt/jumpserver/jms stop</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line">EOF</span><br><span class="line">systemctl enable jms.service --now</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装 podman 部署 koko 与 guacamole</span></span><br><span class="line">yum install -y podman-docker</span><br><span class="line">alias docker=podman</span><br><span class="line">echo &quot;alias docker=podman&quot; &gt;&gt; ~/. bashrc</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">配置 podman 镜像源</span></span><br><span class="line">sed -i &quot;s/registry.redhat.io/dockerhub.azk8s.cn/g&quot; /etc/containers/registries.conf</span><br><span class="line">sed -i &quot;s/registry.access.redhat.com/docker.mirrors.ustc.edu.cn/g&quot; /etc/containers/registries.conf</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">允许 容器ip 访问宿主 8080 端口, ( 容器的 ip 可以进入容器查看 )</span></span><br><span class="line">firewall-cmd --permanent --add-rich-rule=&quot;rule family=&quot;ipv4&quot; source address=&quot;10. 88. 0. 0/16&quot; port protocol=&quot;tcp&quot; port=&quot;8080&quot; accept&quot;</span><br><span class="line">firewall-cmd --reload</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">10. 88. 0. x 是 podman 容器默认的IP池, 这里偷懒直接授权ip段了, 可以根据实际情况单独授权IP</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">获取当前服务器 IP</span></span><br><span class="line">Server_IP=`ip addr  grep &#x27;state UP&#x27; -A2  grep inet  egrep -v &#x27;( 127. 0. 0. 1inet6docker )&#x27;  awk &#x27;&#123;print $2&#125;&#x27;  tr -d &quot;addr:&quot;  head -n 1  cut -d / -f1`</span><br><span class="line">echo -e &quot;服务器IP是 $Server_IP&quot; &gt;&gt; ~/passwd.txt</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">http://&lt;Jumpserver_url&gt; 指向 jumpserver 的服务端口, 如 http://192. 168. 244. 144:8080</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">BOOTSTRAP_TOKEN 为 Jumpserver/config.yml 里面的 BOOTSTRAP_TOKEN</span></span><br><span class="line">docker run --name jms_koko -d -p 2222:2222 -p 127. 0. 0. 1:5000:5000 -e CORE_HOST=http://$Server_IP:8080 -e BOOTSTRAP_TOKEN=$BOOTSTRAP_TOKEN jumpserver/jms_koko:1. 5. 6</span><br><span class="line">docker run --name jms_guacamole -d -p 127. 0. 0. 1:8081:8080 -e JUMPSERVER_SERVER=http://$Server_IP:8080 -e BOOTSTRAP_TOKEN=$BOOTSTRAP_TOKEN jumpserver/jms_guacamole:1. 5. 6</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">配置KOKO自启动</span></span><br><span class="line">cat &gt; /usr/lib/systemd/system/koko.service &lt;&lt; EOF</span><br><span class="line">[Unit]</span><br><span class="line">Description=Podman JMS_koko Service</span><br><span class="line">After=network.target</span><br><span class="line">After=network-online.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type=simple</span><br><span class="line">ExecStart=/usr/bin/podman start -a jms_koko</span><br><span class="line">ExecStop=/usr/bin/podman stop -t 10 jms_koko</span><br><span class="line">Restart=always</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line">systemctl enable koko.service</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">配置guacamole自启动</span></span><br><span class="line">cat &gt; /usr/lib/systemd/system/guacamole.service &lt;&lt; EOF</span><br><span class="line">[Unit]</span><br><span class="line">Description=Podman JMS_guacamole Service</span><br><span class="line">After=network.target</span><br><span class="line">After=network-online.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type=simple</span><br><span class="line">ExecStart=/usr/bin/podman start -a jms_guacamole</span><br><span class="line">ExecStop=/usr/bin/podman stop -t 10 jms_guacamole</span><br><span class="line">Restart=always</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line">systemctl enable guacamole.service</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装 Web Terminal 前端: Luna  需要 Nginx 来运行访问 访问（ https://github.com/jumpserver/luna/releases ）下载对应版本的 release 包, 直接解压, 不需要编译</span></span><br><span class="line">cd /opt</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">wget https://github.com/jumpserver/luna/releases/download/1. 5. 6/luna.tar.gz</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">如果网络有问题导致下载无法完成可以使用下面地址</span></span><br><span class="line">wget https://demo.jumpserver.org/download/luna/1. 5. 6/luna.tar.gz</span><br><span class="line"></span><br><span class="line">tar xvzf luna.tar.gz</span><br><span class="line">chown -R root:root luna</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">配置 Nginx 整合各组件</span></span><br><span class="line">rm -rf /etc/nginx/conf.d/default.conf</span><br><span class="line"></span><br><span class="line">cp /etc/nginx/nginx.conf /etc/nginx.conf.bak</span><br><span class="line">sed -i &quot;38, 58d&quot; /etc/nginx/nginx.conf</span><br><span class="line">cat &gt; /etc/nginx/conf.d/jumpserver.conf &lt;&lt; &quot;EOF&quot;</span><br><span class="line">server &#123;</span><br><span class="line">    listen 80;</span><br><span class="line">    # server_name _;</span><br><span class="line"></span><br><span class="line">    client_max_body_size 100m;  # 录像及文件上传大小限制</span><br><span class="line"></span><br><span class="line">    location /luna/ &#123;</span><br><span class="line">        try_files $uri / /index.html;</span><br><span class="line">        alias /opt/luna/;  # luna 路径, 如果修改安装目录, 此处需要修改</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    location /media/ &#123;</span><br><span class="line">        add_header Content-Encoding gzip;</span><br><span class="line">        root /opt/jumpserver/data/;  # 录像位置, 如果修改安装目录, 此处需要修改</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    location /static/ &#123;</span><br><span class="line">        root /opt/jumpserver/data/;  # 静态资源, 如果修改安装目录, 此处需要修改</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    location /koko/ &#123;</span><br><span class="line">        proxy_pass       http://localhost:5000;</span><br><span class="line">        proxy_buffering off;</span><br><span class="line">        proxy_http_version 1. 1;</span><br><span class="line">        proxy_set_header Upgrade $http_upgrade;</span><br><span class="line">        proxy_set_header Connection &quot;upgrade&quot;;</span><br><span class="line">        proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">        proxy_set_header Host $host;</span><br><span class="line">        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">        access_log off;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    location /guacamole/ &#123;</span><br><span class="line">        proxy_pass       http://localhost:8081/;</span><br><span class="line">        proxy_buffering off;</span><br><span class="line">        proxy_http_version 1. 1;</span><br><span class="line">        proxy_set_header Upgrade $http_upgrade;</span><br><span class="line">        proxy_set_header Connection $http_connection;</span><br><span class="line">        proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">        proxy_set_header Host $host;</span><br><span class="line">        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">        access_log off;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    location /ws/ &#123;</span><br><span class="line">        proxy_pass http://localhost:8070;</span><br><span class="line">        proxy_http_version 1. 1;</span><br><span class="line">        proxy_buffering off;</span><br><span class="line">        proxy_set_header Upgrade $http_upgrade;</span><br><span class="line">        proxy_set_header Connection &quot;upgrade&quot;;</span><br><span class="line">        proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">        proxy_set_header Host $host;</span><br><span class="line">        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">        access_log off;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    location / &#123;</span><br><span class="line">        proxy_pass http://localhost:8080;</span><br><span class="line">        proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">        proxy_set_header Host $host;</span><br><span class="line">        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">        access_log off;</span><br><span class="line">             &#125;</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">确保配置没有问题, 有问题请先解决</span></span><br><span class="line">nginx -t   </span><br><span class="line">systemctl restart nginx</span><br></pre></td></tr></table></figure>
+
+<p>然后网页访问主机地址。 <a href="https://cdn.sujx.net/jumpserver.png" title="jumpserver"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/jumpserver.png" alt="jumpserver" title="jumpserver"></a></p>
+<hr>
+<p>另外，脚本的下载地址如下： <a href="https://cdn.sujx.net/jumpserver.sh" title="jumpserver">jumpserver安装脚本</a></p>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/centos/">centos</a><a class="post-meta__tags" href="/tags/jumpserver/">jumpserver</a><a class="post-meta__tags" href="/tags/shell/">shell</a></div><div class="post-share"><div class="social-share" data-image="https://cdn.sujx.net/2024/07/20240803100728.jpg" data-sites="facebook,twitter,weibo,qq"></div><link rel="stylesheet" href="/libs/sharejs/css/share.min.css" media="print" onload="this.media='all'"><script src="/libs/sharejs/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>能否请我喝一杯咖啡？</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.jpg" target="_blank"><img class="post-qr-code-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/wechat.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2020/01/31/centos8-mirrors/" title="CentOS8的软件库"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/06/wallhaven-nrrwxm.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">CentOS8的软件库</div></div><div class="info-2"><div class="info-item-1">相对于华为和阿里云的mirrors，中国科技大学的mirrors的完整性和速度要好一些，而且配置文件也方便一些。现在把相关文件记一下： 系统repo[BaseOS]name=CentOS-$releasever - Base#mirrorlist=http://mirrorlist.centos.org/?release=$releasever&amp;arch=$basearch&amp;repo=BaseOS&amp;infra=$infrabaseurl=https://mirrors.ustc.edu.cn/centos/$releasever/BaseOS/$basearch/os/gpgcheck=1enabled=1gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-centosofficial#additional packages that may be useful[extras]name=CentOS-$releasever - Extras#mirrorlist=http://mirrorlist.centos.org/?...</div></div></div></a><a class="pagination-related" href="/2019/11/20/centos8-itop-install/" title="基于CentOS8快速部署iTop"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/itop15.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">基于CentOS8快速部署iTop</div></div><div class="info-2"><div class="info-item-1">iTop是一个用PHP编写的基于ITIL理念打造的开源ITSM系统。本次将在CentOS8的虚机上安装部署一套iTOP系统。  系统准备 首先是准本LAMP环境，使用系统默认的Apache2. 4. 3、PHP7. 2、Mariadb10. 3.  yum update -yyum install -y cmake make autoconf gcc gcc-g++ unzip graphviz libzip-devel libzip-toolsyum install -y httpd php php-fpm php-ldap php-soapyum install -y php-xmlrpc php-gd php-opcache php-mysqlnd php-json php-develyum install -y libmcrypt libmcrypt-devel php-pecl-apcu mhashyum install -y php-odbc php-mbstring php-snmpyum install -y mariadb mariadb-serverfirew...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2019/09/09/Create-loacl-repo/" title="建立本地RPM包仓库"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/07/wallhaven-g8q8qd.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2019-09-09</div><div class="info-item-2">建立本地RPM包仓库</div></div><div class="info-2"><div class="info-item-1">随着国内使用Linux的氛围日渐浓郁，各个大厂的源也如雨后春笋一般纷纷出现，下载速度也是越来越快。不过，在我司内部因为安全制度的限制，生产环境是不能直接连接互联网的， 因此需要建立本地的源服务器。 建立服务环境软件镜像需要通过HTTP&#x2F;HTTPS环境来提供服务。 # 系统更新yum update -y# 安装RPM相关包yum install -y zlib-devel openssl-devel gcc perl-devel pam-devel make autoconfyum install -y rpm-build unzip rsync createrepo# 安装HTTP服务器yum install -y httpd mod_security# 修改配置文件touch /etc/httpd/conf.d/repos.confcat&gt;&gt;/etc/httpd/conf.d/repos.conf&lt;&lt;EOFAlias /repos /var/www/repos&lt;directory /var/www/repos&gt;    Options...</div></div></div></a><a class="pagination-related" href="/2020/08/18/Jumpserver-firstuse/" title="用户初次使用jumpserver指南"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/jumpexample-001.PNG" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-08-18</div><div class="info-item-2">用户初次使用jumpserver指南</div></div><div class="info-2"><div class="info-item-1">概况为方便研发和运维同事进行线上操作，平台运营运维组为大家搭建了从线下办公环境到线上生产环境的网页版跳板机。 访问方式如下： - 访问地址：http://jump.sujx.net - 用户名： 域用户名 - 密码为： 域账户密码 首次登录 首次登录网址并输入用户名密码  再次输入域账户密码进行安全令牌绑定  iPhone手机用户可以使用下图二维码获取安全令牌验证码生成器  安装完成安全令牌生成器之后就可以进行用户绑定  可以通过访问 https://gauth.apps.gbraad.nl 输入上图中的Secret Key来获取令牌  输入上述程序获得的一次性密码完成绑定  绑定完成之后系统会跳转回首页，再次输入Foneshare域账户和域密码  输入6位动态码  进入跳板机首次登录页面，勾选“我同意” ( 手机和微信信息选填 )  完成配置  点击左侧面板“我的资产”，即可看到可用主机  点击左侧面板“Web终端”，即可进入网页版的远程管理界面  点击可管理主机，会以登录域用户名自动连接对象主机   常见问题 登录提示“密码解密失败” ：更换浏览器或者清空浏览器缓存即可 安卓...</div></div></div></a><a class="pagination-related" href="/2020/02/14/cdh63-deploy/" title="离线部署CDH6. 3"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/wallhaven-4gr113.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-02-14</div><div class="info-item-2">离线部署CDH6. 3</div></div><div class="info-2"><div class="info-item-1">部署练习的环境有六台主机，主机的配置是4核心4G内存（ 内存还是低了，建议8G起步 ）： 主机名 IP地址 Elephant    184      Lion    185      Horse    186      Monkey    187      Tiger    188      环境准备 主机环境配置  按照各个主机配置修改相应值，下面以elephant为例： [root@localhost ~]# nmcli c m ens33 ipv4. method manual ipv4. addresses 192. 168. 174. 184/24 ipv4. gateway 192. 168. 174. 2 ipv4. dns 192. 168. 174. 2[root@localhost ~]# nmcli c d ens33 &amp;&amp; nmcli c u ens33[root@localhost ~]# hostnamectl set-hostname elephant  2。  文件复制 将离线部署CDH6。 3。 1的文件复制到每一台主机上。其中包...</div></div></div></a><a class="pagination-related" href="/2023/10/04/Shell-Howto/" title="如何编写Shell脚本"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/1/wallhaven-57joz1.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-10-04</div><div class="info-item-2">如何编写Shell脚本</div></div><div class="info-2"><div class="info-item-1"> 从这里开始书写格式#!/bin/bash# 解释器&lt;&lt;COMMENTAuthor: sujxDate: 2023-09-23Version: 1. 0Description: This is my first script.COMMENT# 多行注释echo &quot;Hello World!&quot;# 单行注释  执行方式 脚本没有执行权限 [sujx@LEGION:~]$ bash first.shHello World![sujx@LEGION:~]$ source first.shHello World! 脚本有可执行权限 [sujx@LEGION:~]$ chmod +x first.sh[sujx@LEGION:~]$ ./first.shHello World![sujx@LEGION:~]$ /home/sujx/first.shHello World! 开启子进程执行 [sujx@LEGION:~]$ cat sleep.sh#!/bin/bashsleep 1000[sujx@LEGION:~]$ chmod +x sleep.sh[suj...</div></div></div></a><a class="pagination-related" href="/2024/01/11/Sed-Grep-Awk/" title="正则三剑客的使用"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/02/wallhaven-j5elow.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-01-11</div><div class="info-item-2">正则三剑客的使用</div></div><div class="info-2"><div class="info-item-1"> 一个程序从运行到消亡，它这一生总共就干了三件事情——数据接收、数据处理和数据输出。大部分的Linux指令都是由命令、选项和参数构成，参数是于用户交互的入口，也是保证程序能够正常运行的关键。  GREPgrep( Globally search a Regular Expression and Print )是一个强大的文本搜索工具，可以根据制定模式来匹配并输出符合要求的字符串。 语法grep [options] pattern [files]或grep [-abcEFGhHilLnqrsvVwxy][-A&lt;显示行数&gt;][-B&lt;显示列数&gt;][-C&lt;显示列数&gt;][-d&lt;进行动作&gt;][-e&lt;范本样式&gt;][-f&lt;范本文件&gt;][--help][范本样式][文件或目录...]pattern - 表示要查找的字符串或正则表达式。files - 表示要查找的文件名，可以同时查找多个文件，如果省略 files 参数，则默认从标准输入中读取数据。常用选项：：-i：忽略大小写进行匹配。-v：反向查找，只打印不匹配的行。-n：显示...</div></div></div></a><a class="pagination-related" href="/2020/08/21/Jumpserver-Extend/" title="JumpServer的两项修改"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/jumpexample-010.PNG" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-08-21</div><div class="info-item-2">JumpServer的两项修改</div></div><div class="info-2"><div class="info-item-1">JumpServer 扩容目标JumpSever的录像默认位置为： &#x2F;opt&#x2F;jumpserver&#x2F;data&#x2F;media&#x2F;replay&#x2F; 为了防止录像文件把过大，需要为该目录挂载一块新的硬盘。 执行 为主机挂载一块20G硬盘 新建LVM分区  [root@jumpserver ~]# partprobe /dev/sdb[root@jumpserver ~]# pvcreate /dev/sdb[root@jumpserver ~]# vgcreate vg_jumpereplay /dev/sdb[root@jumpserver ~]# lvcreate -l 100%FREE -n lv_jump vg_jumpreplay[root@jumpserver ~]# mkfs.xfs /dev/vg_jumpreplay/lv_jump   挂载  [root@jumpserver ~]# blkid/dev/mapper/vg_jumpreplay-lv_jump: UUID=&quot;7360e830-ec71-...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">靖轩</div><div class="author-info-description">逝者如斯夫,不舍昼夜</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/grepsu"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://gitee.com/grepsu" target="_blank" title="Gitee"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:sujx@live.cn" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS链接"><i class="fa  fa-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/07/03/AIGC_FoxHole/" title="海鹰">海鹰</a><time datetime="2026-07-03T01:04:07.000Z" title="发表于 2026-07-03 09:04:07">2026-07-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/11/fristVibeCoding/" title="鹊随金印：我的第一个完整的AI编程项目">鹊随金印：我的第一个完整的AI编程项目</a><time datetime="2026-06-11T01:04:07.000Z" title="发表于 2026-06-11 09:04:07">2026-06-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/03/VI_Howto/" title="VI编辑器简介">VI编辑器简介</a><time datetime="2026-06-03T01:04:07.000Z" title="发表于 2026-06-03 09:04:07">2026-06-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/28/HNCitic_2605/" title="我要上头条">我要上头条</a><time datetime="2026-05-28T01:04:07.000Z" title="发表于 2026-05-28 09:04:07">2026-05-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/12/TS-Domain-Controller-Sync-Failure/" title="记一次Windows AD域控制器同步故障排错">记一次Windows AD域控制器同步故障排错</a><time datetime="2026-05-12T03:04:07.000Z" title="发表于 2026-05-12 11:04:07">2026-05-12</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2008 - 2026 By 靖轩</span></div><div class="footer_custom_text">京ICP备17034757号</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.5"></script><script src="/js/main.js?v=5.5.5"></script><script src="/libs/fancybox/fancybox.umd.js"></script><script src="/js/instantpage.js" type="module"></script><script src="/libs/lazyload/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const parseViewBox = viewBox => {
+    if (!viewBox) return null
+    const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
+    if (parts.length !== 4 || parts.some(n => Number.isNaN(n))) return null
+    return parts
+  }
+
+  const getSvgViewBox = svg => {
+    const attr = parseViewBox(svg.getAttribute('viewBox'))
+    if (attr) return attr
+
+    // Fallback: use bbox to build a viewBox
+    try {
+      const bbox = svg.getBBox()
+      if (bbox && bbox.width && bbox.height) return [bbox.x, bbox.y, bbox.width, bbox.height]
+    } catch (e) {
+      // getBBox may fail on some edge cases; ignore
+    }
+
+    const w = Number(svg.getAttribute('width')) || 0
+    const h = Number(svg.getAttribute('height')) || 0
+    if (w > 0 && h > 0) return [0, 0, w, h]
+    return [0, 0, 100, 100]
+  }
+
+  const setSvgViewBox = (svg, vb) => {
+    svg.setAttribute('viewBox', `${vb[0]} ${vb[1]} ${vb[2]} ${vb[3]}`)
+  }
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v))
+
+  const openSvgInNewTab = ({ source, initViewBox }) => {
+    const getClonedSvg = () => {
+      if (typeof source === 'string') {
+        const template = document.createElement('template')
+        template.innerHTML = source.trim()
+        const svg = template.content.querySelector('svg')
+        return svg ? svg.cloneNode(true) : null
+      }
+      if (source && typeof source.cloneNode === 'function') {
+        return source.cloneNode(true)
+      }
+      return null
+    }
+
+    const clone = getClonedSvg()
+    if (!clone) return
+    if (initViewBox && initViewBox.length === 4) {
+      clone.setAttribute('viewBox', initViewBox.join(' '))
+    }
+    if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+    if (!clone.getAttribute('xmlns:xlink') && clone.outerHTML.includes('xlink:')) {
+      clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+    }
+    // inject background to match current theme
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    const bg = getComputedStyle(document.body).backgroundColor || (isDark ? '#1e1e1e' : '#ffffff')
+    if (!clone.style.background) clone.style.background = bg
+
+    const serializer = new XMLSerializer()
+    const svgSource = serializer.serializeToString(clone)
+    const htmlSource = `<!doctype html><html><head><meta charset="utf-8" />
+      <style>
+        html, body { width: 100%; height: 100%; margin: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; }
+        svg { max-width: 100%; max-height: 100%; height: auto; width: auto; }
+      </style>
+      </head><body>${svgSource}</body></html>`
+    const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank', 'noopener')
+    setTimeout(() => URL.revokeObjectURL(url), 30000)
+  }
+
+  const attachMermaidViewerButton = wrap => {
+    let btn = wrap.querySelector('.mermaid-open-btn')
+    if (!btn) {
+      btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'mermaid-open-btn'
+      wrap.appendChild(btn)
+    }
+
+    btn.innerHTML = '<i class="fa fa-search fa-fw" aria-hidden="true"></i>'
+
+    if (!btn.__mermaidViewerBound) {
+      btn.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        const svg = wrap.__mermaidOriginalSvg || wrap.querySelector('svg')
+        if (!svg) return
+        const initViewBox = wrap.__mermaidInitViewBox
+        if (typeof svg === 'string') {
+          openSvgInNewTab({ source: svg, initViewBox })
+          return
+        }
+        openSvgInNewTab({ source: svg, initViewBox })
+      })
+      btn.__mermaidViewerBound = true
+    }
+  }
+
+  // Zoom around a point (px, py) in the SVG viewport (in viewBox coordinates)
+  const zoomAtPoint = (vb, factor, px, py) => {
+    const w = vb[2] * factor
+    const h = vb[3] * factor
+    const nx = px - (px - vb[0]) * factor
+    const ny = py - (py - vb[1]) * factor
+    return [nx, ny, w, h]
+  }
+
+  const initMermaidGestures = wrap => {
+    const svg = wrap.querySelector('svg')
+    if (!svg) return
+
+    // Ensure viewBox exists so gestures always work
+    const initVb = getSvgViewBox(svg)
+    wrap.__mermaidInitViewBox = initVb
+    wrap.__mermaidCurViewBox = initVb.slice()
+    setSvgViewBox(svg, initVb)
+
+    // Avoid binding multiple times on themeChange/pjax
+    if (wrap.__mermaidGestureBound) return
+    wrap.__mermaidGestureBound = true
+
+    // Helper: map client (viewport) coordinate -> viewBox coordinate
+    const clientToViewBox = (clientX, clientY) => {
+      const rect = svg.getBoundingClientRect()
+      const vb = wrap.__mermaidCurViewBox || getSvgViewBox(svg)
+      const x = vb[0] + (clientX - rect.left) * (vb[2] / rect.width)
+      const y = vb[1] + (clientY - rect.top) * (vb[3] / rect.height)
+      return { x, y, rect, vb }
+    }
+
+    const state = {
+      pointers: new Map(),
+      startVb: null,
+      startDist: 0,
+      startCenter: null
+    }
+
+    const clampVb = vb => {
+      const init = wrap.__mermaidInitViewBox || vb
+      const minW = init[2] * 0.1
+      const maxW = init[2] * 10
+      const minH = init[3] * 0.1
+      const maxH = init[3] * 10
+      vb[2] = clamp(vb[2], minW, maxW)
+      vb[3] = clamp(vb[3], minH, maxH)
+      return vb
+    }
+
+    const setCurVb = vb => {
+      vb = clampVb(vb)
+      wrap.__mermaidCurViewBox = vb
+      setSvgViewBox(svg, vb)
+    }
+
+    const onPointerDown = e => {
+      // Allow only primary button for mouse
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      svg.setPointerCapture(e.pointerId)
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      if (state.pointers.size === 1) {
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      } else if (state.pointers.size === 2) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        state.startDist = Math.hypot(dx, dy)
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        state.startCenter = { x: (pts[0].x + pts[1].x) / 2, y: (pts[0].y + pts[1].y) / 2 }
+      }
+    }
+
+    const onPointerMove = e => {
+      if (!state.pointers.has(e.pointerId)) return
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      // Pan with 1 pointer
+      if (state.pointers.size === 1 && state.startVb) {
+        const p = [...state.pointers.values()][0]
+        const prev = { x: e.clientX - e.movementX, y: e.clientY - e.movementY }
+        // movementX/Y unreliable on touch, compute from stored last position
+        const last = wrap.__mermaidLastSinglePointer || p
+        const dxClient = p.x - last.x
+        const dyClient = p.y - last.y
+        wrap.__mermaidLastSinglePointer = p
+
+        const { rect } = clientToViewBox(p.x, p.y)
+        const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        const dx = dxClient * (vb[2] / rect.width)
+        const dy = dyClient * (vb[3] / rect.height)
+        setCurVb([vb[0] - dx, vb[1] - dy, vb[2], vb[3]])
+        return
+      }
+
+      // Pinch zoom with 2 pointers
+      if (state.pointers.size === 2 && state.startVb && state.startDist > 0) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        const dist = Math.hypot(dx, dy)
+        if (!dist) return
+        const factor = state.startDist / dist // dist bigger => zoom in (viewBox smaller)
+
+        const cx = (pts[0].x + pts[1].x) / 2
+        const cy = (pts[0].y + pts[1].y) / 2
+        const centerClient = { x: cx, y: cy }
+
+        const pxy = clientToViewBox(centerClient.x, centerClient.y)
+        const cpx = pxy.x
+        const cpy = pxy.y
+
+        const vb = zoomAtPoint(state.startVb, factor, cpx, cpy)
+        setCurVb(vb)
+      }
+    }
+
+    const onPointerUpOrCancel = e => {
+      state.pointers.delete(e.pointerId)
+      if (state.pointers.size === 0) {
+        state.startVb = null
+        state.startDist = 0
+        state.startCenter = null
+        wrap.__mermaidLastSinglePointer = null
+      } else if (state.pointers.size === 1) {
+        // reset single pointer baseline to avoid jump
+        wrap.__mermaidLastSinglePointer = [...state.pointers.values()][0]
+      }
+    }
+
+    // Wheel zoom (mouse/trackpad)
+    const onWheel = e => {
+      // ctrlKey on mac trackpad pinch; we treat both as zoom
+      e.preventDefault()
+      const delta = e.deltaY
+      const zoomFactor = delta > 0 ? 1.1 : 0.9
+      const { x, y } = clientToViewBox(e.clientX, e.clientY)
+      const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      setCurVb(zoomAtPoint(vb, zoomFactor, x, y))
+    }
+
+    const onDblClick = () => {
+      const init = wrap.__mermaidInitViewBox
+      if (!init) return
+      wrap.__mermaidCurViewBox = init.slice()
+      setSvgViewBox(svg, init)
+    }
+
+    svg.addEventListener('pointerdown', onPointerDown)
+    svg.addEventListener('pointermove', onPointerMove)
+    svg.addEventListener('pointerup', onPointerUpOrCancel)
+    svg.addEventListener('pointercancel', onPointerUpOrCancel)
+    svg.addEventListener('wheel', onWheel, { passive: false })
+    svg.addEventListener('dblclick', onDblClick)
+  }
+
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+
+      // Clear old render (themeChange/pjax will rerun)
+      const oldSvg = item.querySelector('svg')
+      if (oldSvg) oldSvg.remove()
+      item.__mermaidGestureBound = false
+
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+        if (true) initMermaidGestures(item)
+        item.__mermaidOriginalSvg = svg
+        if (true) attachMermaidViewerButton(item)
+      }
+
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('/libs/mermaid/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.5"></script></div></div></body></html>

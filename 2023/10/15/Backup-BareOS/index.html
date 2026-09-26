@@ -1,0 +1,557 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>BareOS，一个完整的开源备份方案 | 靖轩</title><meta name="author" content="靖轩"><meta name="copyright" content="靖轩"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="介绍BareOS 是一个基于Bacula这个开源备份软件进行frok和二次开发的企业级备份软件。Bareos的团队位于德国，主要开发人员是从SUSE出来创业的老头子，他们首先通过的兼容性认证的也是SUSE的。BareOS相对于Bacula而言，功能强化了管理和对插件的支持，并提供了官方的web管理控制台。需要注意的是，BareOS的repo是区分商业版和社区版的，商业版使用。 com的域名，社区版">
+<meta property="og:type" content="article">
+<meta property="og:title" content="BareOS，一个完整的开源备份方案">
+<meta property="og:url" content="https://www.sujx.net/2023/10/15/Backup-BareOS/index.html">
+<meta property="og:site_name" content="靖轩">
+<meta property="og:description" content="介绍BareOS 是一个基于Bacula这个开源备份软件进行frok和二次开发的企业级备份软件。Bareos的团队位于德国，主要开发人员是从SUSE出来创业的老头子，他们首先通过的兼容性认证的也是SUSE的。BareOS相对于Bacula而言，功能强化了管理和对插件的支持，并提供了官方的web管理控制台。需要注意的是，BareOS的repo是区分商业版和社区版的，商业版使用。 com的域名，社区版">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.sujx.net/covers/cover16.jpg">
+<meta property="article:published_time" content="2023-10-15T07:04:07.000Z">
+<meta property="article:modified_time" content="2026-09-26T02:32:14.919Z">
+<meta property="article:author" content="靖轩">
+<meta property="article:tag" content="backup">
+<meta property="article:tag" content="bacula">
+<meta property="article:tag" content="bareos">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.sujx.net/covers/cover16.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "BareOS，一个完整的开源备份方案",
+  "url": "https://www.sujx.net/2023/10/15/Backup-BareOS/",
+  "image": "https://cdn.sujx.net/covers/cover16.jpg",
+  "datePublished": "2023-10-15T07:04:07.000Z",
+  "dateModified": "2026-09-26T02:32:14.919Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "靖轩",
+      "url": "https://www.sujx.net"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://cdn.sujx.net/about/favicon.png"><link rel="canonical" href="https://www.sujx.net/2023/10/15/Backup-BareOS/index.html"><link rel="preconnect" href="//cdnjs.cloudflare.com"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css?v=5.5.5"><link rel="stylesheet" href="/fonts/css/all.min.css"><link rel="stylesheet" href="/libs/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?417b20ac1984432f821159fac27d3bb5";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><link rel="stylesheet" href="/fonts/titillium-web.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: '/libs/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: true,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'BareOS，一个完整的开源备份方案',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="alternate" href="/atom.xml" title="靖轩" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">靖轩</span></a><a class="nav-page-title" href="/"><span class="site-name">BareOS，一个完整的开源备份方案</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 汇总</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fa fa-television"></i><span> 电影</span></a></div><div class="menus_item"><a class="site-page" href="/books/"><i class="fa-fw fa fa-book"></i><span> 读书</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">BareOS，一个完整的开源备份方案</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-10-15T07:04:07.000Z" title="发表于 2023-10-15 15:04:07">2023-10-15</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-09-26T02:32:14.919Z" title="更新于 2026-09-26 10:32:14">2026-09-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F/">应用程序</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">1.4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>6分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p><a target="_blank" rel="noopener" href="https://www.bareos.com/">BareOS</a> 是一个基于Bacula这个开源备份软件进行frok和二次开发的企业级备份软件。Bareos的团队位于德国，主要开发人员是从SUSE出来创业的老头子，他们首先通过的兼容性认证的也是SUSE的。BareOS相对于Bacula而言，功能强化了管理和对插件的支持，并提供了官方的web管理控制台。需要注意的是，BareOS的repo是区分商业版和社区版的，商业版使用。 com的域名，社区版使用。 org域名。</p>
+<p>有关于Bacula的部署和使用，可以看<a href="https://www.sujx.net/2023/09/05/Backup-Baucla/">这里</a></p>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/covers/cover16.jpg"></p>
+<blockquote>
+<ol start="2023">
+<li>10 摄于北京延庆</li>
+</ol>
+</blockquote>
+<h2 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h2><table>
+<thead>
+<tr>
+<th>主机名</th>
+<th>IP地址</th>
+<th>任务角色</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>BareOS</td>
+<td>192. 168. 10. 250</td>
+<td>备份服务器</td>
+</tr>
+<tr>
+<td>Client</td>
+<td>192. 168. 10. 101</td>
+<td>备份客户端</td>
+</tr>
+</tbody></table>
+<h3 id="安装软件"><a href="#安装软件" class="headerlink" title="安装软件"></a>安装软件</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装备份软件</span></span><br><span class="line">wget https://download.bareos.org/current/EL_9/add_bareos_repositories.sh</span><br><span class="line">sh ./add_bareos_repositories.sh</span><br><span class="line">dnf makecache</span><br><span class="line">dnf -y install bareos </span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">创建相关目录</span></span><br><span class="line">mkdir -p /bacula/backup /bacula/restore</span><br><span class="line">chown -R bacula:bacula /bacula</span><br><span class="line">chmod -R 700 /bacula</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">开启防火墙</span></span><br><span class="line">firewall-cmd --permanent --add-service=bacula</span><br><span class="line">firewall-cmd --reload</span><br></pre></td></tr></table></figure>
+<h3 id="准备数据库"><a href="#准备数据库" class="headerlink" title="准备数据库"></a>准备数据库</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装</span></span><br><span class="line">dnf -y install postgresql-server </span><br><span class="line">postgresql-setup --initdb</span><br><span class="line">systemctl enable --now postgresql </span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">创建数据库相关表</span></span><br><span class="line">su postgres -c /usr/lib/bareos/scripts/create_bareos_database</span><br><span class="line">su postgres -c /usr/lib/bareos/scripts/make_bareos_tables</span><br><span class="line">su postgres -c /usr/lib/bareos/scripts/grant_bareos_privileges</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">访问测试</span></span><br><span class="line">[root@bareos ~]# su - postgres </span><br><span class="line">[postgres@bareos ~]$ psql -l</span><br><span class="line">                                  List of databases</span><br><span class="line">   Name    |  Owner   | Encoding  |   Collate   |    Ctype    |   Access privileges   </span><br><span class="line">-----------+----------+-----------+-------------+-------------+-----------------------</span><br><span class="line"> bareos    | postgres | SQL_ASCII | C           | C           | </span><br><span class="line"> postgres  | postgres | UTF8      | en_US. UTF-8 | en_US. UTF-8 | </span><br><span class="line"> template0 | postgres | UTF8      | en_US. UTF-8 | en_US. UTF-8 | =c/postgres          +</span><br><span class="line">           |          |           |             |             | postgres=CTc/postgres</span><br><span class="line"> template1 | postgres | UTF8      | en_US. UTF-8 | en_US. UTF-8 | =c/postgres          +</span><br><span class="line">           |          |           |             |             | postgres=CTc/postgres</span><br><span class="line">           </span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">拉起服务</span></span><br><span class="line">systemctl enable --now bareos-dir</span><br><span class="line">systemctl enable --now bareos-sd</span><br><span class="line">systemctl enable --now bareos-fd</span><br></pre></td></tr></table></figure>
+
+<h3 id="安装WEB-UI"><a href="#安装WEB-UI" class="headerlink" title="安装WEB-UI"></a>安装WEB-UI</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">默认使用httpd</span></span><br><span class="line">dnf install -y bareos-webui</span><br><span class="line">systemctl	enable	--now httpd</span><br><span class="line">firewall-cmd --permanent --add-service=&#123;http, https&#125;</span><br><span class="line">firewall-cmd --reload</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">配置门户密码（默认使用admin:admin）</span></span><br><span class="line">cp /etc/bareos/bareos-dir.d/console/admin.conf.example /etc/bareos/bareos-dir.d/console/admin.conf</span><br><span class="line">systemctl restart bareos-dir</span><br></pre></td></tr></table></figure>
+<p>访问路径为：http:&#x2F;&#x2F;主机地址&#x2F;bareos-webui&#x2F;<br><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023/10/bareos-webui-index.PNG" alt="bareos"></p>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023/10/bareos-webui-dashborad.PNG" alt="bareos"></p>
+<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><h3 id="目录结构"><a href="#目录结构" class="headerlink" title="目录结构"></a>目录结构</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@bareos ~]# tree /etc/bareos</span><br><span class="line">/etc/bareos</span><br><span class="line">├── bareos-dir.d</span><br><span class="line">│   ├── catalog</span><br><span class="line">│   │   └── MyCatalog.conf</span><br><span class="line">│   ├── client</span><br><span class="line">│   │   └── bareos-fd.conf</span><br><span class="line">│   ├── console</span><br><span class="line">│   │   ├── admin.conf</span><br><span class="line">│   │   ├── admin.conf.example</span><br><span class="line">│   │   └── bareos-mon.conf</span><br><span class="line">│   ├── counter</span><br><span class="line">│   ├── director</span><br><span class="line">│   │   └── bareos-dir.conf</span><br><span class="line">│   ├── fileset</span><br><span class="line">│   │   ├── Catalog.conf</span><br><span class="line">│   │   ├── LinuxAll.conf</span><br><span class="line">│   │   ├── SelfTest.conf</span><br><span class="line">│   │   └── Windows All Drives.conf</span><br><span class="line">│   ├── job</span><br><span class="line">│   │   ├── backup-bareos-fd.conf</span><br><span class="line">│   │   ├── BackupCatalog.conf</span><br><span class="line">│   │   └── RestoreFiles.conf</span><br><span class="line">│   ├── jobdefs</span><br><span class="line">│   │   └── DefaultJob.conf</span><br><span class="line">│   ├── messages</span><br><span class="line">│   │   ├── Daemon.conf</span><br><span class="line">│   │   └── Standard.conf</span><br><span class="line">│   ├── pool</span><br><span class="line">│   │   ├── Differential.conf</span><br><span class="line">│   │   ├── Full.conf</span><br><span class="line">│   │   ├── Incremental.conf</span><br><span class="line">│   │   └── Scratch.conf</span><br><span class="line">│   ├── profile</span><br><span class="line">│   │   ├── operator.conf</span><br><span class="line">│   │   ├── webui-admin.conf</span><br><span class="line">│   │   ├── webui-limited.conf.example</span><br><span class="line">│   │   └── webui-readonly.conf</span><br><span class="line">│   ├── schedule</span><br><span class="line">│   │   ├── WeeklyCycleAfterBackup.conf</span><br><span class="line">│   │   └── WeeklyCycle.conf</span><br><span class="line">│   ├── storage</span><br><span class="line">│   │   └── File.conf</span><br><span class="line">│   └── user</span><br><span class="line">├── bareos-dir-export</span><br><span class="line">│   └── client</span><br><span class="line">├── bareos-fd.d</span><br><span class="line">│   ├── client</span><br><span class="line">│   │   └── myself.conf</span><br><span class="line">│   ├── director</span><br><span class="line">│   │   ├── bareos-dir.conf</span><br><span class="line">│   │   └── bareos-mon.conf</span><br><span class="line">│   └── messages</span><br><span class="line">│       └── Standard.conf</span><br><span class="line">├── bareos-sd.d</span><br><span class="line">│   ├── autochanger</span><br><span class="line">│   ├── device</span><br><span class="line">│   │   └── FileStorage.conf</span><br><span class="line">│   ├── director</span><br><span class="line">│   │   ├── bareos-dir.conf</span><br><span class="line">│   │   └── bareos-mon.conf</span><br><span class="line">│   ├── messages</span><br><span class="line">│   │   └── Standard.conf</span><br><span class="line">│   ├── ndmp</span><br><span class="line">│   └── storage</span><br><span class="line">│       └── bareos-sd.conf</span><br><span class="line">├── bconsole.conf</span><br><span class="line">└── tray-monitor.d</span><br><span class="line">    ├── client</span><br><span class="line">    │   └── FileDaemon-local.conf</span><br><span class="line">    ├── director</span><br><span class="line">    │   └── Director-local.conf</span><br><span class="line">    └── storage</span><br><span class="line">        └── StorageDaemon-local.conf</span><br><span class="line"></span><br><span class="line">32 directories, 40 files</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>管理终端（bconsole）：<br>bconsole：全功能CLI管理终端。<br>WebUI：只能用于备份和恢复，同时包含基于Web的CLI界面。</p>
+</li>
+<li><p>管理服务（bareos-dir）：<br>运行在bareos管理机上，包含全部管理功能、CLI管理服务、WebUI后台支持、目录（catalog）数据库支持等。</p>
+</li>
+<li><p>存储服务（bareos-sd）：<br>运行在bareos管理机上，支持不同的物理存储媒体（如硬盘存储系统、磁带存储系统等），管理数据的读取和存储。</p>
+</li>
+<li><p>文件服务（bareos-fd）：<br>运行在客户机上，管理本地文件的备份和恢复。</p>
+</li>
+<li><p>储存媒体：<br>物理存储媒体（如硬盘存储系统、磁带存储系统等）</p>
+</li>
+</ul>
+<h3 id="连接数据库"><a href="#连接数据库" class="headerlink" title="连接数据库"></a>连接数据库</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@bareos ~]# cd /etc/bareos/bareos-dir.d/</span><br><span class="line">[root@bareos bareos-dir.d]# ls</span><br><span class="line">catalog  console  director  job      messages  profile   storage</span><br><span class="line">client   counter  fileset   jobdefs  pool      schedule  user</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">使用本机root账号的登陆数据库，所以默认不设密码</span></span><br><span class="line">[root@bareos bareos-dir.d]# cat catalog/MyCatalog.conf </span><br><span class="line">Catalog &#123;</span><br><span class="line">  Name = MyCatalog</span><br><span class="line">  dbname = &quot;bareos&quot;</span><br><span class="line">  dbuser = &quot;bareos&quot;</span><br><span class="line">  dbpassword = &quot;&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="配置客户端"><a href="#配置客户端" class="headerlink" title="配置客户端"></a>配置客户端</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@bareos client]# pwd</span><br><span class="line">/etc/bareos/bareos-dir.d/client</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">本地信息</span></span><br><span class="line">[root@bareos client]# cat bareos-fd.conf </span><br><span class="line">Client &#123;</span><br><span class="line">  Name = bareos-fd</span><br><span class="line">  Description = &quot;Client resource of the Director itself.&quot;</span><br><span class="line">  Address = localhost</span><br><span class="line">  Password = &quot;9lvO7RcbxLdb4iqY4CSguiU80DtR2f2jS595gslNXx28&quot;          # password for FileDaemon</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="配置存储"><a href="#配置存储" class="headerlink" title="配置存储"></a>配置存储</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">进入存储配置目录</span></span><br><span class="line">[root@bareos bareos]# cd bareos-sd.d/</span><br><span class="line">[root@bareos bareos-sd.d]# ls</span><br><span class="line">autochanger  device  director  messages  ndmp  storage</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">本地备份配置文件</span></span><br><span class="line">[root@bareos bareos-sd.d]# cat device/FileStorage.conf </span><br><span class="line">Device &#123;</span><br><span class="line">  Name = FileStorage</span><br><span class="line">  Media Type = File</span><br><span class="line">  Archive Device = /var/lib/bareos/storage</span><br><span class="line">  LabelMedia = yes;                   # lets Bareos label unlabeled media</span><br><span class="line">  Random Access = yes;</span><br><span class="line">  AutomaticMount = yes;               # when device opened, read it</span><br><span class="line">  RemovableMedia = no;</span><br><span class="line">  AlwaysOpen = no;</span><br><span class="line">  Description = &quot;File device. A connecting Director must have the same Name and MediaType.&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="重启服务"><a href="#重启服务" class="headerlink" title="重启服务"></a>重启服务</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">测试配置信息是否正确</span></span><br><span class="line">su bareos -s /bin/sh -c &quot;/usr/sbin/bareos-dir -t&quot;</span><br><span class="line">su bareos -s /bin/sh -c &quot;/usr/sbin/bareos-sd -t&quot;</span><br><span class="line">bareos-fd -t</span><br><span class="line">bconsole -t</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">重启服务</span></span><br><span class="line">systemctl restart bareos-dir</span><br><span class="line">systemctl restart bareos-sd</span><br><span class="line">systemctl restart bareos-fd</span><br></pre></td></tr></table></figure>
+
+<h2 id="客户端"><a href="#客户端" class="headerlink" title="客户端"></a>客户端</h2><h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装备份软件</span></span><br><span class="line">wget https://download.bareos.org/current/EL_9/add_bareos_repositories.sh</span><br><span class="line">sh ./add_bareos_repositories.sh</span><br><span class="line">dnf makecache</span><br><span class="line">dnf -y install bareos-client</span><br><span class="line">systemctl enable --now bacula-fd</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">开启防火墙</span></span><br><span class="line">firewall-cmd --permanent --add-service=bacula-client</span><br><span class="line">firewall-cmd --reload</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">返回服务器上创建客户端信息</span></span><br><span class="line">[root@bareos ~]# bconsole </span><br><span class="line">*configure add client name=client-fd address=client.contoso.com password=testPw0rd</span><br><span class="line">Exported resource file &quot;/etc/bareos/bareos-dir-export/client/client-fd/bareos-fd.d/director/bareos-dir.conf&quot;:</span><br><span class="line">Director &#123;</span><br><span class="line">  Name = &quot;bareos-dir&quot;</span><br><span class="line">  Password = &quot;[md5]6180cedccd8308ed85ca676e2be5aabf&quot;</span><br><span class="line">&#125;</span><br><span class="line">Created resource config file &quot;/etc/bareos/bareos-dir.d/client/client-fd.conf&quot;:</span><br><span class="line">Client &#123;</span><br><span class="line">  Name = &quot;client-fd&quot;</span><br><span class="line">  Address = &quot;client.contoso.com&quot;</span><br><span class="line">  Password = &quot;testPw0rd&quot;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">可以得到两个文件</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">/etc/bareos/bareos-dir-export/client/client-fd/bareos-fd.d/director/bareos-dir.conf</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">/etc/bareos/bareos-dir.d/client/client-fd.conf</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">将上述文件复制到客户端对应文件夹</span></span><br><span class="line">scp /etc/bareos/bareos-dir-export/client/client-fd/bareos-fd.d/director/bareos-dir.conf root@client.contoso.com:/etc/bareos/bareos-fd.d/director/</span><br><span class="line">scp /etc/bareos/bareos-dir.d/client/client-fd.conf root@client.contoso.com:/etc/bareos/bareos-dir.d/client/</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">让服务器重新读取配置文件</span></span><br><span class="line">[root@bareos ~]# bconsole </span><br><span class="line">Connecting to Director localhost:9101</span><br><span class="line"> Encryption: TLS_CHACHA20_POLY1305_SHA256 TLSv1. 3</span><br><span class="line">1000 OK: bareos-dir Version: 22. 1. 2~pre4. c37b33136 ( 06 November 2023 )</span><br><span class="line">Bareos community build ( UNSUPPORTED ).</span><br><span class="line">Get professional support from https://www.bareos.com</span><br><span class="line">You are connected using the default console</span><br><span class="line"></span><br><span class="line">Enter a period ( . ) to cancel a command.</span><br><span class="line">*reload</span><br><span class="line">reloaded</span><br></pre></td></tr></table></figure>
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023/10/bareos-webui-backup.PNG" alt="bareos"><br><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023/10/bareos-webui-restore.PNG" alt="bareos"></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/wsl222000/p/7080097.html">使用bareos备份</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/laotou1963/article/details/82711776">备份&#x2F;恢复系统bareos的安装</a></li>
+</ol>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/bacula/">bacula</a><a class="post-meta__tags" href="/tags/bareos/">bareos</a><a class="post-meta__tags" href="/tags/backup/">backup</a></div><div class="post-share"><div class="social-share" data-image="https://cdn.sujx.net/covers/cover16.jpg" data-sites="facebook,twitter,weibo,qq"></div><link rel="stylesheet" href="/libs/sharejs/css/share.min.css" media="print" onload="this.media='all'"><script src="/libs/sharejs/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>能否请我喝一杯咖啡？</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.jpg" target="_blank"><img class="post-qr-code-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/wechat.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2023/10/21/Ohttps-certs/" title="全网SSL证书的自动更新"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023/10/ohttps-index.PNG" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">全网SSL证书的自动更新</div></div><div class="info-2"><div class="info-item-1">在运维实践中，SSL证书的维护也是值得重视的运维工作，特别是现在的普通商业SSL证书都变成2年期和1年期了。这里就需要专门抽时间来进行证书有效期监控和对各种CDN、云服务商、ECS进行证书更新维护。ohttps就是专门提供这个服务的saas服务商，这里有完整的介绍。 原理 使用certbot类似方案申请 **Let’s Encrypt**的域名证书   该网站集成了多个云服务商的SDK，通过对应API来修改dns记录、添加托管SSL证书  通过调用API来实现证书的自动更新   使用授权 获取阿里云、七牛等云服务商的 Access Key ID和Sercret  对RAM账号进行授权，这里很多需要Fullaccess权限，需要注意  添加管理节点   自动更新会在凌晨1点进行   问题 很多公有云不支持，比如AWS、AZURE等； 支付需要调用第三方平台打开较慢，且不知道哪里开发票  费用1。 一个通配符证书，使用阿里云的CDN和OSS、SSL，再加上监控服务，一年差不多是5块钱。2。 开通账号赠送5元体验金，基本上第一年免费了。3. 使用我的邀请链接注册，你我都将额外多获得1元...</div></div></div></a><a class="pagination-related" href="/2023/10/07/Pritunl-build/" title="使用Pritunl构建企业远程接入系统"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2023/10/pritunl-homepage.PNG" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">使用Pritunl构建企业远程接入系统</div></div><div class="info-2"><div class="info-item-1">pritunl是一个开源的企业级分布式远程接入服务器。它的社区版就是单机版，开源、免费，同时支持图形化的管理界面。它在高级版中可以通过RADIUS服务支持Openldap或者Active Directory的用户管理，只不过需要每个月70$的授权费用。   官方文档   Github项目地址   部署# 系统环境为AlmaLinux 8. 8# 系统需要关闭selinux, 以下使用root账户进行安装tee /etc/yum.repos.d/mongodb-org-6. 0. repo &lt;&lt; EOF[mongodb-org-6. 0]name=MongoDB Repositorybaseurl=https://repo.mongodb.org/yum/redhat/8/mongodb-org/6. 0/x86_64/gpgcheck=1enabled=1gpgkey=https://www.mongodb.org/static/pgp/server-6. 0. ascEOFtee /etc/yum.repos.d/pritunl.repo &lt;&lt; EOF[...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2023/09/05/Backup-Baucla/" title="备份系统Bacula的部署和使用"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/07/wallhaven-g8q8qd.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-05</div><div class="info-item-2">备份系统Bacula的部署和使用</div></div><div class="info-2"><div class="info-item-1">Bacula 是一款开源的跨平台网络备份工具，提供基于企业级的CS的备份解决方案，可以对数据进行备份、恢复、以及完整性校验。 组件  Director：中央控制程序，管理所有组件 Console：管理控制台 Storage Daemon：负责文件的实际存储和读取，同时对接存储硬盘或者磁带 Catalog：数据库，建立备份文件和存储路径建立索引，支持MySQL、PG和SQLite File Daemon：客户端程序，负责执行文件的备份、还原和文件传输  部署准备数据库# 安装dnf makecachednf update -ydnf install -y mariadb mariadb-server mariadb-server# 指定客户端和服务端使用utf8来访问mariadbcat &gt; /etc/my.cnf.d/charset.cnf &lt;&lt;EOF[mysqld]character-set-server = utf8mb4[client]default-character-set = utf8mb4EOF# 拉起服务systemctl enable --no...</div></div></div></a><a class="pagination-related" href="/2021/08/31/Dos-cmd-backup/" title="使用批处理进行数据备份"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/2024/05/wallhaven-4lmklr.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-08-31</div><div class="info-item-2">使用批处理进行数据备份</div></div><div class="info-2"><div class="info-item-1">背景运维组内部有一个服务器日志的离线备份需求：  Filebeat将日志打到一个WindowsServer的SMB共享上，然后要通过FTP的形式在办公环境进行离线备份； 要在生产环境备份服务器上保留14天以防线下备份失效；  方案 生产环境备份服务器提供相应文件夹共享，并开放权限； 建立计划任务，定时打包实现文件备份转储以及删除超过14天的备份文件； 线下建立离线存储服务器，同步FTP数据到加密磁盘 线下磁盘的定期轮转和永久存储  脚本 基于时间的命名备份方案  @echo off::该脚本已被放弃，原因是备份源文件的日期和打包备份日期相差4天，导致题不对版::设置7z的命令行程序路径set zip7=C:\Program Files\7-Zip\7z.exe::设置压缩包保存路径set Save=D:\temp::当天日期，备份文件名set curdate=%date:~0, 4%-%date:~5, 2%-%date:~8, 2%::设置要打包压缩的文件夹set Backup=D:\AllLogsBackup\*::备份命令 无压缩只存档，压缩完成后删除::备份密码为 #IH...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.sujx.net/about/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">靖轩</div><div class="author-info-description">逝者如斯夫,不舍昼夜</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">287</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">613</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/grepsu"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://gitee.com/grepsu" target="_blank" title="Gitee"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:sujx@live.cn" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS链接"><i class="fa  fa-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.</span> <span class="toc-text">介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%83%A8%E7%BD%B2"><span class="toc-number">2.</span> <span class="toc-text">部署</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E8%BD%AF%E4%BB%B6"><span class="toc-number">2.1.</span> <span class="toc-text">安装软件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%86%E5%A4%87%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="toc-number">2.2.</span> <span class="toc-text">准备数据库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85WEB-UI"><span class="toc-number">2.3.</span> <span class="toc-text">安装WEB-UI</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE"><span class="toc-number">3.</span> <span class="toc-text">配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84"><span class="toc-number">3.1.</span> <span class="toc-text">目录结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9E%E6%8E%A5%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="toc-number">3.2.</span> <span class="toc-text">连接数据库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="toc-number">3.3.</span> <span class="toc-text">配置客户端</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E5%AD%98%E5%82%A8"><span class="toc-number">3.4.</span> <span class="toc-text">配置存储</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%8D%E5%90%AF%E6%9C%8D%E5%8A%A1"><span class="toc-number">3.5.</span> <span class="toc-text">重启服务</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="toc-number">4.</span> <span class="toc-text">客户端</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85"><span class="toc-number">4.1.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8"><span class="toc-number">4.2.</span> <span class="toc-text">使用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">5.</span> <span class="toc-text">参考</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/07/03/AIGC_FoxHole/" title="海鹰">海鹰</a><time datetime="2026-07-03T01:04:07.000Z" title="发表于 2026-07-03 09:04:07">2026-07-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/11/fristVibeCoding/" title="鹊随金印：我的第一个完整的AI编程项目">鹊随金印：我的第一个完整的AI编程项目</a><time datetime="2026-06-11T01:04:07.000Z" title="发表于 2026-06-11 09:04:07">2026-06-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/03/VI_Howto/" title="VI编辑器简介">VI编辑器简介</a><time datetime="2026-06-03T01:04:07.000Z" title="发表于 2026-06-03 09:04:07">2026-06-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/28/HNCitic_2605/" title="我要上头条">我要上头条</a><time datetime="2026-05-28T01:04:07.000Z" title="发表于 2026-05-28 09:04:07">2026-05-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/12/TS-Domain-Controller-Sync-Failure/" title="记一次Windows AD域控制器同步故障排错">记一次Windows AD域控制器同步故障排错</a><time datetime="2026-05-12T03:04:07.000Z" title="发表于 2026-05-12 11:04:07">2026-05-12</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2008 - 2026 By 靖轩</span></div><div class="footer_custom_text">京ICP备17034757号</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.5"></script><script src="/js/main.js?v=5.5.5"></script><script src="/libs/fancybox/fancybox.umd.js"></script><script src="/js/instantpage.js" type="module"></script><script src="/libs/lazyload/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const parseViewBox = viewBox => {
+    if (!viewBox) return null
+    const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
+    if (parts.length !== 4 || parts.some(n => Number.isNaN(n))) return null
+    return parts
+  }
+
+  const getSvgViewBox = svg => {
+    const attr = parseViewBox(svg.getAttribute('viewBox'))
+    if (attr) return attr
+
+    // Fallback: use bbox to build a viewBox
+    try {
+      const bbox = svg.getBBox()
+      if (bbox && bbox.width && bbox.height) return [bbox.x, bbox.y, bbox.width, bbox.height]
+    } catch (e) {
+      // getBBox may fail on some edge cases; ignore
+    }
+
+    const w = Number(svg.getAttribute('width')) || 0
+    const h = Number(svg.getAttribute('height')) || 0
+    if (w > 0 && h > 0) return [0, 0, w, h]
+    return [0, 0, 100, 100]
+  }
+
+  const setSvgViewBox = (svg, vb) => {
+    svg.setAttribute('viewBox', `${vb[0]} ${vb[1]} ${vb[2]} ${vb[3]}`)
+  }
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v))
+
+  const openSvgInNewTab = ({ source, initViewBox }) => {
+    const getClonedSvg = () => {
+      if (typeof source === 'string') {
+        const template = document.createElement('template')
+        template.innerHTML = source.trim()
+        const svg = template.content.querySelector('svg')
+        return svg ? svg.cloneNode(true) : null
+      }
+      if (source && typeof source.cloneNode === 'function') {
+        return source.cloneNode(true)
+      }
+      return null
+    }
+
+    const clone = getClonedSvg()
+    if (!clone) return
+    if (initViewBox && initViewBox.length === 4) {
+      clone.setAttribute('viewBox', initViewBox.join(' '))
+    }
+    if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+    if (!clone.getAttribute('xmlns:xlink') && clone.outerHTML.includes('xlink:')) {
+      clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+    }
+    // inject background to match current theme
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    const bg = getComputedStyle(document.body).backgroundColor || (isDark ? '#1e1e1e' : '#ffffff')
+    if (!clone.style.background) clone.style.background = bg
+
+    const serializer = new XMLSerializer()
+    const svgSource = serializer.serializeToString(clone)
+    const htmlSource = `<!doctype html><html><head><meta charset="utf-8" />
+      <style>
+        html, body { width: 100%; height: 100%; margin: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; }
+        svg { max-width: 100%; max-height: 100%; height: auto; width: auto; }
+      </style>
+      </head><body>${svgSource}</body></html>`
+    const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank', 'noopener')
+    setTimeout(() => URL.revokeObjectURL(url), 30000)
+  }
+
+  const attachMermaidViewerButton = wrap => {
+    let btn = wrap.querySelector('.mermaid-open-btn')
+    if (!btn) {
+      btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'mermaid-open-btn'
+      wrap.appendChild(btn)
+    }
+
+    btn.innerHTML = '<i class="fa fa-search fa-fw" aria-hidden="true"></i>'
+
+    if (!btn.__mermaidViewerBound) {
+      btn.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        const svg = wrap.__mermaidOriginalSvg || wrap.querySelector('svg')
+        if (!svg) return
+        const initViewBox = wrap.__mermaidInitViewBox
+        if (typeof svg === 'string') {
+          openSvgInNewTab({ source: svg, initViewBox })
+          return
+        }
+        openSvgInNewTab({ source: svg, initViewBox })
+      })
+      btn.__mermaidViewerBound = true
+    }
+  }
+
+  // Zoom around a point (px, py) in the SVG viewport (in viewBox coordinates)
+  const zoomAtPoint = (vb, factor, px, py) => {
+    const w = vb[2] * factor
+    const h = vb[3] * factor
+    const nx = px - (px - vb[0]) * factor
+    const ny = py - (py - vb[1]) * factor
+    return [nx, ny, w, h]
+  }
+
+  const initMermaidGestures = wrap => {
+    const svg = wrap.querySelector('svg')
+    if (!svg) return
+
+    // Ensure viewBox exists so gestures always work
+    const initVb = getSvgViewBox(svg)
+    wrap.__mermaidInitViewBox = initVb
+    wrap.__mermaidCurViewBox = initVb.slice()
+    setSvgViewBox(svg, initVb)
+
+    // Avoid binding multiple times on themeChange/pjax
+    if (wrap.__mermaidGestureBound) return
+    wrap.__mermaidGestureBound = true
+
+    // Helper: map client (viewport) coordinate -> viewBox coordinate
+    const clientToViewBox = (clientX, clientY) => {
+      const rect = svg.getBoundingClientRect()
+      const vb = wrap.__mermaidCurViewBox || getSvgViewBox(svg)
+      const x = vb[0] + (clientX - rect.left) * (vb[2] / rect.width)
+      const y = vb[1] + (clientY - rect.top) * (vb[3] / rect.height)
+      return { x, y, rect, vb }
+    }
+
+    const state = {
+      pointers: new Map(),
+      startVb: null,
+      startDist: 0,
+      startCenter: null
+    }
+
+    const clampVb = vb => {
+      const init = wrap.__mermaidInitViewBox || vb
+      const minW = init[2] * 0.1
+      const maxW = init[2] * 10
+      const minH = init[3] * 0.1
+      const maxH = init[3] * 10
+      vb[2] = clamp(vb[2], minW, maxW)
+      vb[3] = clamp(vb[3], minH, maxH)
+      return vb
+    }
+
+    const setCurVb = vb => {
+      vb = clampVb(vb)
+      wrap.__mermaidCurViewBox = vb
+      setSvgViewBox(svg, vb)
+    }
+
+    const onPointerDown = e => {
+      // Allow only primary button for mouse
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      svg.setPointerCapture(e.pointerId)
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      if (state.pointers.size === 1) {
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      } else if (state.pointers.size === 2) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        state.startDist = Math.hypot(dx, dy)
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        state.startCenter = { x: (pts[0].x + pts[1].x) / 2, y: (pts[0].y + pts[1].y) / 2 }
+      }
+    }
+
+    const onPointerMove = e => {
+      if (!state.pointers.has(e.pointerId)) return
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      // Pan with 1 pointer
+      if (state.pointers.size === 1 && state.startVb) {
+        const p = [...state.pointers.values()][0]
+        const prev = { x: e.clientX - e.movementX, y: e.clientY - e.movementY }
+        // movementX/Y unreliable on touch, compute from stored last position
+        const last = wrap.__mermaidLastSinglePointer || p
+        const dxClient = p.x - last.x
+        const dyClient = p.y - last.y
+        wrap.__mermaidLastSinglePointer = p
+
+        const { rect } = clientToViewBox(p.x, p.y)
+        const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        const dx = dxClient * (vb[2] / rect.width)
+        const dy = dyClient * (vb[3] / rect.height)
+        setCurVb([vb[0] - dx, vb[1] - dy, vb[2], vb[3]])
+        return
+      }
+
+      // Pinch zoom with 2 pointers
+      if (state.pointers.size === 2 && state.startVb && state.startDist > 0) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        const dist = Math.hypot(dx, dy)
+        if (!dist) return
+        const factor = state.startDist / dist // dist bigger => zoom in (viewBox smaller)
+
+        const cx = (pts[0].x + pts[1].x) / 2
+        const cy = (pts[0].y + pts[1].y) / 2
+        const centerClient = { x: cx, y: cy }
+
+        const pxy = clientToViewBox(centerClient.x, centerClient.y)
+        const cpx = pxy.x
+        const cpy = pxy.y
+
+        const vb = zoomAtPoint(state.startVb, factor, cpx, cpy)
+        setCurVb(vb)
+      }
+    }
+
+    const onPointerUpOrCancel = e => {
+      state.pointers.delete(e.pointerId)
+      if (state.pointers.size === 0) {
+        state.startVb = null
+        state.startDist = 0
+        state.startCenter = null
+        wrap.__mermaidLastSinglePointer = null
+      } else if (state.pointers.size === 1) {
+        // reset single pointer baseline to avoid jump
+        wrap.__mermaidLastSinglePointer = [...state.pointers.values()][0]
+      }
+    }
+
+    // Wheel zoom (mouse/trackpad)
+    const onWheel = e => {
+      // ctrlKey on mac trackpad pinch; we treat both as zoom
+      e.preventDefault()
+      const delta = e.deltaY
+      const zoomFactor = delta > 0 ? 1.1 : 0.9
+      const { x, y } = clientToViewBox(e.clientX, e.clientY)
+      const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      setCurVb(zoomAtPoint(vb, zoomFactor, x, y))
+    }
+
+    const onDblClick = () => {
+      const init = wrap.__mermaidInitViewBox
+      if (!init) return
+      wrap.__mermaidCurViewBox = init.slice()
+      setSvgViewBox(svg, init)
+    }
+
+    svg.addEventListener('pointerdown', onPointerDown)
+    svg.addEventListener('pointermove', onPointerMove)
+    svg.addEventListener('pointerup', onPointerUpOrCancel)
+    svg.addEventListener('pointercancel', onPointerUpOrCancel)
+    svg.addEventListener('wheel', onWheel, { passive: false })
+    svg.addEventListener('dblclick', onDblClick)
+  }
+
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+
+      // Clear old render (themeChange/pjax will rerun)
+      const oldSvg = item.querySelector('svg')
+      if (oldSvg) oldSvg.remove()
+      item.__mermaidGestureBound = false
+
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+        if (true) initMermaidGestures(item)
+        item.__mermaidOriginalSvg = svg
+        if (true) attachMermaidViewerButton(item)
+      }
+
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('/libs/mermaid/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.5"></script></div></div></body></html>
